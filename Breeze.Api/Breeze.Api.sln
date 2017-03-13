@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{807563C4-7259-434D-B604-A14C3DCF8E30}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2FF3130A-E8F3-4E0B-8733-B34C4A19910C}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+		..\global.json = ..\global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Breeze.Api", "src\Breeze.Api\Breeze.Api.xproj", "{E7B3E9EB-34E8-4B10-B296-4D5270E314A4}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Breeze.Api.Tests", "src\Breeze.Api.Tests\Breeze.Api.Tests.xproj", "{BD5174B4-DCE8-4594-9A16-B83E56767770}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E7B3E9EB-34E8-4B10-B296-4D5270E314A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7B3E9EB-34E8-4B10-B296-4D5270E314A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7B3E9EB-34E8-4B10-B296-4D5270E314A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7B3E9EB-34E8-4B10-B296-4D5270E314A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD5174B4-DCE8-4594-9A16-B83E56767770}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD5174B4-DCE8-4594-9A16-B83E56767770}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD5174B4-DCE8-4594-9A16-B83E56767770}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD5174B4-DCE8-4594-9A16-B83E56767770}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E7B3E9EB-34E8-4B10-B296-4D5270E314A4} = {807563C4-7259-434D-B604-A14C3DCF8E30}
+		{BD5174B4-DCE8-4594-9A16-B83E56767770} = {807563C4-7259-434D-B604-A14C3DCF8E30}
+	EndGlobalSection
+EndGlobal
