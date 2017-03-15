@@ -84,5 +84,43 @@ namespace Breeze.Api.Controllers
                 return this.StatusCode((int)HttpStatusCode.BadRequest, e.Message);
             }
         }
+
+        [Route("recover")]
+        [HttpPost]
+        public IActionResult Recover([FromBody]SafeRecoveryModel safeRecovery)
+        {
+            // checks the request is valid
+            if (!this.ModelState.IsValid)
+            {
+                var errors = this.ModelState.Values.SelectMany(e => e.Errors.Select(m => m.ErrorMessage));
+                return this.BadRequest(string.Join(Environment.NewLine, errors));
+            }
+
+            try
+            {
+                var safe = this.safeWrapper.Recover(safeRecovery.Password, safeRecovery.FolderPath, safeRecovery.Name, safeRecovery.Network, safeRecovery.Mnemonic);
+                return this.Json(safe);
+
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine(e);
+
+                // indicates that this wallet does not exist
+                return this.StatusCode((int)HttpStatusCode.NotFound, "Wallet not found.");
+            }
+            catch (SecurityException e)
+            {
+                Console.WriteLine(e);
+
+                // indicates that the password is wrong
+                return this.StatusCode((int)HttpStatusCode.Forbidden, "Wrong password, please try again.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return this.StatusCode((int)HttpStatusCode.BadRequest, e.Message);
+            }
+        }
     }
 }
