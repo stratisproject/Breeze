@@ -48,14 +48,5 @@ namespace Breeze.Api.Models
 		public string Name { get; set; }
 
 		public string Network { get; set; }
-	}
-
-	public class SafeModel
-	{
-		public string Network { get; set; }
-
-		public string FileName { get; set; }
-
-		public IEnumerable<string> Addresses { get; set; }
-	}
+	}	
 }

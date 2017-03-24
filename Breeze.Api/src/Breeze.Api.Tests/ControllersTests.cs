@@ -5,7 +5,8 @@ using Xunit;
 using Moq;
 using Breeze.Api.Controllers;
 using Breeze.Api.Models;
-using Breeze.Api.Wrappers;
+using Breeze.Wallet.Wrappers;
+using Breeze.Wallet;
 
 namespace Breeze.Api.Tests
 {

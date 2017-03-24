@@ -2,9 +2,8 @@
 using System.Linq;
 using HBitcoin.KeyManagement;
 using NBitcoin;
-using Breeze.Api.Models;
 
-namespace Breeze.Api.Wrappers
+namespace Breeze.Wallet.Wrappers
 {
 	/// <summary>
 	/// An implementation of the <see cref="ISafeWrapper"/> interface.

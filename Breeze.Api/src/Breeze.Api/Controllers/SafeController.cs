@@ -5,7 +5,7 @@ using System.Net;
 using System.Security;
 using Microsoft.AspNetCore.Mvc;
 using Breeze.Api.Models;
-using Breeze.Api.Wrappers;
+using Breeze.Wallet.Wrappers;
 
 
 namespace Breeze.Api.Controllers

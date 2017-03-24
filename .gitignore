@@ -9,3 +9,8 @@
 /Breeze.Api/src/Breeze.Api/obj
 *.user
 /Breeze.Api/src/Breeze.Api/Wallets
+/Breeze.Api/src/Breeze.Wallet/bin
+/Breeze.Api/src/Breeze.Wallet/obj
+
+# DNX
+project.lock.json

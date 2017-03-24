@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Breeze.Api.Wrappers;
+using Breeze.Wallet.Wrappers;
 
 namespace Breeze.Api
 {
@@ -32,8 +32,6 @@ namespace Breeze.Api
             // add DI classes for controllers. 
             services.AddTransient<ISafeWrapper, SafeWrapper>();
             services.AddTransient<ITrackerWrapper, TrackerWrapper>();
-
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

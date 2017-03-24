@@ -1,6 +1,6 @@
-﻿{
+{
   "dependencies": {
-    "HBitcoin": "0.1.4",
+    "Breeze.Wallet": "1.0.0-*",
     "Microsoft.AspNetCore.Mvc": "1.1.2",
     "Microsoft.AspNetCore.Routing": "1.1.1",
     "Microsoft.AspNetCore.Server.IISIntegration": "1.1.1",
@@ -12,7 +12,9 @@
     "Microsoft.Extensions.Logging.Console": "1.1.1",
     "Microsoft.Extensions.Logging.Debug": "1.1.1",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.1",
-    "Microsoft.NETCore.App": "1.1.1"
+    "Microsoft.NETCore.App": "1.1.1",
+    "NBitcoin": "3.0.2.10",
+    "System.Reactive": "3.1.1"
   },
 
   "tools": {
@@ -31,7 +33,7 @@
   "buildOptions": {
     "emitEntryPoint": true,
     "preserveCompilationContext": true
-    
+
   },
 
   "runtimeOptions": {

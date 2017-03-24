@@ -15,6 +15,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Breeze.Api", "src\Breeze.Ap
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Breeze.Api.Tests", "src\Breeze.Api.Tests\Breeze.Api.Tests.xproj", "{BD5174B4-DCE8-4594-9A16-B83E56767770}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Breeze.Wallet", "src\Breeze.Wallet\Breeze.Wallet.xproj", "{D16CD478-9D1E-4C69-91AD-43539E94A215}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{BD5174B4-DCE8-4594-9A16-B83E56767770}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD5174B4-DCE8-4594-9A16-B83E56767770}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD5174B4-DCE8-4594-9A16-B83E56767770}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D16CD478-9D1E-4C69-91AD-43539E94A215}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D16CD478-9D1E-4C69-91AD-43539E94A215}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D16CD478-9D1E-4C69-91AD-43539E94A215}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D16CD478-9D1E-4C69-91AD-43539E94A215}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -36,5 +42,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{E7B3E9EB-34E8-4B10-B296-4D5270E314A4} = {807563C4-7259-434D-B604-A14C3DCF8E30}
 		{BD5174B4-DCE8-4594-9A16-B83E56767770} = {807563C4-7259-434D-B604-A14C3DCF8E30}
+		{D16CD478-9D1E-4C69-91AD-43539E94A215} = {807563C4-7259-434D-B604-A14C3DCF8E30}
 	EndGlobalSection
 EndGlobal
