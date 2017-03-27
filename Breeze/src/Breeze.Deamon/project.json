@@ -1,0 +1,27 @@
+{
+  "title": "",
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "emitEntryPoint": true
+    // TODO uncomment the line below when we move to VS2017 (https://github.com/aspnet/Tooling/issues/842)
+    //"outputName": "breezed"
+  },
+
+  "dependencies": {
+    "Breeze.Api": "1.0.0-*",
+    "Breeze.Wallet": "1.0.0-*",
+    "Microsoft.Extensions.Logging.Abstractions": "1.1.1",
+    "Microsoft.Extensions.Logging.Console": "1.1.1",
+    "Microsoft.NETCore.App": {
+      "type": "platform",
+      "version": "1.1.0"
+    },
+    "Stratis.Bitcoin": "1.0.1.2-alpha"
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": "dnxcore50"
+    }
+  }
+}
