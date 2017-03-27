@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using Breeze.Api;
 using Microsoft.Extensions.Logging;
 using Stratis.Bitcoin;
 using Stratis.Bitcoin.Builder;
@@ -18,7 +19,7 @@ namespace Breeze.Deamon
 			var node = (FullNode)new FullNodeBuilder()
 				.UseNodeSettings(nodeSettings)	
 				//.UseWallet()
-				//.UseApi()
+				.UseApi()
 				//.UseBlockNotification()			
 				.Build();
 

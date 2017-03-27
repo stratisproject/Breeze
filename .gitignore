@@ -257,3 +257,4 @@ ModelManifest.xml
 
 # DNX
 project.lock.json
+/Breeze/src/Breeze.Deamon/Wallets

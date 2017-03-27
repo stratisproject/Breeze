@@ -14,6 +14,7 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.1",
     "Microsoft.NETCore.App": "1.1.0",
     "NBitcoin": "3.0.2.10",
+    "Stratis.Bitcoin": "1.0.1.2-alpha",
     "System.Reactive": "3.1.1"
   },
 
