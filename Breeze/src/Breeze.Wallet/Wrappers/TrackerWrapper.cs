@@ -9,9 +9,9 @@ namespace Breeze.Wallet.Wrappers
     {
         private readonly Tracker tracker;
 
-        public TrackerWrapper()
+        public TrackerWrapper(Network network)
         {
-            this.tracker = new Tracker();              
+            this.tracker = new Tracker(network);              
         }
 
 		/// <summary>

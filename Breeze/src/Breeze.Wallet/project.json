@@ -1,10 +1,10 @@
-﻿{
+{
   "version": "1.0.0-*",
 
   "dependencies": {
-    "HBitcoin": "0.1.4",
+    "HBitcoin": "0.1.5",
     "NBitcoin": "3.0.2.10",
-    "NETStandard.Library": "1.6.0"
+    "NETStandard.Library": "1.6.1"
   },
 
   "frameworks": {
