@@ -5,6 +5,7 @@ using Stratis.Bitcoin;
 using Stratis.Bitcoin.Builder;
 using Stratis.Bitcoin.Configuration;
 using Stratis.Bitcoin.Logging;
+using Breeze.Wallet;
 
 namespace Breeze.Deamon
 {
@@ -16,11 +17,11 @@ namespace Breeze.Deamon
 			Logs.Configure(new LoggerFactory().AddConsole(LogLevel.Trace, false));
 			NodeSettings nodeSettings = NodeSettings.FromArguments(args);
 
-			var node = (FullNode)new FullNodeBuilder()
-				.UseNodeSettings(nodeSettings)	
-				//.UseWallet()
+	        var node = (FullNode)new FullNodeBuilder()
+				.UseNodeSettings(nodeSettings)
+				.UseWallet()
 				.UseApi()
-				//.UseBlockNotification()			
+				//.UseBlockNotification()
 				.Build();
 
 			System.Console.WriteLine();

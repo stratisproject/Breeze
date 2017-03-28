@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Breeze.Api.Models
+namespace Breeze.Wallet.Models
 {
 	/// <summary>
 	/// Object used to create a new wallet

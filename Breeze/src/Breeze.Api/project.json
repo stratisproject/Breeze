@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "Breeze.Wallet": "1.0.0-*",
     "Microsoft.AspNetCore.Mvc": "1.1.2",
     "Microsoft.AspNetCore.Routing": "1.1.1",
     "Microsoft.AspNetCore.Server.IISIntegration": "1.1.1",
@@ -8,6 +7,7 @@
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.1",
     "Microsoft.Extensions.Configuration.FileExtensions": "1.1.1",
     "Microsoft.Extensions.Configuration.Json": "1.1.1",
+    "Microsoft.Extensions.DependencyModel": "1.1.1",
     "Microsoft.Extensions.Logging": "1.1.1",
     "Microsoft.Extensions.Logging.Console": "1.1.1",
     "Microsoft.Extensions.Logging.Debug": "1.1.1",
@@ -15,7 +15,8 @@
     "Microsoft.NETCore.App": "1.1.0",
     "NBitcoin": "3.0.2.10",
     "Stratis.Bitcoin": "1.0.1.2-alpha",
-    "System.Reactive": "3.1.1"
+    "System.Reactive": "3.1.1",
+    "System.Runtime.Loader": "4.3.0"
   },
 
   "tools": {
@@ -34,7 +35,6 @@
   "buildOptions": {
     "emitEntryPoint": true,
     "preserveCompilationContext": true
-
   },
 
   "runtimeOptions": {

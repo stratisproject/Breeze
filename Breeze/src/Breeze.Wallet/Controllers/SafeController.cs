@@ -4,11 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Security;
 using Microsoft.AspNetCore.Mvc;
-using Breeze.Api.Models;
+using Breeze.Wallet.Models;
 using Breeze.Wallet.Wrappers;
+using Stratis.Bitcoin;
 
 
-namespace Breeze.Api.Controllers
+namespace Breeze.Wallet.Controllers
 {
     [Route("api/[controller]")]
     public class SafeController : Controller
@@ -19,13 +20,13 @@ namespace Breeze.Api.Controllers
         {
             this.safeWrapper = safeWrapper;
         }
-
-        /// <summary>
-        /// Creates a new safe on the local machine.
-        /// </summary>
-        /// <param name="safeCreation">The object containing the parameters used to create the wallet.</param>
-        /// <returns>A JSON object contaibibg the mnemonic created for the new wallet.</returns>
-        [HttpPost]
+		
+		/// <summary>
+		/// Creates a new safe on the local machine.
+		/// </summary>
+		/// <param name="safeCreation">The object containing the parameters used to create the wallet.</param>
+		/// <returns>A JSON object contaibibg the mnemonic created for the new wallet.</returns>
+		[HttpPost]
         public IActionResult Create([FromBody]SafeCreationModel safeCreation)
         {
             // checks the request is valid
