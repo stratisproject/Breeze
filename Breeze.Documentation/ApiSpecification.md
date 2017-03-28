@@ -1,4 +1,24 @@
-`/api/v1/`
+`/api/v1/`  
+  
+## Request/Response
+
+RESPONSE: responsecode (`200` if success, `400`/`500` if error, see later)  
+  
+HEADERS
+`Content-Type:application/json`  
+  
+## Errors
+
+`400` series status codes for client issues & `500` series status codes for server issues.  
+API should standardize that all `400` series errors come with consumable JSON error representation.  
+  
+BODY  
+```
+{
+  "message" : "Something bad happened :(", // ex.Message maybe?
+  "description" : ex.ToString()
+}
+```  
 
 ## Key Management
 
@@ -31,26 +51,4 @@ GET /wallet/balance/[account1/account2] - Displays the balances of the specified
 ```
 POST /wallet/build-transaction/[account1/account2] - Attempts to build a transaction with the specified wallet account
 POST /wallet/send-transaction - Attempts to send a transaction
-```
-
-## Request/Response
-
-RESPONSE: responsecode (`200` if success, `400`/`500` if error, see later  
-  
-HEADERS
-`Content-Type:application/json`  
-  
-BODY: json  
-
-## Errors
-
-`400` series status codes for client issues & `500` series status codes for server issues.  
-API should standardize that all `400` series errors come with consumable JSON error representation.  
-  
-BODY  
-```
-{
-  "message" : "Something bad happened :(", // ex.Message maybe?
-  "description" : ex.ToString()
-}
 ```
