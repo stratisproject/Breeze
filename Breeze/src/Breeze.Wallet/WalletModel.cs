@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Breeze.Wallet
 {
-	public class SafeModel
+	public class WalletModel
 	{
 		public string Network { get; set; }
 
