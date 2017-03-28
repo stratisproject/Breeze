@@ -6,12 +6,9 @@ using System.Security;
 using Microsoft.AspNetCore.Mvc;
 using Breeze.Wallet.Models;
 using Breeze.Wallet.Wrappers;
-using Stratis.Bitcoin;
-
 
 namespace Breeze.Wallet.Controllers
 {
-	[ApiVersion("1.0")]
 	[Route("api/v{version:apiVersion}/[controller]")]
     public class WalletController : Controller
     {
@@ -51,7 +48,8 @@ namespace Breeze.Wallet.Controllers
             }            
         }
 
-        public IActionResult Load(WalletLoadModel walletLoad)
+		[HttpGet]
+        public IActionResult Load([FromQuery]WalletLoadModel walletLoad)
         {
             // checks the request is valid
             if (!this.ModelState.IsValid)
