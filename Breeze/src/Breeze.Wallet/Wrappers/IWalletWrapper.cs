@@ -4,12 +4,12 @@ namespace Breeze.Wallet.Wrappers
 	/// <summary>
 	/// An interface enabling wallet operations.
 	/// </summary>
-	public interface ISafeWrapper
+	public interface IWalletWrapper
 	{
 		string Create(string password, string folderPath, string name, string network);
 
-		SafeModel Load(string password, string folderPath, string name);
+		WalletModel Load(string password, string folderPath, string name);
 
-		SafeModel Recover(string password, string folderPath, string name, string network, string mnemonic);
+		WalletModel Recover(string password, string folderPath, string name, string network, string mnemonic);
 	}
 }
