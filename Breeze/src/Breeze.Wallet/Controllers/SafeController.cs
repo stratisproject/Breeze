@@ -25,7 +25,7 @@ namespace Breeze.Wallet.Controllers
 		/// Creates a new safe on the local machine.
 		/// </summary>
 		/// <param name="safeCreation">The object containing the parameters used to create the wallet.</param>
-		/// <returns>A JSON object contaibibg the mnemonic created for the new wallet.</returns>
+		/// <returns>A JSON object containing the mnemonic created for the new wallet.</returns>
 		[HttpPost]
         public IActionResult Create([FromBody]SafeCreationModel safeCreation)
         {
