@@ -11,7 +11,8 @@ using Stratis.Bitcoin;
 
 namespace Breeze.Wallet.Controllers
 {
-    [Route("api/[controller]")]
+	[ApiVersion("1.0")]
+	[Route("api/v{version:apiVersion}/[controller]")]
     public class WalletController : Controller
     {
         private readonly IWalletWrapper walletWrapper;

@@ -28,6 +28,8 @@ namespace Breeze.Api
 				// add serializers for NBitcoin objects
 				.AddJsonOptions(options => NBitcoin.JsonConverters.Serializer.RegisterFrontConverters(options.SerializerSettings))
 				.AddControllers(services);
+
+			services.AddApiVersioning();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

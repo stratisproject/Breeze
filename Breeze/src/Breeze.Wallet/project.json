@@ -3,6 +3,7 @@
 
   "dependencies": {
     "HBitcoin": "0.1.5",
+    "Microsoft.AspNetCore.Mvc.Versioning": "1.0.3",
     "NBitcoin": "3.0.2.10",
     "NETStandard.Library": "1.6.1",
     "Stratis.Bitcoin": "1.0.1.2-alpha"
