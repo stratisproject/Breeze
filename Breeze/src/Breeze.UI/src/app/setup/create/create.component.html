@@ -1,0 +1,34 @@
+<div class="content-wrapper">
+<h1>
+  Please create a new wallet.
+</h1>
+<div>
+  <is-connected></is-connected>
+</div>
+<div class="form-group">
+  <label for="name">Name:</label>
+  <input class="form-control" type="text" #walletName required>
+</div>
+<div class="form-group">
+  <label for="password">Password:</label>
+  <input class="form-control" type="password" #walletPassword required>
+</div>
+<div class="form-group">
+  <label for="networklabel">Network:</label>
+  <select name="network" #walletNetwork>
+    <option value="main">Main</option>
+    <option value="test">Testnet</option>
+  </select>
+</div>
+<div class="form-group">
+  <label for="path">Path:</label>
+  <input class="form-control" type="text" #walletPath required>
+</div>
+<button type="submit" (click)="createWallet(walletPassword.value, walletNetwork.value, walletPath.value, walletName.value)">Create</button>
+<div>
+  <label>Mnemonic:</label>
+</div>
+<div>
+  <label>{{body}}</label>
+</div>
+</div>
