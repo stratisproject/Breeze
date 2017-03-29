@@ -96,7 +96,34 @@ POST /wallet/send-transaction - Attempts to send a transaction
 # Details
 
 ## GET /wallet/general - Displays general information on the wallet
+### Responses
+```
+{
+  "success": "true",
+  "walletFilePath": "path to the wallet file",
+  "encryptedSeed": "6PYKWP34en1wELfcJDgXaFRPugjgkDdEk2p2Pzytm1158dxgNyLAUXwpKL",
+  "chainCode": "q/Fn7+RSIVM0p0Nj6rIuNkybF+0WKeSZPMQS2QCbDzY=",
+  "network": "main", // main/testnet
+  "creationTime": "2017-03-21",
+  "decrypted": "true",
+  "uniqueId": "sadwpiqjdpijwqdpijwqidjoi" // can only get if decrypted, if not it's empty string
+}
+```
 ## GET /wallet/sensitive - Displays sensitive information on the wallet
+### Parameters
+```
+{
+  "password": "password"  
+}
+```
+### Responses
+```
+{
+  "success": "true",
+  "extkey": "sadwqdpqoijedqcdoijsadoijsadisa",
+  "extpubkey": "dalkdsaklkjdlkjdsaljlkjdsalkjdsalk",
+}
+```
 ## GET /wallet/status - Displays dynamic information on the wallet
 ## POST /wallet/create - Creates the wallet
 ### Parameters
@@ -106,7 +133,7 @@ POST /wallet/send-transaction - Attempts to send a transaction
   "password": "password"  
 }
 ```
-### Response
+### Responses
 ```
 {
   "success": "true",
@@ -198,6 +225,7 @@ Unconfirmed balance is the difference of unconfirmed incoming and outgoing trans
 ### Parameters
 ```
 {
+  "password": "password",
   "address": "1Xyz...",
   "amount": "0.12", // in btc, if 0, then spends all available
   "feeType": "low", // "low"/"medium"/"high"
