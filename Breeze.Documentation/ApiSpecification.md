@@ -15,8 +15,41 @@ API should standardize that all `400` series errors come with consumable JSON er
 BODY  
 ```
 {
-  "message" : "Something bad happened :(", // ex.Message maybe?
+  "success" : "false",
+  "message" : "something bad happened", // ex.Message maybe?
   "description" : ex.ToString()
+}
+```  
+
+### wallet is not created
+
+This error message comes at all request if the wallet is not created yet, except
+- `POST /wallet/create`
+- `POST /wallet/recover`
+- `POST /wallet/send-transaction`
+
+```
+{
+  "success" : "false",
+  "message" : "wallet is not created",
+  "description" : ""
+}
+```  
+
+### wallet is not decrypted
+
+This error message comes at all request if the wallet is not loaded yet, except
+- `POST /wallet/create`
+- `POST /wallet/recover`
+- `POST /wallet/send-transaction`
+- `POST /wallet/load`
+- `DELETE /wallet`
+
+```
+{
+  "success" : "false",
+  "message" : "wallet is not decrypted",
+  "description" : ""
 }
 ```  
 
