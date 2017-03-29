@@ -125,6 +125,21 @@ POST /wallet/send-transaction - Attempts to send a transaction
 }
 ```
 ## GET /wallet/status - Displays dynamic information on the wallet
+### Responses
+```
+{
+  "success": "true",
+  "connectedNodeCount": "7",
+  "maxConnextedNodeCount": "8",
+  "headerChainHeight": "1048",
+  "trackingHeight": "1047",
+  "trackedTransactionCount": "306",
+  "trackedScriptPubKeyCount": "100",
+  "walletState": "syncingBlocks", // notStarted/syncingHeaders/syncingBlocks/mempoolStalling/syncingMempool/synced
+  "historyChangeBump": "231321" // every time something changes this number is dumped. So it's enough to poll this get request and no need to poll the history or balances get request constantly to update the up, but only when this number changes
+}
+```
+
 ## POST /wallet/create - Creates the wallet
 ### Parameters
 ```
