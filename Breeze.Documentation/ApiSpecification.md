@@ -56,9 +56,9 @@ This error message comes at all request if the wallet is not loaded yet, except
 ## Key Management
 
 ```
-GET /wallet/general - Displays general information on the wallet 
-GET /wallet/sensitive - Displays sensitive information on the wallet 
-GET /wallet/status - Displays dynamic information on the wallet 
+GET /wallet/general - Displays general information on the wallet
+GET /wallet/sensitive - Displays sensitive information on the wallet
+GET /wallet/status - Displays dynamic information on the wallet
 POST /wallet/create - Creates the wallet
 POST /wallet/load - Loads the wallet and starts syncing
 POST /wallet/recover - Recovers the wallet
@@ -85,3 +85,19 @@ GET /wallet/balance/[account1/account2] - Displays the balances of the specified
 POST /wallet/build-transaction/[account1/account2] - Attempts to build a transaction with the specified wallet account
 POST /wallet/send-transaction - Attempts to send a transaction
 ```
+
+# Details
+
+## GET /wallet/general - Displays general information on the wallet
+## GET /wallet/sensitive - Displays sensitive information on the wallet
+## GET /wallet/status - Displays dynamic information on the wallet
+## POST /wallet/create - Creates the wallet
+## POST /wallet/load - Loads the wallet and starts syncing
+## POST /wallet/recover - Recovers the wallet
+## DELETE /wallet - Deletes the wallet
+## GET /wallet/mempool/?allow=[true/false] - Allows or disallows mempool syncing
+## GET /wallet/receive/[account1/account2] - Displays unused receive addresses of the specified wallet account
+## GET /wallet/history/[account1/account2] - Displays the history of the specified wallet account
+## GET /wallet/balance/[account1/account2] - Displays the balances of the specified wallet account
+## POST /wallet/build-transaction/[account1/account2] - Attempts to build a transaction with the specified wallet account
+## POST /wallet/send-transaction - Attempts to send a transaction
