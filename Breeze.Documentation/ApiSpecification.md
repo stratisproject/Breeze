@@ -140,8 +140,60 @@ Works as expected.
 Works as expected.
 
 ## GET /wallet/receive/[account1/account2] - Displays unused receive addresses of the specified wallet account
+### Responses
+```
+{
+  "success": "true",
+  "addresses": // 7 unused receive address (7 is the best number: https://www.psychologytoday.com/blog/fulfillment-any-age/201109/7-reasons-we-7-reasons)
+  [
+    "mzz63n3n89KVeHQXRqJEVsQX8MZj5zeqCw",
+    "mhm1pFe2hH7yqkdQhwbBQ8qLnMZqfL6jXb",
+    "mmRzqMDBrfNxMfryQSYec3rfPHXURNapBA",
+    "my2ELDBqLGVz1ER7CMynDqG4BUpV2pwfR5",
+    "mmwccp4GefhPn4P6Mui6DGLGzHTVyQ12tD",
+    "miTedyDXJAz6GYMRasiJk9M3ibnGnb99M1",
+    "mrsb39MmPceSPfKAURTH23hYgLRH1M1Uhg"
+  ]
+}
+```
+
 ## GET /wallet/history/[account1/account2] - Displays the history of the specified wallet account
+### Responses
+```
+{
+  "success": "true",
+  "history": 
+  [
+    {
+      "txid": "9a9949476b629b4075b31d8faad64dad352586a18df8f2810c5a7bb900478c60",
+      "amount": "0.1",
+      "confirmed": "true",
+      "timestamp": "2016.12.19. 23:15:05" // if confirmed it's the blocktime, utc
+    },
+    {
+      "txid": "9a9949476b629b4075b31d8faad64dad352586a18df8f2810c5a7bb900478c60",
+      "amount": "-0.1",
+      "confirmed": "false",
+      "timestamp": "2016.12.20. 1:15:36" // if unconfirmed it's the time our node first seen this transaction, utc
+    }
+  ]
+}
+```
+
 ## GET /wallet/balance/[account1/account2] - Displays the balances of the specified wallet account
+### Responses
+```
+{
+  "success": "true",
+  "synced": "true",
+  "confirmed": "0.144",
+  "unconfirmed": "-6.23"
+}
+```
+If the synced is false, then the balances might not be accurate.  
+Confirmed balance is the (amount of unspent confirmed outputs - unconfirmed outgoing transactions). It cannot be negative.  
+Unconfirmed balance is the difference of unconfirmed incoming and outgoing transactions. It can be negative.  
+
 ## POST /wallet/build-transaction/[account1/account2] - Attempts to build a transaction with the specified wallet account
 ### Parameters
 ```
@@ -154,7 +206,7 @@ Works as expected.
 ``` 
 
 ### Responses
-### Successful
+#### Successful
 ```
 {
 	"success": "true",
