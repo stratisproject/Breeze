@@ -23,9 +23,9 @@ namespace Breeze.Wallet
 				.AddFeature<WalletFeature>()
 				.FeatureServices(services =>
 				{
-					services.AddTransient<ISafeWrapper, SafeWrapper>();
+					services.AddTransient<IWalletWrapper, WalletWrapper>();
 					services.AddTransient<ITrackerWrapper, TrackerWrapper>();
-					services.AddSingleton<SafeController>();
+					services.AddSingleton<WalletController>();
 				});
 			});
 

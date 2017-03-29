@@ -1,0 +1,14 @@
+<div class="content-wrapper">
+    <h1>Send</h1>
+    <form (ngSubmit)="onSubmit()" #sendForm="ngForm">
+      <div class="form-group">
+        <label for="toAddress">Pay To: </label>
+        <input type="text" class="form-control" id="name" required name="toAddress">
+      </div>
+      <div class="form-group">
+        <label for="amount">Amount</label>
+        <input type="text" class="form-control" id="amount" required name="amount">
+      </div>
+      <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+</div>

@@ -6,28 +6,26 @@ using System.Security;
 using Microsoft.AspNetCore.Mvc;
 using Breeze.Wallet.Models;
 using Breeze.Wallet.Wrappers;
-using Stratis.Bitcoin;
-
 
 namespace Breeze.Wallet.Controllers
 {
-    [Route("api/[controller]")]
-    public class SafeController : Controller
+	[Route("api/v{version:apiVersion}/[controller]")]
+    public class WalletController : Controller
     {
-        private readonly ISafeWrapper safeWrapper;
+        private readonly IWalletWrapper walletWrapper;
 
-        public SafeController(ISafeWrapper safeWrapper)
+        public WalletController(IWalletWrapper walletWrapper)
         {
-            this.safeWrapper = safeWrapper;
+            this.walletWrapper = walletWrapper;
         }
 		
 		/// <summary>
-		/// Creates a new safe on the local machine.
+		/// Creates a new wallet on the local machine.
 		/// </summary>
-		/// <param name="safeCreation">The object containing the parameters used to create the wallet.</param>
-		/// <returns>A JSON object contaibibg the mnemonic created for the new wallet.</returns>
+		/// <param name="walletCreation">The object containing the parameters used to create the wallet.</param>
+		/// <returns>A JSON object containing the mnemonic created for the new wallet.</returns>
 		[HttpPost]
-        public IActionResult Create([FromBody]SafeCreationModel safeCreation)
+        public IActionResult Create([FromBody]WalletCreationModel walletCreation)
         {
             // checks the request is valid
             if (!this.ModelState.IsValid)
@@ -38,7 +36,7 @@ namespace Breeze.Wallet.Controllers
             
             try
             {
-                var mnemonic = this.safeWrapper.Create(safeCreation.Password, safeCreation.FolderPath, safeCreation.Name, safeCreation.Network);
+                var mnemonic = this.walletWrapper.Create(walletCreation.Password, walletCreation.FolderPath, walletCreation.Name, walletCreation.Network);
                 return this.Json(mnemonic);
             }
             catch (NotSupportedException e)
@@ -50,7 +48,8 @@ namespace Breeze.Wallet.Controllers
             }            
         }
 
-        public IActionResult Load(SafeLoadModel safeLoad)
+		[HttpGet]
+        public IActionResult Load([FromQuery]WalletLoadModel walletLoad)
         {
             // checks the request is valid
             if (!this.ModelState.IsValid)
@@ -61,8 +60,8 @@ namespace Breeze.Wallet.Controllers
             
             try
             {
-                var safe = this.safeWrapper.Load(safeLoad.Password, safeLoad.FolderPath, safeLoad.Name);
-                return this.Json(safe);
+                var wallet = this.walletWrapper.Load(walletLoad.Password, walletLoad.FolderPath, walletLoad.Name);
+                return this.Json(wallet);
 
             }            
             catch (FileNotFoundException e)
@@ -88,7 +87,7 @@ namespace Breeze.Wallet.Controllers
 
         [Route("recover")]
         [HttpPost]
-        public IActionResult Recover([FromBody]SafeRecoveryModel safeRecovery)
+        public IActionResult Recover([FromBody]WalletRecoveryModel walletRecovery)
         {
             // checks the request is valid
             if (!this.ModelState.IsValid)
@@ -99,8 +98,8 @@ namespace Breeze.Wallet.Controllers
 
             try
             {
-                var safe = this.safeWrapper.Recover(safeRecovery.Password, safeRecovery.FolderPath, safeRecovery.Name, safeRecovery.Network, safeRecovery.Mnemonic);
-                return this.Json(safe);
+                var wallet = this.walletWrapper.Recover(walletRecovery.Password, walletRecovery.FolderPath, walletRecovery.Name, walletRecovery.Network, walletRecovery.Mnemonic);
+                return this.Json(wallet);
 
             }
             catch (FileNotFoundException e)

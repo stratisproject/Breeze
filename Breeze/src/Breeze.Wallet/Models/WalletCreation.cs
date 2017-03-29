@@ -7,21 +7,21 @@ namespace Breeze.Wallet.Models
 	/// <summary>
 	/// Object used to create a new wallet
 	/// </summary>
-	public class SafeCreationModel
+	public class WalletCreationModel
 	{
 		[Required(ErrorMessage = "A password is required.")]
 		public string Password { get; set; }
 
 		public string Network { get; set; }
 
-		[Required(ErrorMessage = "The folder path where the safe will be created is required.")]
+		[Required(ErrorMessage = "The folder path where the wallet will be created is required.")]
 		public string FolderPath { get; set; }
 
-		[Required(ErrorMessage = "The name of the safe to create is missing.")]
+		[Required(ErrorMessage = "The name of the wallet to create is missing.")]
 		public string Name { get; set; }
 	}
 
-	public class SafeLoadModel
+	public class WalletLoadModel
 	{
 		[Required(ErrorMessage = "A password is required.")]
 		public string Password { get; set; }       
@@ -29,11 +29,11 @@ namespace Breeze.Wallet.Models
 		[Required(ErrorMessage = "The folder path is required.")]
 		public string FolderPath { get; set; }
 
-		[Required(ErrorMessage = "The name of the safe is missing.")]
+		[Required(ErrorMessage = "The name of the wallet is missing.")]
 		public string Name { get; set; }
 	}
 
-	public class SafeRecoveryModel
+	public class WalletRecoveryModel
 	{
 		[Required(ErrorMessage = "A mnemonic is required.")]
 		public string Mnemonic { get; set; }
@@ -44,7 +44,7 @@ namespace Breeze.Wallet.Models
 		[Required(ErrorMessage = "The folder path is required.")]
 		public string FolderPath { get; set; }
 
-		[Required(ErrorMessage = "The name of the safe is missing.")]
+		[Required(ErrorMessage = "The name of the wallet is missing.")]
 		public string Name { get; set; }
 
 		public string Network { get; set; }

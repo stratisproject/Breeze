@@ -2,15 +2,11 @@
 
 namespace Breeze.Api.Controllers
 {
-	[Route("api/[controller]")]
+	
+	[Route("api/v{version:apiVersion}/[controller]")]
 	public class NodeController : Controller
-    {			 
-		[Route("connect")]
-		public IActionResult Connect(string[] args)
-		{
-			return NotFound();
-		}
-
+    {
+		[HttpGet]
 		[Route("status")]
 		public IActionResult Status()
 		{
