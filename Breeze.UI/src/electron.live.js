@@ -1,6 +1,5 @@
 const electron = require('electron')
-const dotenv = require('dotenv')
-// const edge = require('electron-edge')
+
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
@@ -9,55 +8,37 @@ const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
 
-// Require dotenv
-dotenv.config();
-if (process.env.DEBUG === 'true'){
-  // Require electron-reload for dev options
-  require('electron-reload')(__dirname);
-}
-
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow = null;
 
 function createWindow () {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1000, height: 600, frame: true, minWidth: 1000, minHeight: 600, icon: "./src/assets/images/stratis-tray.png"})
+  setTimeout(() => {
+    // Create the browser window.
+    mainWindow = new BrowserWindow({width: 1000, height: 600, frame: true, minWidth: 1000, minHeight: 600, icon: "./assets/images/stratis-tray.png"})
 
-  if (process.env.DEBUG === 'false'){
     mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, 'index.html'),
-      protocol: 'file:',
-      slashes: true
-    }));
-  } else {
-    mainWindow.loadURL('http://localhost:4200');
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools();
-  }
+        pathname: 'localhost:4200',
+        protocol: 'http:',
+        slashes: true
+      }))
 
-  // mainWindow.loadURL(url.format({
-  //     pathname: path.join(__dirname, 'index.html'),
-  //     protocol: 'file:',
-  //     slashes: true
-  //   }));
-
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null
-  })
+    // Emitted when the window is closed.
+    mainWindow.on('closed', function () {
+      // Dereference the window object, usually you would store windows
+      // in an array if your app supports multi windows, this is the time
+      // when you should delete the corresponding element.
+      mainWindow = null
+    })
+  }, 12000)
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', function () {
-  startServer()
-  createWindow()
   createTray()
+  createWindow()
 })
 
 // Quit when all windows are closed.
@@ -77,10 +58,6 @@ app.on('activate', function () {
   }
 })
 
-function startServer() {
-  // var startServer = edge.func('./assets/dll/Wallet.WebApi.dll');
-}
-
 function createTray() {
   //Put the app in system tray
   const Menu = electron.Menu
@@ -88,7 +65,7 @@ function createTray() {
 
   let appIcon = null
 
-  const iconName = process.platform === 'win32' ? './src/assets/images/stratis-tray.png' : './src/assets/images/stratis-tray.png'
+  const iconName = process.platform === 'win32' ? './assets/images/stratis-tray.png' : './assets/images/stratis-tray.png'
   const iconPath = path.join(__dirname, iconName)
   appIcon = new Tray(iconPath)
   const contextMenu = Menu.buildFromTemplate([{

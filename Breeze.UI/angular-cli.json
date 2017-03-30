@@ -1,6 +1,7 @@
 {
   "project": {
-    "name": "breeze-ui"
+    "name": "breeze-ui",
+    "ejected": true
   },
   "apps": [
     {
@@ -14,6 +15,7 @@
       "polyfills": "polyfills.ts",
       "test": "test.ts",
       "tsconfig": "tsconfig.json",
+      "testTsconfig": "tsconfig.json",
       "prefix": "app",
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.min.css",
