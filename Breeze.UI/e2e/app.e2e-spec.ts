@@ -1,14 +1,14 @@
-import { BreezeUIPage } from './app.po';
+import { BreezePage } from './app.po';
 
-describe('breeze-ui App', function() {
-  let page: BreezeUIPage;
+describe('breeze App', function() {
+  let page: BreezePage;
 
   beforeEach(() => {
-    page = new BreezeUIPage();
+    page = new BreezePage();
   });
 
-  it('should display message saying app works', () => {
+  it('title should be Breeze', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+    expect(page.getTitle()).toEqual('Breeze');
   });
 });
