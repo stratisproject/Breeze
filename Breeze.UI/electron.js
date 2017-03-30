@@ -36,12 +36,6 @@ function createWindow () {
     mainWindow.webContents.openDevTools();
   }
 
-  // mainWindow.loadURL(url.format({
-  //     pathname: path.join(__dirname, 'index.html'),
-  //     protocol: 'file:',
-  //     slashes: true
-  //   }));
-
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
     // Dereference the window object, usually you would store windows
@@ -55,7 +49,6 @@ function createWindow () {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', function () {
-  startServer()
   createWindow()
   createTray()
 })
@@ -76,10 +69,6 @@ app.on('activate', function () {
     createWindow()
   }
 })
-
-function startServer() {
-  // var startServer = edge.func('./assets/dll/Wallet.WebApi.dll');
-}
 
 function createTray() {
   //Put the app in system tray

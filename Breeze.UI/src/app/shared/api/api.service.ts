@@ -11,12 +11,12 @@ import { Mnemonic } from '../mnemonic';
 export class ApiService {
     constructor(private http: Http) {};
 
-    private webApiUrl = 'http://localhost:5000/';
+    private webApiUrl = 'http://localhost:5000/api/v1';
     private headers = new Headers({'Content-Type': 'application/json'});
 
     isConnected(): Observable<string> {
       return this.http
-        .get(this.webApiUrl + 'api/safe/connected')
+        .get(this.webApiUrl + '/safe/connected')
         .map(data => data.json())
     }
 
@@ -28,7 +28,7 @@ export class ApiService {
     }
 
     private handleError(error: any): Promise<any> {
-      console.error('An error occurred', error); // for demo purposes only
+      console.error('An error occurred', error);
       return Promise.reject(error.message || error);
     }
 }
