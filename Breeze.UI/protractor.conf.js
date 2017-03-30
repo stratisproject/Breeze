@@ -10,6 +10,10 @@ exports.config = {
     './e2e/**/*.e2e-spec.ts'
   ],
   capabilities: {
+    chromeOptions: {
+      binary: './node_modules/electron/dist/electron',
+      args: ['--test-type=webdriver']
+    },
     'browserName': 'chrome'
   },
   directConnect: true,
@@ -23,7 +27,7 @@ exports.config = {
   useAllAngular2AppRoots: true,
   beforeLaunch: function() {
     require('ts-node').register({
-      project: 'e2e'
+      project: 'e2e/tsconfig.e2e.json'
     });
   },
   onPrepare: function() {

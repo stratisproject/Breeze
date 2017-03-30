@@ -198,10 +198,6 @@ module.exports = {
   },
   "plugins": [
     new NoEmitOnErrorsPlugin(),
-    new CopyWebpackPlugin([{
-      context: path.resolve(__dirname, "src"),
-      from: "electron.js"
-    }]),
     new GlobCopyWebpackPlugin({
       "patterns": [
         "assets"
@@ -212,6 +208,10 @@ module.exports = {
         "ignore": "**/.gitkeep"
       }
     }),
+    new CopyWebpackPlugin([{
+      context: path.resolve(__dirname, "src"),
+      from: "electron.js"
+    }]),
     new ProgressPlugin(),
     new HtmlWebpackPlugin({
       "template": "./src/index.html",
@@ -299,7 +299,7 @@ module.exports = {
         "environments/environment.ts": "environments/environment.ts"
       },
       "exclude": [],
-      "tsConfigPath": "src/tsconfig.json",
+      "tsConfigPath": "src/tsconfig.app.json",
       "skipCodeGeneration": true
     })
   ],
