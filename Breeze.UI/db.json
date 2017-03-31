@@ -1,0 +1,14 @@
+{
+    "status":
+    {
+        "success": "true",
+        "connectedNodeCount": "7",
+        "maxConnextedNodeCount": "8",
+        "headerChainHeight": "1048",
+        "trackingHeight": "1047",
+        "trackedTransactionCount": "306",
+        "trackedScriptPubKeyCount": "100",
+        "walletState": "syncingBlocks",
+        "historyChangeBump": "231321"
+    }
+}
