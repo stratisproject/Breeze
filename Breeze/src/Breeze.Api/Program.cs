@@ -2,6 +2,7 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Stratis.Bitcoin;
 
 namespace Breeze.Api
 {
@@ -12,7 +13,7 @@ namespace Breeze.Api
 			Initialize();
 		}
 
-		public static void Initialize(IEnumerable<ServiceDescriptor> services = null)
+		public static void Initialize(IEnumerable<ServiceDescriptor> services = null, FullNode fullNode = null)
 		{
 			var host = new WebHostBuilder()
 				.UseKestrel()
@@ -20,20 +21,30 @@ namespace Breeze.Api
 				.UseIISIntegration()
 				.ConfigureServices(collection =>
 				{
-					if (services == null)
+					if (services == null || fullNode == null)
 					{
 						return;
 					}
-
+					
+					// copies all the services defined for the full node to the Api.
+					// also copies over singleton instances already defined
 					foreach (var service in services)
 					{
-						collection.Add(service);
+						var obj = fullNode.Services.ServiceProvider.GetService(service.ServiceType);
+						if (obj != null && service.Lifetime == ServiceLifetime.Singleton && service.ImplementationInstance == null)
+						{
+							collection.AddSingleton(service.ServiceType, obj);
+						}
+						else
+						{
+							collection.Add(service);
+						}
 					}
 				})
 				.UseStartup<Startup>()
 				.Build();
 
-			host.Run();
+			host.Start();
 		}
 	}
 }
