@@ -10,6 +10,9 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 
+import { ApiService } from './shared/api/api.service';
+
+
 @NgModule({
   imports: [
     AppRoutingModule,
@@ -22,8 +25,8 @@ import { AppComponent } from './app.component';
   declarations: [
     AppComponent
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [ ApiService ],
+  bootstrap: [ AppComponent ]
 })
 
 export class AppModule { }
