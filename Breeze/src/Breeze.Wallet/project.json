@@ -6,7 +6,7 @@
     "Microsoft.AspNetCore.Mvc.Versioning": "1.0.3",
     "NBitcoin": "3.0.2.10",
     "NETStandard.Library": "1.6.1",
-    "Stratis.Bitcoin": "1.0.1.2-alpha"
+    "Stratis.Bitcoin": "1.0.1.3-alpha"
   },
 
   "frameworks": {
