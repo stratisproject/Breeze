@@ -16,18 +16,18 @@ export class AppComponent implements OnInit {
   private isConfigured: boolean = true;
 
   ngOnInit() {
-    this.response = this.checkWalletStatus();
+    this.checkWalletStatus();
   }
 
   private checkWalletStatus(){
     this.apiService.getWalletStatus()
       .subscribe(
-        response => this.response = response,
+        response => this.response = response.success,
         error => this.errorMessage = <any>error
       );
 
-    if (this.response.success = "true") {
-      remote.dialog.showMessageBox({message: remote.app.getPath('userData')})
+    if (this.response = "true") {
+      // remote.dialog.showMessageBox({message: remote.app.getPath('userData')})
       this.router.navigateByUrl('/wallet')
     } else {
       this.router.navigateByUrl('/setup')
