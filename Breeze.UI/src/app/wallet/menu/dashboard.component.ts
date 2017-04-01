@@ -25,8 +25,6 @@ export class DashboardComponent {
                 error => this.errorMessage = <any>error,
                 () => this.setBalance()
         );
-
-        
     }
 
     private setBalance() {

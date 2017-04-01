@@ -1,1 +1,15 @@
 <h1>History</h1>
+<table *ngIf="transactions"> 
+    <thead>
+        <th>Timestamp</th>
+        <th>Amount</th>
+        <th>Confirmed</th>
+        <th>Transaction ID</th>
+    </thead>
+    <tr *ngFor="let transaction of transactions">
+        <td>{{ transaction.timestamp }}</td>
+        <td>{{ transaction.amount }}</td>
+        <td>{{ transaction.confirmed }}</td>
+        <td>{{ transaction.txid }}</td>
+    </tr>
+</table>
