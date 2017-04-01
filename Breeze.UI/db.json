@@ -36,5 +36,19 @@
             "timestamp": "2016.12.20. 1:15:36"
             }
         ]
-        }
+    },
+    "receive":
+    {
+        "success": "true",
+        "addresses":
+        [
+            "mzz63n3n89KVeHQXRqJEVsQX8MZj5zeqCw",
+            "mhm1pFe2hH7yqkdQhwbBQ8qLnMZqfL6jXb",
+            "mmRzqMDBrfNxMfryQSYec3rfPHXURNapBA",
+            "my2ELDBqLGVz1ER7CMynDqG4BUpV2pwfR5",
+            "mmwccp4GefhPn4P6Mui6DGLGzHTVyQ12tD",
+            "miTedyDXJAz6GYMRasiJk9M3ibnGnb99M1",
+            "mrsb39MmPceSPfKAURTH23hYgLRH1M1Uhg"
+        ]
+    }
 }

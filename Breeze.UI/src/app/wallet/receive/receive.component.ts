@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import { ApiService } from '../../shared/api/api.service'
 
 @Component({
   selector: 'receive-component',
@@ -7,5 +9,20 @@ import { Component } from '@angular/core';
 })
 
 export class ReceiveComponent {
-  
+  constructor(private apiService: ApiService) {}
+
+  private addresses: any;
+  private errorMessage: string;
+
+  ngOnInit() {
+    this.getUnusedReceiveAddresses();
+  }
+
+  private getUnusedReceiveAddresses() {
+    this.apiService.getUnusedReceiveAddresses()
+      .subscribe(
+        response => this.addresses = response.addresses,
+        error => this.errorMessage = <any>error
+    );
+  }
 }

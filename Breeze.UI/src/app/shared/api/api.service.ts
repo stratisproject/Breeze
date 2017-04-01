@@ -42,6 +42,13 @@ export class ApiService {
         .catch(this.handleError);
     }
 
+    getUnusedReceiveAddresses(): Observable<any> {
+      return this.http
+        .get(this.webApiUrl + '/wallet/receive')
+        .map((response:Response) => response.json())
+        .catch(this.handleError);
+    }
+
     createWallet(data: SafeCreation): Observable<any> {
       console.log(JSON.stringify(data));
       return this.http

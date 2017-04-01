@@ -22,8 +22,7 @@ export class HistoryComponent {
     this.apiService.getWalletHistory()
       .subscribe(
         response => this.transactions = response.history,
-        error => this.errorMessage = <any>error,
-        () => console.log(this.transactions)
+        error => this.errorMessage = <any>error
     );
   }
 }
