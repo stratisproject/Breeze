@@ -1,4 +1,4 @@
 {
   "/api/v1/wallet/": "/",
-  "/api/v1/create/": "/"
+  "/api/v1/setup/": "/"
 }

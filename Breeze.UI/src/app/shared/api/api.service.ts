@@ -28,6 +28,27 @@ export class ApiService {
         .catch(this.handleError);
     }
 
+    getWalletBalance(): Observable<any> {
+      return this.http
+        .get(this.webApiUrl + '/wallet/balance')
+        .map((response:Response) => response.json())
+        .catch(this.handleError);
+    }
+
+    getWalletHistory(): Observable<any> {
+      return this.http
+        .get(this.webApiUrl + '/wallet/history')
+        .map((response:Response) => response.json())
+        .catch(this.handleError);
+    }
+
+    getUnusedReceiveAddresses(): Observable<any> {
+      return this.http
+        .get(this.webApiUrl + '/wallet/receive')
+        .map((response:Response) => response.json())
+        .catch(this.handleError);
+    }
+
     createWallet(data: SafeCreation): Observable<any> {
       console.log(JSON.stringify(data));
       return this.http

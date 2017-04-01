@@ -5,7 +5,6 @@ import { RouterModule }   from '@angular/router';
 
 import { SetupComponent } from './setup.component';
 import { CreateComponent } from './create/create.component';
-import { ApiComponent } from './create/api.component';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -20,8 +19,7 @@ import { SetupRoutingModule } from './setup-routing.module';
   ],
   declarations: [
     CreateComponent,
-    SetupComponent,
-    ApiComponent
+    SetupComponent
   ],
   exports: [ SetupComponent ],
   providers: []
