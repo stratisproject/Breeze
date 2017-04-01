@@ -10,5 +10,31 @@
         "trackedScriptPubKeyCount": "100",
         "walletState": "syncingBlocks",
         "historyChangeBump": "231321"
-    }
+    },
+    "balance": 
+    {
+        "success": "true",
+        "synced": "true",
+        "confirmed": "0.144",
+        "unconfirmed": "-6.23"
+    },
+    "history":
+    {
+        "success": "true",
+        "history": 
+        [
+            {
+            "txid": "9a9949476b629b4075b31d8faad64dad352586a18df8f2810c5a7bb900478c60",
+            "amount": "0.1",
+            "confirmed": "true",
+            "timestamp": "2016.12.19. 23:15:05"
+            },
+            {
+            "txid": "9a9949476b629b4075b31d8faad64dad352586a18df8f2810c5a7bb900478c60",
+            "amount": "-0.1",
+            "confirmed": "false",
+            "timestamp": "2016.12.20. 1:15:36"
+            }
+        ]
+        }
 }
