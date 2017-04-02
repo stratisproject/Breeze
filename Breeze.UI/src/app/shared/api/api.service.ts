@@ -7,6 +7,10 @@ import 'rxjs/add/operator/catch';
 import { SafeCreation } from '../safe-creation';
 import { Mnemonic } from '../mnemonic';
 
+/**
+ * For information on the API specification have a look at our Github:
+ * https://github.com/stratisproject/Breeze/blob/master/Breeze.Documentation/ApiSpecification.md
+ */
 @Injectable()
 export class ApiService {
     constructor(private http: Http) {};
@@ -14,13 +18,9 @@ export class ApiService {
     private webApiUrl = 'http://localhost:3000/api/v1';
     private headers = new Headers({'Content-Type': 'application/json'});
 
-    isConnected(): Observable<any> {
-      return this.http
-        .get(this.webApiUrl + '/safe/connected')
-        .map((response:Response) => response.json())
-        .catch(this.handleError);
-    }
-
+    /**
+     * Get wallet status info from the API.
+     */
     getWalletStatus(): Observable<any> {
       return this.http
         .get(this.webApiUrl + '/wallet/status')
@@ -28,6 +28,9 @@ export class ApiService {
         .catch(this.handleError);
     }
 
+    /**
+     * Get wallet balance info from the API. 
+     */
     getWalletBalance(): Observable<any> {
       return this.http
         .get(this.webApiUrl + '/wallet/balance')
@@ -35,6 +38,9 @@ export class ApiService {
         .catch(this.handleError);
     }
 
+    /**
+     * Get a wallets transaction history info from the API.
+     */
     getWalletHistory(): Observable<any> {
       return this.http
         .get(this.webApiUrl + '/wallet/history')
@@ -42,6 +48,9 @@ export class ApiService {
         .catch(this.handleError);
     }
 
+    /**
+     * Get unused receive addresses for a certain wallet from the API.
+     */
     getUnusedReceiveAddresses(): Observable<any> {
       return this.http
         .get(this.webApiUrl + '/wallet/receive')
@@ -49,13 +58,20 @@ export class ApiService {
         .catch(this.handleError);
     }
 
+    /**
+     * Create a new wallet.
+     */
     createWallet(data: SafeCreation): Observable<any> {
       console.log(JSON.stringify(data));
       return this.http
         .post(this.webApiUrl + 'api/safe', JSON.stringify(data), {headers: this.headers})
         .map(response => response.json());
     }
-
+    
+    /**
+     * Handle errors from the API.
+     * @param error 
+     */
     private handleError (error: Response | any) {
     let errMsg: string;
     if (error instanceof Response) {
