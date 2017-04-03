@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using Breeze.Wallet.Models;
 using HBitcoin.KeyManagement;
 using NBitcoin;
 
@@ -78,6 +79,32 @@ namespace Breeze.Wallet.Wrappers
 				default:
 					return Network.TestNet;
 			}
+		}
+
+		public WalletInfoModel GetInfo(string name)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public WalletBalanceModel GetBalance(string walletName)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public WalletHistoryModel GetHistory(string walletName)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public WalletBuildTransactionModel BuildTransaction(string password, string address, Money amount, string feeType,
+			bool allowUnconfirmed)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public bool SendTransaction(string transactionHex)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security;
+using Breeze.Wallet.Errors;
 using Microsoft.AspNetCore.Mvc;
 using Breeze.Wallet.Models;
 using Breeze.Wallet.Wrappers;
@@ -25,14 +27,14 @@ namespace Breeze.Wallet.Controllers
 		/// <param name="walletCreation">The object containing the parameters used to create the wallet.</param>
 		/// <returns>A JSON object containing the mnemonic created for the new wallet.</returns>
 		[HttpPost]
-        public IActionResult Create([FromBody]WalletCreationModel walletCreation)
+        public IActionResult Create([FromBody]WalletCreationRequest walletCreation)
         {
             // checks the request is valid
             if (!this.ModelState.IsValid)
             {
                 var errors = this.ModelState.Values.SelectMany(e => e.Errors.Select(m => m.ErrorMessage));
-                return this.BadRequest(string.Join(Environment.NewLine, errors));
-            }
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, "Formatting error", string.Join(Environment.NewLine, errors));
+			}
             
             try
             {
@@ -41,22 +43,20 @@ namespace Breeze.Wallet.Controllers
             }
             catch (NotSupportedException e)
             {
-                Console.WriteLine(e);
-               
-                // indicates that this wallet already exists
-                return this.StatusCode((int) HttpStatusCode.Conflict, "This wallet already exists.");
+				// indicates that this wallet already exists
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.Conflict, "This wallet already exists.", e.ToString());
             }            
         }
-
-		[HttpGet]
-        public IActionResult Load([FromQuery]WalletLoadModel walletLoad)
+		
+	    [HttpGet]
+        public IActionResult Load([FromQuery]WalletLoadRequest walletLoad)
         {
             // checks the request is valid
             if (!this.ModelState.IsValid)
             {
                 var errors = this.ModelState.Values.SelectMany(e => e.Errors.Select(m => m.ErrorMessage));
-                return this.BadRequest(string.Join(Environment.NewLine, errors));
-            }
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, "Formatting error", string.Join(Environment.NewLine, errors));
+			}
             
             try
             {
@@ -66,35 +66,29 @@ namespace Breeze.Wallet.Controllers
             }            
             catch (FileNotFoundException e)
             {
-                Console.WriteLine(e);
-
-                // indicates that this wallet does not exist
-                return this.StatusCode((int)HttpStatusCode.NotFound, "Wallet not found.");
-            }
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.Conflict, "This wallet already exists.", e.ToString());
+			}
             catch (SecurityException e)
             {
-                Console.WriteLine(e);
-              
-                // indicates that the password is wrong
-                return this.StatusCode((int)HttpStatusCode.Forbidden, "Wrong password, please try again.");
+				// indicates that the password is wrong
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.Forbidden, "Wrong password, please try again.", e.ToString());				
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                return this.StatusCode((int)HttpStatusCode.BadRequest, e.Message);
-            }
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, e.Message, e.ToString());
+			}
         }
 
         [Route("recover")]
         [HttpPost]
-        public IActionResult Recover([FromBody]WalletRecoveryModel walletRecovery)
+        public IActionResult Recover([FromBody]WalletRecoveryRequest walletRecovery)
         {
             // checks the request is valid
             if (!this.ModelState.IsValid)
             {
                 var errors = this.ModelState.Values.SelectMany(e => e.Errors.Select(m => m.ErrorMessage));
-                return this.BadRequest(string.Join(Environment.NewLine, errors));
-            }
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, "Formatting error", string.Join(Environment.NewLine, errors));
+			}
 
             try
             {
@@ -104,23 +98,133 @@ namespace Breeze.Wallet.Controllers
             }
             catch (FileNotFoundException e)
             {
-                Console.WriteLine(e);
-
-                // indicates that this wallet does not exist
-                return this.StatusCode((int)HttpStatusCode.NotFound, "Wallet not found.");
+				// indicates that this wallet does not exist
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.NotFound, "Wallet not found.", e.ToString());				
             }
             catch (SecurityException e)
             {
-                Console.WriteLine(e);
-
-                // indicates that the password is wrong
-                return this.StatusCode((int)HttpStatusCode.Forbidden, "Wrong password, please try again.");
-            }
+				// indicates that the password is wrong
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.Forbidden, "Wrong password, please try again.", e.ToString());
+			}
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                return this.StatusCode((int)HttpStatusCode.BadRequest, e.Message);
-            }
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, e.Message, e.ToString());
+			}
         }
-    }
+
+	    [Route("info")]
+	    [HttpGet]
+	    public IActionResult GetInfo([FromQuery] WalletName model)
+	    {
+			// checks the request is valid
+			if (!this.ModelState.IsValid)
+			{
+				var errors = this.ModelState.Values.SelectMany(e => e.Errors.Select(m => m.ErrorMessage));
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, "Formatting error", string.Join(Environment.NewLine, errors));
+			}
+
+			try
+			{				
+				return this.Json(this.walletWrapper.GetInfo(model.Name));
+
+			}			
+			catch (Exception e)
+			{
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, e.Message, e.ToString());
+			}
+		}
+
+		[Route("history")]
+		[HttpGet]
+		public IActionResult GetHistory([FromQuery] WalletName model)
+		{
+			// checks the request is valid
+			if (!this.ModelState.IsValid)
+			{
+				var errors = this.ModelState.Values.SelectMany(e => e.Errors.Select(m => m.ErrorMessage));
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, "Formatting error", string.Join(Environment.NewLine, errors));
+			}
+
+			try
+			{
+				return this.Json(this.walletWrapper.GetHistory(model.Name));
+
+			}
+			catch (Exception e)
+			{
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, e.Message, e.ToString());
+			}
+		}
+
+		[Route("balance")]
+		[HttpGet]
+		public IActionResult GetBalance([FromQuery] WalletName model)
+		{
+			// checks the request is valid
+			if (!this.ModelState.IsValid)
+			{
+				var errors = this.ModelState.Values.SelectMany(e => e.Errors.Select(m => m.ErrorMessage));
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, "Formatting error", string.Join(Environment.NewLine, errors));
+			}
+
+			try
+			{
+				return this.Json(this.walletWrapper.GetBalance(model.Name));
+
+			}
+			catch (Exception e)
+			{
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, e.Message, e.ToString());
+			}
+		}
+
+		[Route("build-transaction")]
+		[HttpPost]
+		public IActionResult BuildTransaction([FromQuery] BuildTransactionRequest request)
+		{
+			// checks the request is valid
+			if (!this.ModelState.IsValid)
+			{
+				var errors = this.ModelState.Values.SelectMany(e => e.Errors.Select(m => m.ErrorMessage));
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, "Formatting error", string.Join(Environment.NewLine, errors));
+			}
+
+			try
+			{
+				return this.Json(this.walletWrapper.BuildTransaction(request.Password, request.Address, request.Amount, request.FeeType, request.AllowUnconfirmed));
+
+			}
+			catch (Exception e)
+			{
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, e.Message, e.ToString());
+			}
+		}
+
+		[Route("send-transaction")]
+		[HttpPost]
+		public IActionResult SendTransaction([FromQuery] SendTransactionRequest request)
+		{
+			// checks the request is valid
+			if (!this.ModelState.IsValid)
+			{
+				var errors = this.ModelState.Values.SelectMany(e => e.Errors.Select(m => m.ErrorMessage));
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, "Formatting error", string.Join(Environment.NewLine, errors));
+			}
+
+			try
+			{
+				var result = this.walletWrapper.SendTransaction(request.Hex);
+				if (result)
+				{
+					return this.Ok();
+				}
+
+				return this.StatusCode((int)HttpStatusCode.BadRequest);
+			}
+			catch (Exception e)
+			{
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, e.Message, e.ToString());
+			}
+		}
+	}
 }
