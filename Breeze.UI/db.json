@@ -10,7 +10,7 @@
     },
     "status":
     {
-        "success": "false",
+        "success": "true",
         "connectedNodeCount": "7",
         "maxConnextedNodeCount": "8",
         "headerChainHeight": "1048",
