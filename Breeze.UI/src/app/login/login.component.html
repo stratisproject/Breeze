@@ -1,0 +1,9 @@
+<h1>Welcome back</h1>
+<p>Please enter your password to decrypt your wallet</p>
+<form (ngSubmit)="onSubmit()" #passwordForm="ngForm">
+  <div class="form-group">
+    <label for="password">Your password: </label>
+    <input type="password" class="form-control" id="password" required name="password">
+  </div>
+  <button type="submit" class="btn btn-success">Decrypt</button>
+</form>

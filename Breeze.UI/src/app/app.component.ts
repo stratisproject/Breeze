@@ -28,9 +28,9 @@ export class AppComponent implements OnInit {
         error => this.errorMessage = <any>error
       );
 
-    if (this.response = "true") {
+    if (this.response === "true") {
       // remote.dialog.showMessageBox({message: remote.app.getPath('userData')})
-      this.router.navigate(['/wallet'])
+      this.router.navigate(['/login'])
     } else {
       this.router.navigate(['/setup'])
     }

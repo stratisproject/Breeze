@@ -9,12 +9,14 @@ import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
+import { LoginComponent } from './login/login.component';
 
 import { ApiService } from './shared/api/api.service';
 
 
 @NgModule({
   imports: [
+    
     AppRoutingModule,
     BrowserModule,
     HttpModule,
@@ -23,7 +25,8 @@ import { ApiService } from './shared/api/api.service';
     SharedModule.forRoot()
   ],
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginComponent
   ],
   providers: [ ApiService ],
   bootstrap: [ AppComponent ]

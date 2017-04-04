@@ -1,7 +1,16 @@
 {
-    "status":
+    "create":
     {
         "success": "true",
+        "mnemonic": "foo bar buz"
+    },
+    "load":
+    {
+        "success": "true"
+    },
+    "status":
+    {
+        "success": "false",
         "connectedNodeCount": "7",
         "maxConnextedNodeCount": "8",
         "headerChainHeight": "1048",

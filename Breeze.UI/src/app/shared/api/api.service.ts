@@ -19,6 +19,26 @@ export class ApiService {
     private headers = new Headers({'Content-Type': 'application/json'});
 
     /**
+     * Create a new wallet.
+     */
+    createWallet(data: SafeCreation): Observable<any> {
+      console.log(JSON.stringify(data));
+      return this.http
+        .post(this.webApiUrl + 'api/safe', JSON.stringify(data), {headers: this.headers})
+        .map(response => response.json());
+    }
+
+    /**
+     * Load a wallet
+     */
+    loadWallet(password: string): Observable<any> {
+      return this.http
+        .get(this.webApiUrl + '/wallet/load/', {headers: this.headers, body: JSON.stringify(password)})
+        .map(response => response.json())
+        .catch(this.handleError);
+    }
+
+    /**
      * Get wallet status info from the API.
      */
     getWalletStatus(): Observable<any> {
@@ -56,16 +76,6 @@ export class ApiService {
         .get(this.webApiUrl + '/wallet/receive')
         .map((response:Response) => response.json())
         .catch(this.handleError);
-    }
-
-    /**
-     * Create a new wallet.
-     */
-    createWallet(data: SafeCreation): Observable<any> {
-      console.log(JSON.stringify(data));
-      return this.http
-        .post(this.webApiUrl + 'api/safe', JSON.stringify(data), {headers: this.headers})
-        .map(response => response.json());
     }
     
     /**
