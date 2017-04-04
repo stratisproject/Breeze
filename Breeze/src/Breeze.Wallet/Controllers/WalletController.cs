@@ -20,12 +20,13 @@ namespace Breeze.Wallet.Controllers
         {
             this.walletWrapper = walletWrapper;
         }
-		
+
 		/// <summary>
 		/// Creates a new wallet on the local machine.
 		/// </summary>
 		/// <param name="walletCreation">The object containing the parameters used to create the wallet.</param>
 		/// <returns>A JSON object containing the mnemonic created for the new wallet.</returns>
+		[Route("create")]
 		[HttpPost]
         public IActionResult Create([FromBody]WalletCreationRequest walletCreation)
         {
@@ -47,9 +48,10 @@ namespace Breeze.Wallet.Controllers
 				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.Conflict, "This wallet already exists.", e.ToString());
             }            
         }
-		
-	    [HttpGet]
-        public IActionResult Load([FromQuery]WalletLoadRequest walletLoad)
+
+		[Route("load")]
+		[HttpPost]
+        public IActionResult Load([FromBody]WalletLoadRequest walletLoad)
         {
             // checks the request is valid
             if (!this.ModelState.IsValid)
@@ -180,7 +182,7 @@ namespace Breeze.Wallet.Controllers
 
 		[Route("build-transaction")]
 		[HttpPost]
-		public IActionResult BuildTransaction([FromQuery] BuildTransactionRequest request)
+		public IActionResult BuildTransaction([FromBody] BuildTransactionRequest request)
 		{
 			// checks the request is valid
 			if (!this.ModelState.IsValid)
@@ -202,7 +204,7 @@ namespace Breeze.Wallet.Controllers
 
 		[Route("send-transaction")]
 		[HttpPost]
-		public IActionResult SendTransaction([FromQuery] SendTransactionRequest request)
+		public IActionResult SendTransaction([FromBody] SendTransactionRequest request)
 		{
 			// checks the request is valid
 			if (!this.ModelState.IsValid)
