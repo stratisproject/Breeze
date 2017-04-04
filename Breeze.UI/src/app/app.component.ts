@@ -30,9 +30,9 @@ export class AppComponent implements OnInit {
 
     if (this.response = "true") {
       // remote.dialog.showMessageBox({message: remote.app.getPath('userData')})
-      this.router.navigateByUrl('/wallet')
+      this.router.navigate(['/wallet'])
     } else {
-      this.router.navigateByUrl('/setup')
+      this.router.navigate(['/setup'])
     }
   }
 
