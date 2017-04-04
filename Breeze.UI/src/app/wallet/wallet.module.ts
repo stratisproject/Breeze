@@ -27,7 +27,7 @@ import { WalletRoutingModule } from './wallet-routing.module';
     DashboardComponent,
     ReceiveComponent,
     SendComponent,
-    HistoryComponent,
+    HistoryComponent
   ],
   exports: [
     WalletComponent

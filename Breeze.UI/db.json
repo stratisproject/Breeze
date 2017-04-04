@@ -1,4 +1,13 @@
 {
+    "create":
+    {
+        "success": "true",
+        "mnemonic": "foo bar buz"
+    },
+    "load":
+    {
+        "success": "true"
+    },
     "status":
     {
         "success": "true",

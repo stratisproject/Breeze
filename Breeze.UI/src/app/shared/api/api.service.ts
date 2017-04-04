@@ -7,6 +7,10 @@ import 'rxjs/add/operator/catch';
 import { SafeCreation } from '../safe-creation';
 import { Mnemonic } from '../mnemonic';
 
+/**
+ * For information on the API specification have a look at our Github:
+ * https://github.com/stratisproject/Breeze/blob/master/Breeze.Documentation/ApiSpecification.md
+ */
 @Injectable()
 export class ApiService {
     constructor(private http: Http) {};
@@ -14,41 +18,9 @@ export class ApiService {
     private webApiUrl = 'http://localhost:3000/api/v1';
     private headers = new Headers({'Content-Type': 'application/json'});
 
-    isConnected(): Observable<any> {
-      return this.http
-        .get(this.webApiUrl + '/safe/connected')
-        .map((response:Response) => response.json())
-        .catch(this.handleError);
-    }
-
-    getWalletStatus(): Observable<any> {
-      return this.http
-        .get(this.webApiUrl + '/wallet/status')
-        .map((response:Response) => response.json())
-        .catch(this.handleError);
-    }
-
-    getWalletBalance(): Observable<any> {
-      return this.http
-        .get(this.webApiUrl + '/wallet/balance')
-        .map((response:Response) => response.json())
-        .catch(this.handleError);
-    }
-
-    getWalletHistory(): Observable<any> {
-      return this.http
-        .get(this.webApiUrl + '/wallet/history')
-        .map((response:Response) => response.json())
-        .catch(this.handleError);
-    }
-
-    getUnusedReceiveAddresses(): Observable<any> {
-      return this.http
-        .get(this.webApiUrl + '/wallet/receive')
-        .map((response:Response) => response.json())
-        .catch(this.handleError);
-    }
-
+    /**
+     * Create a new wallet.
+     */
     createWallet(data: SafeCreation): Observable<any> {
       console.log(JSON.stringify(data));
       return this.http
@@ -56,6 +28,60 @@ export class ApiService {
         .map(response => response.json());
     }
 
+    /**
+     * Load a wallet
+     */
+    loadWallet(password: string): Observable<any> {
+      return this.http
+        .get(this.webApiUrl + '/wallet/load/', {headers: this.headers, body: JSON.stringify(password)})
+        .map(response => response.json())
+        .catch(this.handleError);
+    }
+
+    /**
+     * Get wallet status info from the API.
+     */
+    getWalletStatus(): Observable<any> {
+      return this.http
+        .get(this.webApiUrl + '/wallet/status')
+        .map((response:Response) => response.json())
+        .catch(this.handleError);
+    }
+
+    /**
+     * Get wallet balance info from the API. 
+     */
+    getWalletBalance(): Observable<any> {
+      return this.http
+        .get(this.webApiUrl + '/wallet/balance')
+        .map((response:Response) => response.json())
+        .catch(this.handleError);
+    }
+
+    /**
+     * Get a wallets transaction history info from the API.
+     */
+    getWalletHistory(): Observable<any> {
+      return this.http
+        .get(this.webApiUrl + '/wallet/history')
+        .map((response:Response) => response.json())
+        .catch(this.handleError);
+    }
+
+    /**
+     * Get unused receive addresses for a certain wallet from the API.
+     */
+    getUnusedReceiveAddresses(): Observable<any> {
+      return this.http
+        .get(this.webApiUrl + '/wallet/receive')
+        .map((response:Response) => response.json())
+        .catch(this.handleError);
+    }
+    
+    /**
+     * Handle errors from the API.
+     * @param error 
+     */
     private handleError (error: Response | any) {
     let errMsg: string;
     if (error instanceof Response) {

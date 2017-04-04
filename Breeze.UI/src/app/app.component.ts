@@ -24,15 +24,18 @@ export class AppComponent implements OnInit {
   private checkWalletStatus(){
     this.apiService.getWalletStatus()
       .subscribe(
-        response => this.response = response.success,
-        error => this.errorMessage = <any>error
+        response => this.response = response,
+        error => this.errorMessage = <any>error,
+        () => this.navigate()
       );
+  }
 
-    if (this.response = "true") {
+  private navigate() {
+    if (this.response.success === "true") {
       // remote.dialog.showMessageBox({message: remote.app.getPath('userData')})
-      this.router.navigateByUrl('/wallet')
+      this.router.navigate(['/login'])
     } else {
-      this.router.navigateByUrl('/setup')
+      this.router.navigate(['/setup'])
     }
   }
 
