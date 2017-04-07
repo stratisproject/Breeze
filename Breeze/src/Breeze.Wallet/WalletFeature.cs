@@ -26,6 +26,8 @@ namespace Breeze.Wallet
 		{
 			BlockSubscriber sub = new BlockSubscriber(signals.Blocks, new BlockObserver(chain, trackerWrapper));
 			sub.Subscribe();
+            TransactionSubscriber txSub = new TransactionSubscriber(signals.Transactions, new TransactionObserver(trackerWrapper));
+		    txSub.Subscribe();
 		}
 	}
 

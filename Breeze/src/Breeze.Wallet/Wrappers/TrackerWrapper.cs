@@ -13,8 +13,8 @@ namespace Breeze.Wallet.Wrappers
         {
             this.tracker = new Tracker(network);              
         }
-
-		/// <summary>
+        
+        /// <summary>
 		/// Get the hash of the last block that has been succesfully processed.
 		/// </summary>
 		/// <returns>The hash of the block</returns>
@@ -27,7 +27,15 @@ namespace Breeze.Wallet.Wrappers
 		public void NotifyAboutBlock(int height, Block block)
         {
             this.tracker.AddOrReplaceBlock(new Height(height), block);
-			Console.WriteLine($"height: {height}, block hash: {block.Header.GetHash()}");
+			Console.WriteLine($"block notification: height: {height}, block hash: {block.Header.GetHash()}");
         }
+
+        public void NotifyAboutTransaction(Transaction transaction)
+        {
+            // TODO what should the height be? is it necessary?
+            this.tracker.ProcessTransaction(new SmartTransaction(transaction, new Height(0)));
+            Console.WriteLine($"transaction notification: tx hash {transaction.GetHash()}");
+        }
+
     }
 }
