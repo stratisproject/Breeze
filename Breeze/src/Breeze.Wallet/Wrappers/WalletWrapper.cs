@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Breeze.Wallet.Models;
 using HBitcoin.FullBlockSpv;
 using HBitcoin.KeyManagement;
+using HBitcoin.Models;
 using NBitcoin;
 
 namespace Breeze.Wallet.Wrappers
@@ -84,6 +85,28 @@ namespace Breeze.Wallet.Wrappers
 			};
 		}
 
+		private SafeAccount GetAccount(string aliceOrBob)
+		{
+			var trimmed = aliceOrBob.Trim();
+			if (trimmed.Equals("alice", StringComparison.OrdinalIgnoreCase))
+				return _aliceAccount;
+			if(trimmed.Equals("bob", StringComparison.OrdinalIgnoreCase))
+				return _bobAccount;
+			throw new ArgumentException("Wrong account");
+		}
+
+		private FeeType GetFeeType(string feeType)
+		{
+			var trimmed = feeType.Trim();
+			if (trimmed.Equals("low", StringComparison.OrdinalIgnoreCase))
+				return FeeType.Low;
+			if (trimmed.Equals("medium", StringComparison.OrdinalIgnoreCase))
+				return FeeType.Medium;
+			if (trimmed.Equals("heigh", StringComparison.OrdinalIgnoreCase))
+				return FeeType.High;
+			throw new ArgumentException("Wrong feeType");
+		}
+
 		private Network GetNetwork(string network)
 		{
 			// any network different than MainNet will default to TestNet			
@@ -109,18 +132,51 @@ namespace Breeze.Wallet.Wrappers
 
 		public WalletHistoryModel GetHistory(string walletName)
 		{
-			throw new System.NotImplementedException();
+			var model = new WalletHistoryModel();
+			foreach(var record in _walletJob.GetSafeHistory())
+			{
+				model.Transactions.Add(new TransactionItem
+				{
+					TransactionId = record.TransactionId,
+					Amount = record.Amount,
+					Confirmed = record.Confirmed,
+					Timestamp = record.TimeStamp
+				});
+			}
+			return model;
 		}
 
 		public WalletBuildTransactionModel BuildTransaction(string password, string address, Money amount, string feeType,
-			bool allowUnconfirmed)
+			bool allowUnconfirmed, string account)
 		{
-			throw new System.NotImplementedException();
+			var res = _walletJob.BuildTransactionAsync(
+				BitcoinAddress.Create(address, _walletJob.Safe.Network).ScriptPubKey,
+				amount,
+				GetFeeType(feeType),
+				GetAccount(account),
+				allowUnconfirmed).Result;
+
+			return new WalletBuildTransactionModel
+			{
+				Fee = res.Fee,
+				Hex = res.Transaction.ToHex(),
+				SpendsUnconfirmed = res.SpendsUnconfirmed,
+				FeePercentOfSent = res.FeePercentOfSent
+			};
 		}
 
 		public bool SendTransaction(string transactionHex)
 		{
-			throw new System.NotImplementedException();
+			try
+			{
+				var res = WalletJob.SendTransactionAsync(new NBitcoin.Transaction(transactionHex)).Result;
+				if (res.Success) return true;
+				else return false;
+			}
+			catch
+			{
+				return false;
+			}
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NBitcoin;
 using Newtonsoft.Json;
 
@@ -13,15 +14,15 @@ namespace Breeze.Wallet.Models
 	public class TransactionItem
 	{
 		[JsonProperty(PropertyName = "txId")]
-		public string TransactionId { get; set; }
+		public uint256 TransactionId { get; set; }
 
 		[JsonProperty(PropertyName = "amount")]
 		public Money Amount { get; set; }
 
 		[JsonProperty(PropertyName = "confirmed")]
-		public Money Confirmed { get; set; }
+		public bool Confirmed { get; set; }
 
 		[JsonProperty(PropertyName = "timestamp")]
-		public string Timestamp { get; set; }
+		public DateTimeOffset Timestamp { get; set; }
 	}
 }
