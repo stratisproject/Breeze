@@ -49,7 +49,7 @@ This error message comes at all request if the wallet is not loaded yet, except
 - `POST /wallet/create`
 - `POST /wallet/recover`
 - `POST /wallet/send-transaction`
-- `POST /wallet/load`
+- `GET /wallet/load`
 - `DELETE /wallet`
 
 ```
@@ -67,7 +67,7 @@ GET /wallet/general - Displays general information on the wallet
 GET /wallet/sensitive - Displays sensitive information on the wallet
 GET /wallet/status - Displays dynamic information on the wallet
 POST /wallet/create - Creates the wallet
-POST /wallet/load - Loads the wallet and starts syncing
+GET /wallet/load - Loads the wallet and starts syncing
 POST /wallet/recover - Recovers the wallet
 DELETE /wallet - Deletes the wallet
 ```
@@ -105,7 +105,7 @@ POST /wallet/send-transaction - Attempts to send a transaction
   "chainCode": "q/Fn7+RSIVM0p0Nj6rIuNkybF+0WKeSZPMQS2QCbDzY=",
   "network": "main", // main/testnet
   "creationTime": "2017-03-21",
-  "decrypted": "true",
+  "isDecrypted": "true",
   "uniqueId": "sadwpiqjdpijwqdpijwqidjoi" // can only get if decrypted, if not it's empty string
 }
 ```
@@ -155,7 +155,7 @@ POST /wallet/send-transaction - Attempts to send a transaction
   "mnemonic": "foo bar buz",
 }
 ```
-## POST /wallet/load - Loads the wallet and starts syncing
+## GET /wallet/load - Loads the wallet and starts syncing
 ### Parameters
 ```
 {

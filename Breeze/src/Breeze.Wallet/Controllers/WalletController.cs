@@ -50,7 +50,7 @@ namespace Breeze.Wallet.Controllers
         }
 
 		[Route("load")]
-		[HttpPost]
+		[HttpGet]
         public IActionResult Load([FromBody]WalletLoadRequest walletLoad)
         {
             // checks the request is valid
@@ -62,13 +62,12 @@ namespace Breeze.Wallet.Controllers
             
             try
             {
-                var wallet = this.walletWrapper.Load(walletLoad.Password, walletLoad.FolderPath, walletLoad.Name);
-                return this.Json(wallet);
-
+                this.walletWrapper.Load(walletLoad.Password, walletLoad.FolderPath, walletLoad.Name);
+                return this.Json(new SuccessModel {Success = true});
             }            
             catch (FileNotFoundException e)
             {
-				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.Conflict, "This wallet already exists.", e.ToString());
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.NotFound, "Wallet not found.", e.ToString());
 			}
             catch (SecurityException e)
             {
@@ -94,14 +93,14 @@ namespace Breeze.Wallet.Controllers
 
             try
             {
-                var wallet = this.walletWrapper.Recover(walletRecovery.Password, walletRecovery.FolderPath, walletRecovery.Name, walletRecovery.Network, walletRecovery.Mnemonic);
-                return this.Json(wallet);
+                this.walletWrapper.Recover(walletRecovery.Password, walletRecovery.FolderPath, walletRecovery.Name, walletRecovery.Network, walletRecovery.Mnemonic);
+	            return this.Json(new SuccessModel {Success = true});
 
             }
             catch (FileNotFoundException e)
             {
 				// indicates that this wallet does not exist
-				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.NotFound, "Wallet not found.", e.ToString());				
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.Conflict, "This wallet already exists.", e.ToString());	
             }
             catch (Exception e)
             {
@@ -109,9 +108,9 @@ namespace Breeze.Wallet.Controllers
 			}
         }
 
-	    [Route("info")]
+	    [Route("general")]
 	    [HttpGet]
-	    public IActionResult GetInfo([FromQuery] WalletName model)
+	    public IActionResult GetGeneralInfo()
 	    {
 			// checks the request is valid
 			if (!this.ModelState.IsValid)
@@ -122,7 +121,7 @@ namespace Breeze.Wallet.Controllers
 
 			try
 			{				
-				return this.Json(this.walletWrapper.GetInfo(model.Name));
+				return this.Json(this.walletWrapper.GetGeneralInfo());
 
 			}			
 			catch (Exception e)
@@ -131,9 +130,53 @@ namespace Breeze.Wallet.Controllers
 			}
 		}
 
+		[Route("sensitive")]
+		[HttpGet]
+		public IActionResult GetSensitiveInfo([FromBody] WalletSensitiveRequest request)
+		{
+			// checks the request is valid
+			if (!this.ModelState.IsValid)
+			{
+				var errors = this.ModelState.Values.SelectMany(e => e.Errors.Select(m => m.ErrorMessage));
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, "Formatting error", string.Join(Environment.NewLine, errors));
+			}
+
+			try
+			{
+				return this.Json(this.walletWrapper.GetSensitiveInfo(request.Password));
+
+			}
+			catch (Exception e)
+			{
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, e.Message, e.ToString());
+			}
+		}
+
+		[Route("status")]
+		[HttpGet]
+		public IActionResult GetStatusInfo()
+		{
+			// checks the request is valid
+			if (!this.ModelState.IsValid)
+			{
+				var errors = this.ModelState.Values.SelectMany(e => e.Errors.Select(m => m.ErrorMessage));
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, "Formatting error", string.Join(Environment.NewLine, errors));
+			}
+
+			try
+			{
+				return this.Json(this.walletWrapper.GetStatusInfo());
+
+			}
+			catch (Exception e)
+			{
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, e.Message, e.ToString());
+			}
+		}
+
 		[Route("history")]
 		[HttpGet]
-		public IActionResult GetHistory([FromQuery] WalletName model)
+		public IActionResult GetHistory([FromQuery] AccountName model)
 		{
 			// checks the request is valid
 			if (!this.ModelState.IsValid)
@@ -155,7 +198,7 @@ namespace Breeze.Wallet.Controllers
 
 		[Route("balance")]
 		[HttpGet]
-		public IActionResult GetBalance([FromQuery] WalletName model)
+		public IActionResult GetBalance([FromQuery] AccountName model)
 		{
 			// checks the request is valid
 			if (!this.ModelState.IsValid)
@@ -177,7 +220,7 @@ namespace Breeze.Wallet.Controllers
 
 		[Route("build-transaction")]
 		[HttpPost]
-		public IActionResult BuildTransaction([FromBody] BuildTransactionRequest request)
+		public IActionResult BuildTransaction([FromQuery] AccountName model, [FromBody] BuildTransactionRequest request)
 		{
 			// checks the request is valid
 			if (!this.ModelState.IsValid)
@@ -188,7 +231,7 @@ namespace Breeze.Wallet.Controllers
 
 			try
 			{
-				return this.Json(this.walletWrapper.BuildTransaction(request.Password, request.Address, request.Amount, request.FeeType, request.AllowUnconfirmed));
+				return this.Json(this.walletWrapper.BuildTransaction(model.Name, request.Password, request.Address, request.Amount, request.FeeType, request.AllowUnconfirmed));
 
 			}
 			catch (Exception e)

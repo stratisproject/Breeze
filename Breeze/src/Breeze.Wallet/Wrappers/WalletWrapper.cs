@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using Breeze.Wallet.Models;
@@ -21,6 +22,7 @@ namespace Breeze.Wallet.Wrappers
 		private WalletJob _walletJob = null;
 		private Task _walletJobTask = null;
 		private CancellationTokenSource _walletJobTaskCts = new CancellationTokenSource();
+		private string _password = null;
 
 		/// <summary>
 		/// Creates a wallet on the local device.
@@ -43,24 +45,16 @@ namespace Breeze.Wallet.Wrappers
 		/// <param name="password">The user's password.</param>
 		/// <param name="folderPath">The folder where the wallet will be loaded.</param>
 		/// <param name="name">The name of the wallet.</param>
-		/// <returns>The wallet loaded from the local device</returns>
-		public WalletModel Load(string password, string folderPath, string name)
+		public void Load(string password, string folderPath, string name)
 		{
 			Safe safe = Safe.Load(password, Path.Combine(folderPath, $"{name}.json"));
+			_password = password;
 
 			// todo add Tor support (DotNetTor nuget) and pass HttpClientHandle to the constructor
 			// the tor support should be added statically (executables shipped with the project), the tor process should be opened programatically
 			// https://www.codeproject.com/Articles/1161078/WebControls/
 			_walletJob = new WalletJob(safe, null, false, _aliceAccount, _bobAccount);
 			_walletJobTask = _walletJob.StartAsync(_walletJobTaskCts.Token);
-
-			//TODO review here which data should be returned
-			return new WalletModel
-			{
-				Network = safe.Network.Name,
-				Addresses = safe.GetFirstNAddresses(10).Select(a => a.ToWif()),
-				FileName = safe.WalletFilePath
-			};
 		}
 
 		/// <summary>
@@ -72,25 +66,24 @@ namespace Breeze.Wallet.Wrappers
 		/// <param name="network">The network in which to creae this wallet</param>
 		/// <param name="mnemonic">The user's mnemonic for the wallet.</param>		
 		/// <returns></returns>
-		public WalletModel Recover(string password, string folderPath, string name, string network, string mnemonic)
+		public void Recover(string password, string folderPath, string name, string network, string mnemonic)
 		{
-			Safe wallet = Safe.Recover(new Mnemonic(mnemonic), password, Path.Combine(folderPath, $"{name}.json"), this.GetNetwork(network));
-
-			//TODO review here which data should be returned
-			return new WalletModel
-			{
-				Network = wallet.Network.Name,
-				Addresses = wallet.GetFirstNAddresses(10).Select(a => a.ToWif()),
-				FileName = wallet.WalletFilePath
-			};
+			Safe wallet = Safe.Recover(new Mnemonic(mnemonic), password, Path.Combine(folderPath, $"{name}.json"),
+					this.GetNetwork(network));
 		}
 
 		private SafeAccount GetAccount(string aliceOrBob)
 		{
 			var trimmed = aliceOrBob.Trim();
-			if (trimmed.Equals("alice", StringComparison.OrdinalIgnoreCase))
+			if (trimmed.Equals("alice", StringComparison.OrdinalIgnoreCase)
+				|| trimmed.Equals("account1", StringComparison.OrdinalIgnoreCase)
+				|| trimmed.Equals("walletaccount1", StringComparison.OrdinalIgnoreCase)
+				|| trimmed.Equals("safeaccount1", StringComparison.OrdinalIgnoreCase))
 				return _aliceAccount;
-			if(trimmed.Equals("bob", StringComparison.OrdinalIgnoreCase))
+			if(trimmed.Equals("bob", StringComparison.OrdinalIgnoreCase)
+				|| trimmed.Equals("account2", StringComparison.OrdinalIgnoreCase)
+				|| trimmed.Equals("walletaccount2", StringComparison.OrdinalIgnoreCase)
+				|| trimmed.Equals("safeaccount3", StringComparison.OrdinalIgnoreCase))
 				return _bobAccount;
 			throw new ArgumentException("Wrong account");
 		}
@@ -120,20 +113,31 @@ namespace Breeze.Wallet.Wrappers
 			throw new ArgumentException("Wrong network");
 		}
 
-		public WalletInfoModel GetInfo(string name)
+		public WalletGeneralInfoModel GetGeneralInfo()
+		{
+			throw new System.NotImplementedException();
+		}
+		public WalletSensitiveInfoModel GetSensitiveInfo(string password)
+		{
+			if(_password == null || password != _password)
+				throw new SecurityException("Wrong password or wallet is not decrypted yet");
+
+			throw new System.NotImplementedException();
+		}
+		public WalletStatusInfoModel GetStatusInfo()
 		{
 			throw new System.NotImplementedException();
 		}
 
-		public WalletBalanceModel GetBalance(string walletName)
+		public WalletBalanceModel GetBalance(string account)
 		{
 			throw new System.NotImplementedException();
 		}
 
-		public WalletHistoryModel GetHistory(string walletName)
+		public WalletHistoryModel GetHistory(string account)
 		{
 			var model = new WalletHistoryModel();
-			foreach(var record in _walletJob.GetSafeHistory())
+			foreach(var record in _walletJob.GetSafeHistory(GetAccount(account)))
 			{
 				model.Transactions.Add(new TransactionItem
 				{
@@ -146,9 +150,12 @@ namespace Breeze.Wallet.Wrappers
 			return model;
 		}
 
-		public WalletBuildTransactionModel BuildTransaction(string password, string address, Money amount, string feeType,
-			bool allowUnconfirmed, string account)
+		public WalletBuildTransactionModel BuildTransaction(string account, string password, string address, Money amount, string feeType,
+			bool allowUnconfirmed)
 		{
+			if(_password == null || password != _password)
+				throw new SecurityException("Wrong password or wallet is not decrypted yet");
+
 			var res = _walletJob.BuildTransactionAsync(
 				BitcoinAddress.Create(address, _walletJob.Safe.Network).ScriptPubKey,
 				amount,

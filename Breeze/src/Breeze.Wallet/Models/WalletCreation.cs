@@ -50,9 +50,9 @@ namespace Breeze.Wallet.Models
 		public string Network { get; set; }
 	}
 
-	public class WalletName
+	public class AccountName
 	{
-		[Required(ErrorMessage = "The name of the wallet is missing.")]
+		[Required(ErrorMessage = "The name of the account is missing.")]
 		public string Name { get; set; }
 	}
 
