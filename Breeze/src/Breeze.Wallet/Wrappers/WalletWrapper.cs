@@ -1,6 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Breeze.Wallet.Models;
+using HBitcoin.FullBlockSpv;
 using HBitcoin.KeyManagement;
 using NBitcoin;
 
@@ -11,6 +15,12 @@ namespace Breeze.Wallet.Wrappers
 	/// </summary>
 	public class WalletWrapper : IWalletWrapper
 	{
+		private readonly SafeAccount _aliceAccount = new SafeAccount(1);
+		private readonly SafeAccount _bobAccount = new SafeAccount(2);
+		private WalletJob _walletJob = null;
+		private Task _walletJobTask = null;
+		private CancellationTokenSource _walletJobTaskCts = new CancellationTokenSource();
+
 		/// <summary>
 		/// Creates a wallet on the local device.
 		/// </summary>
@@ -35,14 +45,20 @@ namespace Breeze.Wallet.Wrappers
 		/// <returns>The wallet loaded from the local device</returns>
 		public WalletModel Load(string password, string folderPath, string name)
 		{
-			Safe wallet = Safe.Load(password, Path.Combine(folderPath, $"{name}.json"));
+			Safe safe = Safe.Load(password, Path.Combine(folderPath, $"{name}.json"));
+
+			// todo add Tor support (DotNetTor nuget) and pass HttpClientHandle to the constructor
+			// the tor support should be added statically (executables shipped with the project), the tor process should be opened programatically
+			// https://www.codeproject.com/Articles/1161078/WebControls/
+			_walletJob = new WalletJob(safe, null, false, _aliceAccount, _bobAccount);
+			_walletJobTask = _walletJob.StartAsync(_walletJobTaskCts.Token);
 
 			//TODO review here which data should be returned
 			return new WalletModel
 			{
-				Network = wallet.Network.Name,
-				Addresses = wallet.GetFirstNAddresses(10).Select(a => a.ToWif()),
-				FileName = wallet.WalletFilePath
+				Network = safe.Network.Name,
+				Addresses = safe.GetFirstNAddresses(10).Select(a => a.ToWif()),
+				FileName = safe.WalletFilePath
 			};
 		}
 
@@ -71,14 +87,14 @@ namespace Breeze.Wallet.Wrappers
 		private Network GetNetwork(string network)
 		{
 			// any network different than MainNet will default to TestNet			
-			switch (network.ToLowerInvariant())
-			{
-				case "main":
-				case "mainnet":
-					return Network.Main;					
-				default:
-					return Network.TestNet;
-			}
+			var trimmed = network.Trim();
+			if (trimmed.Equals("main", StringComparison.OrdinalIgnoreCase)
+				|| trimmed.Equals("mainnet", StringComparison.OrdinalIgnoreCase))
+				return Network.Main;
+			if (trimmed.Equals("test", StringComparison.OrdinalIgnoreCase)
+				|| trimmed.Equals("testnet", StringComparison.OrdinalIgnoreCase))
+				return Network.TestNet;
+			throw new ArgumentException("Wrong network");
 		}
 
 		public WalletInfoModel GetInfo(string name)
