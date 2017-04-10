@@ -49,7 +49,7 @@ This error message comes at all request if the wallet is not loaded yet, except
 - `POST /wallet/create`
 - `POST /wallet/recover`
 - `POST /wallet/send-transaction`
-- `GET /wallet/load`
+- `POST /wallet/load`
 - `DELETE /wallet`
 
 ```
@@ -67,7 +67,7 @@ GET /wallet/general - Displays general information on the wallet
 GET /wallet/sensitive - Displays sensitive information on the wallet
 GET /wallet/status - Displays dynamic information on the wallet
 POST /wallet/create - Creates the wallet
-GET /wallet/load - Loads the wallet and starts syncing
+Post /wallet/load - Loads the wallet and starts syncing
 POST /wallet/recover - Recovers the wallet
 DELETE /wallet - Deletes the wallet
 ```
@@ -155,7 +155,7 @@ POST /wallet/send-transaction - Attempts to send a transaction
   "mnemonic": "foo bar buz",
 }
 ```
-## GET /wallet/load - Loads the wallet and starts syncing
+## POST /wallet/load - Loads the wallet and starts syncing
 ### Parameters
 ```
 {

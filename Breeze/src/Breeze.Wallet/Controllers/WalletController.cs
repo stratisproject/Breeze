@@ -50,7 +50,7 @@ namespace Breeze.Wallet.Controllers
         }
 
 		[Route("load")]
-		[HttpGet]
+		[HttpPost]
         public IActionResult Load([FromBody]WalletLoadRequest walletLoad)
         {
             // checks the request is valid
