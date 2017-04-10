@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
     this.apiService.getWalletStatus()
       .subscribe(
         response => {
-          if (response.status === 200) {
+          if (response.status >= 200 && response.status < 400) {
             this.responseMessage = response;
             this.router.navigate(['/login']);
           }

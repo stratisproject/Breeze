@@ -22,12 +22,12 @@ export class ReceiveComponent {
     this.apiService.getUnusedReceiveAddresses()
       .subscribe(
         response => {
-          if (response.status === 200) {
+          if (response.status >= 200 && response.status < 400) {
             this.addresses = response.addresses;
           }
         },
         error => {
-          if (error.status > 400) {
+          if (error.status >= 400) {
             this.errorMessage = <any>error;
             console.log(this.errorMessage);
           }

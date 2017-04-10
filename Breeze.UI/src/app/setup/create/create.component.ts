@@ -30,12 +30,12 @@ export class CreateComponent {
       .createWallet(this.newWallet)
       .subscribe(
         response => {
-          if (response.status === 200){
+          if (response.status >= 200 && response.status < 400){
             this.responseMessage = response;
           }
         },
         error => {
-          if (error.status > 400){
+          if (error.status >= 400) {
             this.errorMessage = error;
             console.log(this.errorMessage);
           }

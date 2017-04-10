@@ -22,12 +22,12 @@ export class HistoryComponent {
     this.apiService.getWalletHistory()
       .subscribe(
         response => {
-          if (response.status === 200) {
+          if (response.status >= 200 && response.status < 400) {
             this.transactions = response.history;
           }
         },
         error => {
-          if (error.status === 400) {
+          if (error.status >= 400) {
             this.errorMessage = <any>error;
             console.log(this.errorMessage);
           }

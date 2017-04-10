@@ -22,14 +22,14 @@ export class DashboardComponent {
         this.apiService.getWalletBalance()
             .subscribe(
                 response =>  {
-                    if (response.status === 200) {
+                    if (response.status >= 200 && response.status < 400) {
                         this.balanceResponse = response
                         this.confirmedBalance = this.balanceResponse.confirmed;
                         this.unconfirmedBalance = this.balanceResponse.unconfirmed;
                     } 
                 },
                 error => {
-                    if (error.status > 400) {
+                    if (error.status >= 400) {
                         this.errorMessage = <any>error;
                         console.log(this.errorMessage);                    
                     }

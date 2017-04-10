@@ -27,14 +27,14 @@ export class LoginComponent implements OnInit {
     this.apiService.loadWallet(this.walletLoad)
       .subscribe(
         response => {
-          if (response.status === 200) {
+          if (response.status >= 200 && response.status < 400) {
             this.responseMessage = response;
             this.router.navigate['/wallet']
           }
         },
         error => {
           this.errorMessage = <any>error;
-          if (error.status > 400) {
+          if (error.status >= 400) {
             alert(this.errorMessage);
             console.log(this.errorMessage);
           }
