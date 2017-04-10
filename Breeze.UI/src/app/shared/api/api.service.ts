@@ -4,7 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { SafeCreation } from '../safe-creation';
+import { WalletCreation } from '../wallet-creation';
+import { WalletRecovery } from '../wallet-recovery';
 import { Mnemonic } from '../mnemonic';
 
 /**
@@ -21,10 +22,18 @@ export class ApiService {
     /**
      * Create a new wallet.
      */
-    createWallet(data: SafeCreation): Observable<any> {
-      console.log(JSON.stringify(data));
+    createWallet(data: WalletCreation): Observable<any> {
       return this.http
-        .post(this.webApiUrl + 'api/safe', JSON.stringify(data), {headers: this.headers})
+        .post(this.webApiUrl + '/wallet/create/', JSON.stringify(data), {headers: this.headers})
+        .map(response => response.json());
+    }
+
+    /**
+     * Recover a wallet.
+     */
+    recoverWallet(data: WalletRecovery): Observable<any> {
+      return this.http
+        .post(this.webApiUrl + '/wallet/recover/', JSON.stringify(data), {headers: this.headers})
         .map(response => response.json());
     }
 
