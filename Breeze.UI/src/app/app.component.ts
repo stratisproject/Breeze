@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { remote } from 'electron';
-
 import { ApiService } from './shared/api/api.service';
 
 @Component({
@@ -13,9 +11,8 @@ import { ApiService } from './shared/api/api.service';
 
 export class AppComponent implements OnInit {
   constructor(private router: Router, private apiService: ApiService) {}
-  private errorMessage: string;
-  private response: any;
-  private isConfigured: boolean = true;
+  private errorMessage: any;
+  private responseMessage: any;
 
   ngOnInit() {
     this.checkWalletStatus();
@@ -24,22 +21,19 @@ export class AppComponent implements OnInit {
   private checkWalletStatus(){
     this.apiService.getWalletStatus()
       .subscribe(
-        response => this.response = response,
-        error => this.errorMessage = <any>error,
-        () => this.navigate()
+        response => {
+          if (response.status === 200) {
+            this.responseMessage = response;
+            this.router.navigate(['/login']);
+          }
+        },
+        error => {
+          this.errorMessage = <any>error;
+          if (error.status === 400 || error.status === 404) {
+            this.router.navigate(['/setup']);
+            console.log(this.errorMessage);
+          }
+        }
       );
-  }
-
-  private navigate() {
-    if (this.response.success === "true") {
-      // remote.dialog.showMessageBox({message: remote.app.getPath('userData')})
-      this.router.navigate(['/login'])
-    } else {
-      this.router.navigate(['/setup'])
-    }
-  }
-
-  private hasWallet() {
-    return true;
   }
 }
