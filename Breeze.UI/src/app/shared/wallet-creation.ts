@@ -1,4 +1,4 @@
-export class SafeCreation {
+export class WalletCreation {
   password: string;
   network: string;
   folderPath: string;

@@ -9,6 +9,7 @@ import { CreateComponent } from './create/create.component';
 import { SharedModule } from '../shared/shared.module';
 
 import { SetupRoutingModule } from './setup-routing.module';
+import { RecoverComponent } from './recover/recover.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { SetupRoutingModule } from './setup-routing.module';
   ],
   declarations: [
     CreateComponent,
-    SetupComponent
+    SetupComponent,
+    RecoverComponent
   ],
   exports: [ SetupComponent ],
   providers: []

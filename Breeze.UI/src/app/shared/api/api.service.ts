@@ -4,7 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { SafeCreation } from '../safe-creation';
+import { WalletCreation } from '../wallet-creation';
+import { WalletRecovery } from '../wallet-recovery';
 import { Mnemonic } from '../mnemonic';
 
 /**
@@ -15,16 +16,25 @@ import { Mnemonic } from '../mnemonic';
 export class ApiService {
     constructor(private http: Http) {};
 
-    private webApiUrl = 'http://localhost:3000/api/v1';
+    private mockApiUrl = 'http://localhost:3000/api/v1';
+    private webApiUrl = 'http://localhost:5000/api/v1';
     private headers = new Headers({'Content-Type': 'application/json'});
 
     /**
      * Create a new wallet.
      */
-    createWallet(data: SafeCreation): Observable<any> {
-      console.log(JSON.stringify(data));
+    createWallet(data: WalletCreation): Observable<any> {
       return this.http
-        .post(this.webApiUrl + 'api/safe', JSON.stringify(data), {headers: this.headers})
+        .post(this.webApiUrl + '/wallet/create/', JSON.stringify(data), {headers: this.headers})
+        .map(response => response.json());
+    }
+
+    /**
+     * Recover a wallet.
+     */
+    recoverWallet(data: WalletRecovery): Observable<any> {
+      return this.http
+        .post(this.webApiUrl + '/wallet/recover/', JSON.stringify(data), {headers: this.headers})
         .map(response => response.json());
     }
 
@@ -43,7 +53,7 @@ export class ApiService {
      */
     getWalletStatus(): Observable<any> {
       return this.http
-        .get(this.webApiUrl + '/wallet/status')
+        .get(this.mockApiUrl + '/wallet/status')
         .map((response:Response) => response.json())
         .catch(this.handleError);
     }

@@ -1,0 +1,28 @@
+<h1>Recover your wallet</h1>
+<p>
+  Welcome, please complete the form below to recover your wallet.
+</p>
+<div class="form-group">
+  <label for="name">Mnemonic:</label>
+  <input class="form-control" type="text" #walletMnemonic required>
+</div>
+<div class="form-group">
+  <label for="name">Password:</label>
+  <input class="form-control" type="password" #walletPassword required>
+</div>
+<div class="form-group">
+  <label for="name">Wallet Path:</label>
+  <input class="form-control" type="text" #walletPath required>
+</div>
+<div class="form-group">
+  <label for="name">Wallet Name:</label>
+  <input class="form-control" type="text" #walletName required>
+</div>
+<div class="form-group">
+  <label for="networklabel">Network:</label>
+  <select name="network" #walletNetwork>
+    <option value="main">Main</option>
+    <option value="test">Testnet</option>
+  </select>
+</div>
+<button type="submit" (click)="recoverWallet(walletMnemonic.value, walletPassword.value, walletPath.value, walletName.value, walletNetwork.value)">Recover</button>

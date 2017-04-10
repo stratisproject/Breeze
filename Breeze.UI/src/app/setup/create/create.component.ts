@@ -2,7 +2,7 @@ import { Component, Injectable } from '@angular/core';
 
 import { ApiService } from '../../shared/api/api.service';
 
-import { SafeCreation } from '../../shared/safe-creation';
+import { WalletCreation } from '../../shared/wallet-creation';
 import { Mnemonic } from '../../shared/mnemonic';
 
 @Component({
@@ -14,10 +14,11 @@ import { Mnemonic } from '../../shared/mnemonic';
 export class CreateComponent {
   constructor(private apiService: ApiService) {}
 
-  private newWallet: SafeCreation;
-  private body: string;
+  private newWallet: WalletCreation;
+  private responseMessage: string;
 
   private createWallet(password: string, network: string, folderPath: string, name: string, ) {
+    this.newWallet = new WalletCreation();
     this.newWallet.password = password;
     this.newWallet.network = network;
     this.newWallet.folderPath = folderPath;
@@ -25,8 +26,6 @@ export class CreateComponent {
 
     this.apiService
       .createWallet(this.newWallet)
-      //.map(res => {let body = res.text()})
-      .subscribe((response: string) => this.body = response,
-      () => console.log("createWallet() complete from init"));
+      .subscribe((response: string) => this.responseMessage = response);
   }
 }
