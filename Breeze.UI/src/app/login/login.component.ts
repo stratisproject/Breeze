@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
         },
         error => {
           this.errorMessage = <any>error;
-          if (error.status === 400) {
+          if (error.status > 400) {
             alert(this.errorMessage);
             console.log(this.errorMessage);
           }

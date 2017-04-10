@@ -10,8 +10,11 @@ import { WalletRecovery } from '../../shared/wallet-recovery'
 export class RecoverComponent implements OnInit {
 
   constructor(private apiService: ApiService) { }
+
   private walletRecovery: WalletRecovery;
-  private responseBody: string;
+  
+  private responseMessage: string;
+  private errorMessage: string;
 
   ngOnInit() {
   }
@@ -26,7 +29,18 @@ export class RecoverComponent implements OnInit {
 
     this.apiService
       .recoverWallet(this.walletRecovery)
-      .subscribe((response: string) => this.responseBody = response,
-      () => console.log("recoverWallet() completed"));
+      .subscribe(
+        response => {
+          if (response.status === 200) {
+            this.responseMessage = response;
+          }
+        },
+        error => {
+          if(error.status > 400) {
+            this.errorMessage = error;
+            console.log(this.errorMessage);
+          }
+        }
+      );
   }
 }
