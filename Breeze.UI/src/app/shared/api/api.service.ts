@@ -6,6 +6,7 @@ import 'rxjs/add/operator/catch';
 
 import { WalletCreation } from '../wallet-creation';
 import { WalletRecovery } from '../wallet-recovery';
+import { WalletLoad } from '../wallet-load';
 import { Mnemonic } from '../mnemonic';
 
 /**
@@ -41,9 +42,9 @@ export class ApiService {
     /**
      * Load a wallet
      */
-    loadWallet(password: string): Observable<any> {
+    loadWallet(data: WalletLoad): Observable<any> {
       return this.http
-        .get(this.webApiUrl + '/wallet/load/', {headers: this.headers, body: JSON.stringify(password)})
+        .get(this.webApiUrl + '/wallet/load/', {headers: this.headers, body: JSON.stringify(data)})
         .map(response => response.json())
         .catch(this.handleError);
     }
