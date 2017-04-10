@@ -63,9 +63,9 @@ This error message comes at all request if the wallet is not loaded yet, except
 ## Key Management
 
 ```
-GET /wallet/general - Displays general information on the wallet
-GET /wallet/sensitive - Displays sensitive information on the wallet
-GET /wallet/status - Displays dynamic information on the wallet
+GET /wallet/general-info - Displays general information on the wallet
+GET /wallet/sensitive-info - Displays sensitive information on the wallet
+GET /wallet/status-info - Displays dynamic information on the wallet
 POST /wallet/create - Creates the wallet
 Post /wallet/load - Loads the wallet and starts syncing
 POST /wallet/recover - Recovers the wallet
@@ -95,7 +95,7 @@ POST /wallet/send-transaction - Attempts to send a transaction
 
 # Details
 
-## GET /wallet/general - Displays general information on the wallet
+## GET /wallet/general-info - Displays general information on the wallet
 ### Responses
 ```
 {
@@ -109,7 +109,7 @@ POST /wallet/send-transaction - Attempts to send a transaction
   "uniqueId": "sadwpiqjdpijwqdpijwqidjoi" // can only get if decrypted, if not it's empty string
 }
 ```
-## GET /wallet/sensitive - Displays sensitive information on the wallet
+## GET /wallet/sensitive-info - Displays sensitive information on the wallet
 ### Parameters
 ```
 {
@@ -124,7 +124,7 @@ POST /wallet/send-transaction - Attempts to send a transaction
   "extpubkey": "dalkdsaklkjdlkjdsaljlkjdsalkjdsalk",
 }
 ```
-## GET /wallet/status - Displays dynamic information on the wallet
+## GET /wallet/status-info - Displays dynamic information on the wallet
 ### Responses
 ```
 {

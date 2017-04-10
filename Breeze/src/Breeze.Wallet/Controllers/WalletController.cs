@@ -108,7 +108,7 @@ namespace Breeze.Wallet.Controllers
 			}
         }
 
-	    [Route("general")]
+	    [Route("general-info")]
 	    [HttpGet]
 	    public IActionResult GetGeneralInfo()
 	    {
@@ -130,7 +130,7 @@ namespace Breeze.Wallet.Controllers
 			}
 		}
 
-		[Route("sensitive")]
+		[Route("sensitive-info")]
 		[HttpGet]
 		public IActionResult GetSensitiveInfo([FromBody] WalletSensitiveRequest request)
 		{
@@ -152,7 +152,7 @@ namespace Breeze.Wallet.Controllers
 			}
 		}
 
-		[Route("status")]
+		[Route("status-info")]
 		[HttpGet]
 		public IActionResult GetStatusInfo()
 		{
