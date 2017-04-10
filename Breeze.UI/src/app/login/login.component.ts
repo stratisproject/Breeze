@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../shared/api/api.service';
+import { WalletLoad } from '../shared/wallet-load';
 
 @Component({
   selector: 'app-login',
@@ -10,27 +11,34 @@ import { ApiService } from '../shared/api/api.service';
 export class LoginComponent implements OnInit {
   constructor(private apiService: ApiService, private router: Router) { }
   
-  private response: any;
-  private errorMessage: string;
+  private responseMessage: any;
+  private errorMessage: any;
+  private walletLoad: WalletLoad;
 
   ngOnInit() {
   }
 
   private onSubmit() {
-    this.apiService.loadWallet("123")
+    this.walletLoad = new WalletLoad();
+    this.walletLoad.password = "123";
+    this.walletLoad.name = "test"
+    this.walletLoad.folderPath = "folderPath"
+
+    this.apiService.loadWallet(this.walletLoad)
       .subscribe(
-        response => this.response = response,
-        error => this.errorMessage = error,
-        () => this.loadWallet()
+        response => {
+          if (response.status >= 200 && response.status < 400) {
+            this.responseMessage = response;
+            this.router.navigate['/wallet']
+          }
+        },
+        error => {
+          this.errorMessage = <any>error;
+          if (error.status >= 400) {
+            alert(this.errorMessage);
+            console.log(this.errorMessage);
+          }
+        }
       );
-  }
-
-  private loadWallet() {
-    if (this.response.success === "true") {
-      this.router.navigate(['/wallet/send']);
-
-    } else {
-      alert("Something went wrong.")
-    }
   }
 }
