@@ -17,6 +17,7 @@ export class RecoverComponent implements OnInit {
   }
 
   private recoverWallet(mnemonic: string, password: string, folderPath: string, name: string, network: string) {
+    this.walletRecovery = new WalletRecovery();
     this.walletRecovery.mnemonic = mnemonic;
     this.walletRecovery.password = password;
     this.walletRecovery.folderPath = folderPath;
