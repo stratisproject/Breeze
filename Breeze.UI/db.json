@@ -1,7 +1,6 @@
 {
     "create":
     {
-        "success": "true",
         "mnemonic": "foo bar buz"
     },
     "load":
@@ -10,7 +9,6 @@
     },
     "status":
     {
-        "success": "true",
         "connectedNodeCount": "7",
         "maxConnextedNodeCount": "8",
         "headerChainHeight": "1048",
@@ -22,14 +20,12 @@
     },
     "balance": 
     {
-        "success": "true",
         "synced": "true",
         "confirmed": "0.144",
         "unconfirmed": "-6.23"
     },
     "history":
     {
-        "success": "true",
         "history": 
         [
             {
@@ -48,7 +44,6 @@
     },
     "receive":
     {
-        "success": "true",
         "addresses":
         [
             "mzz63n3n89KVeHQXRqJEVsQX8MZj5zeqCw",
