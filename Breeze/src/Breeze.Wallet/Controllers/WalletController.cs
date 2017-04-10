@@ -11,6 +11,9 @@ using Breeze.Wallet.Wrappers;
 
 namespace Breeze.Wallet.Controllers
 {
+    /// <summary>
+    /// Controller providing operations on a wallet.
+    /// </summary>
 	[Route("api/v{version:apiVersion}/[controller]")]
     public class WalletController : Controller
     {
@@ -49,6 +52,11 @@ namespace Breeze.Wallet.Controllers
             }            
         }
 
+        /// <summary>
+        /// Loads a wallet previously created by the user.
+        /// </summary>
+        /// <param name="walletLoad">The name of the wallet to load.</param>
+        /// <returns></returns>
 		[Route("load")]
 		[HttpPost]
         public IActionResult Load([FromBody]WalletLoadRequest walletLoad)
@@ -81,6 +89,11 @@ namespace Breeze.Wallet.Controllers
 			}
         }
 
+        /// <summary>
+        /// Recovers a wallet.
+        /// </summary>
+        /// <param name="walletRecovery">The object containing the parameters used to recover a wallet.</param>
+        /// <returns></returns>
         [Route("recover")]
         [HttpPost]
         public IActionResult Recover([FromBody]WalletRecoveryRequest walletRecovery)
@@ -113,8 +126,13 @@ namespace Breeze.Wallet.Controllers
 				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, e.Message, e.ToString());
 			}
         }
-
-	    [Route("info")]
+        
+        /// <summary>
+        /// Get some general info about a wallet.
+        /// </summary>
+        /// <param name="model">The name of the wallet.</param>
+        /// <returns></returns>
+        [Route("info")]
 	    [HttpGet]
 	    public IActionResult GetInfo([FromQuery] WalletName model)
 	    {
@@ -136,6 +154,11 @@ namespace Breeze.Wallet.Controllers
 			}
 		}
 
+        /// <summary>
+        /// Retrieves the history of a wallet.
+        /// </summary>
+        /// <param name="model">The name of the wallet.</param>
+        /// <returns></returns>
 		[Route("history")]
 		[HttpGet]
 		public IActionResult GetHistory([FromQuery] WalletName model)
@@ -158,6 +181,11 @@ namespace Breeze.Wallet.Controllers
 			}
 		}
 
+        /// <summary>
+        /// Gets the balance of a wallet.
+        /// </summary>
+        /// <param name="model">The name of the wallet.</param>
+        /// <returns></returns>
 		[Route("balance")]
 		[HttpGet]
 		public IActionResult GetBalance([FromQuery] WalletName model)
@@ -180,6 +208,11 @@ namespace Breeze.Wallet.Controllers
 			}
 		}
 
+        /// <summary>
+        /// Builds a transaction. 
+        /// </summary>
+        /// <param name="request">The transaction parameters.</param>
+        /// <returns>All the details of the transaction, including the hex used to execute it.</returns>
 		[Route("build-transaction")]
 		[HttpPost]
 		public IActionResult BuildTransaction([FromBody] BuildTransactionRequest request)
@@ -202,6 +235,11 @@ namespace Breeze.Wallet.Controllers
 			}
 		}
 
+        /// <summary>
+        /// Sends a transaction.
+        /// </summary>
+        /// <param name="request">The hex representing the transaction.</param>
+        /// <returns></returns>
 		[Route("send-transaction")]
 		[HttpPost]
 		public IActionResult SendTransaction([FromBody] SendTransactionRequest request)

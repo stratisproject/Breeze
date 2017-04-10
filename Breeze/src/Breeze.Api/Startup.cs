@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Breeze.Api
@@ -55,7 +57,14 @@ namespace Breeze.Api
 
 					return true;
 				});
-			});
+
+			    //Set the comments path for the swagger json and ui.
+			    var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+			    var apiXmlPath = Path.Combine(basePath, "Breeze.Api.xml");
+			    var walletXmlPath = Path.Combine(basePath, "Breeze.Wallet.xml");
+			    setup.IncludeXmlComments(apiXmlPath);
+			    setup.IncludeXmlComments(walletXmlPath);
+            });
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

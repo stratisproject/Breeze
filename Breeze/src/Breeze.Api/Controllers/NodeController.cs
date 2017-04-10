@@ -15,6 +15,10 @@ namespace Breeze.Api.Controllers
 			this.blockNotification = blockNotification;
 		}
 
+        /// <summary>
+        /// Returns some general information about the status of the underlying node.
+        /// </summary>
+        /// <returns></returns>
 	    [HttpGet]
 		[Route("status")]
 		public IActionResult Status()
@@ -22,6 +26,12 @@ namespace Breeze.Api.Controllers
 			return this.NotFound();
 		}
 
+        /// <summary>
+        /// Starts sending block to the wallet for synchronisation.
+        /// This is for demo and testing use only.
+        /// </summary>
+        /// <param name="model">The hash of the block from which to start syncing.</param>
+        /// <returns></returns>
 		[HttpPost]
 		[Route("sync")]
 		public IActionResult Sync([FromBody] HashModel model)
