@@ -20,6 +20,8 @@ export class CreateComponent {
   private createWallet(password: string, network: string, folderPath: string, name: string, ) {
     this.newWallet.password = password;
     this.newWallet.network = network;
+    this.newWallet.folderPath = folderPath;
+    this.newWallet.name = name;
 
     this.apiService
       .createWallet(this.newWallet)
