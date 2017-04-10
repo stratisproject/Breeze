@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.12
+VisualStudioVersion = 15.0.26403.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{807563C4-7259-434D-B604-A14C3DCF8E30}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2FF3130A-E8F3-4E0B-8733-B34C4A19910C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "global", "global", "{2FF3130A-E8F3-4E0B-8733-B34C4A19910C}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		global.json = global.json
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Breeze.Api", "src\Breeze.Api\Breeze.Api.csproj", "{E7B3E9EB-34E8-4B10-B296-4D5270E314A4}"
 EndProject
