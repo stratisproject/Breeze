@@ -18,6 +18,7 @@ export class CreateComponent {
   private responseMessage: string;
 
   private createWallet(password: string, network: string, folderPath: string, name: string, ) {
+    this.newWallet = new WalletCreation();
     this.newWallet.password = password;
     this.newWallet.network = network;
     this.newWallet.folderPath = folderPath;

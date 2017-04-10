@@ -16,7 +16,8 @@ import { Mnemonic } from '../mnemonic';
 export class ApiService {
     constructor(private http: Http) {};
 
-    private webApiUrl = 'http://localhost:3000/api/v1';
+    private mockApiUrl = 'http://localhost:3000/api/v1';
+    private webApiUrl = 'http://localhost:5000/api/v1';
     private headers = new Headers({'Content-Type': 'application/json'});
 
     /**
@@ -52,7 +53,7 @@ export class ApiService {
      */
     getWalletStatus(): Observable<any> {
       return this.http
-        .get(this.webApiUrl + '/wallet/status')
+        .get(this.mockApiUrl + '/wallet/status')
         .map((response:Response) => response.json())
         .catch(this.handleError);
     }

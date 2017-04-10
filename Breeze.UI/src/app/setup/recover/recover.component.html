@@ -11,8 +11,12 @@
   <input class="form-control" type="password" #walletPassword required>
 </div>
 <div class="form-group">
-  <label for="name">Date of creation (yyyy-MM-dd):</label>
-  <input class="form-control" type="password" #walletDate required>
+  <label for="name">Wallet Path:</label>
+  <input class="form-control" type="text" #walletPath required>
+</div>
+<div class="form-group">
+  <label for="name">Wallet Name:</label>
+  <input class="form-control" type="text" #walletName required>
 </div>
 <div class="form-group">
   <label for="networklabel">Network:</label>
@@ -21,4 +25,4 @@
     <option value="test">Testnet</option>
   </select>
 </div>
-<button type="submit" (click)="recoverWallet(walletMnemonic.value, walletPassword.value, walletDate.value, walletNetwork.value)">Recover</button>
+<button type="submit" (click)="recoverWallet(walletMnemonic.value, walletPassword.value, walletPath.value, walletName.value, walletNetwork.value)">Recover</button>
