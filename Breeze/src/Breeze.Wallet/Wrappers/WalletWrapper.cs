@@ -74,28 +74,28 @@ namespace Breeze.Wallet.Wrappers
 
 		private SafeAccount GetAccount(string aliceOrBob)
 		{
-			var trimmed = aliceOrBob.Trim();
-			if (trimmed.Equals("alice", StringComparison.OrdinalIgnoreCase)
-				|| trimmed.Equals("account1", StringComparison.OrdinalIgnoreCase)
-				|| trimmed.Equals("walletaccount1", StringComparison.OrdinalIgnoreCase)
-				|| trimmed.Equals("safeaccount1", StringComparison.OrdinalIgnoreCase))
+			var val = aliceOrBob.Trim().ToLowerInvariant();
+			if(val == "alice"
+				|| val == "account1"
+				|| val == "walletaccount1"
+				|| val == "safeaccount1")
 				return _aliceAccount;
-			if(trimmed.Equals("bob", StringComparison.OrdinalIgnoreCase)
-				|| trimmed.Equals("account2", StringComparison.OrdinalIgnoreCase)
-				|| trimmed.Equals("walletaccount2", StringComparison.OrdinalIgnoreCase)
-				|| trimmed.Equals("safeaccount3", StringComparison.OrdinalIgnoreCase))
+			if(val == "bob"
+				|| val == "account2"
+				|| val == "walletaccount2"
+				|| val == "safeaccount3")
 				return _bobAccount;
 			throw new ArgumentException("Wrong account");
 		}
 
 		private FeeType GetFeeType(string feeType)
 		{
-			var trimmed = feeType.Trim();
-			if (trimmed.Equals("low", StringComparison.OrdinalIgnoreCase))
+			var val = feeType.Trim().ToLowerInvariant();
+			if (val == "low")
 				return FeeType.Low;
-			if (trimmed.Equals("medium", StringComparison.OrdinalIgnoreCase))
+			if (val == "medium")
 				return FeeType.Medium;
-			if (trimmed.Equals("heigh", StringComparison.OrdinalIgnoreCase))
+			if (val == "heigh")
 				return FeeType.High;
 			throw new ArgumentException("Wrong feeType");
 		}
@@ -103,12 +103,10 @@ namespace Breeze.Wallet.Wrappers
 		private Network GetNetwork(string network)
 		{
 			// any network different than MainNet will default to TestNet			
-			var trimmed = network.Trim();
-			if (trimmed.Equals("main", StringComparison.OrdinalIgnoreCase)
-				|| trimmed.Equals("mainnet", StringComparison.OrdinalIgnoreCase))
+			var val = network.Trim().ToLowerInvariant();
+			if(val == "main" || val == "mainnet")
 				return Network.Main;
-			if (trimmed.Equals("test", StringComparison.OrdinalIgnoreCase)
-				|| trimmed.Equals("testnet", StringComparison.OrdinalIgnoreCase))
+			if (val == "test" || val == "testnet")
 				return Network.TestNet;
 			throw new ArgumentException("Wrong network");
 		}
