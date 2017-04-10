@@ -6,10 +6,10 @@ using Newtonsoft.Json;
 
 namespace Breeze.Wallet.Models
 {
-	public class WalletInfoModel
+	public class WalletGeneralInfoModel
 	{
-		[JsonProperty(PropertyName = "filePath")]
-		public string FilePath { get; set; }
+		[JsonProperty(PropertyName = "walletFilePath")]
+		public string WalletFilePath { get; set; }
 
 		[JsonProperty(PropertyName = "encryptedSeed")]
 		public string EncryptedSeed { get; set; }

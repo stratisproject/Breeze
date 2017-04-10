@@ -13,17 +13,21 @@ namespace Breeze.Wallet.Wrappers
 		
 		string Create(string password, string folderPath, string name, string network);
 
-		WalletModel Load(string password, string folderPath, string name);
+		void Load(string password, string folderPath, string name);
 
-		WalletModel Recover(string password, string folderPath, string name, string network, string mnemonic);
+		void Recover(string password, string folderPath, string name, string network, string mnemonic);
 
-		WalletInfoModel GetInfo(string walletName);
+		WalletGeneralInfoModel GetGeneralInfo();
 
-		WalletBalanceModel GetBalance(string walletName);
+		WalletSensitiveInfoModel GetSensitiveInfo(string password);
 
-		WalletHistoryModel GetHistory(string walletName);
+		WalletStatusInfoModel GetStatusInfo();
 
-		WalletBuildTransactionModel BuildTransaction(string password, string address, Money amount, string feeType, bool allowUnconfirmed);
+		WalletBalanceModel GetBalance(string account);
+
+		WalletHistoryModel GetHistory(string account);
+
+		WalletBuildTransactionModel BuildTransaction(string account, string password, string address, Money amount, string feeType, bool allowUnconfirmed);
 
 		bool SendTransaction(string transactionHex);
 	}
