@@ -27,7 +27,7 @@ export class ApiService {
     createWallet(data: WalletCreation): Observable<any> {
       return this.http
         .post(this.webApiUrl + '/wallet/create/', JSON.stringify(data), {headers: this.headers})
-        .map(response => response.json());
+        .map((response: Response) => response);
     }
 
     /**
@@ -36,7 +36,7 @@ export class ApiService {
     recoverWallet(data: WalletRecovery): Observable<any> {
       return this.http
         .post(this.webApiUrl + '/wallet/recover/', JSON.stringify(data), {headers: this.headers})
-        .map(response => response.json());
+        .map((response: Response) => response);
     }
 
     /**
@@ -45,8 +45,7 @@ export class ApiService {
     loadWallet(data: WalletLoad): Observable<any> {
       return this.http
         .get(this.webApiUrl + '/wallet/load/', {headers: this.headers, body: JSON.stringify(data)})
-        .map(response => response.json())
-        .catch(this.handleError);
+        .map((response: Response) => response);
     }
 
     /**
@@ -55,8 +54,7 @@ export class ApiService {
     getWalletStatus(): Observable<any> {
       return this.http
         .get(this.mockApiUrl + '/wallet/status')
-        .map((response:Response) => response.json())
-        .catch(this.handleError);
+        .map((response: Response) => response);
     }
 
     /**
@@ -65,8 +63,7 @@ export class ApiService {
     getWalletBalance(): Observable<any> {
       return this.http
         .get(this.webApiUrl + '/wallet/balance')
-        .map((response:Response) => response.json())
-        .catch(this.handleError);
+        .map((response: Response) => response);
     }
 
     /**
@@ -75,8 +72,7 @@ export class ApiService {
     getWalletHistory(): Observable<any> {
       return this.http
         .get(this.webApiUrl + '/wallet/history')
-        .map((response:Response) => response.json())
-        .catch(this.handleError);
+        .map((response: Response) => response);
     }
 
     /**
@@ -85,24 +81,8 @@ export class ApiService {
     getUnusedReceiveAddresses(): Observable<any> {
       return this.http
         .get(this.webApiUrl + '/wallet/receive')
-        .map((response:Response) => response.json())
-        .catch(this.handleError);
+        .map((response: Response) => response);
     }
-    
-    /**
-     * Handle errors from the API.
-     * @param error 
-     */
-    private handleError (error: Response | any) {
-    let errMsg: string;
-    if (error instanceof Response) {
-      const body = error.json() || '';
-      const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    } else {
-      errMsg = error.message ? error.message : error.toString();
-    }
-    console.error(errMsg);
-    return Observable.throw(errMsg);
+
   }
 }
