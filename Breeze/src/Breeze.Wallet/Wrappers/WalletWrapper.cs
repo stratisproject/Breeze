@@ -17,12 +17,12 @@ namespace Breeze.Wallet.Wrappers
 	/// </summary>
 	public class WalletWrapper : IWalletWrapper
 	{
-		private readonly SafeAccount _aliceAccount = new SafeAccount(1);
-		private readonly SafeAccount _bobAccount = new SafeAccount(2);
-		private WalletJob _walletJob = null;
-		private Task _walletJobTask = null;
-		private CancellationTokenSource _walletJobTaskCts = new CancellationTokenSource();
-		private string _password = null;
+		private readonly SafeAccount aliceAccount = new SafeAccount(1);
+		private readonly SafeAccount bobAccount = new SafeAccount(2);
+		private WalletJob walletJob = null;
+		private Task walletJobTask = null;
+		private CancellationTokenSource walletJobTaskCts = new CancellationTokenSource();
+		private string password = null;
 
 		/// <summary>
 		/// Creates a wallet on the local device.
@@ -48,13 +48,13 @@ namespace Breeze.Wallet.Wrappers
 		public void Load(string password, string folderPath, string name)
 		{
 			Safe safe = Safe.Load(password, Path.Combine(folderPath, $"{name}.json"));
-			_password = password;
+			this.password = password;
 
 			// todo add Tor support (DotNetTor nuget) and pass HttpClientHandle to the constructor
 			// the tor support should be added statically (executables shipped with the project), the tor process should be opened programatically
 			// https://www.codeproject.com/Articles/1161078/WebControls/
-			_walletJob = new WalletJob(safe, null, false, _aliceAccount, _bobAccount);
-			_walletJobTask = _walletJob.StartAsync(_walletJobTaskCts.Token);
+			walletJob = new WalletJob(safe, null, false, aliceAccount, bobAccount);
+			walletJobTask = walletJob.StartAsync(walletJobTaskCts.Token);
 		}
 
 		/// <summary>
@@ -79,12 +79,12 @@ namespace Breeze.Wallet.Wrappers
 				|| val == "account1"
 				|| val == "walletaccount1"
 				|| val == "safeaccount1")
-				return _aliceAccount;
+				return aliceAccount;
 			if(val == "bob"
 				|| val == "account2"
 				|| val == "walletaccount2"
 				|| val == "safeaccount3")
-				return _bobAccount;
+				return bobAccount;
 			throw new ArgumentException("Wrong account");
 		}
 
@@ -117,7 +117,7 @@ namespace Breeze.Wallet.Wrappers
 		}
 		public WalletSensitiveInfoModel GetSensitiveInfo(string password)
 		{
-			if(_password == null || password != _password)
+			if(this.password == null || password != this.password)
 				throw new SecurityException("Wrong password or wallet is not decrypted yet");
 
 			throw new System.NotImplementedException();
@@ -135,7 +135,7 @@ namespace Breeze.Wallet.Wrappers
 		public WalletHistoryModel GetHistory(string account)
 		{
 			var model = new WalletHistoryModel();
-			foreach(var record in _walletJob.GetSafeHistory(GetAccount(account)))
+			foreach(var record in walletJob.GetSafeHistory(GetAccount(account)))
 			{
 				model.Transactions.Add(new TransactionItem
 				{
@@ -151,11 +151,11 @@ namespace Breeze.Wallet.Wrappers
 		public WalletBuildTransactionModel BuildTransaction(string account, string password, string address, Money amount, string feeType,
 			bool allowUnconfirmed)
 		{
-			if(_password == null || password != _password)
+			if(this.password == null || password != this.password)
 				throw new SecurityException("Wrong password or wallet is not decrypted yet");
 
-			var res = _walletJob.BuildTransactionAsync(
-				BitcoinAddress.Create(address, _walletJob.Safe.Network).ScriptPubKey,
+			var res = walletJob.BuildTransactionAsync(
+				BitcoinAddress.Create(address, walletJob.Safe.Network).ScriptPubKey,
 				amount,
 				GetFeeType(feeType),
 				GetAccount(account),
