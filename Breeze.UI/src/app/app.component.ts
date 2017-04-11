@@ -15,25 +15,26 @@ export class AppComponent implements OnInit {
   private responseMessage: any;
 
   ngOnInit() {
-    this.checkWalletStatus();
+    this.router.navigate(['/login']);
+    //this.checkWalletStatus();
   }
 
-  private checkWalletStatus(){
-    this.apiService.getWalletStatus()
-      .subscribe(
-        response => {
-          if (response.status >= 200 && response.status < 400) {
-            this.responseMessage = response;
-            this.router.navigate(['/login']);
-          }
-        },
-        error => {
-          this.errorMessage = <any>error;
-          if (error.status === 400 || error.status === 404) {
-            this.router.navigate(['/setup']);
-            console.log(this.errorMessage);
-          }
-        }
-      );
-  }
+  // private checkWalletStatus(){
+  //   this.apiService.getWalletStatus()
+  //     .subscribe(
+  //       response => {
+  //         if (response.status >= 200 && response.status < 400) {
+  //           this.responseMessage = response;
+  //           this.router.navigate(['/login']);
+  //         }
+  //       },
+  //       error => {
+  //         this.errorMessage = <any>error;
+  //         if (error.status === 400 || error.status === 404) {
+  //           this.router.navigate(['/setup']);
+  //           console.log(this.errorMessage);
+  //         }
+  //       }
+  //     );
+  // }
 }
