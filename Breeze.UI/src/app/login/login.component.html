@@ -1,10 +1,10 @@
-<h1>Welcome back</h1>
+<h1>Welcome to Breeze</h1>
 <div *ngIf="hasWallet">
   <p>Choose the wallet you want to open:</p>
   <div class="form-group">
     <label for="walletLabel">Wallet to open:</label>
-    <select name="wallet" #walletName>
-      <option *ngFor="let wallet of wallets">{{wallet}}</option>
+    <select name="wallet" #walletName (change)="walletChanged(walletName.value)">
+      <option *ngFor="let wallet of wallets" [value]="wallet">{{wallet}}</option>
     </select>
   </div>
   <p>Please enter your password to decrypt your wallet</p>
@@ -17,5 +17,11 @@
   </form>
   <p></p>
 </div>
-<p> If you like to create or restore a wallet please click the button below.</p>
+<div *ngIf="hasWallet;else no_wallet">
+  <p> If you like to create or restore a wallet please click the button below.</p>
+</div>
+<ng-template #no_wallet>
+  <p> Looks like you're new here. Please create or restore a wallet.</p>
+</ng-template>
+
 <button type="button" (click)="clickedCreate()" class="btn btn-success">Create or restore wallet</button>
