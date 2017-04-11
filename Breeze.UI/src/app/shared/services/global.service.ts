@@ -5,12 +5,21 @@ export class GlobalService {
     constructor() {}
 
     private walletPath: string;
+    private currentWalletName: string;
 
-    getWalletPath(walletPath: string) {
-        return this.walletPath = walletPath;
+    getWalletPath() {
+        return this.walletPath;
     }
 
     setWalletPath(walletPath: string) {
         this.walletPath = walletPath;
+    }
+
+    getCurrentWalletName() {
+        return this.currentWalletName;
+    }
+
+    setCurrentWalletName(currentWalletName: string) {
+        this.currentWalletName = currentWalletName;
     }
 }
