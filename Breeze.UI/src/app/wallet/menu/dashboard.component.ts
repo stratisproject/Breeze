@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../../shared/api/api.service';
+import { ApiService } from '../../shared/services/api.service';
 
 @Component({
   selector: 'dashboard-component',

@@ -1,9 +1,9 @@
 import { Component, Injectable } from '@angular/core';
 
-import { ApiService } from '../../shared/api/api.service';
+import { ApiService } from '../../shared/services/api.service';
 
-import { WalletCreation } from '../../shared/wallet-creation';
-import { Mnemonic } from '../../shared/mnemonic';
+import { WalletCreation } from '../../shared/classes/wallet-creation';
+import { Mnemonic } from '../../shared/classes/mnemonic';
 
 @Component({
   selector: 'create-component',

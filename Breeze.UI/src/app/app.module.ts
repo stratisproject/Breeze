@@ -11,7 +11,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 
-import { ApiService } from './shared/api/api.service';
+import { ApiService } from './shared/services/api.service';
+import { GlobalService } from './shared/services/global.service';
 
 
 @NgModule({
@@ -28,7 +29,7 @@ import { ApiService } from './shared/api/api.service';
     AppComponent,
     LoginComponent
   ],
-  providers: [ ApiService ],
+  providers: [ ApiService, GlobalService ],
   bootstrap: [ AppComponent ]
 })
 

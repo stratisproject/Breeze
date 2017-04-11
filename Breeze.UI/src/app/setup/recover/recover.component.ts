@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../../shared/api/api.service'
-import { WalletRecovery } from '../../shared/wallet-recovery'
+import { ApiService } from '../../shared/services/api.service'
+import { WalletRecovery } from '../../shared/classes/wallet-recovery'
 
 @Component({
   selector: 'app-recover',

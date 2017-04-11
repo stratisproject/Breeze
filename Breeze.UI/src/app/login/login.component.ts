@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from '../shared/api/api.service';
-import { WalletLoad } from '../shared/wallet-load';
+import { ApiService } from '../shared/services/api.service';
+import { WalletLoad } from '../shared/classes/wallet-load';
 
 @Component({
   selector: 'app-login',
