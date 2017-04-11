@@ -1,11 +1,10 @@
 {
-    "create":
-    {
-        "mnemonic": "foo bar buz"
-    },
-    "load":
-    {
-        "success": "true"
+    "files": {
+        "walletsPath": "/home/dev0tion/Desktop/Wallets",
+        "walletsFiles": [
+            "myFirstWallet.json",
+            "mySecondWallet.json"
+        ]
     },
     "status":
     {

@@ -22,6 +22,15 @@ export class ApiService {
     private headers = new Headers({'Content-Type': 'application/json'});
 
     /**
+     * Gets available wallets at the default path
+     */
+     getWalletFiles(): Observable<any> {
+        return this.http
+          .get(this.mockApiUrl + '/wallet/files')
+          .map((response: Response) => response);
+     }
+
+    /**
      * Create a new wallet.
      */
     createWallet(data: WalletCreation): Observable<any> {
