@@ -2,12 +2,7 @@
   
 ## Request/Response
 
-RESPONSE: responsecode (`200` if success, `400`/`500` if error, see later)  
-```
-{
-  "success": "true"
-}
-```
+RESPONSE: response code (`200` for all successful requests, `4xx`/`5xx` if error, see later)  
   
 HEADERS
 `Content-Type:application/json`  
@@ -15,16 +10,20 @@ HEADERS
 ## Errors
 
 ### General errors
-
-`400` series status codes for client issues & `500` series status codes for server issues.  
-API should standardize that all `400` series errors come with consumable JSON error representation.  
   
-BODY  
+BODY
+The error response is an array of error objects.
+Depending on the circumstance the API will either return an error at the first encounter or will continue until multiple errors are gathered.
+
 ```
 {
-  "success": "false",
-  "message": "something bad happened", // ex.Message maybe?
-  "description": ex.ToString()
+  "errors": [
+    {
+      "status": 400,
+      "message": "No wallet file found at Wallets\\myFirstWallet.json",
+      "description": "System.ArgumentException: No wallet file found at..."
+    }
+  ]
 }
 ```  
 
@@ -36,11 +35,7 @@ This error message comes at all request if the wallet is not created yet, except
 - `POST /wallet/send-transaction`
 
 ```
-{
-  "success": "false",
-  "message": "wallet is not created",
-  "description": ""
-}
+404 (Not Found) - "wallet is not created"
 ```  
 
 ### wallet is not decrypted
@@ -53,11 +48,7 @@ This error message comes at all request if the wallet is not loaded yet, except
 - `DELETE /wallet`
 
 ```
-{
-  "success": "false",
-  "message": "wallet is not decrypted",
-  "description": ""
-}
+400 (Bad Request) - "wallet is not decrypted"
 ```  
 
 ## Key Management
@@ -99,7 +90,6 @@ POST /wallet/send-transaction - Attempts to send a transaction
 ### Responses
 ```
 {
-  "success": "true",
   "walletFilePath": "path to the wallet file",
   "encryptedSeed": "6PYKWP34en1wELfcJDgXaFRPugjgkDdEk2p2Pzytm1158dxgNyLAUXwpKL",
   "chainCode": "q/Fn7+RSIVM0p0Nj6rIuNkybF+0WKeSZPMQS2QCbDzY=",
@@ -119,7 +109,6 @@ POST /wallet/send-transaction - Attempts to send a transaction
 ### Responses
 ```
 {
-  "success": "true",
   "extkey": "sadwqdpqoijedqcdoijsadoijsadisa",
   "extpubkey": "dalkdsaklkjdlkjdsaljlkjdsalkjdsalk",
 }
@@ -128,7 +117,6 @@ POST /wallet/send-transaction - Attempts to send a transaction
 ### Responses
 ```
 {
-  "success": "true",
   "connectedNodeCount": "7",
   "maxConnextedNodeCount": "8",
   "headerChainHeight": "1048",
@@ -151,7 +139,6 @@ POST /wallet/send-transaction - Attempts to send a transaction
 ### Responses
 ```
 {
-  "success": "true",
   "mnemonic": "foo bar buz",
 }
 ```
@@ -185,7 +172,6 @@ Works as expected.
 ### Responses
 ```
 {
-  "success": "true",
   "addresses": // 7 unused receive address (7 is the best number: https://www.psychologytoday.com/blog/fulfillment-any-age/201109/7-reasons-we-7-reasons)
   [
     "mzz63n3n89KVeHQXRqJEVsQX8MZj5zeqCw",
@@ -203,7 +189,6 @@ Works as expected.
 ### Responses
 ```
 {
-  "success": "true",
   "history": 
   [
     {
@@ -226,7 +211,6 @@ Works as expected.
 ### Responses
 ```
 {
-  "success": "true",
   "synced": "true",
   "confirmed": "0.144",
   "unconfirmed": "-6.23"
@@ -252,7 +236,6 @@ Unconfirmed balance is the difference of unconfirmed incoming and outgoing trans
 #### Successful
 ```
 {
-	"success": "true",
 	"spendsUnconfirmed": "false", // If spends unconfirmed you can ask the user if it's sure about spending unconfirmed transaction (if inputs are malleated or inputs never confirm then this transaction will never confirm either" 
 	"fee": "0.0001",
 	"feePercentOfSent": "0.1" // Percentage of the total spent amount, there must be a safety limit implemented here
@@ -303,11 +286,7 @@ Unconfirmed balance is the difference of unconfirmed incoming and outgoing trans
 
 #### Errors
 ```
-{
-  "success": "false",
-  "message": "wallet is not synced",
-  "description": ""
-}
+400 - "wallet is not synced"
 ```  
 
 ## POST /wallet/send-transaction - Attempts to send a transaction
