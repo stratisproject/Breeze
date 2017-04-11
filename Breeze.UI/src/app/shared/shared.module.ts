@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { ApiService} from './api/api.service';
-
 @NgModule({
   imports: [CommonModule, RouterModule],
   declarations: [],
@@ -15,7 +13,7 @@ export class SharedModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: SharedModule,
-      providers: [ApiService]
+      providers: [ ]
     };
   }
 }
