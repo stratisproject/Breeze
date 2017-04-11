@@ -71,7 +71,7 @@ export class ApiService {
      */
     getWalletBalance(): Observable<any> {
       return this.http
-        .get(this.webApiUrl + '/wallet/balance')
+        .get(this.mockApiUrl + '/wallet/balance')
         .map((response: Response) => response);
     }
 
@@ -80,7 +80,7 @@ export class ApiService {
      */
     getWalletHistory(): Observable<any> {
       return this.http
-        .get(this.webApiUrl + '/wallet/history')
+        .get(this.mockApiUrl + '/wallet/history')
         .map((response: Response) => response);
     }
 
@@ -89,7 +89,7 @@ export class ApiService {
      */
     getUnusedReceiveAddresses(): Observable<any> {
       return this.http
-        .get(this.webApiUrl + '/wallet/receive')
+        .get(this.mockApiUrl + '/wallet/receive')
         .map((response: Response) => response);
     }
 }
