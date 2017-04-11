@@ -1,9 +1,21 @@
 <h1>Welcome back</h1>
-<p>Please enter your password to decrypt your wallet</p>
-<form (ngSubmit)="onSubmit()" #passwordForm="ngForm">
+<div *ngIf="hasWallet">
+  <p>Choose the wallet you want to open:</p>
   <div class="form-group">
-    <label for="password">Your password: </label>
-    <input type="password" class="form-control" id="password" required name="password">
+    <label for="walletLabel">Wallet to open:</label>
+    <select name="wallet" #walletName>
+      <option *ngFor="let wallet of wallets">{{wallet}}</option>
+    </select>
   </div>
-  <button type="submit" class="btn btn-success">Decrypt</button>
-</form>
+  <p>Please enter your password to decrypt your wallet</p>
+  <form (ngSubmit)="onSubmit()" #passwordForm="ngForm">
+    <div class="form-group">
+      <label for="password">Your password: </label>
+      <input type="password" class="form-control" id="password" required name="password">
+    </div>
+    <button type="submit" class="btn btn-success">Decrypt</button>
+  </form>
+  <p></p>
+</div>
+<p> If you like to create or restore a wallet please click the button below.</p>
+<button type="button" (click)="clickedCreate()" class="btn btn-success">Create or restore wallet</button>
