@@ -44,7 +44,7 @@ export class ApiService {
      */
     loadWallet(data: WalletLoad): Observable<any> {
       return this.http
-        .get(this.webApiUrl + '/wallet/load/', {headers: this.headers, body: JSON.stringify(data)})
+        .post(this.webApiUrl + '/wallet/load/', JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
 
@@ -83,6 +83,4 @@ export class ApiService {
         .get(this.webApiUrl + '/wallet/receive')
         .map((response: Response) => response);
     }
-
-  }
 }
