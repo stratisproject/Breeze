@@ -31,7 +31,7 @@ export class CreateComponent {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400){
-            this.responseMessage = response;
+            this.responseMessage = response.json();
           }
         },
         error => {

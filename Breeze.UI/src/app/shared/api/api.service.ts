@@ -22,6 +22,15 @@ export class ApiService {
     private headers = new Headers({'Content-Type': 'application/json'});
 
     /**
+     * Gets available wallets at the default path
+     */
+     getWalletFiles(): Observable<any> {
+        return this.http
+          .get(this.mockApiUrl + '/wallet/files')
+          .map((response: Response) => response);
+     }
+
+    /**
      * Create a new wallet.
      */
     createWallet(data: WalletCreation): Observable<any> {
@@ -44,7 +53,7 @@ export class ApiService {
      */
     loadWallet(data: WalletLoad): Observable<any> {
       return this.http
-        .get(this.webApiUrl + '/wallet/load/', {headers: this.headers, body: JSON.stringify(data)})
+        .post(this.webApiUrl + '/wallet/load/', JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
 
@@ -62,7 +71,7 @@ export class ApiService {
      */
     getWalletBalance(): Observable<any> {
       return this.http
-        .get(this.webApiUrl + '/wallet/balance')
+        .get(this.mockApiUrl + '/wallet/balance')
         .map((response: Response) => response);
     }
 
@@ -71,7 +80,7 @@ export class ApiService {
      */
     getWalletHistory(): Observable<any> {
       return this.http
-        .get(this.webApiUrl + '/wallet/history')
+        .get(this.mockApiUrl + '/wallet/history')
         .map((response: Response) => response);
     }
 
@@ -80,9 +89,7 @@ export class ApiService {
      */
     getUnusedReceiveAddresses(): Observable<any> {
       return this.http
-        .get(this.webApiUrl + '/wallet/receive')
+        .get(this.mockApiUrl + '/wallet/receive')
         .map((response: Response) => response);
     }
-
-  }
 }

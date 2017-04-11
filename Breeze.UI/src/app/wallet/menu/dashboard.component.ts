@@ -23,7 +23,7 @@ export class DashboardComponent {
             .subscribe(
                 response =>  {
                     if (response.status >= 200 && response.status < 400) {
-                        this.balanceResponse = response
+                        this.balanceResponse = response.json();
                         this.confirmedBalance = this.balanceResponse.confirmed;
                         this.unconfirmedBalance = this.balanceResponse.unconfirmed;
                     } 

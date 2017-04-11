@@ -10,26 +10,32 @@ import { WalletLoad } from '../shared/wallet-load';
 })
 export class LoginComponent implements OnInit {
   constructor(private apiService: ApiService, private router: Router) { }
+
+  private walletLoad: WalletLoad;
+  private hasWallet: boolean = false;
+  private currentWalletName: string;
+  private wallets: [any];
+  private walletPath: string;
+  private password: string;
   
   private responseMessage: any;
   private errorMessage: any;
-  private walletLoad: WalletLoad;
+  
 
   ngOnInit() {
-  }
-
-  private onSubmit() {
-    this.walletLoad = new WalletLoad();
-    this.walletLoad.password = "123";
-    this.walletLoad.name = "test"
-    this.walletLoad.folderPath = "folderPath"
-
-    this.apiService.loadWallet(this.walletLoad)
+    this.apiService.getWalletFiles()
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            this.responseMessage = response;
-            this.router.navigate['/wallet']
+            this.responseMessage=response;
+            this.wallets = response.json().walletsFiles;
+            this.walletPath = response.json().walletsPath;
+            if (this.wallets.length > 0) {
+              this.hasWallet = true;
+              this.currentWalletName = this.wallets[0].slice(0, -5);
+            } else {
+              this.hasWallet = false;
+            }
           }
         },
         error => {
@@ -40,5 +46,44 @@ export class LoginComponent implements OnInit {
           }
         }
       );
+  }
+
+  private onSubmit() {
+
+    this.walletLoad = new WalletLoad();
+    this.walletLoad.password = this.password;
+    this.walletLoad.name = this.currentWalletName;
+    this.walletLoad.folderPath = this.walletPath;
+
+    console.log(this.walletLoad);
+
+    this.apiService.loadWallet(this.walletLoad)
+      .subscribe(
+        response => {
+          console.log(response);
+          if (response.status >= 200 && response.status < 400) {
+            this.responseMessage = response;
+            this.router.navigate(['/wallet']);
+          }
+        },
+        error => {
+          this.errorMessage = <any>error;
+          if (error.status === 403 && error.json().errors[0].message === "Wrong password, please try again.") {
+            alert("Wrong password, try again.");
+          } else if (error.status >= 400) {
+            alert(this.errorMessage);
+            console.log(this.errorMessage);
+          }
+        }
+      );
+  }
+
+  private walletChanged(walletName: string) {
+    let walletNameNoJson: string = walletName.slice(0, -5);
+    this.currentWalletName = walletNameNoJson;
+  }
+
+  private clickedCreate() {
+    this.router.navigate(['/setup']);
   }
 }

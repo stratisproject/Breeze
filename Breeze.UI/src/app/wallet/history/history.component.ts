@@ -23,7 +23,7 @@ export class HistoryComponent {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            this.transactions = response.history;
+            this.transactions = response.json().history;
           }
         },
         error => {
