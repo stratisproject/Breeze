@@ -23,7 +23,7 @@ export class ReceiveComponent {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            this.addresses = response.addresses;
+            this.addresses = response.json().addresses;
           }
         },
         error => {
