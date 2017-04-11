@@ -16,13 +16,13 @@ export class LoginComponent implements OnInit {
   private currentWalletName: string;
   private wallets: [any];
   private walletPath: string;
+  private password: string;
   
   private responseMessage: any;
   private errorMessage: any;
   
 
   ngOnInit() {
-    this.currentWalletName = "";
     this.apiService.getWalletFiles()
       .subscribe(
         response => {
@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
   private onSubmit() {
 
     this.walletLoad = new WalletLoad();
-    this.walletLoad.password = "test";
+    this.walletLoad.password = this.password;
     this.walletLoad.name = this.currentWalletName;
     this.walletLoad.folderPath = this.walletPath;
 
@@ -68,7 +68,9 @@ export class LoginComponent implements OnInit {
         },
         error => {
           this.errorMessage = <any>error;
-          if (error.status >= 400) {
+          if (error.status === 403 && error.json().errors[0].message === "Wrong password, please try again.") {
+            alert("Wrong password, try again.");
+          } else if (error.status >= 400) {
             alert(this.errorMessage);
             console.log(this.errorMessage);
           }

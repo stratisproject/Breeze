@@ -11,7 +11,7 @@
   <form (ngSubmit)="onSubmit()" #passwordForm="ngForm">
     <div class="form-group">
       <label for="password">Your password: </label>
-      <input type="password" class="form-control" id="password" required name="password">
+      <input type="password" class="form-control" id="password" [(ngModel)]="password" required name="password">
     </div>
     <button type="submit" class="btn btn-success">Decrypt</button>
   </form>
