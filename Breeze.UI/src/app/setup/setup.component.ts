@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Location} from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,12 +8,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./setup.component.css'],
 })
 export class SetupComponent {
-  constructor(private router: Router) {}
-  private createWallet() {
-    this.router.navigate(['/setup/create'])
+  constructor(private router: Router, private location: Location) {}
+  private onCreateClicked() {
+    this.router.navigate(['/setup/create']);
   }
 
-  private recoverWallet() {
-    this.router.navigate(['/setup/recover'])
+  private onRecoverClicked() {
+    this.router.navigate(['/setup/recover']);
+  }
+
+  private onBackClicked() {
+    this.location.back();
   }
 }
