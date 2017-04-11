@@ -28,6 +28,28 @@ namespace Breeze.Api
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			// Add service and create Policy to allow Cross-Origin Requests
+			services.AddCors
+			(
+				options =>
+				{
+					options.AddPolicy
+					(
+						"CorsPolicy",
+
+						builder => 
+						{
+							var allowedDomains = new[]{"http://localhost","http://localhost:4200"};
+
+							builder
+							.WithOrigins(allowedDomains)
+							.AllowAnyMethod()
+							.AllowAnyHeader()
+							.AllowCredentials();
+						}
+					);
+			});
+			
 			// Add framework services.
 			services.AddMvc()
 				// add serializers for NBitcoin objects
