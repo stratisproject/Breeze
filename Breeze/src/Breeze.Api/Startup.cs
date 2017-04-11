@@ -95,6 +95,8 @@ namespace Breeze.Api
 			loggerFactory.AddConsole(this.Configuration.GetSection("Logging"));
 			loggerFactory.AddDebug();
 
+			app.UseCors("CorsPolicy");
+
 			app.UseMvc();
 
 			// Enable middleware to serve generated Swagger as a JSON endpoint.
