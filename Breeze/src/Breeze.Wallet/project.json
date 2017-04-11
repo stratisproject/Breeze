@@ -2,9 +2,9 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "HBitcoin": "0.1.5",
+    "HBitcoin": "0.1.6",
     "Microsoft.AspNetCore.Mvc.Versioning": "1.0.3",
-    "NBitcoin": "3.0.2.10",
+    "NBitcoin": "3.0.2.14",
     "NETStandard.Library": "1.6.1",
     "Stratis.Bitcoin": "1.0.1.3-alpha"
   },
