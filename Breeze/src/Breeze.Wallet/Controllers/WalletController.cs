@@ -303,8 +303,12 @@ namespace Breeze.Wallet.Controllers
             }
         }
 
+        /// <summary>
+        /// Get the default folder in which the wallets will be stored.
+        /// </summary>
+        /// <returns>The folder path for Windows, Linux or OSX systems.</returns>
         private string GetDefaultFolderPath()
-        {            
+        {                
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {                
                 return $@"{Environment.GetEnvironmentVariable("AppData")}\Breeze";
