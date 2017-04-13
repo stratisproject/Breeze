@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
+using Breeze.Wallet.Helpers;
 using Breeze.Wallet.Models;
 using HBitcoin.KeyManagement;
 using NBitcoin;
@@ -22,7 +24,7 @@ namespace Breeze.Wallet.Wrappers
 		public string Create(string password, string folderPath, string name, string network)
 		{			
 			Mnemonic mnemonic;
-			Safe wallet = Safe.Create(out mnemonic, password, Path.Combine(folderPath, $"{name}.json"), this.GetNetwork(network));
+			Safe wallet = Safe.Create(out mnemonic, password, Path.Combine(folderPath, $"{name}.json"), WalletHelpers.GetNetwork(network));
 			return mnemonic.ToString();
 		}
 
@@ -57,7 +59,7 @@ namespace Breeze.Wallet.Wrappers
 		/// <returns></returns>
 		public WalletModel Recover(string password, string folderPath, string name, string network, string mnemonic)
 		{
-			Safe wallet = Safe.Recover(new Mnemonic(mnemonic), password, Path.Combine(folderPath, $"{name}.json"), this.GetNetwork(network));
+			Safe wallet = Safe.Recover(new Mnemonic(mnemonic), password, Path.Combine(folderPath, $"{name}.json"), WalletHelpers.GetNetwork(network));
 
 			//TODO review here which data should be returned
 			return new WalletModel
@@ -67,20 +69,7 @@ namespace Breeze.Wallet.Wrappers
 				FileName = wallet.WalletFilePath
 			};
 		}
-
-		private Network GetNetwork(string network)
-		{
-			// any network different than MainNet will default to TestNet			
-			switch (network.ToLowerInvariant())
-			{
-				case "main":
-				case "mainnet":
-					return Network.Main;					
-				default:
-					return Network.TestNet;
-			}
-		}
-
+        
 		public WalletInfoModel GetInfo(string name)
 		{
 			throw new System.NotImplementedException();
