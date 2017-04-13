@@ -15,7 +15,9 @@ export class CreateComponent {
   constructor(private apiService: ApiService) {}
 
   private newWallet: WalletCreation;
+
   private responseMessage: string;
+  private errorMessage: string;
 
   private createWallet(password: string, network: string, folderPath: string, name: string, ) {
     this.newWallet = new WalletCreation();
@@ -26,6 +28,18 @@ export class CreateComponent {
 
     this.apiService
       .createWallet(this.newWallet)
-      .subscribe((response: string) => this.responseMessage = response);
+      .subscribe(
+        response => {
+          if (response.status >= 200 && response.status < 400){
+            this.responseMessage = response.json();
+          }
+        },
+        error => {
+          if (error.status >= 400) {
+            this.errorMessage = error;
+            console.log(this.errorMessage);
+          }
+        }
+      );
   }
 }

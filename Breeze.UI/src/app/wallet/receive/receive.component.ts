@@ -21,8 +21,17 @@ export class ReceiveComponent {
   private getUnusedReceiveAddresses() {
     this.apiService.getUnusedReceiveAddresses()
       .subscribe(
-        response => this.addresses = response.addresses,
-        error => this.errorMessage = <any>error
+        response => {
+          if (response.status >= 200 && response.status < 400) {
+            this.addresses = response.json().addresses;
+          }
+        },
+        error => {
+          if (error.status >= 400) {
+            this.errorMessage = <any>error;
+            console.log(this.errorMessage);
+          }
+        }
     );
   }
 }

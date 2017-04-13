@@ -21,14 +21,19 @@ export class DashboardComponent {
     private getWalletBalance() {
         this.apiService.getWalletBalance()
             .subscribe(
-                response => this.balanceResponse = response,
-                error => this.errorMessage = <any>error,
-                () => this.setBalance()
+                response =>  {
+                    if (response.status >= 200 && response.status < 400) {
+                        this.balanceResponse = response.json();
+                        this.confirmedBalance = this.balanceResponse.confirmed;
+                        this.unconfirmedBalance = this.balanceResponse.unconfirmed;
+                    } 
+                },
+                error => {
+                    if (error.status >= 400) {
+                        this.errorMessage = <any>error;
+                        console.log(this.errorMessage);                    
+                    }
+                }
         );
-    }
-
-    private setBalance() {
-        this.confirmedBalance = this.balanceResponse.confirmed;
-        this.unconfirmedBalance = this.balanceResponse.unconfirmed;
     }
 }

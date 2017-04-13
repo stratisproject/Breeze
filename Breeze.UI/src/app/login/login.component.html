@@ -1,9 +1,27 @@
-<h1>Welcome back</h1>
-<p>Please enter your password to decrypt your wallet</p>
-<form (ngSubmit)="onSubmit()" #passwordForm="ngForm">
+<h1>Welcome to Breeze</h1>
+<div *ngIf="hasWallet">
+  <p>Choose the wallet you want to open:</p>
   <div class="form-group">
-    <label for="password">Your password: </label>
-    <input type="password" class="form-control" id="password" required name="password">
+    <label for="walletLabel">Wallet to open:</label>
+    <select name="wallet" #walletName (change)="walletChanged(walletName.value)">
+      <option *ngFor="let wallet of wallets" [value]="wallet">{{wallet}}</option>
+    </select>
   </div>
-  <button type="submit" class="btn btn-success">Decrypt</button>
-</form>
+  <p>Please enter your password to decrypt your wallet</p>
+  <form (ngSubmit)="onSubmit()" #passwordForm="ngForm">
+    <div class="form-group">
+      <label for="password">Your password: </label>
+      <input type="password" class="form-control" id="password" [(ngModel)]="password" required name="password">
+    </div>
+    <button type="submit" class="btn btn-success">Decrypt</button>
+  </form>
+  <p></p>
+</div>
+<div *ngIf="hasWallet;else no_wallet">
+  <p> If you like to create or restore a wallet please click the button below.</p>
+</div>
+<ng-template #no_wallet>
+  <p> Looks like you're new here. Please create or restore a wallet.</p>
+</ng-template>
+
+<button type="button" (click)="clickedCreate()" class="btn btn-success">Create or restore wallet</button>
