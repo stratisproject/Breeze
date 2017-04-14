@@ -82,7 +82,7 @@ namespace Breeze.Wallet.Controllers
             }            
             catch (FileNotFoundException e)
             {
-				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.Conflict, "This wallet already exists.", e.ToString());
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.NotFound, "This wallet was not found at the specified location.", e.ToString());
 			}
             catch (SecurityException e)
             {
