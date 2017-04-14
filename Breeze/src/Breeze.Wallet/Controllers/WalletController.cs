@@ -123,12 +123,7 @@ namespace Breeze.Wallet.Controllers
             {
 				// indicates that this wallet does not exist
 				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.NotFound, "Wallet not found.", e.ToString());				
-            }
-            catch (SecurityException e)
-            {
-				// indicates that the password is wrong
-				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.Forbidden, "Wrong password, please try again.", e.ToString());
-			}
+            }          
             catch (Exception e)
             {
 				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, e.Message, e.ToString());
