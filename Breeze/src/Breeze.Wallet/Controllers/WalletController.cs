@@ -135,9 +135,9 @@ namespace Breeze.Wallet.Controllers
         /// </summary>
         /// <param name="model">The name of the wallet.</param>
         /// <returns></returns>
-        [Route("info")]
+        [Route("general-info")]
 	    [HttpGet]
-	    public IActionResult GetInfo([FromQuery] WalletName model)
+	    public IActionResult GetGeneralInfo([FromQuery] WalletName model)
 	    {
 			// checks the request is valid
 			if (!this.ModelState.IsValid)
@@ -148,7 +148,7 @@ namespace Breeze.Wallet.Controllers
 
 			try
 			{				
-				return this.Json(this.walletWrapper.GetInfo(model.Name));
+				return this.Json(this.walletWrapper.GetGeneralInfo(model.Name));
 
 			}			
 			catch (Exception e)

@@ -17,7 +17,7 @@ namespace Breeze.Wallet.Wrappers
 
 		WalletModel Recover(string password, string folderPath, string name, string network, string mnemonic);
 
-		WalletInfoModel GetInfo(string walletName);
+		WalletGeneralInfoModel GetGeneralInfo(string walletName);
 
 		WalletBalanceModel GetBalance(string walletName);
 

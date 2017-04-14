@@ -70,7 +70,7 @@ namespace Breeze.Wallet.Wrappers
 			};
 		}
         
-		public WalletInfoModel GetInfo(string name)
+		public WalletGeneralInfoModel GetGeneralInfo(string name)
 		{
 			throw new System.NotImplementedException();
 		}

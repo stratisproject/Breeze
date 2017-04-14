@@ -54,7 +54,7 @@ This error message comes at all request if the wallet is not loaded yet, except
 ## Key Management
 
 ```
-GET /wallet/general - Displays general information on the wallet
+GET /wallet/general-info - Displays general information on the wallet
 GET /wallet/sensitive - Displays sensitive information on the wallet
 GET /wallet/status - Displays dynamic information on the wallet
 POST /wallet/create - Creates the wallet
@@ -86,7 +86,7 @@ POST /wallet/send-transaction - Attempts to send a transaction
 
 # Details
 
-## GET /wallet/general - Displays general information on the wallet
+## GET /wallet/general-info - Displays general information on the wallet
 ### Responses
 ```
 {
