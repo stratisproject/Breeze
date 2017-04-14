@@ -82,7 +82,7 @@ namespace Breeze.Wallet.Controllers
             }            
             catch (FileNotFoundException e)
             {
-				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.Conflict, "This wallet already exists.", e.ToString());
+				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.NotFound, "This wallet was not found at the specified location.", e.ToString());
 			}
             catch (SecurityException e)
             {
@@ -123,12 +123,7 @@ namespace Breeze.Wallet.Controllers
             {
 				// indicates that this wallet does not exist
 				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.NotFound, "Wallet not found.", e.ToString());				
-            }
-            catch (SecurityException e)
-            {
-				// indicates that the password is wrong
-				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.Forbidden, "Wrong password, please try again.", e.ToString());
-			}
+            }          
             catch (Exception e)
             {
 				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, e.Message, e.ToString());
@@ -140,9 +135,9 @@ namespace Breeze.Wallet.Controllers
         /// </summary>
         /// <param name="model">The name of the wallet.</param>
         /// <returns></returns>
-        [Route("info")]
+        [Route("general-info")]
 	    [HttpGet]
-	    public IActionResult GetInfo([FromQuery] WalletName model)
+	    public IActionResult GetGeneralInfo([FromQuery] WalletName model)
 	    {
 			// checks the request is valid
 			if (!this.ModelState.IsValid)
@@ -153,7 +148,7 @@ namespace Breeze.Wallet.Controllers
 
 			try
 			{				
-				return this.Json(this.walletWrapper.GetInfo(model.Name));
+				return this.Json(this.walletWrapper.GetGeneralInfo(model.Name));
 
 			}			
 			catch (Exception e)

@@ -16,7 +16,7 @@ namespace Breeze.Wallet.Models
 		public Money Fee { get; set; }
 
 		[JsonProperty(PropertyName = "feePercentOfSent")]
-		public double FeePercentOfSent { get; set; }
+		public decimal FeePercentOfSent { get; set; }
 
 		[JsonProperty(PropertyName = "hex")]
 		public string Hex { get; set; }

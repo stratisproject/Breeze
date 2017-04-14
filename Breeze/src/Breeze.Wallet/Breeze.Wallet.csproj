@@ -16,9 +16,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HBitcoin" Version="0.1.5" />
+    <PackageReference Include="HBitcoin" Version="0.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="1.0.3" />
-    <PackageReference Include="NBitcoin" Version="3.0.2.10" />
+    <PackageReference Include="NBitcoin" Version="3.0.2.15" />
     <PackageReference Include="Stratis.Bitcoin" Version="1.0.1.3-alpha" />
   </ItemGroup>
 

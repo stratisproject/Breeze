@@ -54,7 +54,7 @@ This error message comes at all request if the wallet is not loaded yet, except
 ## Key Management
 
 ```
-GET /wallet/general - Displays general information on the wallet
+GET /wallet/general-info - Displays general information on the wallet
 GET /wallet/sensitive - Displays sensitive information on the wallet
 GET /wallet/status - Displays dynamic information on the wallet
 POST /wallet/create - Creates the wallet
@@ -86,7 +86,7 @@ POST /wallet/send-transaction - Attempts to send a transaction
 
 # Details
 
-## GET /wallet/general - Displays general information on the wallet
+## GET /wallet/general-info - Displays general information on the wallet
 ### Responses
 ```
 {
@@ -95,7 +95,7 @@ POST /wallet/send-transaction - Attempts to send a transaction
   "chainCode": "q/Fn7+RSIVM0p0Nj6rIuNkybF+0WKeSZPMQS2QCbDzY=",
   "network": "main", // main/testnet
   "creationTime": "2017-03-21",
-  "decrypted": "true",
+  "isDecrypted": true,
   "uniqueId": "sadwpiqjdpijwqdpijwqidjoi" // can only get if decrypted, if not it's empty string
 }
 ```
@@ -194,13 +194,13 @@ Works as expected.
     {
       "txid": "9a9949476b629b4075b31d8faad64dad352586a18df8f2810c5a7bb900478c60",
       "amount": "0.1",
-      "confirmed": "true",
+      "confirmed": true,
       "timestamp": "2016.12.19. 23:15:05" // if confirmed it's the blocktime, utc
     },
     {
       "txid": "9a9949476b629b4075b31d8faad64dad352586a18df8f2810c5a7bb900478c60",
       "amount": "-0.1",
-      "confirmed": "false",
+      "confirmed": false,
       "timestamp": "2016.12.20. 1:15:36" // if unconfirmed it's the time our node first seen this transaction, utc
     }
   ]
@@ -211,7 +211,7 @@ Works as expected.
 ### Responses
 ```
 {
-  "synced": "true",
+  "isSynced": true,
   "confirmed": "0.144",
   "unconfirmed": "-6.23"
 }
@@ -228,7 +228,7 @@ Unconfirmed balance is the difference of unconfirmed incoming and outgoing trans
   "address": "1Xyz...",
   "amount": "0.12", // in btc, if 0, then spends all available
   "feeType": "low", // "low"/"medium"/"high"
-  "allowUnconfirmed": "true" // if spending unconfirmed outputs is allowed
+  "allowUnconfirmed": true // if spending unconfirmed outputs is allowed
 }
 ``` 
 
@@ -236,7 +236,7 @@ Unconfirmed balance is the difference of unconfirmed incoming and outgoing trans
 #### Successful
 ```
 {
-	"spendsUnconfirmed": "false", // If spends unconfirmed you can ask the user if it's sure about spending unconfirmed transaction (if inputs are malleated or inputs never confirm then this transaction will never confirm either" 
+	"spendsUnconfirmed": false, // If spends unconfirmed you can ask the user if it's sure about spending unconfirmed transaction (if inputs are malleated or inputs never confirm then this transaction will never confirm either" 
 	"fee": "0.0001",
 	"feePercentOfSent": "0.1" // Percentage of the total spent amount, there must be a safety limit implemented here
 	"hex": "0100000002d9dced2b6fc80c706d3564670cb6706afe7a798863a9218efcdcf415d58f0f82000000006a473044022030b8bea478444bd52f08de33b082cde1176d3137111f506eefefa91b47b1f6bf02204f12746abd1aeac5805872d163592cf145967fa0619339a9c5348d674852ef4801210224ec1e4c270ce373e6999eebfa01d0a7e7db3c537c026f265233350d5aab81fbfeffffffa0706db65c5e3594d43df5a2a8b6dfd3c9ee506b678f8c26f7820b324b26aa0f000000006a473044022061b718034f876590d6d80bac77a63248b2548d934849acd02c4f4236309e853002201aded6b24f553b6902cf571276b37b12f76b75650164d8738c74469b4edd547e012103d649294a0ca4db920a69eacd6a75cb8a38ae1b81129900621ce45e6ba3438a7bfeffffff0280a90300000000001976a914d0965947ebb329b776328624ebde8f8b32dc639788ac1cc80f00000000001976a914c2a420d34fc86cff932b8c3191549a0ddfd2b0d088acba770f00"
