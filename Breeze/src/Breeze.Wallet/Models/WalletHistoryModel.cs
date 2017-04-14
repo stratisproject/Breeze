@@ -19,7 +19,7 @@ namespace Breeze.Wallet.Models
 		public Money Amount { get; set; }
 
 		[JsonProperty(PropertyName = "confirmed")]
-		public Money Confirmed { get; set; }
+		public bool Confirmed { get; set; } 
 
 		[JsonProperty(PropertyName = "timestamp")]
 		public string Timestamp { get; set; }
