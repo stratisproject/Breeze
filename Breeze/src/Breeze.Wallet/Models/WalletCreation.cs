@@ -14,7 +14,6 @@ namespace Breeze.Wallet.Models
 
 		public string Network { get; set; }
 
-		[Required(ErrorMessage = "The folder path where the wallet will be created is required.")]
 		public string FolderPath { get; set; }
 
 		[Required(ErrorMessage = "The name of the wallet to create is missing.")]
@@ -26,7 +25,6 @@ namespace Breeze.Wallet.Models
 		[Required(ErrorMessage = "A password is required.")]
 		public string Password { get; set; }
 
-		[Required(ErrorMessage = "The folder path is required.")]
 		public string FolderPath { get; set; }
 
 		[Required(ErrorMessage = "The name of the wallet is missing.")]
@@ -41,7 +39,6 @@ namespace Breeze.Wallet.Models
 		[Required(ErrorMessage = "A password is required.")]
 		public string Password { get; set; }
 
-		[Required(ErrorMessage = "The folder path is required.")]
 		public string FolderPath { get; set; }
 
 		[Required(ErrorMessage = "The name of the wallet is missing.")]
