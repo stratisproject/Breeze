@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -43,10 +42,10 @@ namespace Breeze.Wallet.Controllers
             
             try
             {
-                // get the folder path 
-                string folderPath = string.IsNullOrEmpty(request.FolderPath) ? this.GetDefaultFolderPath() : request.FolderPath;
+                // get the wallet folder 
+                DirectoryInfo walletFolder = GetWalletFolder(request.FolderPath);
 
-                var mnemonic = this.walletWrapper.Create(request.Password, folderPath, request.Name, request.Network);
+                var mnemonic = this.walletWrapper.Create(request.Password, walletFolder.FullName, request.Name, request.Network);
                 return this.Json(mnemonic);
             }
             catch (NotSupportedException e)
@@ -74,10 +73,10 @@ namespace Breeze.Wallet.Controllers
             
             try
             {
-                // get the folder path 
-                string folderPath = string.IsNullOrEmpty(request.FolderPath) ? this.GetDefaultFolderPath() : request.FolderPath;
+                // get the wallet folder 
+                DirectoryInfo walletFolder = GetWalletFolder(request.FolderPath);
 
-                var wallet = this.walletWrapper.Load(request.Password, folderPath, request.Name);
+                var wallet = this.walletWrapper.Load(request.Password, walletFolder.FullName, request.Name);
                 return this.Json(wallet);
 
             }            
@@ -114,12 +113,11 @@ namespace Breeze.Wallet.Controllers
 
             try
             {
-                // get the folder path 
-                string folderPath = string.IsNullOrEmpty(request.FolderPath) ? this.GetDefaultFolderPath() : request.FolderPath;
+                // get the wallet folder 
+                DirectoryInfo walletFolder = GetWalletFolder(request.FolderPath);
 
-                var wallet = this.walletWrapper.Recover(request.Password, folderPath, request.Name, request.Network, request.Mnemonic);
+                var wallet = this.walletWrapper.Recover(request.Password, walletFolder.FullName, request.Name, request.Network, request.Mnemonic);
                 return this.Json(wallet);
-
             }
             catch (FileNotFoundException e)
             {
@@ -287,12 +285,12 @@ namespace Breeze.Wallet.Controllers
         {            
             try
             {
-                var defaultWalletsPath = this.GetDefaultFolderPath();
+                DirectoryInfo walletsFolder = GetWalletFolder();
 
                 WalletFileModel model = new WalletFileModel
                 {
-                    WalletsPath = defaultWalletsPath,
-                    WalletsFiles = Directory.EnumerateFiles(defaultWalletsPath, "*.json", SearchOption.TopDirectoryOnly).Select(p => Path.GetFileName(p))
+                    WalletsPath = walletsFolder.FullName,
+                    WalletsFiles = Directory.EnumerateFiles(walletsFolder.FullName, "*.json", SearchOption.TopDirectoryOnly).Select(p => Path.GetFileName(p))
                 };
 
                 return this.Json(model);
@@ -304,11 +302,25 @@ namespace Breeze.Wallet.Controllers
         }
 
         /// <summary>
-        /// Get the default folder in which the wallets will be stored.
+        /// Gets a folder.
+        /// </summary>
+        /// <returns>The path folder of the folder.</returns>
+        /// <remarks>The folder is created if it doesn't exist.</remarks>
+        private static DirectoryInfo GetWalletFolder(string folderPath = null)
+        {            
+            if (string.IsNullOrEmpty(folderPath))
+            {
+                folderPath = GetDefaultWalletFolderPath();
+            }
+            return Directory.CreateDirectory(folderPath);
+        }
+
+        /// <summary>
+        /// Gets the path of the default folder in which the wallets will be stored.
         /// </summary>
         /// <returns>The folder path for Windows, Linux or OSX systems.</returns>
-        private string GetDefaultFolderPath()
-        {                
+        private static string GetDefaultWalletFolderPath()
+        {                            
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {                
                 return $@"{Environment.GetEnvironmentVariable("AppData")}\Breeze";
