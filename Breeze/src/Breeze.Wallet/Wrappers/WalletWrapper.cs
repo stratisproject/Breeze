@@ -13,7 +13,14 @@ namespace Breeze.Wallet.Wrappers
 	/// </summary>
 	public class WalletWrapper : IWalletWrapper
 	{
-		/// <summary>
+	    private readonly IWalletManager walletManager;
+
+	    public WalletWrapper(IWalletManager walletManager)
+	    {
+	        this.walletManager = walletManager;
+	    }
+
+	    /// <summary>
 		/// Creates a wallet on the local device.
 		/// </summary>
 		/// <param name="password">The user's password.</param>
@@ -22,9 +29,8 @@ namespace Breeze.Wallet.Wrappers
 		/// <param name="network">The network for which to create a wallet.</param>
 		/// <returns>A mnemonic allowing recovery of the wallet.</returns>
 		public string Create(string password, string folderPath, string name, string network)
-		{			
-			Mnemonic mnemonic;
-			Safe wallet = Safe.Create(out mnemonic, password, Path.Combine(folderPath, $"{name}.json"), WalletHelpers.GetNetwork(network));
+		{						
+            Mnemonic mnemonic = this.walletManager.CreateWallet(password, Path.Combine(folderPath, $"{name}.json"), WalletHelpers.GetNetwork(network), password);
 			return mnemonic.ToString();
 		}
 
@@ -36,14 +42,14 @@ namespace Breeze.Wallet.Wrappers
 		/// <param name="name">The name of the wallet.</param>
 		/// <returns>The wallet loaded from the local device</returns>
 		public WalletModel Load(string password, string folderPath, string name)
-		{
-			Safe wallet = Safe.Load(password, Path.Combine(folderPath, $"{name}.json"));
-
-			//TODO review here which data should be returned
+		{		    
+		    Wallet wallet = this.walletManager.LoadWallet(password, Path.Combine(folderPath, $"{name}.json"));
+			
+            //TODO review here which data should be returned
 			return new WalletModel
 			{
 				Network = wallet.Network.Name,
-				Addresses = wallet.GetFirstNAddresses(10).Select(a => a.ToWif()),
+			//	Addresses = wallet.GetFirstNAddresses(10).Select(a => a.ToWif()),
 				FileName = wallet.WalletFilePath
 			};
 		}
@@ -59,13 +65,13 @@ namespace Breeze.Wallet.Wrappers
 		/// <returns></returns>
 		public WalletModel Recover(string password, string folderPath, string name, string network, string mnemonic)
 		{
-			Safe wallet = Safe.Recover(new Mnemonic(mnemonic), password, Path.Combine(folderPath, $"{name}.json"), WalletHelpers.GetNetwork(network));
-
+		    Wallet wallet = this.walletManager.RecoverWallet(new Mnemonic(mnemonic), password, Path.Combine(folderPath, $"{name}.json"), WalletHelpers.GetNetwork(network), password);
+			
 			//TODO review here which data should be returned
 			return new WalletModel
 			{
 				Network = wallet.Network.Name,
-				Addresses = wallet.GetFirstNAddresses(10).Select(a => a.ToWif()),
+			//	Addresses = wallet.GetFirstNAddresses(10).Select(a => a.ToWif()),
 				FileName = wallet.WalletFilePath
 			};
 		}

@@ -41,6 +41,7 @@ namespace Breeze.Wallet
 				{
 					services.AddTransient<IWalletWrapper, WalletWrapper>();
 					services.AddTransient<ITrackerWrapper, TrackerWrapper>();
+				    services.AddSingleton<IWalletManager, WalletManager>();
 					services.AddSingleton<WalletController>();
 				});
 			});
