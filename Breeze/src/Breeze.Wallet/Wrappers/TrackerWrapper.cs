@@ -1,17 +1,15 @@
 ﻿using NBitcoin;
-using HBitcoin.FullBlockSpv;
-using HBitcoin.Models;
 using System;
 
 namespace Breeze.Wallet.Wrappers
 {
     public class TrackerWrapper : ITrackerWrapper
     {
-        private readonly Tracker tracker;
+       // private readonly Tracker tracker;
 
         public TrackerWrapper(Network network)
         {
-            this.tracker = new Tracker(network);              
+            //this.tracker = new Tracker(network);              
         }
 
 		/// <summary>
@@ -26,7 +24,7 @@ namespace Breeze.Wallet.Wrappers
 
 		public void NotifyAboutBlock(int height, Block block)
         {
-            this.tracker.AddOrReplaceBlock(new Height(height), block);
+            //this.tracker.AddOrReplaceBlock(new Height(height), block);
 			Console.WriteLine($"height: {height}, block hash: {block.Header.GetHash()}");
         }
     }

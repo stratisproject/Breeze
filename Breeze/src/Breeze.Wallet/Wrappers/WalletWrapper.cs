@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using Breeze.Wallet.Helpers;
 using Breeze.Wallet.Models;
-using HBitcoin.KeyManagement;
 using NBitcoin;
 
 namespace Breeze.Wallet.Wrappers
