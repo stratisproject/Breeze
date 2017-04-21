@@ -6,6 +6,8 @@ namespace Breeze.Wallet.Wrappers
     {
         void NotifyAboutBlock(int height, Block block);
 
-		uint256 GetLastProcessedBlock();
+        void NotifyAboutTransaction(Transaction transaction);
+
+        uint256 GetLastProcessedBlock();
     }
 }
