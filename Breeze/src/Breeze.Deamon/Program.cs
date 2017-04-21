@@ -18,11 +18,12 @@ namespace Breeze.Deamon
 			// configure Full Node
 			Logs.Configure(new LoggerFactory().AddConsole(LogLevel.Trace, false));
 			NodeSettings nodeSettings = NodeSettings.FromArguments(args);
-
-	        var node = (FullNode)new FullNodeBuilder()
+            
+            var node = (FullNode)new FullNodeBuilder()
 				.UseNodeSettings(nodeSettings)
 				.UseWallet()				
 				.UseBlockNotification()
+                .UseTransactionNotification()
 				.UseApi()
 				.Build();
 

@@ -1,6 +1,4 @@
-﻿
-using Breeze.Wallet.Models;
-using HBitcoin.Models;
+﻿using Breeze.Wallet.Models;
 using NBitcoin;
 
 namespace Breeze.Wallet.Wrappers
