@@ -1,22 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{807563C4-7259-434D-B604-A14C3DCF8E30}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2FF3130A-E8F3-4E0B-8733-B34C4A19910C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "global", "global", "{2FF3130A-E8F3-4E0B-8733-B34C4A19910C}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Breeze.Api", "src\Breeze.Api\Breeze.Api.xproj", "{E7B3E9EB-34E8-4B10-B296-4D5270E314A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Breeze.Api", "src\Breeze.Api\Breeze.Api.csproj", "{E7B3E9EB-34E8-4B10-B296-4D5270E314A4}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Breeze.Api.Tests", "src\Breeze.Api.Tests\Breeze.Api.Tests.xproj", "{BD5174B4-DCE8-4594-9A16-B83E56767770}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Breeze.Api.Tests", "src\Breeze.Api.Tests\Breeze.Api.Tests.csproj", "{BD5174B4-DCE8-4594-9A16-B83E56767770}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Breeze.Wallet", "src\Breeze.Wallet\Breeze.Wallet.xproj", "{D16CD478-9D1E-4C69-91AD-43539E94A215}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Breeze.Wallet", "src\Breeze.Wallet\Breeze.Wallet.csproj", "{D16CD478-9D1E-4C69-91AD-43539E94A215}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Breeze.Deamon", "src\Breeze.Deamon\Breeze.Deamon.xproj", "{1B598E33-667F-496D-BC0D-88276E8E7632}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Breeze.Deamon", "src\Breeze.Deamon\Breeze.Deamon.csproj", "{1B598E33-667F-496D-BC0D-88276E8E7632}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
