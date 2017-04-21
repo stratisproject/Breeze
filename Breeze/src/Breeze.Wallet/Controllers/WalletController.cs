@@ -48,7 +48,7 @@ namespace Breeze.Wallet.Controllers
                 var mnemonic = this.walletWrapper.Create(request.Password, walletFolder.FullName, request.Name, request.Network);
                 return this.Json(mnemonic);
             }
-            catch (NotSupportedException e)
+            catch (InvalidOperationException e)
             {
 				// indicates that this wallet already exists
 				return ErrorHelpers.BuildErrorResponse(HttpStatusCode.Conflict, "This wallet already exists.", e.ToString());
@@ -118,6 +118,11 @@ namespace Breeze.Wallet.Controllers
 
                 var wallet = this.walletWrapper.Recover(request.Password, walletFolder.FullName, request.Name, request.Network, request.Mnemonic);
                 return this.Json(wallet);
+            }
+            catch (InvalidOperationException e)
+            {
+                // indicates that this wallet already exists
+                return ErrorHelpers.BuildErrorResponse(HttpStatusCode.Conflict, "This wallet already exists.", e.ToString());
             }
             catch (FileNotFoundException e)
             {
