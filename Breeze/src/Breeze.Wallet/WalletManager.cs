@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using Breeze.Wallet.Helpers;
+using Breeze.Wallet.Models;
 using NBitcoin;
 using Newtonsoft.Json;
 
@@ -9,48 +11,90 @@ namespace Breeze.Wallet
     /// A manager providing operations on wallets.
     /// </summary>
     public class WalletManager : IWalletManager
-    {        
+    {
         /// <inheritdoc />
-        public Mnemonic CreateWallet(string password, string walletFilePath, Network network, string passphrase = null)
+        public Mnemonic CreateWallet(string password, string folderPath, string name, string network, string passphrase = null)
         {
+            string walletFilePath = Path.Combine(folderPath, $"{name}.json");
+
+            // for now the passphrase is set to be the password by default.
+            if (passphrase == null)
+            {
+                passphrase = password;
+            }
+
             // generate the root seed used to generate keys from a mnemonic picked at random 
             // and a passphrase optionally provided by the user
             Mnemonic mnemonic = new Mnemonic(Wordlist.English, WordCount.Twelve);
             ExtKey extendedKey = mnemonic.DeriveExtKey(passphrase);
 
             // create a wallet file 
-            Wallet wallet = this.GenerateWalletFile(password, walletFilePath, network, extendedKey);            
+            Wallet wallet = this.GenerateWalletFile(password, walletFilePath, WalletHelpers.GetNetwork(network), extendedKey);
             return mnemonic;
         }
 
         /// <inheritdoc />
-        public Wallet LoadWallet(string password, string walletFilePath)
+        public Wallet LoadWallet(string password, string folderPath, string name)
         {
+            string walletFilePath = Path.Combine(folderPath, $"{name}.json");
+
             if (!File.Exists(walletFilePath))
                 throw new FileNotFoundException($"No wallet file found at {walletFilePath}");
 
             // load the file from the local system
-            Wallet wallet = JsonConvert.DeserializeObject<Wallet>(File.ReadAllText(walletFilePath));            
+            Wallet wallet = JsonConvert.DeserializeObject<Wallet>(File.ReadAllText(walletFilePath));
             return wallet;
         }
 
         /// <inheritdoc />
-        public Wallet RecoverWallet(Mnemonic mnemonic, string password, string walletFilePath, Network network, string passphrase = null, DateTimeOffset? creationTime = null)
+        public Wallet RecoverWallet(string password, string folderPath, string name, string network, string mnemonic, string passphrase = null, DateTimeOffset? creationTime = null)
         {
+            // for now the passphrase is set to be the password by default.
+            if (passphrase == null)
+            {
+                passphrase = password;
+            }
+
             // generate the root seed used to generate keys
-            ExtKey extendedKey = mnemonic.DeriveExtKey(passphrase);
+            ExtKey extendedKey = (new Mnemonic(mnemonic)).DeriveExtKey(passphrase);
 
             // create a wallet file 
-            Wallet wallet = this.GenerateWalletFile(password, walletFilePath, network, extendedKey, creationTime);           
+            Wallet wallet = this.GenerateWalletFile(password, Path.Combine(folderPath, $"{name}.json"), WalletHelpers.GetNetwork(network), extendedKey, creationTime);
             return wallet;
         }
-        
+
+        public WalletGeneralInfoModel GetGeneralInfo(string name)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public WalletBalanceModel GetBalance(string walletName)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public WalletHistoryModel GetHistory(string walletName)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public WalletBuildTransactionModel BuildTransaction(string password, string address, Money amount, string feeType,
+            bool allowUnconfirmed)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool SendTransaction(string transactionHex)
+        {
+            throw new System.NotImplementedException();
+        }
+
         /// <inheritdoc />
         public void DeleteWallet(string walletFilePath)
         {
             File.Delete(walletFilePath);
         }
-        
+
         /// <inheritdoc />
         public void Dispose()
         {
@@ -77,7 +121,7 @@ namespace Breeze.Wallet
                 EncryptedSeed = extendedKey.PrivateKey.GetEncryptedBitcoinSecret(password, network).ToWif(),
                 ChainCode = extendedKey.ChainCode,
                 CreationTime = creationTime ?? DateTimeOffset.Now,
-                Network = network                
+                Network = network
             };
 
             // create a folder if none exists and persist the file
