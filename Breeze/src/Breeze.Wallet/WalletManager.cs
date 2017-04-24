@@ -19,8 +19,7 @@ namespace Breeze.Wallet
             ExtKey extendedKey = mnemonic.DeriveExtKey(passphrase);
 
             // create a wallet file 
-            this.GenerateWalletFile(password, walletFilePath, network, extendedKey);
-            
+            Wallet wallet = this.GenerateWalletFile(password, walletFilePath, network, extendedKey);            
             return mnemonic;
         }
 
@@ -31,21 +30,7 @@ namespace Breeze.Wallet
                 throw new FileNotFoundException($"No wallet file found at {walletFilePath}");
 
             // load the file from the local system
-            WalletFile walletFile = JsonConvert.DeserializeObject<WalletFile>(File.ReadAllText(walletFilePath));
-
-            // decrypt the private key and use it to regenerate the seed
-            var privateKey = Key.Parse(walletFile.EncryptedSeed, password, walletFile.Network);
-            var seedExtKey = new ExtKey(privateKey, walletFile.ChainCode);
-
-            Wallet wallet = new Wallet
-            {
-                ChainCode = walletFile.ChainCode,
-                CreationTime = walletFile.CreationTime,
-                Network = walletFile.Network,
-                WalletFilePath = walletFilePath,
-                ExtendedKey = seedExtKey
-            };
-            
+            Wallet wallet = JsonConvert.DeserializeObject<Wallet>(File.ReadAllText(walletFilePath));            
             return wallet;
         }
 
@@ -56,17 +41,7 @@ namespace Breeze.Wallet
             ExtKey extendedKey = mnemonic.DeriveExtKey(passphrase);
 
             // create a wallet file 
-            WalletFile walletFile = this.GenerateWalletFile(password, walletFilePath, network, extendedKey, creationTime);
-            
-            Wallet wallet = new Wallet
-            {
-                ChainCode = walletFile.ChainCode,
-                CreationTime = walletFile.CreationTime,
-                Network = walletFile.Network,
-                WalletFilePath = walletFilePath,
-                ExtendedKey = extendedKey
-            };
-
+            Wallet wallet = this.GenerateWalletFile(password, walletFilePath, network, extendedKey, creationTime);           
             return wallet;
         }
         
@@ -92,17 +67,17 @@ namespace Breeze.Wallet
         /// <param name="creationTime">The time this wallet was created.</param>
         /// <returns></returns>
         /// <exception cref="System.NotSupportedException"></exception>
-        private WalletFile GenerateWalletFile(string password, string walletFilePath, Network network, ExtKey extendedKey, DateTimeOffset? creationTime = null)
+        private Wallet GenerateWalletFile(string password, string walletFilePath, Network network, ExtKey extendedKey, DateTimeOffset? creationTime = null)
         {
             if (File.Exists(walletFilePath))
                 throw new InvalidOperationException($"Wallet already exists at {walletFilePath}");
 
-            WalletFile walletFile = new WalletFile
+            Wallet walletFile = new Wallet
             {
                 EncryptedSeed = extendedKey.PrivateKey.GetEncryptedBitcoinSecret(password, network).ToWif(),
                 ChainCode = extendedKey.ChainCode,
                 CreationTime = creationTime ?? DateTimeOffset.Now,
-                Network = network
+                Network = network                
             };
 
             // create a folder if none exists and persist the file
