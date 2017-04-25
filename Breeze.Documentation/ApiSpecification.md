@@ -61,6 +61,8 @@ POST /wallet/create - Creates the wallet
 POST /wallet/load - Loads the wallet and starts syncing
 POST /wallet/recover - Recovers the wallet
 DELETE /wallet - Deletes the wallet
+POST /wallet/account
+POST /wallet/address
 ```
 	
 ## Syncing
@@ -164,6 +166,35 @@ Cannot check if the password is good or not. If the password is wrong it'll reco
 
 ## DELETE /wallet - Deletes the wallet
 Works as expected.
+
+## POST /wallet/account - Adds an account to the wallet
+### Parameters
+```
+{
+	"walletName": "myFirstWallet",
+	"accountName": "account one",
+	"password": "123456",
+	"coinType": 105
+}
+```
+### Responses
+```
+  "account one"
+```
+
+## POST /wallet/address - Adds an address to an account
+### Parameters
+```
+{
+	"walletName": "myFirstWallet",
+	"accountName": "account one",
+	"coinType": 0
+}
+```
+### Responses
+```
+  "1HDypWxXWZC5KXK259EHMnrWaa2youy7Mj"
+```
 
 ## GET /wallet/mempool/?allow=[true/false] - Allows or disallows mempool syncing
 Works as expected.
