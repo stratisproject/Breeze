@@ -17,8 +17,9 @@ namespace Breeze.Wallet
         /// <param name="name">The name of the wallet.</param>
         /// <param name="network">The network this wallet is for.</param>
         /// <param name="passphrase">The passphrase used in the seed.</param>
+        /// <param name="coinType">The type of coin this wallet will contain.</param>
         /// <returns>A mnemonic defining the wallet's seed used to generate addresses.</returns>
-        Mnemonic CreateWallet(string password, string folderPath, string name, string network, string passphrase = null);
+        Mnemonic CreateWallet(string password, string folderPath, string name, string network, string passphrase = null, CoinType coinType = CoinType.Bitcoin);
 
         /// <summary>
         /// Loads a wallet from a file.
@@ -38,15 +39,28 @@ namespace Breeze.Wallet
         /// <param name="network">The network in which to creae this wallet</param>
         /// <param name="mnemonic">The user's mnemonic for the wallet.</param>		
         /// <param name="passphrase">The passphrase used in the seed.</param>
+        /// <param name="coinType">The type of coin this wallet will contain.</param>
         /// <param name="creationTime">The time this wallet was created.</param>
         /// <returns>The recovered wallet.</returns>
-        Wallet RecoverWallet(string password, string folderPath, string name, string network, string mnemonic, string passphrase = null, DateTimeOffset? creationTime = null);
+        Wallet RecoverWallet(string password, string folderPath, string name, string network, string mnemonic, string passphrase = null, CoinType coinType = CoinType.Bitcoin, DateTimeOffset? creationTime = null);
 
         /// <summary>
         /// Deleted a wallet.
         /// </summary>
         /// <param name="walletFilePath">The location of the wallet file.</param>        
         void DeleteWallet(string walletFilePath);
+
+        /// <summary>
+        /// Creates a new account.
+        /// </summary>
+        /// <param name="walletName">The name of the wallet in which this account will be created.</param>
+        /// <param name="accountName">The name by which this account will be identified.</param>
+        /// <remarks>
+        /// According to BIP44, an account at index (i) can only be created when the account
+        /// at index (i - 1) contains transactions.
+        /// </remarks>
+        /// <returns>The name of the new account.</returns>
+        string CreateNewAccount(string walletName, string accountName);
 
         WalletGeneralInfoModel GetGeneralInfo(string walletName);
 
