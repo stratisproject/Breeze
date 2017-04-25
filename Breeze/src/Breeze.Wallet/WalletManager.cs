@@ -23,7 +23,7 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public Mnemonic CreateWallet(string password, string folderPath, string name, string network, string passphrase = null, CoinType coinType = CoinType.Bitcoin)
+        public Mnemonic CreateWallet(string password, string folderPath, string name, string network, string passphrase = null)
         {
             // for now the passphrase is set to be the password by default.
             if (passphrase == null)
@@ -37,7 +37,7 @@ namespace Breeze.Wallet
             ExtKey extendedKey = mnemonic.DeriveExtKey(passphrase);
 
             // create a wallet file 
-            Wallet wallet = this.GenerateWalletFile(password, folderPath, name, WalletHelpers.GetNetwork(network), extendedKey, coinType);
+            Wallet wallet = this.GenerateWalletFile(password, folderPath, name, WalletHelpers.GetNetwork(network), extendedKey);
 
             this.Load(wallet);
             return mnemonic;
@@ -59,7 +59,7 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public Wallet RecoverWallet(string password, string folderPath, string name, string network, string mnemonic, string passphrase = null, CoinType coinType = CoinType.Bitcoin, DateTimeOffset? creationTime = null)
+        public Wallet RecoverWallet(string password, string folderPath, string name, string network, string mnemonic, string passphrase = null, DateTimeOffset? creationTime = null)
         {
             // for now the passphrase is set to be the password by default.
             if (passphrase == null)
@@ -71,35 +71,37 @@ namespace Breeze.Wallet
             ExtKey extendedKey = (new Mnemonic(mnemonic)).DeriveExtKey(passphrase);
 
             // create a wallet file 
-            Wallet wallet = this.GenerateWalletFile(password, folderPath, name, WalletHelpers.GetNetwork(network), extendedKey, coinType, creationTime);
+            Wallet wallet = this.GenerateWalletFile(password, folderPath, name, WalletHelpers.GetNetwork(network), extendedKey, creationTime);
 
             this.Load(wallet);
             return wallet;
         }
-        
+
         /// <inheritdoc />
-        public string CreateNewAccount(string walletName, string accountName, string password)
+        public string CreateNewAccount(string walletName, CoinType coinType, string accountName, string password)
         {
             Wallet wallet = this.Wallets.SingleOrDefault(w => w.Name == walletName);
             if (wallet == null)
             {
-                throw new Exception($"No wallet with name {walletName} could be found.");    
+                throw new Exception($"No wallet with name {walletName} could be found.");
             }
 
+            // get the accounts for this type of coin
+            var accounts = wallet.AccountsRoot.Single(a => a.CoinType == coinType).Accounts.ToList();
             int newAccountIndex = 0;
 
             // validate account creation
-            if (wallet.Accounts.Any())
+            if (accounts.Any())
             {
                 // check account with same name doesn't already exists
-                if (wallet.Accounts.Any(a => a.Name == accountName))
+                if (accounts.Any(a => a.Name == accountName))
                 {
                     throw new Exception($"Account with name '{accountName}' already exists in '{walletName}'.");
                 }
 
                 // check account at index i - 1 contains transactions.
-                int lastAccountIndex = wallet.Accounts.Max(a => a.Index);
-                HdAccount previousAccount = wallet.Accounts.Single(a => a.Index == lastAccountIndex);
+                int lastAccountIndex = accounts.Max(a => a.Index);
+                HdAccount previousAccount = accounts.Single(a => a.Index == lastAccountIndex);
                 if (!previousAccount.ExternalAddresses.Any(addresses => addresses.Transactions.Any()) && !previousAccount.InternalAddresses.Any(addresses => addresses.Transactions.Any()))
                 {
                     throw new Exception($"Cannot create new account '{accountName}' in '{walletName}' if the previous account '{previousAccount.Name}' has not been used.");
@@ -111,11 +113,11 @@ namespace Breeze.Wallet
             // get the extended pub key used to generate addresses for this account
             var privateKey = Key.Parse(wallet.EncryptedSeed, password, wallet.Network);
             var seedExtKey = new ExtKey(privateKey, wallet.ChainCode);
-            KeyPath keyPath = new KeyPath($"m/44'/{(int)wallet.CoinType}'/{newAccountIndex}'");
-            var accountExtKey = seedExtKey.Derive(keyPath);
+            KeyPath keyPath = new KeyPath($"m/44'/{(int)coinType}'/{newAccountIndex}'");
+            ExtKey accountExtKey = seedExtKey.Derive(keyPath);
             ExtPubKey accountExtPubKey = accountExtKey.Neuter();
 
-            wallet.Accounts = wallet.Accounts.Concat(new[] {new HdAccount
+            accounts.Add(new HdAccount
             {
                 Index = newAccountIndex,
                 ExtendedPubKey = accountExtPubKey.ToString(wallet.Network),
@@ -123,15 +125,16 @@ namespace Breeze.Wallet
                 InternalAddresses = new List<HdAddress>(),
                 Name = accountName,
                 CreationTime = DateTimeOffset.Now
-            }});
+            });
 
+            wallet.AccountsRoot.Single(a => a.CoinType == coinType).Accounts = accounts;
             this.SaveToFile(wallet);
 
             return accountName;
         }
 
         /// <inheritdoc />
-        public string CreateNewAddress(string walletName, string accountName)
+        public string CreateNewAddress(string walletName, CoinType coinType, string accountName)
         {
             Wallet wallet = this.Wallets.SingleOrDefault(w => w.Name == walletName);
             if (wallet == null)
@@ -139,7 +142,8 @@ namespace Breeze.Wallet
                 throw new Exception($"No wallet with name {walletName} could be found.");
             }
 
-            HdAccount account = wallet.Accounts.SingleOrDefault(a => a.Name == accountName);
+            // get the account
+            HdAccount account = wallet.AccountsRoot.Single(a => a.CoinType == coinType).Accounts.SingleOrDefault(a => a.Name == accountName);
             if (account == null)
             {
                 throw new Exception($"No account with name {accountName} could be found.");
@@ -160,7 +164,7 @@ namespace Breeze.Wallet
 
                 newAddressIndex = lastAddressIndex + 1;
             }
-            
+
             // generate new receiving address
             BitcoinPubKeyAddress address = this.GenerateAddress(account.ExtendedPubKey, newAddressIndex, false, wallet.Network);
 
@@ -168,7 +172,7 @@ namespace Breeze.Wallet
             account.ExternalAddresses = account.ExternalAddresses.Concat(new[] {new HdAddress
             {
                 Index = newAddressIndex,
-                HdPath = CreateBip44Path(wallet.CoinType, account.Index, newAddressIndex, false),
+                HdPath = CreateBip44Path(coinType, account.Index, newAddressIndex, false),
                 ScriptPubKey = address.ScriptPubKey,
                 Address = address.ToString(),
                 Transactions = new List<TransactionData>(),
@@ -230,7 +234,7 @@ namespace Breeze.Wallet
         /// <param name="creationTime">The time this wallet was created.</param>
         /// <returns></returns>
         /// <exception cref="System.NotSupportedException"></exception>
-        private Wallet GenerateWalletFile(string password, string folderPath, string name, Network network, ExtKey extendedKey, CoinType coinType = CoinType.Bitcoin, DateTimeOffset? creationTime = null)
+        private Wallet GenerateWalletFile(string password, string folderPath, string name, Network network, ExtKey extendedKey, DateTimeOffset? creationTime = null)
         {
             string walletFilePath = Path.Combine(folderPath, $"{name}.json");
 
@@ -241,11 +245,12 @@ namespace Breeze.Wallet
             {
                 Name = name,
                 EncryptedSeed = extendedKey.PrivateKey.GetEncryptedBitcoinSecret(password, network).ToWif(),
-                ChainCode = extendedKey.ChainCode,                
+                ChainCode = extendedKey.ChainCode,
                 CreationTime = creationTime ?? DateTimeOffset.Now,
                 Network = network,
-                Accounts = new List<HdAccount>(),
-                CoinType = coinType,
+                AccountsRoot = new List<AccountRoot> {
+                    new AccountRoot { Accounts = new List<HdAccount>(), CoinType = CoinType.Bitcoin },
+                    new AccountRoot { Accounts = new List<HdAccount>(), CoinType = CoinType.Stratis} },
                 WalletFilePath = walletFilePath
             };
 

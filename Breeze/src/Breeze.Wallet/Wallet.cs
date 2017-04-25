@@ -52,6 +52,18 @@ namespace Breeze.Wallet
         public string WalletFilePath { get; set; }
 
         /// <summary>
+        /// The root of the accounts tree.
+        /// </summary>
+        [JsonProperty(PropertyName = "accountsRoot")]
+        public IEnumerable<AccountRoot> AccountsRoot { get; set; }
+    }
+
+    /// <summary>
+    /// The root for the accounts for any type of coins.
+    /// </summary>
+    public class AccountRoot
+    {
+        /// <summary>
         /// The type of coin, Bitcoin or Stratis.
         /// </summary>
         [JsonProperty(PropertyName = "coinType")]

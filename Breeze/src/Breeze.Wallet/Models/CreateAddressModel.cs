@@ -14,6 +14,12 @@ namespace Breeze.Wallet.Models
         public string WalletName { get; set; }
 
         /// <summary>
+        /// The type of coin this account contains.
+        /// </summary>
+        [Required]
+        public CoinType CoinType { get; set; }
+
+        /// <summary>
         /// The name of the account in which to create the address.
         /// </summary>
         [Required]

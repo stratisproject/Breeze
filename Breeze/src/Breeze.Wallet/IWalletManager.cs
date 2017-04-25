@@ -17,9 +17,8 @@ namespace Breeze.Wallet
         /// <param name="name">The name of the wallet.</param>
         /// <param name="network">The network this wallet is for.</param>
         /// <param name="passphrase">The passphrase used in the seed.</param>
-        /// <param name="coinType">The type of coin this wallet will contain.</param>
         /// <returns>A mnemonic defining the wallet's seed used to generate addresses.</returns>
-        Mnemonic CreateWallet(string password, string folderPath, string name, string network, string passphrase = null, CoinType coinType = CoinType.Bitcoin);
+        Mnemonic CreateWallet(string password, string folderPath, string name, string network, string passphrase = null);
 
         /// <summary>
         /// Loads a wallet from a file.
@@ -39,10 +38,9 @@ namespace Breeze.Wallet
         /// <param name="network">The network in which to creae this wallet</param>
         /// <param name="mnemonic">The user's mnemonic for the wallet.</param>		
         /// <param name="passphrase">The passphrase used in the seed.</param>
-        /// <param name="coinType">The type of coin this wallet will contain.</param>
         /// <param name="creationTime">The time this wallet was created.</param>
         /// <returns>The recovered wallet.</returns>
-        Wallet RecoverWallet(string password, string folderPath, string name, string network, string mnemonic, string passphrase = null, CoinType coinType = CoinType.Bitcoin, DateTimeOffset? creationTime = null);
+        Wallet RecoverWallet(string password, string folderPath, string name, string network, string mnemonic, string passphrase = null, DateTimeOffset? creationTime = null);
 
         /// <summary>
         /// Deleted a wallet.
@@ -54,6 +52,7 @@ namespace Breeze.Wallet
         /// Creates a new account.
         /// </summary>
         /// <param name="walletName">The name of the wallet in which this account will be created.</param>
+        /// <param name="coinType">the type of coin for which to create an account.</param>
         /// <param name="accountName">The name by which this account will be identified.</param>
         /// <param name="password">The password used to decrypt the private key.</param>
         /// <remarks>
@@ -61,15 +60,16 @@ namespace Breeze.Wallet
         /// at index (i - 1) contains transactions.
         /// </remarks>
         /// <returns>The name of the new account.</returns>
-        string CreateNewAccount(string walletName, string accountName, string password);
+        string CreateNewAccount(string walletName, CoinType coinType, string accountName, string password);
 
         /// <summary>
         /// Creates the new address.
         /// </summary>
         /// <param name="walletName">The name of the wallet in which this address will be created.</param>
+        /// <param name="coinType">the type of coin for which to create an account.</param>
         /// <param name="accountName">The name of the account in which this address will be created.</param>        
         /// <returns>The new address, in Base58 format.</returns>
-        string CreateNewAddress(string walletName, string accountName);
+        string CreateNewAddress(string walletName, CoinType coinType, string accountName);
         
         WalletGeneralInfoModel GetGeneralInfo(string walletName);
 

@@ -328,7 +328,7 @@ namespace Breeze.Wallet.Controllers
 
             try
             {
-                var result = this.walletManager.CreateNewAccount(request.WalletName, request.AccountName, request.Password);
+                var result = this.walletManager.CreateNewAccount(request.WalletName, request.CoinType, request.AccountName, request.Password);
                 return this.Json(result);
             }
             catch (Exception e)
@@ -354,7 +354,7 @@ namespace Breeze.Wallet.Controllers
 
             try
             {
-                var result = this.walletManager.CreateNewAddress(request.WalletName, request.AccountName);
+                var result = this.walletManager.CreateNewAddress(request.WalletName, request.CoinType, request.AccountName);
                 return this.Json(result);
             }
             catch (Exception e)
