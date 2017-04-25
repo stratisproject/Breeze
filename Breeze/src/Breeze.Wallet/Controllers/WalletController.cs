@@ -328,7 +328,33 @@ namespace Breeze.Wallet.Controllers
 
             try
             {
-                var result = this.walletManager.CreateNewAccount(request.WalletName, request.AccountName);
+                var result = this.walletManager.CreateNewAccount(request.WalletName, request.AccountName, request.Password);
+                return this.Json(result);
+            }
+            catch (Exception e)
+            {
+                return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, e.Message, e.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Creates a new address for a wallet.
+        /// </summary>
+        /// <returns>An address in Base58 format.</returns>
+        [Route("address")]
+        [HttpPost]
+        public IActionResult CreateNewAddress([FromBody]CreateAddressModel request)
+        {
+            // checks the request is valid
+            if (!this.ModelState.IsValid)
+            {
+                var errors = this.ModelState.Values.SelectMany(e => e.Errors.Select(m => m.ErrorMessage));
+                return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, "Formatting error", string.Join(Environment.NewLine, errors));
+            }
+
+            try
+            {
+                var result = this.walletManager.CreateNewAddress(request.WalletName, request.AccountName);
                 return this.Json(result);
             }
             catch (Exception e)

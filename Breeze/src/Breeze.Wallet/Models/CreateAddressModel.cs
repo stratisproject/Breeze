@@ -5,26 +5,18 @@ using System.Text;
 
 namespace Breeze.Wallet.Models
 {
-    public class CreateAccountModel
+    public class CreateAddressModel
     {
         /// <summary>
-        /// The name of the wallet in which to create the account.
+        /// The name of the wallet in which to create the address.
         /// </summary>
         [Required]
         public string WalletName { get; set; }
 
         /// <summary>
-        /// The name of the account.
+        /// The name of the account in which to create the address.
         /// </summary>
         [Required]
         public string AccountName { get; set; }
-
-        /// <summary>
-        /// The password for this wallet.
-        /// </summary>
-        [Required]
-        public string Password { get; set; }
-
-
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Breeze.Wallet.JsonConverters;
 using NBitcoin;
+using NBitcoin.JsonConverters;
 using Newtonsoft.Json;
 
 namespace Breeze.Wallet
@@ -29,7 +30,7 @@ namespace Breeze.Wallet
         [JsonProperty(PropertyName = "chainCode")]
         [JsonConverter(typeof(ByteArrayConverter))]
         public byte[] ChainCode { get; set; }
-
+        
         /// <summary>
         /// The network this wallet is for.
         /// </summary>
@@ -94,6 +95,12 @@ namespace Breeze.Wallet
         public string Name { get; set; }
 
         /// <summary>
+        /// An extended pub key used to generate addresses.
+        /// </summary>
+        [JsonProperty(PropertyName = "extPubKey")]
+        public string ExtendedPubKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the creation time.
         /// </summary>
         [JsonProperty(PropertyName = "creationTime")]
@@ -119,6 +126,12 @@ namespace Breeze.Wallet
     public class HdAddress
     {
         /// <summary>
+        /// The index of the address.
+        /// </summary>
+        [JsonProperty(PropertyName = "index")]
+        public int Index { get; set; }
+
+        /// <summary>
         /// Gets or sets the creation time.
         /// </summary>
         [JsonProperty(PropertyName = "creationTime")]
@@ -129,13 +142,14 @@ namespace Breeze.Wallet
         /// The script pub key for this address.
         /// </summary>
         [JsonProperty(PropertyName = "scriptPubKey")]
+        [JsonConverter(typeof(ScriptJsonConverter))]
         public Script ScriptPubKey { get; set; }
 
         /// <summary>
         /// The Base58 representation of this address.
         /// </summary>
-        [JsonProperty(PropertyName = "address")]
-        public BitcoinAddress Address { get; set; }
+        [JsonProperty(PropertyName = "address")]        
+        public string Address { get; set; }
 
         /// <summary>
         /// A path to the address as defined in BIP44.

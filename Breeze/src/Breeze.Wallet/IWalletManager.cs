@@ -55,13 +55,22 @@ namespace Breeze.Wallet
         /// </summary>
         /// <param name="walletName">The name of the wallet in which this account will be created.</param>
         /// <param name="accountName">The name by which this account will be identified.</param>
+        /// <param name="password">The password used to decrypt the private key.</param>
         /// <remarks>
         /// According to BIP44, an account at index (i) can only be created when the account
         /// at index (i - 1) contains transactions.
         /// </remarks>
         /// <returns>The name of the new account.</returns>
-        string CreateNewAccount(string walletName, string accountName);
+        string CreateNewAccount(string walletName, string accountName, string password);
 
+        /// <summary>
+        /// Creates the new address.
+        /// </summary>
+        /// <param name="walletName">The name of the wallet in which this address will be created.</param>
+        /// <param name="accountName">The name of the account in which this address will be created.</param>        
+        /// <returns>The new address, in Base58 format.</returns>
+        string CreateNewAddress(string walletName, string accountName);
+        
         WalletGeneralInfoModel GetGeneralInfo(string walletName);
 
         WalletBalanceModel GetBalance(string walletName);
