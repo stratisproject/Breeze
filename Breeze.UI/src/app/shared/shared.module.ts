@@ -1,21 +1,19 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-
-import { ApiService} from './api/api.service';
+import { CoinNotationPipe } from './pipes/coin-notation.pipe';
+import { CoinAbbreviationPipe } from './pipes/coin-abbreviation.pipe';
 
 @NgModule({
-  imports: [CommonModule, RouterModule],
-  declarations: [],
-  exports: [CommonModule, FormsModule, RouterModule]
+  imports: [CommonModule],
+  declarations: [CoinNotationPipe, CoinAbbreviationPipe],
+  exports: [CoinNotationPipe, CoinAbbreviationPipe]
 })
 
 export class SharedModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: SharedModule,
-      providers: [ApiService]
+      providers: []
     };
   }
 }

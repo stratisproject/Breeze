@@ -4,10 +4,10 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { WalletCreation } from '../wallet-creation';
-import { WalletRecovery } from '../wallet-recovery';
-import { WalletLoad } from '../wallet-load';
-import { Mnemonic } from '../mnemonic';
+import { WalletCreation } from '../classes/wallet-creation';
+import { WalletRecovery } from '../classes/wallet-recovery';
+import { WalletLoad } from '../classes/wallet-load';
+import { Mnemonic } from '../classes/mnemonic';
 
 /**
  * For information on the API specification have a look at our Github:
@@ -26,7 +26,7 @@ export class ApiService {
      */
      getWalletFiles(): Observable<any> {
         return this.http
-          .get(this.mockApiUrl + '/wallet/files')
+          .get(this.webApiUrl + '/wallet/files')
           .map((response: Response) => response);
      }
 
@@ -67,7 +67,7 @@ export class ApiService {
     }
 
     /**
-     * Get wallet balance info from the API. 
+     * Get wallet balance info from the API.
      */
     getWalletBalance(): Observable<any> {
       return this.http

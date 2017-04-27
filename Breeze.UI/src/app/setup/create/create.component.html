@@ -2,30 +2,33 @@
 <h1>
   Please create a new wallet.
 </h1>
-<div class="form-group">
-  <label for="name">Name:</label>
-  <input class="form-control" type="text" #walletName required>
-</div>
-<div class="form-group">
-  <label for="password">Password:</label>
-  <input class="form-control" type="password" #walletPassword required>
-</div>
-<div class="form-group">
-  <label for="networklabel">Network:</label>
-  <select name="network" #walletNetwork>
-    <option value="main">Main</option>
-    <option value="test">Testnet</option>
-  </select>
-</div>
-<div class="form-group">
-  <label for="path">Path:</label>
-  <input class="form-control" type="text" #walletPath required>
-</div>
-<button type="submit" (click)="createWallet(walletPassword.value, walletNetwork.value, walletPath.value, walletName.value)">Create</button>
+<form [formGroup]="createWalletForm" (ngSubmit)="onCreateClicked()">
+  <div class="form-group">
+    <label>Name:</label>
+    <input class="form-control" formControlName="walletName" type="text" placeholder="Enter a name for your wallet.">
+  </div>
+  <div class="form-group">
+    <label>Password:</label>
+    <input class="form-control" formControlName="walletPassword" type="password" placeholder="Enter a password for your wallet.">
+  </div>
+  <div class="form-group">
+    <label>Network:</label>
+    <select name="network" formControlName="selectNetwork">
+      <option value="main">Main</option>
+      <option value="test">Testnet</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <button type="submit" [disabled]="!createWalletForm.valid" class="btn btn-success">Create Wallet</button>
+  </div>
+</form>
 <div>
   <label>Mnemonic:</label>
 </div>
 <div>
   <label>{{responseMessage}}</label>
 </div>
+<div class="form-group">
+    <button type="button" class="btn btn-success" (click)="onBackClicked()">Back</button>
+  </div>
 </div>

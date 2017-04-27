@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ApiService } from './shared/api/api.service';
+import { ApiService } from './shared/services/api.service';
 
 @Component({
   selector: 'app-root',
