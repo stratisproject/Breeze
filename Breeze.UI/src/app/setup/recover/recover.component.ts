@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../../shared/services/api.service'
-import { WalletRecovery } from '../../shared/classes/wallet-recovery'
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+
+import { GlobalService } from '../../shared/services/global.service';
+import { ApiService } from '../../shared/services/api.service';
+
+import { WalletRecovery } from '../../shared/classes/wallet-recovery';
 
 @Component({
   selector: 'app-recover',
@@ -9,26 +13,39 @@ import { WalletRecovery } from '../../shared/classes/wallet-recovery'
 })
 export class RecoverComponent implements OnInit {
 
-  constructor(private apiService: ApiService) { }
+  constructor(private globalService: GlobalService, private apiService: ApiService, private fb: FormBuilder) {
+    this.recoverWalletForm = fb.group({
+      "walletMnemonic": ["", Validators.required],
+      "walletPassword": ["", Validators.required],
+      "walletName": ["", Validators.required],
+      "selectNetwork": ["main", Validators.required]
+    });
+  }
 
+  private recoverWalletForm: FormGroup;
   private walletRecovery: WalletRecovery;
-  
+
   private responseMessage: string;
   private errorMessage: string;
 
   ngOnInit() {
   }
 
-  private recoverWallet(mnemonic: string, password: string, folderPath: string, name: string, network: string) {
-    this.walletRecovery = new WalletRecovery();
-    this.walletRecovery.mnemonic = mnemonic;
-    this.walletRecovery.password = password;
-    this.walletRecovery.folderPath = folderPath;
-    this.walletRecovery.name = name;
-    this.walletRecovery.network = network;
+  private onRecoverClicked(){
+    this.walletRecovery = new WalletRecovery(
+      this.recoverWalletForm.get("walletMnemonic").value,
+      this.recoverWalletForm.get("walletPassword").value,
+      this.recoverWalletForm.get("selectNetwork").value,
+      this.globalService.getWalletPath(),
+      this.recoverWalletForm.get("walletName").value
+      );
+    this.recoverWallet(this.walletRecovery);
+  }
+
+  private recoverWallet(recoverWallet: WalletRecovery) {
 
     this.apiService
-      .recoverWallet(this.walletRecovery)
+      .recoverWallet(recoverWallet)
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {

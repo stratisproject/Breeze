@@ -22,14 +22,19 @@ export class CreateComponent {
     });
   }
 
-  private newWallet: WalletCreation;
   private createWalletForm: FormGroup;
+  private newWallet: WalletCreation;
 
   private responseMessage: string;
   private errorMessage: string;
 
   private onCreateClicked() {
-    this.newWallet = new WalletCreation(this.createWalletForm.get("walletPassword").value, this.createWalletForm.get("selectNetwork").value, this.globalService.getWalletPath(), this.createWalletForm.get("walletName").value);
+    this.newWallet = new WalletCreation(
+      this.createWalletForm.get("walletPassword").value,
+      this.createWalletForm.get("selectNetwork").value,
+      this.globalService.getWalletPath(),
+      this.createWalletForm.get("walletName").value
+      );
     this.createWallet(this.newWallet);
   }
 
