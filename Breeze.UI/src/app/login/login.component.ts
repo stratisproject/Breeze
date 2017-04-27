@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { GlobalService } from '../shared/services/global.service';
 import { ApiService } from '../shared/services/api.service';
 import { WalletLoad } from '../shared/classes/wallet-load';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -10,13 +11,40 @@ import { WalletLoad } from '../shared/classes/wallet-load';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  constructor(private globalService: GlobalService, private apiService: ApiService, private router: Router) { }
+  constructor(private globalService: GlobalService, private apiService: ApiService, private router: Router, private fb: FormBuilder) {
+    this.openWalletForm = fb.group({
+      "selectWallet": ["", Validators.required],
+      "password": ["", Validators.required]
+    });
+   }
 
+  private openWalletForm: FormGroup;
   private hasWallet: boolean = false;
   private wallets: [string];
-  private password: string;
 
   ngOnInit() {
+    this.getWalletFiles();
+  }
+
+  private updateWalletFileDisplay(walletName: string) {
+    this.openWalletForm.patchValue({selectWallet: walletName})
+  }
+
+  private onDecryptClicked() {
+    this.setGlobalWalletName(this.openWalletForm.get("selectWallet").value);
+    let walletLoad = new WalletLoad(this.openWalletForm.get("password").value, this.globalService.getWalletPath(), this.openWalletForm.get("selectWallet").value);
+    this.loadWallet(walletLoad);
+  }
+
+  private onCreateClicked() {
+    this.router.navigate(['/setup']);
+  }
+
+  private setGlobalWalletName(walletName: string) {
+    this.globalService.setCurrentWalletName(walletName);
+  }
+
+  private getWalletFiles() {
     this.apiService.getWalletFiles()
       .subscribe(
         response => {
@@ -29,7 +57,7 @@ export class LoginComponent implements OnInit {
               for (let wallet in this.wallets) {
                 this.wallets[wallet] = this.wallets[wallet].slice(0, -5);
               }
-              this.globalService.setCurrentWalletName(this.wallets[0]);
+              this.updateWalletFileDisplay(this.wallets[0]);
             } else {
               this.hasWallet = false;
             }
@@ -45,9 +73,7 @@ export class LoginComponent implements OnInit {
       );
   }
 
-  private onSubmit() {
-    let walletLoad = new WalletLoad(this.password, this.globalService.getWalletPath(), this.globalService.getCurrentWalletName());
-
+  private loadWallet(walletLoad: WalletLoad) {
     this.apiService.loadWallet(walletLoad)
       .subscribe(
         response => {
@@ -67,13 +93,5 @@ export class LoginComponent implements OnInit {
           }
         }
       );
-  }
-
-  private walletChanged(walletName: string) {
-    this.globalService.setCurrentWalletName(walletName);
-  }
-
-  private onCreateClicked() {
-    this.router.navigate(['/setup']);
   }
 }
