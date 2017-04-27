@@ -1,6 +1,5 @@
 ﻿using NBitcoin;
 using Stratis.Bitcoin;
-using Breeze.Wallet.Wrappers;
 
 namespace Breeze.Wallet.Notifications
 {
@@ -8,21 +7,24 @@ namespace Breeze.Wallet.Notifications
     /// Observer that receives notifications about the arrival of new <see cref="Transaction"/>s.
     /// </summary>
 	public class TransactionObserver : SignalObserver<Transaction>
-	{
-	    private readonly ITrackerWrapper trackerWrapper;
+    {
+        private readonly CoinType coinType;
 
-	    public TransactionObserver(ITrackerWrapper trackerWrapper)
-	    {
-	        this.trackerWrapper = trackerWrapper;
-	    }
-        
+        private readonly IWalletManager walletManager;
+
+        public TransactionObserver(CoinType coinType, IWalletManager walletManager)
+        {
+            this.coinType = coinType;
+            this.walletManager = walletManager;            
+        }
+
         /// <summary>
         /// Manages what happens when a new transaction is received.
         /// </summary>
         /// <param name="transaction">The new transaction</param>
-	    protected override void OnNextCore(Transaction transaction)
-	    {            
-            this.trackerWrapper.NotifyAboutTransaction(transaction);	        
-	    }
-	}
+        protected override void OnNextCore(Transaction transaction)
+        {
+            this.walletManager.ProcessTransaction(this.coinType, transaction);
+        }
+    }
 }

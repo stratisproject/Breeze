@@ -70,6 +70,12 @@ namespace Breeze.Wallet
         public CoinType CoinType { get; set; }
 
         /// <summary>
+        /// The height of the last block that was synced.
+        /// </summary>
+        [JsonProperty(PropertyName = "lastBlockSyncedHeight", NullValueHandling = NullValueHandling.Ignore)]
+        public int? LastBlockSyncedHeight { get; set; }
+        
+        /// <summary>
         /// The accounts used in the wallet.
         /// </summary>
         [JsonProperty(PropertyName = "accounts")]
@@ -79,9 +85,22 @@ namespace Breeze.Wallet
     /// <summary>
     /// The type of coin, as specified in BIP44.
     /// </summary>
+    /// <remarks>For more, see https://github.com/satoshilabs/slips/blob/master/slip-0044.md</remarks>
     public enum CoinType
     {
+        /// <summary>
+        /// Bitcoin
+        /// </summary>
         Bitcoin = 0,
+
+        /// <summary>
+        /// Testnet (all coins)
+        /// </summary>
+        Testnet = 1,
+
+        /// <summary>
+        /// Stratis
+        /// </summary>
         Stratis = 105
     }
 

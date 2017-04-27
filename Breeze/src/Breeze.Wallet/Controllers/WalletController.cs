@@ -2,12 +2,10 @@
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Security;
 using Breeze.Wallet.Errors;
 using Microsoft.AspNetCore.Mvc;
 using Breeze.Wallet.Models;
-using Breeze.Wallet.Wrappers;
 using NBitcoin;
 
 namespace Breeze.Wallet.Controllers
@@ -122,6 +120,9 @@ namespace Breeze.Wallet.Controllers
                 DirectoryInfo walletFolder = GetWalletFolder(request.FolderPath);
 
                 Wallet wallet = this.walletManager.RecoverWallet(request.Password, walletFolder.FullName, request.Name, request.Network, request.Mnemonic);
+                
+                // TODO give the tracker the date at which this wallet was originally created so that it can start syncing blocks for it
+
                 return this.Json(new WalletModel
                 {
                     Network = wallet.Network.Name,
@@ -372,23 +373,11 @@ namespace Breeze.Wallet.Controllers
         {
             if (string.IsNullOrEmpty(folderPath))
             {
-                folderPath = GetDefaultWalletFolderPath();
+                folderPath = WalletManager.GetDefaultWalletFolderPath();
             }
             return Directory.CreateDirectory(folderPath);
         }
 
-        /// <summary>
-        /// Gets the path of the default folder in which the wallets will be stored.
-        /// </summary>
-        /// <returns>The folder path for Windows, Linux or OSX systems.</returns>
-        private static string GetDefaultWalletFolderPath()
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return $@"{Environment.GetEnvironmentVariable("AppData")}\Breeze";
-            }
 
-            return $"{Environment.GetEnvironmentVariable("HOME")}/.breeze";
-        }
     }
 }
