@@ -8,8 +8,8 @@ import { RecoverComponent } from './recover/recover.component';
 const routes: Routes = [
   { path: '', redirectTo: 'setup', pathMatch: 'full'},
   { path: 'setup', component: SetupComponent },
-  { path: 'setup/create', component: CreateComponent },
-  { path: 'setup/recover', component: RecoverComponent }
+  { path: 'create', component: CreateComponent },
+  { path: 'recover', component: RecoverComponent }
 ];
 
 @NgModule({

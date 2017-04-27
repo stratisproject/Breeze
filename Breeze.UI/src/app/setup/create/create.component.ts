@@ -1,5 +1,7 @@
 import { Component, Injectable } from '@angular/core';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
+import { GlobalService } from '../../shared/services/global.service';
 import { ApiService } from '../../shared/services/api.service';
 
 import { WalletCreation } from '../../shared/classes/wallet-creation';
@@ -12,22 +14,28 @@ import { Mnemonic } from '../../shared/classes/mnemonic';
 })
 
 export class CreateComponent {
-  constructor(private apiService: ApiService) {}
+  constructor(private globalService: GlobalService, private apiService: ApiService, private fb: FormBuilder) {
+    this.createWalletForm = fb.group({
+      "walletName": ["", Validators.required],
+      "walletPassword": ["", Validators.required],
+      "selectNetwork": ["main", Validators.required]
+    });
+  }
 
   private newWallet: WalletCreation;
+  private createWalletForm: FormGroup;
 
   private responseMessage: string;
   private errorMessage: string;
 
-  private createWallet(password: string, network: string, folderPath: string, name: string, ) {
-    this.newWallet = new WalletCreation();
-    this.newWallet.password = password;
-    this.newWallet.network = network;
-    this.newWallet.folderPath = folderPath;
-    this.newWallet.name = name;
+  private onCreateClicked() {
+    this.newWallet = new WalletCreation(this.createWalletForm.get("walletPassword").value, this.createWalletForm.get("selectNetwork").value, this.globalService.getWalletPath(), this.createWalletForm.get("walletName").value);
+    this.createWallet(this.newWallet);
+  }
 
+  private createWallet(wallet: WalletCreation) {
     this.apiService
-      .createWallet(this.newWallet)
+      .createWallet(wallet)
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400){
