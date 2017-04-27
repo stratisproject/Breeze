@@ -1,7 +1,5 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { RouterModule }   from '@angular/router';
 
 import { SetupComponent } from './setup.component';
 import { CreateComponent } from './create/create.component';
@@ -13,8 +11,7 @@ import { RecoverComponent } from './recover/recover.component';
 
 @NgModule({
   imports: [
-    BrowserModule,
-    FormsModule,
+    CommonModule,
     SetupRoutingModule,
     SharedModule
   ],
@@ -23,7 +20,7 @@ import { RecoverComponent } from './recover/recover.component';
     SetupComponent,
     RecoverComponent
   ],
-  exports: [ SetupComponent ],
+  exports: [],
   providers: []
 })
 

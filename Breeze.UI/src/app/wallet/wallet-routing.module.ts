@@ -7,9 +7,10 @@ import { ReceiveComponent } from './receive/receive.component';
 import { HistoryComponent } from './history/history.component';
 
 const routes: Routes = [
-  { path: 'wallet', component: WalletComponent, 
+  { path: '', redirectTo: 'wallet', pathMatch: 'full' },
+  { path: 'wallet', component: WalletComponent,
     children: [
-      { path: '', redirectTo:'send', pathMatch:'full' },
+      { path: '', redirectTo:'history', pathMatch:'full' },
       { path: 'send', component: SendComponent},
       { path: 'receive', component: ReceiveComponent},
       { path: 'history', component: HistoryComponent}

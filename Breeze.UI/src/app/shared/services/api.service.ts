@@ -26,7 +26,7 @@ export class ApiService {
      */
      getWalletFiles(): Observable<any> {
         return this.http
-          .get(this.mockApiUrl + '/wallet/files')
+          .get(this.webApiUrl + '/wallet/files')
           .map((response: Response) => response);
      }
 
@@ -67,7 +67,7 @@ export class ApiService {
     }
 
     /**
-     * Get wallet balance info from the API. 
+     * Get wallet balance info from the API.
      */
     getWalletBalance(): Observable<any> {
       return this.http
