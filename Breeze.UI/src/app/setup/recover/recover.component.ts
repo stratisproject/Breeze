@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { GlobalService } from '../../shared/services/global.service';
 import { ApiService } from '../../shared/services/api.service';
@@ -13,7 +14,7 @@ import { WalletRecovery } from '../../shared/classes/wallet-recovery';
 })
 export class RecoverComponent implements OnInit {
 
-  constructor(private globalService: GlobalService, private apiService: ApiService, private fb: FormBuilder) {
+  constructor(private globalService: GlobalService, private apiService: ApiService, private router: Router, private fb: FormBuilder) {
     this.recoverWalletForm = fb.group({
       "walletMnemonic": ["", Validators.required],
       "walletPassword": ["", Validators.required],
@@ -29,6 +30,10 @@ export class RecoverComponent implements OnInit {
   private errorMessage: string;
 
   ngOnInit() {
+  }
+
+  private onBackClicked() {
+    this.router.navigate(["/setup"]);
   }
 
   private onRecoverClicked(){

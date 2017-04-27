@@ -1,5 +1,6 @@
 import { Component, Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { GlobalService } from '../../shared/services/global.service';
 import { ApiService } from '../../shared/services/api.service';
@@ -14,7 +15,7 @@ import { Mnemonic } from '../../shared/classes/mnemonic';
 })
 
 export class CreateComponent {
-  constructor(private globalService: GlobalService, private apiService: ApiService, private fb: FormBuilder) {
+  constructor(private globalService: GlobalService, private apiService: ApiService, private router: Router, private fb: FormBuilder) {
     this.createWalletForm = fb.group({
       "walletName": ["", Validators.required],
       "walletPassword": ["", Validators.required],
@@ -27,6 +28,10 @@ export class CreateComponent {
 
   private responseMessage: string;
   private errorMessage: string;
+
+  private onBackClicked() {
+    this.router.navigate(["/setup"]);
+  }
 
   private onCreateClicked() {
     this.newWallet = new WalletCreation(
