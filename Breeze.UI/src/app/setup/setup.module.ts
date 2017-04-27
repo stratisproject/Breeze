@@ -13,7 +13,7 @@ import { RecoverComponent } from './recover/recover.component';
   imports: [
     CommonModule,
     SetupRoutingModule,
-    SharedModule
+    SharedModule.forRoot()
   ],
   declarations: [
     CreateComponent,

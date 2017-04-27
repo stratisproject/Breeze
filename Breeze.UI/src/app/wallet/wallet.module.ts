@@ -9,12 +9,14 @@ import { SendComponent } from './send/send.component';
 import { ReceiveComponent } from './receive/receive.component';
 import { HistoryComponent } from './history/history.component';
 
+import {SharedModule} from '../shared/shared.module';
 import { WalletRoutingModule } from './wallet-routing.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    SharedModule.forRoot(),
     ReactiveFormsModule,
     WalletRoutingModule
   ],
