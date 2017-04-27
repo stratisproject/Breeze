@@ -18,6 +18,6 @@ export class SetupComponent {
   }
 
   private onBackClicked() {
-    this.location.back();
+    this.router.navigate(['']);
   }
 }
