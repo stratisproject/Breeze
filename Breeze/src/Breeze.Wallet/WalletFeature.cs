@@ -1,7 +1,5 @@
 ﻿using Stratis.Bitcoin.Builder.Feature;
 using Breeze.Wallet.Controllers;
-using Breeze.Wallet.Notifications;
-using Breeze.Wallet.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using NBitcoin;
 using Stratis.Bitcoin;
@@ -11,23 +9,24 @@ namespace Breeze.Wallet
 {
     public class WalletFeature : FullNodeFeature
     {
-        private readonly ITrackerWrapper trackerWrapper;
-        private readonly Signals signals;
-        private readonly ConcurrentChain chain;
-
-        public WalletFeature(ITrackerWrapper trackerWrapper, Signals signals, ConcurrentChain chain)
+        private readonly ITracker tracker;
+        private readonly IWalletManager walletManager;
+        
+        public WalletFeature(ITracker tracker, IWalletManager walletManager)
         {
-            this.trackerWrapper = trackerWrapper;
-            this.signals = signals;
-            this.chain = chain;
+            this.tracker = tracker;
+            this.walletManager = walletManager;
         }
 
         public override void Start()
+        {            
+            this.tracker.Initialize();
+        }
+
+        public override void Stop()
         {
-            BlockSubscriber sub = new BlockSubscriber(signals.Blocks, new BlockObserver(chain, trackerWrapper));
-            sub.Subscribe();
-            TransactionSubscriber txSub = new TransactionSubscriber(signals.Transactions, new TransactionObserver(trackerWrapper));
-            txSub.Subscribe();
+            this.walletManager.Dispose();
+            base.Stop();
         }
     }
 
@@ -41,7 +40,7 @@ namespace Breeze.Wallet
                 .AddFeature<WalletFeature>()
                 .FeatureServices(services =>
                 {
-                    services.AddSingleton<ITrackerWrapper, TrackerWrapper>();
+                    services.AddSingleton<ITracker, Tracker>();
                     services.AddSingleton<IWalletManager, WalletManager>();
                     services.AddSingleton<WalletController>();
                 });
