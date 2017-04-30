@@ -17,9 +17,13 @@ namespace Breeze.Wallet
     public class WalletManager : IWalletManager
     {
         public List<Wallet> Wallets { get; }
-        
+
+        public HashSet<Script> PubKeys { get; }
+
+        public HashSet<TransactionDetails> TrackedTransactions { get; }
+
         public WalletManager()
-        {            
+        {
             this.Wallets = new List<Wallet>();
 
             // find wallets and load them in memory
@@ -27,6 +31,11 @@ namespace Breeze.Wallet
             {
                 this.Load(this.GetWallet(path));
             }
+
+            // load data in memory for faster lookups
+            // TODO get the coin type from somewhere else
+            this.PubKeys = this.LoadKeys(CoinType.Bitcoin);
+            this.TrackedTransactions = this.LoadTransactions(CoinType.Bitcoin);
         }
 
         /// <inheritdoc />
@@ -184,8 +193,11 @@ namespace Breeze.Wallet
                 CreationTime = DateTimeOffset.Now
             }});
 
+            // persists the address to the wallet file
             this.SaveToFile(wallet);
 
+            // adds the address to the list of tracked addresses
+            this.PubKeys.Add(address.ScriptPubKey);
             return address.ToString();
         }
 
@@ -219,6 +231,11 @@ namespace Breeze.Wallet
         {
             Console.WriteLine($"block notification: height: {height}, block hash: {block.Header.GetHash()}, coin type: {coinType}");
 
+            foreach (Transaction transaction in block.Transactions)
+            {
+                this.ProcessTransaction(coinType, transaction, height, block.Header.Time);
+            }
+
             // update the wallets with the last processed block height
             foreach (var wallet in this.Wallets)
             {
@@ -230,9 +247,88 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public void ProcessTransaction(CoinType coinType, Transaction transaction)
+        public void ProcessTransaction(CoinType coinType, Transaction transaction, int? blockHeight = null, uint? blockTime = null)
         {
             Console.WriteLine($"transaction notification: tx hash {transaction.GetHash()}, coin type: {coinType}");
+
+            foreach (var k in this.PubKeys)
+            {
+                // check if the outputs contain one of our addresses
+                var utxo = transaction.Outputs.SingleOrDefault(o => k == o.ScriptPubKey);
+                if (utxo != null)
+                {
+                    AddTransactionToWallet(coinType, transaction.GetHash(), transaction.Time, transaction.Outputs.IndexOf(utxo), utxo.Value, k, blockHeight, blockTime);
+                }
+
+                // if the inputs have a reference to a transaction containing one of our scripts
+                foreach (TxIn input in transaction.Inputs.Where(txIn => this.TrackedTransactions.Any(trackedTx => trackedTx.Hash == txIn.PrevOut.Hash)))
+                {
+                    TransactionDetails tTx = this.TrackedTransactions.Single(trackedTx => trackedTx.Hash == input.PrevOut.Hash);
+
+                    // compare the index of the output in its original transaction and the index references in the input
+                    if (input.PrevOut.N == tTx.Index)
+                    {
+                        AddTransactionToWallet(coinType, transaction.GetHash(), transaction.Time, null, -tTx.Amount, k, blockHeight, blockTime);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds the transaction to the wallet.
+        /// </summary>
+        /// <param name="coinType">Type of the coin.</param>
+        /// <param name="transactionHash">The transaction hash.</param>
+        /// <param name="time">The time.</param>
+        /// <param name="index">The index.</param>
+        /// <param name="amount">The amount.</param>
+        /// <param name="script">The script.</param>
+        /// <param name="blockHeight">Height of the block.</param>
+        /// <param name="blockTime">The block time.</param>
+        private void AddTransactionToWallet(CoinType coinType, uint256 transactionHash, uint time, int? index, Money amount, Script script, int? blockHeight = null, uint? blockTime = null)
+        {
+            // selects all the transactions we already have in the wallet
+            var txs = this.Wallets.
+                SelectMany(w => w.AccountsRoot.Where(a => a.CoinType == coinType)).
+                SelectMany(a => a.Accounts).
+                SelectMany(a => a.ExternalAddresses).
+                SelectMany(t => t.Transactions);
+
+            // add this transaction if it is not in the list
+            if (txs.All(t => t.Id != transactionHash))
+            {
+                foreach (var wallet in this.Wallets)
+                {
+                    foreach (var accountRoot in wallet.AccountsRoot.Where(a => a.CoinType == coinType))
+                    {
+                        foreach (var account in accountRoot.Accounts)
+                        {
+                            foreach (var address in account.ExternalAddresses.Where(a => a.ScriptPubKey == script))
+                            {
+                                address.Transactions = address.Transactions.Concat(new[]
+                                {
+                                    new TransactionData
+                                    {
+                                        Amount = amount,
+                                        BlockHeight = blockHeight,
+                                        Confirmed = blockHeight.HasValue,
+                                        Id = transactionHash,
+                                        CreationTime = DateTimeOffset.FromUnixTimeMilliseconds(blockTime ?? time),
+                                        Index = index
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+
+                this.TrackedTransactions.Add(new TransactionDetails
+                {
+                    Hash = transactionHash,
+                    Index = index,
+                    Amount = amount
+                });
+            }
         }
 
         /// <inheritdoc />
@@ -375,5 +471,51 @@ namespace Breeze.Wallet
 
             return $"{Environment.GetEnvironmentVariable("HOME")}/.breeze";
         }
+
+        /// <summary>
+        /// Loads the script pub key we're tracking for faster lookups.
+        /// </summary>
+        /// <param name="coinType">Type of the coin.</param>
+        /// <returns></returns>
+        private HashSet<Script> LoadKeys(CoinType coinType)
+        {
+            return new HashSet<Script>(this.Wallets.
+                SelectMany(w => w.AccountsRoot.Where(a => a.CoinType == coinType)).
+                SelectMany(a => a.Accounts).
+                SelectMany(a => a.ExternalAddresses).
+                Select(s => s.ScriptPubKey));
+            // uncomment the following for testing on a random address 
+            // Select(t => (new BitcoinPubKeyAddress(t.Address, Network.Main)).ScriptPubKey));
+        }
+
+        /// <summary>
+        /// Loads the transactions we're tracking in memory for faster lookups.
+        /// </summary>
+        /// <param name="coinType">Type of the coin.</param>
+        /// <returns></returns>
+        private HashSet<TransactionDetails> LoadTransactions(CoinType coinType)
+        {
+            return new HashSet<TransactionDetails>(this.Wallets.
+                SelectMany(w => w.AccountsRoot.Where(a => a.CoinType == coinType)).
+                SelectMany(a => a.Accounts).
+                SelectMany(a => a.ExternalAddresses).
+                SelectMany(t => t.Transactions).
+                Select(t => new TransactionDetails
+                {
+                    Hash = t.Id,
+                    Index = t.Index,
+                    Amount = t.Amount
+                }));
+        }
+    }
+
+    public class TransactionDetails
+    {
+        public uint256 Hash { get; set; }
+
+        public int? Index { get; set; }
+
+        public Money Amount { get; internal set; }
+
     }
 }

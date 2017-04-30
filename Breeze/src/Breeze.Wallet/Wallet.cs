@@ -210,19 +210,27 @@ namespace Breeze.Wallet
         /// Transaction id.
         /// </summary>
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
+        [JsonConverter(typeof(UInt256JsonConverter))]
+        public uint256 Id { get; set; }
 
         /// <summary>
         /// The transaction amount.
         /// </summary>
         [JsonProperty(PropertyName = "amount")]
+        [JsonConverter(typeof(MoneyJsonConverter))]
         public Money Amount { get; set; }
+
+        /// <summary>
+        /// The index of this scriptPubKey in the transaction it is contained.
+        /// </summary>
+        [JsonProperty(PropertyName = "index")]
+        public int? Index { get; set; }
 
         /// <summary>
         /// The height of the block including this transaction.
         /// </summary>
         [JsonProperty(PropertyName = "blockHeight")]
-        public int BlockHeight { get; set; }
+        public int? BlockHeight { get; set; }
 
         /// <summary>
         /// Whether this transaction has been confirmed or not.
