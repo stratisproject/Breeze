@@ -223,7 +223,7 @@ namespace Breeze.Wallet
         /// <summary>
         /// The index of this scriptPubKey in the transaction it is contained.
         /// </summary>
-        [JsonProperty(PropertyName = "index")]
+        [JsonProperty(PropertyName = "index", NullValueHandling = NullValueHandling.Ignore)]
         public int? Index { get; set; }
 
         /// <summary>

@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Breeze.Wallet.JsonConverters;
 using NBitcoin;
+using NBitcoin.JsonConverters;
 using Newtonsoft.Json;
 
 namespace Breeze.Wallet.Models
@@ -12,8 +15,15 @@ namespace Breeze.Wallet.Models
 
 	public class TransactionItem
 	{
-		[JsonProperty(PropertyName = "txId")]
-		public string TransactionId { get; set; }
+	    /// <summary>
+	    /// The Base58 representation of this address.
+	    /// </summary>
+	    [JsonProperty(PropertyName = "address")]
+	    public string Address { get; set; }
+
+        [JsonProperty(PropertyName = "txId")]
+		[JsonConverter(typeof(UInt256JsonConverter))]
+        public uint256 TransactionId { get; set; }
 
 		[JsonProperty(PropertyName = "amount")]
 		public Money Amount { get; set; }
@@ -22,6 +32,7 @@ namespace Breeze.Wallet.Models
 		public bool Confirmed { get; set; } 
 
 		[JsonProperty(PropertyName = "timestamp")]
-		public string Timestamp { get; set; }
-	}
+		[JsonConverter(typeof(DateTimeOffsetConverter))]
+        public DateTimeOffset Timestamp { get; set; }        
+    }
 }

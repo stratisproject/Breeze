@@ -211,9 +211,12 @@ namespace Breeze.Wallet
             throw new System.NotImplementedException();
         }
 
-        public WalletHistoryModel GetHistory(string walletName)
+        /// <inheritdoc />
+        public IEnumerable<HdAccount> GetAccountsByCoinType(string walletName, CoinType coinType)
         {
-            throw new System.NotImplementedException();
+            return this.Wallets.
+                SelectMany(w => w.AccountsRoot.Where(a => a.CoinType == coinType)).
+                SelectMany(a => a.Accounts);            
         }
 
         public WalletBuildTransactionModel BuildTransaction(string password, string address, Money amount, string feeType, bool allowUnconfirmed)
@@ -250,7 +253,7 @@ namespace Breeze.Wallet
         public void ProcessTransaction(CoinType coinType, Transaction transaction, int? blockHeight = null, uint? blockTime = null)
         {
             Console.WriteLine($"transaction notification: tx hash {transaction.GetHash()}, coin type: {coinType}");
-
+            
             foreach (var k in this.PubKeys)
             {
                 // check if the outputs contain one of our addresses
@@ -267,7 +270,7 @@ namespace Breeze.Wallet
 
                     // compare the index of the output in its original transaction and the index references in the input
                     if (input.PrevOut.N == tTx.Index)
-                    {
+                    {                      
                         AddTransactionToWallet(coinType, transaction.GetHash(), transaction.Time, null, -tTx.Amount, k, blockHeight, blockTime);
                     }
                 }

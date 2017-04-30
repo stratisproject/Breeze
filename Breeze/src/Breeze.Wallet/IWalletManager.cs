@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Breeze.Wallet.Models;
 using NBitcoin;
 
@@ -75,7 +76,13 @@ namespace Breeze.Wallet
 
         WalletBalanceModel GetBalance(string walletName);
 
-        WalletHistoryModel GetHistory(string walletName);
+        /// <summary>
+        /// Gets a list of accounts filtered by coin type.
+        /// </summary>
+        /// <param name="walletName">The name of the wallet to look into.</param>
+        /// <param name="coinType">The type of coin to filter by.</param>
+        /// <returns></returns>
+        IEnumerable<HdAccount> GetAccountsByCoinType(string walletName, CoinType coinType);
 
         WalletBuildTransactionModel BuildTransaction(string password, string address, Money amount, string feeType, bool allowUnconfirmed);
 

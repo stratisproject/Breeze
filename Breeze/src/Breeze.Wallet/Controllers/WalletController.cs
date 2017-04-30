@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -176,11 +177,11 @@ namespace Breeze.Wallet.Controllers
         /// <summary>
         /// Retrieves the history of a wallet.
         /// </summary>
-        /// <param name="model">The name of the wallet.</param>
+        /// <param name="request">The request parameters.</param>
         /// <returns></returns>
 		[Route("history")]
         [HttpGet]
-        public IActionResult GetHistory([FromQuery] WalletName model)
+        public IActionResult GetHistory([FromQuery] WalletHistoryRequest request)
         {
             // checks the request is valid
             if (!this.ModelState.IsValid)
@@ -191,8 +192,25 @@ namespace Breeze.Wallet.Controllers
 
             try
             {
-                return this.Json(this.walletManager.GetHistory(model.Name));
+                WalletHistoryModel model = new WalletHistoryModel {Transactions = new List<TransactionItem>()};
 
+                var accounts = this.walletManager.GetAccountsByCoinType(request.WalletName, request.CoinType).ToList();
+                foreach (var address in accounts.SelectMany(a => a.ExternalAddresses).Concat(accounts.SelectMany(a => a.InternalAddresses)))
+                {
+                    foreach (var transaction in address.Transactions)
+                    {
+                        model.Transactions.Add(new TransactionItem
+                        {
+                            Amount = transaction.Amount,
+                            Confirmed = transaction.Confirmed,
+                            Timestamp = transaction.CreationTime,
+                            TransactionId = transaction.Id,
+                            Address = address.Address
+                        });
+                    }
+                }
+                
+                return this.Json(model.Transactions.OrderByDescending(t => t.Timestamp));
             }
             catch (Exception e)
             {
