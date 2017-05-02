@@ -9,13 +9,25 @@ namespace Breeze.Wallet.Models
 {
     public class WalletBalanceModel
     {
-		[JsonProperty(PropertyName = "isSynced")]
-		public bool IsSynced { get; set; }
+        [JsonProperty(PropertyName = "balances")]
+        public List<AccountBalance> AccountsBalances { get; set; }
+    }
 
-		[JsonProperty(PropertyName = "confirmed")]
-		public Money Confirmed { get; set; }
+    public class AccountBalance
+    {
+        [JsonProperty(PropertyName = "accountName")]
+        public string Name { get; set; }
 
-		[JsonProperty(PropertyName = "unconfirmed")]
-		public Money Unconfirmed { get; set; }
-	}
+        [JsonProperty(PropertyName = "accountHdPath")]
+        public string HdPath { get; set; }
+
+        [JsonProperty(PropertyName = "coinType")]
+        public CoinType CoinType { get; set; }
+
+        [JsonProperty(PropertyName = "amountConfirmed")]
+        public Money AmountConfirmed { get; set; }
+
+        [JsonProperty(PropertyName = "amountUnconfirmed")]
+        public Money AmountUnconfirmed { get; set; }
+    }
 }

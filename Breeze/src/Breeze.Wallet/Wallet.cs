@@ -125,6 +125,13 @@ namespace Breeze.Wallet
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
+
+        /// <summary>
+        /// A path to the account as defined in BIP44.
+        /// </summary>
+        [JsonProperty(PropertyName = "hdPath")]
+        public string HdPath { get; set; }
+
         /// <summary>
         /// An extended pub key used to generate addresses.
         /// </summary>

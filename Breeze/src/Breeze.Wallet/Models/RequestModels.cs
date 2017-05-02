@@ -56,6 +56,15 @@ namespace Breeze.Wallet.Models
         public CoinType CoinType { get; set; }
     }
 
+    public class WalletBalanceRequest
+    {
+        [Required(ErrorMessage = "The name of the wallet is missing.")]
+        public string WalletName { get; set; }
+
+        [Required(ErrorMessage = "The type of coin for which history is requested is missing.")]
+        public CoinType CoinType { get; set; }
+    }
+
     public class WalletName
     {
         [Required(ErrorMessage = "The name of the wallet is missing.")]
