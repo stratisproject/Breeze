@@ -1,16 +1,16 @@
 `/api/v1/`  
-  
+
 ## Request/Response
 
 RESPONSE: response code (`200` for all successful requests, `4xx`/`5xx` if error, see later)  
-  
+
 HEADERS
 `Content-Type:application/json`  
-  
+
 ## Errors
 
 ### General errors
-  
+
 BODY
 The error response is an array of error objects.
 Depending on the circumstance the API will either return an error at the first encounter or will continue until multiple errors are gathered.
@@ -64,7 +64,7 @@ DELETE /wallet - Deletes the wallet
 POST /wallet/account
 POST /wallet/address
 ```
-	
+
 ## Syncing
 
 ```
@@ -171,10 +171,10 @@ Works as expected.
 ### Parameters
 ```
 {
-	"walletName": "myFirstWallet",
-	"accountName": "account one",
-	"password": "123456",
-	"coinType": 105
+    "walletName": "myFirstWallet",
+    "accountName": "account one",
+    "password": "123456",
+    "coinType": 105
 }
 ```
 ### Responses
@@ -186,9 +186,9 @@ Works as expected.
 ### Parameters
 ```
 {
-	"walletName": "myFirstWallet",
-	"accountName": "account one",
-	"coinType": 0
+    "walletName": "myFirstWallet",
+    "accountName": "account one",
+    "coinType": 0
 }
 ```
 ### Responses
@@ -196,8 +196,6 @@ Works as expected.
   "1HDypWxXWZC5KXK259EHMnrWaa2youy7Mj"
 ```
 
-## GET /wallet/mempool/?allow=[true/false] - Allows or disallows mempool syncing
-Works as expected.
 
 ## GET /wallet/receive/[account1/account2] - Displays unused receive addresses of the specified wallet account
 ### Responses
@@ -216,38 +214,54 @@ Works as expected.
 }
 ```
 
-## GET /wallet/history/[account1/account2] - Displays the history of the specified wallet account
+## GET /wallet/history - Displays the history of the specified wallet account
+### Query parameters
+`walletName` (required) - the name of the wallet.
+
+`coinType` (required) - the type of coin, e.g 0 for bitcoin, 105 for stratis.
+
 ### Responses
 ```
 {
-  "history": 
-  [
+  "transactions": [
     {
-      "txid": "9a9949476b629b4075b31d8faad64dad352586a18df8f2810c5a7bb900478c60",
-      "amount": "0.1",
+      "address": "1H2jbtknP6jRYx2riaXJf3H9Mb1JC6kcL2",
+      "txId": "b800f9b24a9c49a375cddf4fc8c484722af0bec7d23ac65b782daf1b0089bb29",
+      "amount": -50360386,
       "confirmed": true,
-      "timestamp": "2016.12.19. 23:15:05" // if confirmed it's the blocktime, utc
+      "timestamp": "1337803568"
     },
     {
-      "txid": "9a9949476b629b4075b31d8faad64dad352586a18df8f2810c5a7bb900478c60",
-      "amount": "-0.1",
-      "confirmed": false,
-      "timestamp": "2016.12.20. 1:15:36" // if unconfirmed it's the time our node first seen this transaction, utc
+      "address": "1H2jbtknP6jRYx2riaXJf3H9Mb1JC6kcL2",
+      "txId": "9c0560a34f88573a71ebf68a2540cb7215b55bc2ddee0af3cb1dc343f2f3e0da",
+      "amount": 53845026,
+      "confirmed": true,
+      "timestamp": "1337605326"
     }
   ]
 }
 ```
 
-## GET /wallet/balance/[account1/account2] - Displays the balances of the specified wallet account
+## GET /wallet/balance - Displays the balances of the specified wallet account
+### Query parameters
+`walletName` (required) - the name of the wallet.
+
+`coinType` (required) - the type of coin, e.g 0 for bitcoin, 105 for stratis.
+
 ### Responses
 ```
 {
-  "isSynced": true,
-  "confirmed": "0.144",
-  "unconfirmed": "-6.23"
+  "balances": [
+    {
+      "accountName": "account one",
+      "accountHdPath": "m/44'/0'/0'",
+      "coinType": 0,
+      "amountConfirmed": 209268016,
+      "amountUnconfirmed": 0
+    }
+  ]
 }
 ```
-If the synced is false, then the balances might not be accurate.  
 Confirmed balance is the (amount of unspent confirmed outputs - unconfirmed outgoing transactions). It cannot be negative.  
 Unconfirmed balance is the difference of unconfirmed incoming and outgoing transactions. It can be negative.  
 
@@ -261,57 +275,57 @@ Unconfirmed balance is the difference of unconfirmed incoming and outgoing trans
   "feeType": "low", // "low"/"medium"/"high"
   "allowUnconfirmed": true // if spending unconfirmed outputs is allowed
 }
-``` 
+```
 
 ### Responses
 #### Successful
 ```
 {
-	"spendsUnconfirmed": false, // If spends unconfirmed you can ask the user if it's sure about spending unconfirmed transaction (if inputs are malleated or inputs never confirm then this transaction will never confirm either" 
-	"fee": "0.0001",
-	"feePercentOfSent": "0.1" // Percentage of the total spent amount, there must be a safety limit implemented here
-	"hex": "0100000002d9dced2b6fc80c706d3564670cb6706afe7a798863a9218efcdcf415d58f0f82000000006a473044022030b8bea478444bd52f08de33b082cde1176d3137111f506eefefa91b47b1f6bf02204f12746abd1aeac5805872d163592cf145967fa0619339a9c5348d674852ef4801210224ec1e4c270ce373e6999eebfa01d0a7e7db3c537c026f265233350d5aab81fbfeffffffa0706db65c5e3594d43df5a2a8b6dfd3c9ee506b678f8c26f7820b324b26aa0f000000006a473044022061b718034f876590d6d80bac77a63248b2548d934849acd02c4f4236309e853002201aded6b24f553b6902cf571276b37b12f76b75650164d8738c74469b4edd547e012103d649294a0ca4db920a69eacd6a75cb8a38ae1b81129900621ce45e6ba3438a7bfeffffff0280a90300000000001976a914d0965947ebb329b776328624ebde8f8b32dc639788ac1cc80f00000000001976a914c2a420d34fc86cff932b8c3191549a0ddfd2b0d088acba770f00"
-	"transaction": // NBitcoin.Transaction.ToString()
-	{
-	  "transaction": "0100000002d9dced2b6fc80c706d3564670cb6706afe7a798863a9218efcdcf415d58f0f82000000006a473044022030b8bea478444bd52f08de33b082cde1176d3137111f506eefefa91b47b1f6bf02204f12746abd1aeac5805872d163592cf145967fa0619339a9c5348d674852ef4801210224ec1e4c270ce373e6999eebfa01d0a7e7db3c537c026f265233350d5aab81fbfeffffffa0706db65c5e3594d43df5a2a8b6dfd3c9ee506b678f8c26f7820b324b26aa0f000000006a473044022061b718034f876590d6d80bac77a63248b2548d934849acd02c4f4236309e853002201aded6b24f553b6902cf571276b37b12f76b75650164d8738c74469b4edd547e012103d649294a0ca4db920a69eacd6a75cb8a38ae1b81129900621ce45e6ba3438a7bfeffffff0280a90300000000001976a914d0965947ebb329b776328624ebde8f8b32dc639788ac1cc80f00000000001976a914c2a420d34fc86cff932b8c3191549a0ddfd2b0d088acba770f00",
-	  "transactionId": "22ab5e9b703c0d4cb6023e3a1622b493adc8f83a79771c83a73dfa38ef35b07c",
-	  "isCoinbase": false,
-	  "block": null,
-	  "spentCoins": [
-		{
-		  "transactionId": "820f8fd515f4dcfc8e21a96388797afe6a70b60c6764356d700cc86f2beddcd9",
-		  "index": 0,
-		  "value": 100000,
-		  "scriptPubKey": "76a914e7c1345fc8f87c68170b3aa798a956c2fe6a9eff88ac",
-		  "redeemScript": null
-		},
-		{
-		  "transactionId": "0faa264b320b82f7268c8f676b50eec9d3dfb6a8a2f53dd494355e5cb66d70a0",
-		  "index": 0,
-		  "value": 1180443,
-		  "scriptPubKey": "76a914f3821cff5a90328271d8596198f68e97fbe2ea0e88ac",
-		  "redeemScript": null
-		}
-	  ],
-	  "receivedCoins": [
-		{
-		  "transactionId": "22ab5e9b703c0d4cb6023e3a1622b493adc8f83a79771c83a73dfa38ef35b07c",
-		  "index": 0,
-		  "value": 240000,
-		  "scriptPubKey": "76a914d0965947ebb329b776328624ebde8f8b32dc639788ac",
-		  "redeemScript": null
-		},
-		{
-		  "transactionId": "22ab5e9b703c0d4cb6023e3a1622b493adc8f83a79771c83a73dfa38ef35b07c",
-		  "index": 1,
-		  "value": 1034268,
-		  "scriptPubKey": "76a914c2a420d34fc86cff932b8c3191549a0ddfd2b0d088ac",
-		  "redeemScript": null
-		}
-	  ],
-	  "firstSeen": "2016-10-31T09:13:18.4420023+00:00",
-	  "fees": 6175
-	}
+    "spendsUnconfirmed": false, // If spends unconfirmed you can ask the user if it's sure about spending unconfirmed transaction (if inputs are malleated or inputs never confirm then this transaction will never confirm either"
+    "fee": "0.0001",
+    "feePercentOfSent": "0.1" // Percentage of the total spent amount, there must be a safety limit implemented here
+    "hex": "0100000002d9dced2b6fc80c706d3564670cb6706afe7a798863a9218efcdcf415d58f0f82000000006a473044022030b8bea478444bd52f08de33b082cde1176d3137111f506eefefa91b47b1f6bf02204f12746abd1aeac5805872d163592cf145967fa0619339a9c5348d674852ef4801210224ec1e4c270ce373e6999eebfa01d0a7e7db3c537c026f265233350d5aab81fbfeffffffa0706db65c5e3594d43df5a2a8b6dfd3c9ee506b678f8c26f7820b324b26aa0f000000006a473044022061b718034f876590d6d80bac77a63248b2548d934849acd02c4f4236309e853002201aded6b24f553b6902cf571276b37b12f76b75650164d8738c74469b4edd547e012103d649294a0ca4db920a69eacd6a75cb8a38ae1b81129900621ce45e6ba3438a7bfeffffff0280a90300000000001976a914d0965947ebb329b776328624ebde8f8b32dc639788ac1cc80f00000000001976a914c2a420d34fc86cff932b8c3191549a0ddfd2b0d088acba770f00"
+    "transaction": // NBitcoin.Transaction.ToString()
+    {
+      "transaction": "0100000002d9dced2b6fc80c706d3564670cb6706afe7a798863a9218efcdcf415d58f0f82000000006a473044022030b8bea478444bd52f08de33b082cde1176d3137111f506eefefa91b47b1f6bf02204f12746abd1aeac5805872d163592cf145967fa0619339a9c5348d674852ef4801210224ec1e4c270ce373e6999eebfa01d0a7e7db3c537c026f265233350d5aab81fbfeffffffa0706db65c5e3594d43df5a2a8b6dfd3c9ee506b678f8c26f7820b324b26aa0f000000006a473044022061b718034f876590d6d80bac77a63248b2548d934849acd02c4f4236309e853002201aded6b24f553b6902cf571276b37b12f76b75650164d8738c74469b4edd547e012103d649294a0ca4db920a69eacd6a75cb8a38ae1b81129900621ce45e6ba3438a7bfeffffff0280a90300000000001976a914d0965947ebb329b776328624ebde8f8b32dc639788ac1cc80f00000000001976a914c2a420d34fc86cff932b8c3191549a0ddfd2b0d088acba770f00",
+      "transactionId": "22ab5e9b703c0d4cb6023e3a1622b493adc8f83a79771c83a73dfa38ef35b07c",
+      "isCoinbase": false,
+      "block": null,
+      "spentCoins": [
+        {
+          "transactionId": "820f8fd515f4dcfc8e21a96388797afe6a70b60c6764356d700cc86f2beddcd9",
+          "index": 0,
+          "value": 100000,
+          "scriptPubKey": "76a914e7c1345fc8f87c68170b3aa798a956c2fe6a9eff88ac",
+          "redeemScript": null
+        },
+        {
+          "transactionId": "0faa264b320b82f7268c8f676b50eec9d3dfb6a8a2f53dd494355e5cb66d70a0",
+          "index": 0,
+          "value": 1180443,
+          "scriptPubKey": "76a914f3821cff5a90328271d8596198f68e97fbe2ea0e88ac",
+          "redeemScript": null
+        }
+      ],
+      "receivedCoins": [
+        {
+          "transactionId": "22ab5e9b703c0d4cb6023e3a1622b493adc8f83a79771c83a73dfa38ef35b07c",
+          "index": 0,
+          "value": 240000,
+          "scriptPubKey": "76a914d0965947ebb329b776328624ebde8f8b32dc639788ac",
+          "redeemScript": null
+        },
+        {
+          "transactionId": "22ab5e9b703c0d4cb6023e3a1622b493adc8f83a79771c83a73dfa38ef35b07c",
+          "index": 1,
+          "value": 1034268,
+          "scriptPubKey": "76a914c2a420d34fc86cff932b8c3191549a0ddfd2b0d088ac",
+          "redeemScript": null
+        }
+      ],
+      "firstSeen": "2016-10-31T09:13:18.4420023+00:00",
+      "fees": 6175
+    }
 }
 ```
 

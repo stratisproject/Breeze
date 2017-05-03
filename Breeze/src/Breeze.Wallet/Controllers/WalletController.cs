@@ -121,7 +121,7 @@ namespace Breeze.Wallet.Controllers
                 DirectoryInfo walletFolder = GetWalletFolder(request.FolderPath);
 
                 Wallet wallet = this.walletManager.RecoverWallet(request.Password, walletFolder.FullName, request.Name, request.Network, request.Mnemonic);
-                
+
                 // TODO give the tracker the date at which this wallet was originally created so that it can start syncing blocks for it
 
                 return this.Json(new WalletModel
@@ -192,7 +192,7 @@ namespace Breeze.Wallet.Controllers
 
             try
             {
-                WalletHistoryModel model = new WalletHistoryModel {Transactions = new List<TransactionItem>()};
+                WalletHistoryModel model = new WalletHistoryModel { Transactions = new List<TransactionItem>() };
 
                 var accounts = this.walletManager.GetAccountsByCoinType(request.WalletName, request.CoinType).ToList();
                 foreach (var address in accounts.SelectMany(a => a.ExternalAddresses).Concat(accounts.SelectMany(a => a.InternalAddresses)))
@@ -209,8 +209,9 @@ namespace Breeze.Wallet.Controllers
                         });
                     }
                 }
-                
-                return this.Json(model.Transactions.OrderByDescending(t => t.Timestamp));
+
+                model.Transactions = model.Transactions.OrderByDescending(t => t.Timestamp).ToList();
+                return this.Json(model);
             }
             catch (Exception e)
             {
@@ -221,11 +222,11 @@ namespace Breeze.Wallet.Controllers
         /// <summary>
         /// Gets the balance of a wallet.
         /// </summary>
-        /// <param name="model">The name of the wallet.</param>
+        /// <param name="request">The request parameters.</param>        
         /// <returns></returns>
-		[Route("balance")]
+        [Route("balance")]
         [HttpGet]
-        public IActionResult GetBalance([FromQuery] WalletName model)
+        public IActionResult GetBalance([FromQuery] WalletBalanceRequest request)
         {
             // checks the request is valid
             if (!this.ModelState.IsValid)
@@ -236,8 +237,26 @@ namespace Breeze.Wallet.Controllers
 
             try
             {
-                return this.Json(this.walletManager.GetBalance(model.Name));
+                WalletBalanceModel model = new WalletBalanceModel { AccountsBalances = new List<AccountBalance>() };
 
+                var accounts = this.walletManager.GetAccountsByCoinType(request.WalletName, request.CoinType).ToList();
+                foreach (var account in accounts)
+                {
+                    var allTransactions = account.ExternalAddresses.SelectMany(a => a.Transactions)
+                        .Concat(account.InternalAddresses.SelectMany(i => i.Transactions)).ToList();
+
+                    AccountBalance balance = new AccountBalance
+                    {
+                        CoinType = request.CoinType,
+                        Name = account.Name,
+                        HdPath = account.HdPath,
+                        AmountConfirmed = allTransactions.Where(t => t.Confirmed).Sum(t => t.Amount),
+                        AmountUnconfirmed = allTransactions.Where(t => !t.Confirmed).Sum(t => t.Amount)
+                    };
+                    model.AccountsBalances.Add(balance);
+                }
+
+                return this.Json(model);
             }
             catch (Exception e)
             {

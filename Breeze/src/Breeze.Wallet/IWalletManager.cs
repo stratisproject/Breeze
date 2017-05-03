@@ -71,10 +71,8 @@ namespace Breeze.Wallet
         /// <param name="accountName">The name of the account in which this address will be created.</param>        
         /// <returns>The new address, in Base58 format.</returns>
         string CreateNewAddress(string walletName, CoinType coinType, string accountName);
-        
-        WalletGeneralInfoModel GetGeneralInfo(string walletName);
 
-        WalletBalanceModel GetBalance(string walletName);
+        WalletGeneralInfoModel GetGeneralInfo(string walletName);
 
         /// <summary>
         /// Gets a list of accounts filtered by coin type.
