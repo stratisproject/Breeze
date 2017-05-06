@@ -39,9 +39,9 @@ namespace Breeze.Wallet
         /// <param name="network">The network in which to creae this wallet</param>
         /// <param name="mnemonic">The user's mnemonic for the wallet.</param>		
         /// <param name="passphrase">The passphrase used in the seed.</param>
-        /// <param name="creationTime">The time this wallet was created.</param>
+        /// <param name="creationTime">The date and time this wallet was created.</param>
         /// <returns>The recovered wallet.</returns>
-        Wallet RecoverWallet(string password, string folderPath, string name, string network, string mnemonic, string passphrase = null, DateTimeOffset? creationTime = null);
+        Wallet RecoverWallet(string password, string folderPath, string name, string network, string mnemonic, string passphrase = null, DateTime? creationTime = null);
 
         /// <summary>
         /// Deleted a wallet.

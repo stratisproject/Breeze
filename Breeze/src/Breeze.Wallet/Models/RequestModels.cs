@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Breeze.Wallet.Models
 {
@@ -45,6 +48,9 @@ namespace Breeze.Wallet.Models
         public string Name { get; set; }
 
         public string Network { get; set; }
+
+        [JsonConverter(typeof(IsoDateTimeConverter))]
+        public DateTime CreationDate { get; set; }
     }
 
     public class WalletHistoryRequest

@@ -14,14 +14,17 @@ namespace Breeze.Wallet.Controllers
     /// <summary>
     /// Controller providing operations on a wallet.
     /// </summary>
-	[Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class WalletController : Controller
     {
         private readonly IWalletManager walletManager;
 
-        public WalletController(IWalletManager walletManager)
+        private readonly ITracker tracker;
+
+        public WalletController(IWalletManager walletManager, ITracker tracker)
         {
             this.walletManager = walletManager;
+            this.tracker = tracker;
         }
 
         /// <summary>
@@ -60,7 +63,7 @@ namespace Breeze.Wallet.Controllers
         /// </summary>
         /// <param name="request">The name of the wallet to load.</param>
         /// <returns></returns>
-		[Route("load")]
+        [Route("load")]
         [HttpPost]
         public IActionResult Load([FromBody]WalletLoadRequest request)
         {
@@ -120,9 +123,10 @@ namespace Breeze.Wallet.Controllers
                 // get the wallet folder 
                 DirectoryInfo walletFolder = GetWalletFolder(request.FolderPath);
 
-                Wallet wallet = this.walletManager.RecoverWallet(request.Password, walletFolder.FullName, request.Name, request.Network, request.Mnemonic);
-
-                // TODO give the tracker the date at which this wallet was originally created so that it can start syncing blocks for it
+                Wallet wallet = this.walletManager.RecoverWallet(request.Password, walletFolder.FullName, request.Name, request.Network, request.Mnemonic, null, request.CreationDate);
+                
+                // start syncing the wallet from the creation date
+                this.tracker.SyncFrom(request.CreationDate);
 
                 return this.Json(new WalletModel
                 {
@@ -179,7 +183,7 @@ namespace Breeze.Wallet.Controllers
         /// </summary>
         /// <param name="request">The request parameters.</param>
         /// <returns></returns>
-		[Route("history")]
+        [Route("history")]
         [HttpGet]
         public IActionResult GetHistory([FromQuery] WalletHistoryRequest request)
         {
@@ -269,7 +273,7 @@ namespace Breeze.Wallet.Controllers
         /// </summary>
         /// <param name="request">The transaction parameters.</param>
         /// <returns>All the details of the transaction, including the hex used to execute it.</returns>
-		[Route("build-transaction")]
+        [Route("build-transaction")]
         [HttpPost]
         public IActionResult BuildTransaction([FromBody] BuildTransactionRequest request)
         {
@@ -296,7 +300,7 @@ namespace Breeze.Wallet.Controllers
         /// </summary>
         /// <param name="request">The hex representing the transaction.</param>
         /// <returns></returns>
-		[Route("send-transaction")]
+        [Route("send-transaction")]
         [HttpPost]
         public IActionResult SendTransaction([FromBody] SendTransactionRequest request)
         {
