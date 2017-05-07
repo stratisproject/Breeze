@@ -64,13 +64,13 @@ namespace Breeze.Wallet
         string CreateNewAccount(string walletName, CoinType coinType, string accountName, string password);
 
         /// <summary>
-        /// Creates the new address.
+        /// Gets an address that contains no transaction.
         /// </summary>
-        /// <param name="walletName">The name of the wallet in which this address will be created.</param>
-        /// <param name="coinType">The type of coin for which to create an account.</param>
-        /// <param name="accountName">The name of the account in which this address will be created.</param>        
-        /// <returns>The new address, in Base58 format.</returns>
-        string CreateNewAddress(string walletName, CoinType coinType, string accountName);
+        /// <param name="walletName">The name of the wallet in which this address is contained.</param>
+        /// <param name="coinType">The type of coin for which to get the address.</param>
+        /// <param name="accountName">The name of the account in which this address is contained.</param>
+        /// <returns>An unused address or a newly created address, in Base58 format.</returns>
+        string GetUnusedAddress(string walletName, CoinType coinType, string accountName);
 
         WalletGeneralInfoModel GetGeneralInfo(string walletName);
 
