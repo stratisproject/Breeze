@@ -150,7 +150,7 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public string CreateNewAddress(string walletName, CoinType coinType, string accountName)
+        public string GetUnusedAddress(string walletName, CoinType coinType, string accountName)
         {
             Wallet wallet = this.Wallets.SingleOrDefault(w => w.Name == walletName);
             if (wallet == null)
@@ -175,7 +175,7 @@ namespace Breeze.Wallet
                 var lastAddress = account.ExternalAddresses.SingleOrDefault(a => a.Index == lastAddressIndex);
                 if (lastAddress != null && !lastAddress.Transactions.Any())
                 {
-                    throw new Exception($"Cannot create new address in account '{accountName}' if the previous address '{lastAddress.Address}' has not been used.");
+                    return lastAddress.Address;
                 }
 
                 newAddressIndex = lastAddressIndex + 1;

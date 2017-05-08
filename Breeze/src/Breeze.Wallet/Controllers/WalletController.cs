@@ -14,7 +14,7 @@ namespace Breeze.Wallet.Controllers
     /// <summary>
     /// Controller providing operations on a wallet.
     /// </summary>
-	[Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class WalletController : Controller
     {
         private readonly IWalletManager walletManager;
@@ -60,7 +60,7 @@ namespace Breeze.Wallet.Controllers
         /// </summary>
         /// <param name="request">The name of the wallet to load.</param>
         /// <returns></returns>
-		[Route("load")]
+        [Route("load")]
         [HttpPost]
         public IActionResult Load([FromBody]WalletLoadRequest request)
         {
@@ -179,7 +179,7 @@ namespace Breeze.Wallet.Controllers
         /// </summary>
         /// <param name="request">The request parameters.</param>
         /// <returns></returns>
-		[Route("history")]
+        [Route("history")]
         [HttpGet]
         public IActionResult GetHistory([FromQuery] WalletHistoryRequest request)
         {
@@ -269,7 +269,7 @@ namespace Breeze.Wallet.Controllers
         /// </summary>
         /// <param name="request">The transaction parameters.</param>
         /// <returns>All the details of the transaction, including the hex used to execute it.</returns>
-		[Route("build-transaction")]
+        [Route("build-transaction")]
         [HttpPost]
         public IActionResult BuildTransaction([FromBody] BuildTransactionRequest request)
         {
@@ -296,7 +296,7 @@ namespace Breeze.Wallet.Controllers
         /// </summary>
         /// <param name="request">The hex representing the transaction.</param>
         /// <returns></returns>
-		[Route("send-transaction")]
+        [Route("send-transaction")]
         [HttpPost]
         public IActionResult SendTransaction([FromBody] SendTransactionRequest request)
         {
@@ -374,14 +374,14 @@ namespace Breeze.Wallet.Controllers
                 return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, e.Message, e.ToString());
             }
         }
-
+        
         /// <summary>
-        /// Creates a new address for a wallet.
+        /// Gets an unused address.
         /// </summary>
-        /// <returns>An address in Base58 format.</returns>
+        /// <returns>The last created and unused address or creates a new address (in Base58 format).</returns>
         [Route("address")]
-        [HttpPost]
-        public IActionResult CreateNewAddress([FromBody]CreateAddressModel request)
+        [HttpGet]
+        public IActionResult GetUnusedAddress([FromQuery]GetUnusedAddressModel request)
         {
             // checks the request is valid
             if (!this.ModelState.IsValid)
@@ -391,8 +391,8 @@ namespace Breeze.Wallet.Controllers
             }
 
             try
-            {
-                var result = this.walletManager.CreateNewAddress(request.WalletName, request.CoinType, request.AccountName);
+            {               
+                var result = this.walletManager.GetUnusedAddress(request.WalletName, request.CoinType, request.AccountName);
                 return this.Json(result);
             }
             catch (Exception e)

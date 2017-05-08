@@ -94,4 +94,24 @@ namespace Breeze.Wallet.Models
         public string Hex { get; set; }
     }
 
+    public class GetUnusedAddressModel
+    {
+        /// <summary>
+        /// The name of the wallet from which to get the address.
+        /// </summary>
+        [Required]
+        public string WalletName { get; set; }
+
+        /// <summary>
+        /// The type of coin this address is for.
+        /// </summary>
+        [Required]
+        public CoinType CoinType { get; set; }
+
+        /// <summary>
+        /// The name of the account for which to get the address.
+        /// </summary>
+        [Required]
+        public string AccountName { get; set; }
+    }
 }
