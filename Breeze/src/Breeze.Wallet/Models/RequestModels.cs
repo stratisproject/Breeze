@@ -114,4 +114,25 @@ namespace Breeze.Wallet.Models
         [Required]
         public string AccountName { get; set; }
     }
+
+    public class GetUnusedAccountModel
+    {
+        /// <summary>
+        /// The name of the wallet in which to create the account.
+        /// </summary>
+        [Required]
+        public string WalletName { get; set; }
+
+        /// <summary>
+        /// The type of coin this account contains.
+        /// </summary>
+        [Required]
+        public CoinType CoinType { get; set; }
+
+        /// <summary>
+        /// The password for this wallet.
+        /// </summary>
+        [Required]
+        public string Password { get; set; }
+    }
 }

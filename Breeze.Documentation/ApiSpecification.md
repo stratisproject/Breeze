@@ -167,12 +167,12 @@ Cannot check if the password is good or not. If the password is wrong it'll reco
 ## DELETE /wallet - Deletes the wallet
 Works as expected.
 
-## POST /wallet/account - Adds an account to the wallet
+## POST /wallet/account - Gets an unused account from the wallet
+This endpoint will get the first account containing no transaction or will create a new account.
 ### Parameters
 ```
 {
-    "walletName": "myFirstWallet",
-    "accountName": "account one",
+    "walletName": "myFirstWallet",    
     "password": "123456",
     "coinType": 105
 }

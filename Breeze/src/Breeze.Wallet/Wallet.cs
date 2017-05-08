@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Breeze.Wallet.JsonConverters;
 using NBitcoin;
 using NBitcoin.JsonConverters;
@@ -80,6 +81,23 @@ namespace Breeze.Wallet
         /// </summary>
         [JsonProperty(PropertyName = "accounts")]
         public IEnumerable<HdAccount> Accounts { get; set; }
+
+        /// <summary>
+        /// Gets the first account that contains no transaction.
+        /// </summary>
+        /// <returns>An unused account</returns>
+        public HdAccount GetFirstUnusedAccount()
+        {
+            var unusedAccounts = this.Accounts.Where(acc => !acc.ExternalAddresses.Any() && !acc.InternalAddresses.Any()).ToList();
+            if (!unusedAccounts.Any())
+            {
+                return null;
+            }
+
+            // gets the unused account with the lowest index
+            var index = unusedAccounts.Min(a => a.Index);
+            return unusedAccounts.Single(a => a.Index == index);
+        }
     }
 
     /// <summary>
@@ -124,7 +142,6 @@ namespace Breeze.Wallet
         /// </summary>
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
-
 
         /// <summary>
         /// A path to the account as defined in BIP44.
