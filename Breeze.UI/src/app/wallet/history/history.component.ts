@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ApiService } from '../../shared/services/api.service'
+import { ApiService } from '../../shared/services/api.service';
+import { GlobalService } from '../../shared/services/global.service';
+
+import { WalletInfo } from '../../shared/classes/wallet-info';
 
 @Component({
   selector: 'history-component',
@@ -9,7 +12,7 @@ import { ApiService } from '../../shared/services/api.service'
 })
 
 export class HistoryComponent {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private globalService: GlobalService) {}
 
   private transactions: any;
   private errorMessage: string;
@@ -19,11 +22,12 @@ export class HistoryComponent {
   }
 
   private getWalletHistory() {
-    this.apiService.getWalletHistory()
+    let walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getCoinType())
+    this.apiService.getWalletHistory(walletInfo)
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            this.transactions = response.json().history;
+            this.transactions = response.json().transactions;
           }
         },
         error => {
