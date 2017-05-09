@@ -63,25 +63,33 @@ export class ApiService {
      */
     getWalletStatus(): Observable<any> {
       return this.http
-        .get(this.mockApiUrl + '/wallet/status')
+        .get(this.webApiUrl + '/wallet/status')
         .map((response: Response) => response);
     }
 
     /**
      * Get wallet balance info from the API.
      */
-    getWalletBalance(): Observable<any> {
+    getWalletBalance(data: WalletInfo): Observable<any> {
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', data.walletName);
+      params.set('coinType', data.coinType.toString());
+
       return this.http
-        .get(this.mockApiUrl + '/wallet/balance')
+        .get(this.webApiUrl + '/wallet/balance', new RequestOptions({headers: this.headers, search: params}))
         .map((response: Response) => response);
     }
 
     /**
      * Get a wallets transaction history info from the API.
      */
-    getWalletHistory(): Observable<any> {
+    getWalletHistory(data: WalletInfo): Observable<any> {
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', data.walletName);
+      params.set('coinType', data.coinType.toString());
+
       return this.http
-        .get(this.mockApiUrl + '/wallet/history')
+        .get(this.webApiUrl + '/wallet/history', new RequestOptions({headers: this.headers, search: params}))
         .map((response: Response) => response);
     }
 
@@ -92,7 +100,7 @@ export class ApiService {
       let params: URLSearchParams = new URLSearchParams();
       params.set('walletName', data.walletName);
       params.set('coinType', data.coinType.toString());
-      params.set('accountName', data.accountName);
+
       return this.http
         .get(this.webApiUrl + '/wallet/address', new RequestOptions({headers: this.headers, search: params}))
         .map((response: Response) => response);
