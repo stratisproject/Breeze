@@ -1,5 +1,5 @@
 <h1>History</h1>
-<table *ngIf="transactions"> 
+<table *ngIf="transactions">
     <thead>
         <th>Timestamp</th>
         <th>Amount</th>
@@ -10,6 +10,6 @@
         <td>{{ transaction.timestamp }}</td>
         <td>{{ transaction.amount }}</td>
         <td>{{ transaction.confirmed }}</td>
-        <td>{{ transaction.txid }}</td>
+        <td>{{ transaction.txId }}</td>
     </tr>
 </table>
