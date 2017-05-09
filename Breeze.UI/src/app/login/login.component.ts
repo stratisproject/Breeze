@@ -82,7 +82,6 @@ export class LoginComponent implements OnInit {
     this.apiService.loadWallet(walletLoad)
       .subscribe(
         response => {
-          console.log(response);
           if (response.status >= 200 && response.status < 400) {
             let responseMessage = response.json();
             this.globalService.setWalletName(walletLoad.name)
