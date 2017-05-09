@@ -394,7 +394,7 @@ namespace Breeze.Wallet
                     {
                         foreach (var account in accountRoot.Accounts)
                         {
-                            foreach (var address in account.ExternalAddresses)//.Where(a => a.ScriptPubKey == script))
+                            foreach (var address in account.ExternalAddresses.Where(a => a.ScriptPubKey == script))
                             {
                                 address.Transactions = address.Transactions.Concat(new[]
                                 {
@@ -599,9 +599,9 @@ namespace Breeze.Wallet
                 SelectMany(w => w.AccountsRoot.Where(a => a.CoinType == coinType)).
                 SelectMany(a => a.Accounts).
                 SelectMany(a => a.ExternalAddresses).
-              //  Select(s => s.ScriptPubKey));
+                Select(s => s.ScriptPubKey));
             // uncomment the following for testing on a random address 
-            Select(t => (new BitcoinPubKeyAddress(t.Address, Network.Main)).ScriptPubKey));
+            //Select(t => (new BitcoinPubKeyAddress(t.Address, Network.Main)).ScriptPubKey));
         }
 
         /// <summary>
