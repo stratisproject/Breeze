@@ -121,7 +121,7 @@ namespace Breeze.Wallet.Controllers
                 DirectoryInfo walletFolder = GetWalletFolder(request.FolderPath);
 
                 Wallet wallet = this.walletManager.RecoverWallet(request.Password, walletFolder.FullName, request.Name, request.Network, request.Mnemonic);
-
+         
                 // TODO give the tracker the date at which this wallet was originally created so that it can start syncing blocks for it
 
                 return this.Json(new WalletModel
@@ -355,7 +355,7 @@ namespace Breeze.Wallet.Controllers
         /// <returns>An account name.</returns>
         [Route("account")]
         [HttpPost]
-        public IActionResult CreateNewAccount([FromBody]CreateAccountModel request)
+        public IActionResult CreateNewAccount([FromBody]GetUnusedAccountModel request)
         {
             // checks the request is valid
             if (!this.ModelState.IsValid)
@@ -366,8 +366,8 @@ namespace Breeze.Wallet.Controllers
 
             try
             {
-                var result = this.walletManager.CreateNewAccount(request.WalletName, request.CoinType, request.AccountName, request.Password);
-                return this.Json(result);
+                var result = this.walletManager.GetUnusedAccount(request.WalletName, request.CoinType, request.Password);
+                return this.Json(result.Name);
             }
             catch (Exception e)
             {
