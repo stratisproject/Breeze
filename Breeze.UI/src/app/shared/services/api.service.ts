@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
+import { Http, Headers, Response, RequestOptions, URLSearchParams} from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -7,6 +7,7 @@ import 'rxjs/add/operator/catch';
 import { WalletCreation } from '../classes/wallet-creation';
 import { WalletRecovery } from '../classes/wallet-recovery';
 import { WalletLoad } from '../classes/wallet-load';
+import { WalletInfo } from '../classes/wallet-info';
 import { Mnemonic } from '../classes/mnemonic';
 
 /**
@@ -87,9 +88,13 @@ export class ApiService {
     /**
      * Get unused receive addresses for a certain wallet from the API.
      */
-    getUnusedReceiveAddresses(): Observable<any> {
+    getUnusedReceiveAddress(data: WalletInfo): Observable<any> {
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', data.walletName);
+      params.set('coinType', data.coinType.toString());
+      params.set('accountName', data.accountName);
       return this.http
-        .get(this.mockApiUrl + '/wallet/receive')
+        .get(this.webApiUrl + '/wallet/address', new RequestOptions({headers: this.headers, search: params}))
         .map((response: Response) => response);
     }
 }

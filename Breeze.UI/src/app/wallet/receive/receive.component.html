@@ -2,20 +2,14 @@
     <h1>Receive</h1>
     <div>
         <div>
-            <table *ngIf="addresses"> 
+            <table *ngIf="address">
                 <thead>
-                    <th>Unused Receive Addresses: </th>
+                    <th>Receive address: </th>
                 </thead>
-                <tr *ngFor="let address of addresses">
+                <tr>
                     <td>{{ address }}</td>
                 </tr>
             </table>
         </div>
-    </div>
-    <div>
-        <label>Used Receive Addresses</label>
-    </div>
-    <div>
-        <label>Change Addresses</label>
     </div>
 </div>

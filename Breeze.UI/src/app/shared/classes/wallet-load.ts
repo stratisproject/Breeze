@@ -6,7 +6,7 @@ export class WalletLoad {
     this.name = name;
   }
 
-  private password: string;
-  private folderPath: string;
-  private name: string;
+  public password: string;
+  public folderPath: string;
+  public name: string;
 }
