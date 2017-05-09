@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
   }
 
   private setGlobalWalletName(walletName: string) {
-    this.globalService.setCurrentWalletName(walletName);
+    this.globalService.setWalletName(walletName);
   }
 
   private getWalletFiles() {
@@ -82,9 +82,10 @@ export class LoginComponent implements OnInit {
     this.apiService.loadWallet(walletLoad)
       .subscribe(
         response => {
-          console.log(response);
           if (response.status >= 200 && response.status < 400) {
             let responseMessage = response.json();
+            this.globalService.setWalletName(walletLoad.name)
+            this.globalService.setCoinType(0);
             this.router.navigate(['/wallet']);
           }
         },

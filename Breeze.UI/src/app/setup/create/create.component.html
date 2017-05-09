@@ -6,10 +6,12 @@
   <div class="form-group">
     <label>Name:</label>
     <input class="form-control" formControlName="walletName" type="text" placeholder="Enter a name for your wallet.">
+    <div *ngIf="formErrors.walletName" class="alert alert-danger">{{formErrors.walletName}}</div>
   </div>
   <div class="form-group">
     <label>Password:</label>
     <input class="form-control" formControlName="walletPassword" type="password" placeholder="Enter a password for your wallet.">
+    <div *ngIf="formErrors.walletPassword" class="alert alert-danger">{{formErrors.walletPassword}}</div>
   </div>
   <div class="form-group">
     <label>Network:</label>

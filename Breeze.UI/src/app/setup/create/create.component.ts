@@ -16,11 +16,7 @@ import { Mnemonic } from '../../shared/classes/mnemonic';
 
 export class CreateComponent {
   constructor(private globalService: GlobalService, private apiService: ApiService, private router: Router, private fb: FormBuilder) {
-    this.createWalletForm = fb.group({
-      "walletName": ["", Validators.required],
-      "walletPassword": ["", Validators.required],
-      "selectNetwork": ["main", Validators.required]
-    });
+    this.buildCreateForm();
   }
 
   private createWalletForm: FormGroup;
@@ -28,6 +24,55 @@ export class CreateComponent {
 
   private responseMessage: string;
   private errorMessage: string;
+
+  private buildCreateForm(): void {
+    this.createWalletForm = this.fb.group({
+      "walletName": ["", [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(24)
+        ]
+      ],
+      "walletPassword": ["", Validators.required],
+      "selectNetwork": ["main", Validators.required]
+    });
+
+    this.createWalletForm.valueChanges
+      .subscribe(data => this.onValueChanged(data));
+
+    this.onValueChanged();
+  }
+
+  onValueChanged(data?: any) {
+    if (!this.createWalletForm) { return; }
+    const form = this.createWalletForm;
+    for (const field in this.formErrors) {
+      this.formErrors[field] = '';
+      const control = form.get(field);
+      if (control && control.dirty && !control.valid) {
+        const messages = this.validationMessages[field];
+        for (const key in control.errors) {
+          this.formErrors[field] += messages[key] + ' ';
+        }
+      }
+    }
+  }
+
+  formErrors = {
+    'walletName': '',
+    'walletPassword': ''
+  };
+
+  validationMessages = {
+    'walletName': {
+      'required':      'Name is required.',
+      'minlength':     'Name must be at least 3 characters long.',
+      'maxlength':     'Name cannot be more than 24 characters long.'
+    },
+    'walletPassword': {
+      'required': 'A password is required.'
+    }
+  };
 
   private onBackClicked() {
     this.router.navigate(["/setup"]);
