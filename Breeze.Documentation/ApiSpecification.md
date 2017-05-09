@@ -167,12 +167,12 @@ Cannot check if the password is good or not. If the password is wrong it'll reco
 ## DELETE /wallet - Deletes the wallet
 Works as expected.
 
-## POST /wallet/account - Adds an account to the wallet
+## POST /wallet/account - Gets an unused account from the wallet
+This endpoint will get the first account containing no transaction or will create a new account.
 ### Parameters
 ```
 {
-    "walletName": "myFirstWallet",
-    "accountName": "account one",
+    "walletName": "myFirstWallet",    
     "password": "123456",
     "coinType": 105
 }
@@ -182,20 +182,19 @@ Works as expected.
   "account one"
 ```
 
-## POST /wallet/address - Adds an address to an account
-### Parameters
-```
-{
-    "walletName": "myFirstWallet",
-    "accountName": "account one",
-    "coinType": 0
-}
-```
+## GET /wallet/address - Gets an unused address 
+
+This endpoint will get the last address containing no transaction or will create a new address.
+### Query parameters
+`walletName` (required) - the name of the wallet in which this address is contained.
+
+`coinType` (required) - the type of coin for which to get the address, e.g 0 for bitcoin, 105 for stratis.
+
+`accountName` (required) - the name of the account in which this address is contained.
 ### Responses
 ```
   "1HDypWxXWZC5KXK259EHMnrWaa2youy7Mj"
 ```
-
 
 ## GET /wallet/receive/[account1/account2] - Displays unused receive addresses of the specified wallet account
 ### Responses

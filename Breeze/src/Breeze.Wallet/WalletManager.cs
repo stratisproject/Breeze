@@ -18,9 +18,13 @@ namespace Breeze.Wallet
     {
         public List<Wallet> Wallets { get; }
 
-        public HashSet<Script> PubKeys { get; }
+        public HashSet<Script> PubKeys { get; set; }
 
         public HashSet<TransactionDetails> TrackedTransactions { get; }
+
+        private const int UnusedAddressesBuffer = 20;
+
+        private const int WalletRecoveryAccountsCreationCount = 3;
 
         public WalletManager()
         {
@@ -53,7 +57,6 @@ namespace Breeze.Wallet
             ExtKey extendedKey = mnemonic.DeriveExtKey(passphrase);
 
             // create a wallet file 
-
             Wallet wallet = this.GenerateWalletFile(password, folderPath, name, WalletHelpers.GetNetwork(network), extendedKey);
 
             this.Load(wallet);
@@ -84,15 +87,28 @@ namespace Breeze.Wallet
             // generate the root seed used to generate keys
             ExtKey extendedKey = (new Mnemonic(mnemonic)).DeriveExtKey(passphrase);
 
-            // create a wallet file 
-            Wallet wallet = this.GenerateWalletFile(password, folderPath, name, WalletHelpers.GetNetwork(network), extendedKey, creationTime);
+            Network coinNetwork = WalletHelpers.GetNetwork(network);
 
+            // create a wallet file 
+            Wallet wallet = this.GenerateWalletFile(password, folderPath, name, coinNetwork, extendedKey, creationTime);
+
+            // generate multiple accounts and addresses from the get-go
+            for (int i = 0; i < WalletRecoveryAccountsCreationCount; i++)
+            {
+                HdAccount account = CreateNewAccount(wallet, CoinType.Bitcoin, password);
+                this.CreateAddressesInAccount(account, coinNetwork, UnusedAddressesBuffer);
+                this.CreateAddressesInAccount(account, coinNetwork, UnusedAddressesBuffer, true);
+            }
+
+            // save the changes to the file and add addresses to be tracked
+            this.SaveToFile(wallet);
+            this.PubKeys = this.LoadKeys(CoinType.Bitcoin);
             this.Load(wallet);
             return wallet;
         }
 
         /// <inheritdoc />
-        public string CreateNewAccount(string walletName, CoinType coinType, string accountName, string password)
+        public HdAccount GetUnusedAccount(string walletName, CoinType coinType, string password)
         {
             Wallet wallet = this.Wallets.SingleOrDefault(w => w.Name == walletName);
             if (wallet == null)
@@ -100,57 +116,73 @@ namespace Breeze.Wallet
                 throw new Exception($"No wallet with name {walletName} could be found.");
             }
 
+            return this.GetUnusedAccount(wallet, coinType, password);
+        }
+
+        /// <inheritdoc />
+        public HdAccount GetUnusedAccount(Wallet wallet, CoinType coinType, string password)
+        {
+            // get the accounts root for this type of coin
+            var accountsRoot = wallet.AccountsRoot.Single(a => a.CoinType == coinType);
+
+            // check if an unused account exists
+            if (accountsRoot.Accounts.Any())
+            {
+                // gets an unused account
+                var firstUnusedAccount = accountsRoot.GetFirstUnusedAccount();
+                if (firstUnusedAccount != null)
+                {
+                    return firstUnusedAccount;
+                }
+            }
+
+            // all accounts contain transactions, create a new one
+            var newAccount = this.CreateNewAccount(wallet, coinType, password);
+
+            // save the changes to the file
+            this.SaveToFile(wallet);
+            return newAccount;
+        }
+
+        /// <inheritdoc />
+        public HdAccount CreateNewAccount(Wallet wallet, CoinType coinType, string password)
+        {
             // get the accounts for this type of coin
             var accounts = wallet.AccountsRoot.Single(a => a.CoinType == coinType).Accounts.ToList();
-            int newAccountIndex = 0;
 
-            // validate account creation
+            int newAccountIndex = 0;
             if (accounts.Any())
             {
-                // check account with same name doesn't already exists
-                if (accounts.Any(a => a.Name == accountName))
-                {
-                    throw new Exception($"Account with name '{accountName}' already exists in '{walletName}'.");
-                }
-
-                // check account at index i - 1 contains transactions.
-                int lastAccountIndex = accounts.Max(a => a.Index);
-                HdAccount previousAccount = accounts.Single(a => a.Index == lastAccountIndex);
-                if (!previousAccount.ExternalAddresses.Any(addresses => addresses.Transactions.Any()) && !previousAccount.InternalAddresses.Any(addresses => addresses.Transactions.Any()))
-                {
-                    throw new Exception($"Cannot create new account '{accountName}' in '{walletName}' if the previous account '{previousAccount.Name}' has not been used.");
-                }
-
-                newAccountIndex = lastAccountIndex + 1;
+                newAccountIndex = accounts.Max(a => a.Index) + 1;
             }
 
             // get the extended pub key used to generate addresses for this account
             var privateKey = Key.Parse(wallet.EncryptedSeed, password, wallet.Network);
             var seedExtKey = new ExtKey(privateKey, wallet.ChainCode);
-            var accountHdPath = $"m/44'/{(int) coinType}'/{newAccountIndex}'";
+            var accountHdPath = $"m/44'/{(int)coinType}'/{newAccountIndex}'";
             KeyPath keyPath = new KeyPath(accountHdPath);
             ExtKey accountExtKey = seedExtKey.Derive(keyPath);
             ExtPubKey accountExtPubKey = accountExtKey.Neuter();
 
-            accounts.Add(new HdAccount
+            var newAccount = new HdAccount
             {
                 Index = newAccountIndex,
                 ExtendedPubKey = accountExtPubKey.ToString(wallet.Network),
                 ExternalAddresses = new List<HdAddress>(),
                 InternalAddresses = new List<HdAddress>(),
-                Name = accountName,
+                Name = $"account {newAccountIndex}",
                 HdPath = accountHdPath,
                 CreationTime = DateTimeOffset.Now
-            });
+            };
 
+            accounts.Add(newAccount);
             wallet.AccountsRoot.Single(a => a.CoinType == coinType).Accounts = accounts;
-            this.SaveToFile(wallet);
 
-            return accountName;
+            return newAccount;
         }
 
         /// <inheritdoc />
-        public string CreateNewAddress(string walletName, CoinType coinType, string accountName)
+        public string GetUnusedAddress(string walletName, CoinType coinType, string accountName)
         {
             Wallet wallet = this.Wallets.SingleOrDefault(w => w.Name == walletName);
             if (wallet == null)
@@ -165,42 +197,78 @@ namespace Breeze.Wallet
                 throw new Exception($"No account with name {accountName} could be found.");
             }
 
-            int newAddressIndex = 0;
-
             // validate address creation
             if (account.ExternalAddresses.Any())
             {
                 // check last created address contains transactions.
-                int lastAddressIndex = account.ExternalAddresses.Max(a => a.Index);
-                var lastAddress = account.ExternalAddresses.SingleOrDefault(a => a.Index == lastAddressIndex);
-                if (lastAddress != null && !lastAddress.Transactions.Any())
+                var firstUnusedExternalAddress = account.GetFirstUnusedExternalAddress();
+                if (firstUnusedExternalAddress != null)
                 {
-                    throw new Exception($"Cannot create new address in account '{accountName}' if the previous address '{lastAddress.Address}' has not been used.");
+                    return firstUnusedExternalAddress.Address;
                 }
-
-                newAddressIndex = lastAddressIndex + 1;
             }
 
-            // generate new receiving address
-            BitcoinPubKeyAddress address = this.GenerateAddress(account.ExtendedPubKey, newAddressIndex, false, wallet.Network);
-
-            // add address details
-            account.ExternalAddresses = account.ExternalAddresses.Concat(new[] {new HdAddress
-            {
-                Index = newAddressIndex,
-                HdPath = CreateBip44Path(coinType, account.Index, newAddressIndex, false),
-                ScriptPubKey = address.ScriptPubKey,
-                Address = address.ToString(),
-                Transactions = new List<TransactionData>(),
-                CreationTime = DateTimeOffset.Now
-            }});
+            // creates an address
+            this.CreateAddressesInAccount(account, wallet.Network, 1);
 
             // persists the address to the wallet file
             this.SaveToFile(wallet);
 
             // adds the address to the list of tracked addresses
-            this.PubKeys.Add(address.ScriptPubKey);
-            return address.ToString();
+            this.PubKeys = this.LoadKeys(coinType);
+            return account.GetFirstUnusedExternalAddress().Address;
+        }
+
+        /// <summary>
+        /// Creates a number of addresses in the provided account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        /// <param name="network">The network.</param>
+        /// <param name="addressesQuantity">The number of addresses to create.</param>
+        /// <param name="isChange">Whether the addresses added are change (internal) addresses or receiving (external) addresses.</param>
+        /// <returns>A list of addresses in Base58.</returns>
+        private List<string> CreateAddressesInAccount(HdAccount account, Network network, int addressesQuantity, bool isChange = false)
+        {
+            List<string> addressesCreated = new List<string>();
+
+            var addresses = isChange ? account.InternalAddresses : account.ExternalAddresses;
+
+            // gets the index of the last address with transactions
+            int firstNewAddressIndex = 0;
+            if (addresses.Any())
+            {
+                firstNewAddressIndex = addresses.Max(add => add.Index) + 1;
+            }
+
+            for (int i = firstNewAddressIndex; i < firstNewAddressIndex + addressesQuantity; i++)
+            {
+                // generate new receiving address
+                BitcoinPubKeyAddress address = this.GenerateAddress(account.ExtendedPubKey, i, false, network);
+
+                // add address details
+                addresses = addresses.Concat(new[] {new HdAddress
+                {
+                    Index = i,
+                    HdPath = CreateBip44Path(account.GetCoinType(), account.Index, i, isChange),
+                    ScriptPubKey = address.ScriptPubKey,
+                    Address = address.ToString(),
+                    Transactions = new List<TransactionData>(),
+                    CreationTime = DateTimeOffset.Now
+                }});
+
+                addressesCreated.Add(address.ToString());
+            }
+
+            if (isChange)
+            {
+                account.InternalAddresses = addresses;
+            }
+            else
+            {
+                account.ExternalAddresses = addresses;
+            }
+
+            return addressesCreated;
         }
 
         public WalletGeneralInfoModel GetGeneralInfo(string name)
@@ -485,7 +553,7 @@ namespace Breeze.Wallet
                 SelectMany(a => a.ExternalAddresses).
                 Select(s => s.ScriptPubKey));
             // uncomment the following for testing on a random address 
-             // Select(t => (new BitcoinPubKeyAddress(t.Address, Network.Main)).ScriptPubKey));
+            //Select(t => (new BitcoinPubKeyAddress(t.Address, Network.Main)).ScriptPubKey));
         }
 
         /// <summary>

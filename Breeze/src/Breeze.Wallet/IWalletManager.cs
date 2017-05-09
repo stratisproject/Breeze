@@ -44,33 +44,58 @@ namespace Breeze.Wallet
         Wallet RecoverWallet(string password, string folderPath, string name, string network, string mnemonic, string passphrase = null, DateTime? creationTime = null);
 
         /// <summary>
-        /// Deleted a wallet.
+        /// Deletes a wallet.
         /// </summary>
         /// <param name="walletFilePath">The location of the wallet file.</param>        
         void DeleteWallet(string walletFilePath);
 
         /// <summary>
-        /// Creates a new account.
+        /// Gets an account that contains no transactions.
         /// </summary>
-        /// <param name="walletName">The name of the wallet in which this account will be created.</param>
-        /// <param name="coinType">the type of coin for which to create an account.</param>
-        /// <param name="accountName">The name by which this account will be identified.</param>
+        /// <param name="walletName">The name of the wallet from which to get an account.</param>
+        /// <param name="coinType">The type of coin for which to get an account.</param>
         /// <param name="password">The password used to decrypt the private key.</param>
         /// <remarks>
         /// According to BIP44, an account at index (i) can only be created when the account
         /// at index (i - 1) contains transactions.
         /// </remarks>
-        /// <returns>The name of the new account.</returns>
-        string CreateNewAccount(string walletName, CoinType coinType, string accountName, string password);
+        /// <returns>An unused account.</returns>
+        HdAccount GetUnusedAccount(string walletName, CoinType coinType, string password);
 
         /// <summary>
-        /// Creates the new address.
+        /// Gets an account that contains no transactions.
         /// </summary>
-        /// <param name="walletName">The name of the wallet in which this address will be created.</param>
+        /// <param name="wallet">The wallet from which to get an account.</param>
+        /// <param name="coinType">The type of coin for which to get an account.</param>
+        /// <param name="password">The password used to decrypt the private key.</param>
+        /// <remarks>
+        /// According to BIP44, an account at index (i) can only be created when the account
+        /// at index (i - 1) contains transactions.
+        /// </remarks>
+        /// <returns>An unused account.</returns>
+        HdAccount GetUnusedAccount(Wallet wallet, CoinType coinType, string password);
+        
+        /// <summary>
+        /// Creates a new account.
+        /// </summary>
+        /// <param name="wallet">The wallet in which this account will be created.</param>
         /// <param name="coinType">The type of coin for which to create an account.</param>
-        /// <param name="accountName">The name of the account in which this address will be created.</param>        
-        /// <returns>The new address, in Base58 format.</returns>
-        string CreateNewAddress(string walletName, CoinType coinType, string accountName);
+        /// <param name="password">The password used to decrypt the private key.</param>
+        /// <remarks>
+        /// According to BIP44, an account at index (i) can only be created when the account
+        /// at index (i - 1) contains transactions.
+        /// </remarks>
+        /// <returns>The new account.</returns>
+        HdAccount CreateNewAccount(Wallet wallet, CoinType coinType, string password);
+
+        /// <summary>
+        /// Gets an address that contains no transaction.
+        /// </summary>
+        /// <param name="walletName">The name of the wallet in which this address is contained.</param>
+        /// <param name="coinType">The type of coin for which to get the address.</param>
+        /// <param name="accountName">The name of the account in which this address is contained.</param>
+        /// <returns>An unused address or a newly created address, in Base58 format.</returns>
+        string GetUnusedAddress(string walletName, CoinType coinType, string accountName);
 
         WalletGeneralInfoModel GetGeneralInfo(string walletName);
 
@@ -101,6 +126,6 @@ namespace Breeze.Wallet
         /// <param name="transaction">The transaction.</param>
         /// <param name="blockHeight">The height of the block this transaction came from. Null if it was not a transaction included in a block.</param>
         /// <param name="blockTime">The block time.</param>
-        void ProcessTransaction(CoinType coinType, NBitcoin.Transaction transaction, int? blockHeight = null, uint? blockTime = null);
+        void ProcessTransaction(CoinType coinType, NBitcoin.Transaction transaction, int? blockHeight = null, uint? blockTime = null);       
     }
 }

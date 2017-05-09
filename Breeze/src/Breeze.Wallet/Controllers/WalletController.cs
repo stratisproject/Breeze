@@ -359,7 +359,7 @@ namespace Breeze.Wallet.Controllers
         /// <returns>An account name.</returns>
         [Route("account")]
         [HttpPost]
-        public IActionResult CreateNewAccount([FromBody]CreateAccountModel request)
+        public IActionResult CreateNewAccount([FromBody]GetUnusedAccountModel request)
         {
             // checks the request is valid
             if (!this.ModelState.IsValid)
@@ -370,22 +370,22 @@ namespace Breeze.Wallet.Controllers
 
             try
             {
-                var result = this.walletManager.CreateNewAccount(request.WalletName, request.CoinType, request.AccountName, request.Password);
-                return this.Json(result);
+                var result = this.walletManager.GetUnusedAccount(request.WalletName, request.CoinType, request.Password);
+                return this.Json(result.Name);
             }
             catch (Exception e)
             {
                 return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, e.Message, e.ToString());
             }
         }
-
+        
         /// <summary>
-        /// Creates a new address for a wallet.
+        /// Gets an unused address.
         /// </summary>
-        /// <returns>An address in Base58 format.</returns>
+        /// <returns>The last created and unused address or creates a new address (in Base58 format).</returns>
         [Route("address")]
-        [HttpPost]
-        public IActionResult CreateNewAddress([FromBody]CreateAddressModel request)
+        [HttpGet]
+        public IActionResult GetUnusedAddress([FromQuery]GetUnusedAddressModel request)
         {
             // checks the request is valid
             if (!this.ModelState.IsValid)
@@ -395,8 +395,8 @@ namespace Breeze.Wallet.Controllers
             }
 
             try
-            {
-                var result = this.walletManager.CreateNewAddress(request.WalletName, request.CoinType, request.AccountName);
+            {               
+                var result = this.walletManager.GetUnusedAddress(request.WalletName, request.CoinType, request.AccountName);
                 return this.Json(result);
             }
             catch (Exception e)
