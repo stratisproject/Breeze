@@ -76,7 +76,7 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public Wallet RecoverWallet(string password, string folderPath, string name, string network, string mnemonic, string passphrase = null, DateTimeOffset? creationTime = null)
+        public Wallet RecoverWallet(string password, string folderPath, string name, string network, string mnemonic, string passphrase = null, DateTime? creationTime = null)
         {
             // for now the passphrase is set to be the password by default.
             if (passphrase == null)

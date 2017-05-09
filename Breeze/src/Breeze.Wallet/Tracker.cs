@@ -84,6 +84,15 @@ namespace Breeze.Wallet
                 repeatEvery: TimeSpans.FiveSeconds);
         }
 
+        /// <inheritdoc />
+        public void SyncFrom(DateTime date)
+        {
+            int blockSyncStart = this.chain.GetHeightAtTime(date);
+            
+            // start syncing blocks
+            this.blockNotification.SyncFrom(this.chain.GetBlock(blockSyncStart).HashBlock);
+        }
+
         private bool BlocksSynced()
         {
             return this.walletManager.Wallets.All(w => w.AccountsRoot.Single(a => a.CoinType == this.coinType).LastBlockSyncedHeight == this.chain.Tip.Height);

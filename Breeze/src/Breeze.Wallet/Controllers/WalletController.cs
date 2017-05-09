@@ -19,9 +19,12 @@ namespace Breeze.Wallet.Controllers
     {
         private readonly IWalletManager walletManager;
 
-        public WalletController(IWalletManager walletManager)
+        private readonly ITracker tracker;
+
+        public WalletController(IWalletManager walletManager, ITracker tracker)
         {
             this.walletManager = walletManager;
+            this.tracker = tracker;
         }
 
         /// <summary>
@@ -120,9 +123,10 @@ namespace Breeze.Wallet.Controllers
                 // get the wallet folder 
                 DirectoryInfo walletFolder = GetWalletFolder(request.FolderPath);
 
-                Wallet wallet = this.walletManager.RecoverWallet(request.Password, walletFolder.FullName, request.Name, request.Network, request.Mnemonic);
-         
-                // TODO give the tracker the date at which this wallet was originally created so that it can start syncing blocks for it
+                Wallet wallet = this.walletManager.RecoverWallet(request.Password, walletFolder.FullName, request.Name, request.Network, request.Mnemonic, null, request.CreationDate);
+                
+                // start syncing the wallet from the creation date
+                this.tracker.SyncFrom(request.CreationDate);
 
                 return this.Json(new WalletModel
                 {
