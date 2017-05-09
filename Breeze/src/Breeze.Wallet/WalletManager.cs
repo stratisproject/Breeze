@@ -21,7 +21,11 @@ namespace Breeze.Wallet
         public HashSet<Script> PubKeys { get; set; }
 
         public HashSet<TransactionDetails> TrackedTransactions { get; }
-        
+
+        private const int UnusedAddressesBuffer = 20;
+
+        private const int WalletRecoveryAccountsCreationCount = 3;
+
         public WalletManager()
         {
             this.Wallets = new List<Wallet>();
@@ -83,9 +87,21 @@ namespace Breeze.Wallet
             // generate the root seed used to generate keys
             ExtKey extendedKey = (new Mnemonic(mnemonic)).DeriveExtKey(passphrase);
 
-            // create a wallet file 
-            Wallet wallet = this.GenerateWalletFile(password, folderPath, name, WalletHelpers.GetNetwork(network), extendedKey, creationTime);
+            Network coinNetwork = WalletHelpers.GetNetwork(network);
 
+            // create a wallet file 
+            Wallet wallet = this.GenerateWalletFile(password, folderPath, name, coinNetwork, extendedKey, creationTime);
+
+            // generate multiple accounts and addresses from the get-go
+            for (int i = 0; i < WalletRecoveryAccountsCreationCount; i++)
+            {
+                HdAccount account = CreateNewAccount(wallet, CoinType.Bitcoin, password);
+                this.CreateAddressesInAccount(account, coinNetwork, UnusedAddressesBuffer);
+            }
+
+            // save the changes to the file and add addresses to be tracked
+            this.SaveToFile(wallet);
+            this.PubKeys = this.LoadKeys(CoinType.Bitcoin);
             this.Load(wallet);
             return wallet;
         }
@@ -208,7 +224,7 @@ namespace Breeze.Wallet
         /// </summary>
         /// <param name="account">The account.</param>
         /// <param name="network">The network.</param>
-        /// <param name="addressesQuantity">The addresses quantity.</param>
+        /// <param name="addressesQuantity">The number of addresses to create.</param>
         /// <returns>A list of addresses in Base58.</returns>
         private List<string> CreateAddressesInAccount(HdAccount account, Network network, int addressesQuantity)
         {
@@ -221,7 +237,7 @@ namespace Breeze.Wallet
                 indexOfLastUsedAddress = account.ExternalAddresses.Where(a => a.Transactions.Any()).Max(add => add.Index);
             }
 
-            for (int i = indexOfLastUsedAddress + 1; i <= indexOfLastUsedAddress + addressesQuantity; i++)
+            for (int i = indexOfLastUsedAddress; i <= indexOfLastUsedAddress + addressesQuantity; i++)
             {
                 // skip over addresses that already exist
                 if (account.ExternalAddresses.ElementAtOrDefault(i) != null)
