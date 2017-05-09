@@ -100,6 +100,7 @@ export class ApiService {
       let params: URLSearchParams = new URLSearchParams();
       params.set('walletName', data.walletName);
       params.set('coinType', data.coinType.toString());
+      params.set('accountName', "account 0"); //temporary
 
       return this.http
         .get(this.webApiUrl + '/wallet/address', new RequestOptions({headers: this.headers, search: params}))

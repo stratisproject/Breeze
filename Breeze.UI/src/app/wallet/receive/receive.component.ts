@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ApiService } from '../../shared/services/api.service';
+import { GlobalService } from '../../shared/services/global.service';
 
 import { WalletInfo } from '../../shared/classes/wallet-info';
 
@@ -11,19 +12,18 @@ import { WalletInfo } from '../../shared/classes/wallet-info';
 })
 
 export class ReceiveComponent {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private globalService: GlobalService) {}
 
   private address: any;
   private errorMessage: string;
-  private walletInfo: WalletInfo;
 
   ngOnInit() {
     this.getUnusedReceiveAddresses();
   }
 
   private getUnusedReceiveAddresses() {
-    this.walletInfo = new WalletInfo("Test", 0, "Test")
-    this.apiService.getUnusedReceiveAddress(this.walletInfo)
+    let walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getCoinType())
+    this.apiService.getUnusedReceiveAddress(walletInfo)
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {

@@ -27,8 +27,8 @@ export class DashboardComponent {
               response =>  {
                   if (response.status >= 200 && response.status < 400) {
                       this.balanceResponse = response.json();
-                      this.confirmedBalance = this.balanceResponse.confirmed;
-                      this.unconfirmedBalance = this.balanceResponse.unconfirmed;
+                      this.confirmedBalance = this.balanceResponse.balances[0].amountConfirmed;
+                      this.unconfirmedBalance = this.balanceResponse.balances[0].amountUnconfirmed;
                   }
               },
               error => {
