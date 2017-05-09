@@ -24,7 +24,14 @@ namespace Breeze.Wallet
 
         private const int UnusedAddressesBuffer = 20;
 
-        private const int WalletRecoveryAccountsCreationCount = 3;
+        private const int WalletRecoveryAccountsCount = 3;
+
+        private const int WalletCreationAccountsCount = 2;
+
+        /// <summary>
+        /// Occurs when a transaction is found.
+        /// </summary>
+        public event EventHandler<TransactionFoundEventArgs> TransactionFound;
 
         public WalletManager()
         {
@@ -40,6 +47,7 @@ namespace Breeze.Wallet
             // TODO get the coin type from somewhere else
             this.PubKeys = this.LoadKeys(CoinType.Bitcoin);
             this.TrackedTransactions = this.LoadTransactions(CoinType.Bitcoin);
+            this.TransactionFound += this.OnTransactionFound;           
         }
 
         /// <inheritdoc />
@@ -56,10 +64,24 @@ namespace Breeze.Wallet
             Mnemonic mnemonic = new Mnemonic(Wordlist.English, WordCount.Twelve);
             ExtKey extendedKey = mnemonic.DeriveExtKey(passphrase);
 
-            // create a wallet file 
-            Wallet wallet = this.GenerateWalletFile(password, folderPath, name, WalletHelpers.GetNetwork(network), extendedKey);
+            Network coinNetwork = WalletHelpers.GetNetwork(network);
 
+            // create a wallet file 
+            Wallet wallet = this.GenerateWalletFile(password, folderPath, name, coinNetwork, extendedKey);
+
+            // generate multiple accounts and addresses from the get-go
+            for (int i = 0; i < WalletCreationAccountsCount; i++)
+            {
+                HdAccount account = CreateNewAccount(wallet, CoinType.Bitcoin, password);
+                this.CreateAddressesInAccount(account, coinNetwork, UnusedAddressesBuffer);
+                this.CreateAddressesInAccount(account, coinNetwork, UnusedAddressesBuffer, true);
+            }
+
+            // save the changes to the file and add addresses to be tracked
+            this.SaveToFile(wallet);
+            this.PubKeys = this.LoadKeys(CoinType.Bitcoin);
             this.Load(wallet);
+
             return mnemonic;
         }
 
@@ -93,7 +115,7 @@ namespace Breeze.Wallet
             Wallet wallet = this.GenerateWalletFile(password, folderPath, name, coinNetwork, extendedKey, creationTime);
 
             // generate multiple accounts and addresses from the get-go
-            for (int i = 0; i < WalletRecoveryAccountsCreationCount; i++)
+            for (int i = 0; i < WalletRecoveryAccountsCount; i++)
             {
                 HdAccount account = CreateNewAccount(wallet, CoinType.Bitcoin, password);
                 this.CreateAddressesInAccount(account, coinNetwork, UnusedAddressesBuffer);
@@ -104,6 +126,7 @@ namespace Breeze.Wallet
             this.SaveToFile(wallet);
             this.PubKeys = this.LoadKeys(CoinType.Bitcoin);
             this.Load(wallet);
+
             return wallet;
         }
 
@@ -385,6 +408,9 @@ namespace Breeze.Wallet
                                         Index = index
                                     }
                                 });
+
+                                // notify a transaction has been found
+                                this.TransactionFound?.Invoke(this, new TransactionFoundEventArgs(wallet, accountRoot.CoinType, account, address, false));
                             }
                         }
                     }
@@ -397,6 +423,28 @@ namespace Breeze.Wallet
                     Amount = amount
                 });
             }
+        }
+
+        private void OnTransactionFound(object sender, TransactionFoundEventArgs a)
+        {
+            Console.WriteLine("event raised");
+
+            var wallet = this.Wallets.Single(w => w.Name == a.WalletName);
+            var accountsRoot = wallet.AccountsRoot.Single(ar => ar.CoinType == a.CoinType);
+            var account = accountsRoot.Accounts.Single(acc => acc.Name == a.AccountName);
+
+            // calculate how many accounts to add to keep a buffer of 20 unused addresses
+            int lastUsedAddressIndex = account.GetLastUsedAddress(a.IsChange).Index;
+            int addressesCount = a.IsChange ? account.InternalAddresses.Count() : account.ExternalAddresses.Count();
+            int emptyAddressesCount = addressesCount - lastUsedAddressIndex - 1;
+            int accountsToAdd = UnusedAddressesBuffer - emptyAddressesCount;
+            this.CreateAddressesInAccount(account, wallet.Network, accountsToAdd, a.IsChange);
+
+            // persists the address to the wallet file
+            this.SaveToFile(wallet);
+
+            // adds the address to the list of tracked addresses
+            this.LoadKeys(a.CoinType);
         }
 
         /// <inheritdoc />
@@ -585,5 +633,23 @@ namespace Breeze.Wallet
 
         public Money Amount { get; internal set; }
 
+    }
+
+    public class TransactionFoundEventArgs : EventArgs
+    {
+        public string WalletName { get; set; }
+        public string AccountName { get; set; }
+        public CoinType CoinType { get; set; }
+        public string Address { get; set; }
+        public bool IsChange { get; set; }
+
+        public TransactionFoundEventArgs(Wallet wallet, CoinType coinType, HdAccount account, HdAddress address, bool isChange)
+        {
+            this.WalletName = wallet.Name;
+            this.CoinType = coinType;
+            this.AccountName = account.Name;
+            this.Address = address.Address;
+            this.IsChange = isChange;
+        }
     }
 }
