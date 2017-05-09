@@ -173,6 +173,34 @@ namespace Breeze.Wallet
         /// </summary>
         [JsonProperty(PropertyName = "internalAddresses")]
         public IEnumerable<HdAddress> InternalAddresses { get; set; }
+
+        /// <summary>
+        /// Gets the type of coin this account is for.
+        /// </summary>
+        /// <returns>A <see cref="CoinType"/>.</returns>
+        public CoinType GetCoinType()
+        {
+            string[] pathElements = this.HdPath.Split('/');
+            int coinType = int.Parse(pathElements[2].Replace("'", string.Empty));
+            return (CoinType)coinType;
+        }
+
+        /// <summary>
+        /// Gets the first receiving address that contains no transaction.
+        /// </summary>
+        /// <returns>An unused address</returns>
+        public HdAddress GetFirstUnusedExternalAddress()
+        {
+            var unusedAddresses = this.ExternalAddresses.Where(acc => !acc.Transactions.Any()).ToList();
+            if (!unusedAddresses.Any())
+            {
+                return null;
+            }
+
+            // gets the unused address with the lowest index
+            var index = unusedAddresses.Min(a => a.Index);
+            return unusedAddresses.Single(a => a.Index == index);
+        }
     }
 
     /// <summary>
