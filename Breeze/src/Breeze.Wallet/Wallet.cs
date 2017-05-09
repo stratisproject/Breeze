@@ -232,14 +232,7 @@ namespace Breeze.Wallet
         /// </summary>
         [JsonProperty(PropertyName = "index")]
         public int Index { get; set; }
-
-        /// <summary>
-        /// Gets or sets the creation time.
-        /// </summary>
-        [JsonProperty(PropertyName = "creationTime")]
-        [JsonConverter(typeof(DateTimeOffsetConverter))]
-        public DateTimeOffset CreationTime { get; set; }
-
+        
         /// <summary>
         /// The script pub key for this address.
         /// </summary>

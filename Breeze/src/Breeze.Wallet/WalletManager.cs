@@ -275,8 +275,7 @@ namespace Breeze.Wallet
                     HdPath = CreateBip44Path(account.GetCoinType(), account.Index, i, isChange),
                     ScriptPubKey = address.ScriptPubKey,
                     Address = address.ToString(),
-                    Transactions = new List<TransactionData>(),
-                    CreationTime = DateTimeOffset.Now
+                    Transactions = new List<TransactionData>()
                 }});
 
                 addressesCreated.Add(address.ToString());
