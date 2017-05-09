@@ -97,6 +97,7 @@ namespace Breeze.Wallet
             {
                 HdAccount account = CreateNewAccount(wallet, CoinType.Bitcoin, password);
                 this.CreateAddressesInAccount(account, coinNetwork, UnusedAddressesBuffer);
+                this.CreateAddressesInAccount(account, coinNetwork, UnusedAddressesBuffer, true);
             }
 
             // save the changes to the file and add addresses to be tracked
@@ -200,11 +201,10 @@ namespace Breeze.Wallet
             if (account.ExternalAddresses.Any())
             {
                 // check last created address contains transactions.
-                int lastAddressIndex = account.ExternalAddresses.Max(a => a.Index);
-                var lastAddress = account.ExternalAddresses.SingleOrDefault(a => a.Index == lastAddressIndex);
-                if (lastAddress != null && !lastAddress.Transactions.Any())
+                var firstUnusedExternalAddress = account.GetFirstUnusedExternalAddress();
+                if (firstUnusedExternalAddress != null)
                 {
-                    return lastAddress.Address;
+                    return firstUnusedExternalAddress.Address;
                 }
             }
 
@@ -225,34 +225,31 @@ namespace Breeze.Wallet
         /// <param name="account">The account.</param>
         /// <param name="network">The network.</param>
         /// <param name="addressesQuantity">The number of addresses to create.</param>
+        /// <param name="isChange">Whether the addresses added are change (internal) addresses or receiving (external) addresses.</param>
         /// <returns>A list of addresses in Base58.</returns>
-        private List<string> CreateAddressesInAccount(HdAccount account, Network network, int addressesQuantity)
+        private List<string> CreateAddressesInAccount(HdAccount account, Network network, int addressesQuantity, bool isChange = false)
         {
             List<string> addressesCreated = new List<string>();
 
+            var addresses = isChange ? account.InternalAddresses : account.ExternalAddresses;
+
             // gets the index of the last address with transactions
-            int indexOfLastUsedAddress = 0;
-            if (account.ExternalAddresses.Any())
+            int firstNewAddressIndex = 0;
+            if (addresses.Any())
             {
-                indexOfLastUsedAddress = account.ExternalAddresses.Where(a => a.Transactions.Any()).Max(add => add.Index);
+                firstNewAddressIndex = addresses.Max(add => add.Index) + 1;
             }
 
-            for (int i = indexOfLastUsedAddress; i <= indexOfLastUsedAddress + addressesQuantity; i++)
+            for (int i = firstNewAddressIndex; i < firstNewAddressIndex + addressesQuantity; i++)
             {
-                // skip over addresses that already exist
-                if (account.ExternalAddresses.ElementAtOrDefault(i) != null)
-                {
-                    continue;
-                }
-
                 // generate new receiving address
                 BitcoinPubKeyAddress address = this.GenerateAddress(account.ExtendedPubKey, i, false, network);
 
                 // add address details
-                account.ExternalAddresses = account.ExternalAddresses.Concat(new[] {new HdAddress
+                addresses = addresses.Concat(new[] {new HdAddress
                 {
                     Index = i,
-                    HdPath = CreateBip44Path(account.GetCoinType(), account.Index, i, false),
+                    HdPath = CreateBip44Path(account.GetCoinType(), account.Index, i, isChange),
                     ScriptPubKey = address.ScriptPubKey,
                     Address = address.ToString(),
                     Transactions = new List<TransactionData>(),
@@ -260,6 +257,15 @@ namespace Breeze.Wallet
                 }});
 
                 addressesCreated.Add(address.ToString());
+            }
+
+            if (isChange)
+            {
+                account.InternalAddresses = addresses;
+            }
+            else
+            {
+                account.ExternalAddresses = addresses;
             }
 
             return addressesCreated;
@@ -546,8 +552,8 @@ namespace Breeze.Wallet
                 SelectMany(a => a.Accounts).
                 SelectMany(a => a.ExternalAddresses).
                 Select(s => s.ScriptPubKey));
-              // uncomment the following for testing on a random address 
-              //Select(t => (new BitcoinPubKeyAddress(t.Address, Network.Main)).ScriptPubKey));
+            // uncomment the following for testing on a random address 
+            //Select(t => (new BitcoinPubKeyAddress(t.Address, Network.Main)).ScriptPubKey));
         }
 
         /// <summary>
