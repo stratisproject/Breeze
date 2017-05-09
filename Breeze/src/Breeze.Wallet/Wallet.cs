@@ -201,6 +201,25 @@ namespace Breeze.Wallet
             var index = unusedAddresses.Min(a => a.Index);
             return unusedAddresses.Single(a => a.Index == index);
         }
+
+        /// <summary>
+        /// Gets the last address that contains transactions.
+        /// </summary>
+        /// <param name="isChange">Whether the address is a change (internal) address or receiving (external) address.</param>
+        /// <returns></returns>
+        public HdAddress GetLastUsedAddress(bool isChange)
+        {
+            IEnumerable<HdAddress> addresses = isChange ? this.InternalAddresses : this.ExternalAddresses;
+            var usedAddresses = addresses.Where(acc => acc.Transactions.Any()).ToList();
+            if (!usedAddresses.Any())
+            {
+                return null;
+            }
+
+            // gets the used address with the highest index
+            var index = usedAddresses.Max(a => a.Index);
+            return usedAddresses.Single(a => a.Index == index);
+        }        
     }
 
     /// <summary>
