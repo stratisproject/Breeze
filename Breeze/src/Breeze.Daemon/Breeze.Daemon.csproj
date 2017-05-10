@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.0</TargetFramework>
-    <AssemblyName>Breeze.Deamon</AssemblyName>
+    <AssemblyName>Breeze.Daemon</AssemblyName>
     <OutputType>Exe</OutputType>
-    <PackageId>Breeze.Deamon</PackageId>
+    <PackageId>Breeze.Daemon</PackageId>
     <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>

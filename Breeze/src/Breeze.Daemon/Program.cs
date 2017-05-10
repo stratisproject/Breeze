@@ -9,7 +9,7 @@ using Stratis.Bitcoin.Logging;
 using Breeze.Wallet;
 using Stratis.Bitcoin.Notifications;
 
-namespace Breeze.Deamon
+namespace Breeze.Daemon
 {
 	public class Program
     {
