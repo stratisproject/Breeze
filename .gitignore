@@ -295,4 +295,4 @@ Thumbs.db
 
 # DNX
 project.lock.json
-/Breeze/src/Breeze.Deamon/Wallets
+/Breeze/src/Breeze.Daemon/Wallets

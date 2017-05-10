@@ -198,8 +198,9 @@ namespace Breeze.Wallet.Controllers
             {
                 WalletHistoryModel model = new WalletHistoryModel { Transactions = new List<TransactionItem>() };
 
-                var accounts = this.walletManager.GetAccountsByCoinType(request.WalletName, request.CoinType).ToList();
-                foreach (var address in accounts.SelectMany(a => a.ExternalAddresses).Concat(accounts.SelectMany(a => a.InternalAddresses)))
+                // get transactions contained in the wallet
+                var addresses = this.walletManager.GetHistoryByCoinType(request.WalletName, request.CoinType);
+                foreach (var address in addresses)
                 {
                     foreach (var transaction in address.Transactions)
                     {
@@ -213,7 +214,7 @@ namespace Breeze.Wallet.Controllers
                         });
                     }
                 }
-
+                
                 model.Transactions = model.Transactions.OrderByDescending(t => t.Timestamp).ToList();
                 return this.Json(model);
             }

@@ -40,14 +40,14 @@ namespace Breeze.Wallet
             // find wallets and load them in memory
             foreach (var path in this.GetWalletFilesPaths())
             {
-                this.Load(this.GetWallet(path));
+                this.Load(this.DeserializeWallet(path));
             }
 
             // load data in memory for faster lookups
             // TODO get the coin type from somewhere else
             this.PubKeys = this.LoadKeys(CoinType.Bitcoin);
             this.TrackedTransactions = this.LoadTransactions(CoinType.Bitcoin);
-            this.TransactionFound += this.OnTransactionFound;           
+            this.TransactionFound += this.OnTransactionFound;
         }
 
         /// <inheritdoc />
@@ -91,7 +91,7 @@ namespace Breeze.Wallet
             string walletFilePath = Path.Combine(folderPath, $"{name}.json");
 
             // load the file from the local system
-            Wallet wallet = this.GetWallet(walletFilePath);
+            Wallet wallet = this.DeserializeWallet(walletFilePath);
 
             this.Load(wallet);
             return wallet;
@@ -133,11 +133,7 @@ namespace Breeze.Wallet
         /// <inheritdoc />
         public HdAccount GetUnusedAccount(string walletName, CoinType coinType, string password)
         {
-            Wallet wallet = this.Wallets.SingleOrDefault(w => w.Name == walletName);
-            if (wallet == null)
-            {
-                throw new Exception($"No wallet with name {walletName} could be found.");
-            }
+            Wallet wallet = this.GetWalletByName(walletName);
 
             return this.GetUnusedAccount(wallet, coinType, password);
         }
@@ -207,11 +203,7 @@ namespace Breeze.Wallet
         /// <inheritdoc />
         public string GetUnusedAddress(string walletName, CoinType coinType, string accountName)
         {
-            Wallet wallet = this.Wallets.SingleOrDefault(w => w.Name == walletName);
-            if (wallet == null)
-            {
-                throw new Exception($"No wallet with name {walletName} could be found.");
-            }
+            Wallet wallet = this.GetWalletByName(walletName);
 
             // get the account
             HdAccount account = wallet.AccountsRoot.Single(a => a.CoinType == coinType).Accounts.SingleOrDefault(a => a.Name == accountName);
@@ -240,6 +232,28 @@ namespace Breeze.Wallet
             // adds the address to the list of tracked addresses
             this.PubKeys = this.LoadKeys(coinType);
             return account.GetFirstUnusedExternalAddress().Address;
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<HdAddress> GetHistoryByCoinType(string walletName, CoinType coinType)
+        {
+            Wallet wallet = this.GetWalletByName(walletName);
+
+            return this.GetHistoryByCoinType(wallet, coinType);
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<HdAddress> GetHistoryByCoinType(Wallet wallet, CoinType coinType)
+        {
+            var accounts = wallet.GetAccountsByCoinType(coinType).ToList();
+
+            foreach (var address in accounts.SelectMany(a => a.ExternalAddresses).Concat(accounts.SelectMany(a => a.InternalAddresses)))
+            {
+                if (address.Transactions.Any())
+                {
+                    yield return address;
+                }
+            }
         }
 
         /// <summary>
@@ -275,8 +289,7 @@ namespace Breeze.Wallet
                     HdPath = CreateBip44Path(account.GetCoinType(), account.Index, i, isChange),
                     ScriptPubKey = address.ScriptPubKey,
                     Address = address.ToString(),
-                    Transactions = new List<TransactionData>(),
-                    CreationTime = DateTimeOffset.Now
+                    Transactions = new List<TransactionData>()
                 }});
 
                 addressesCreated.Add(address.ToString());
@@ -302,9 +315,9 @@ namespace Breeze.Wallet
         /// <inheritdoc />
         public IEnumerable<HdAccount> GetAccountsByCoinType(string walletName, CoinType coinType)
         {
-            return this.Wallets.
-                SelectMany(w => w.AccountsRoot.Where(a => a.CoinType == coinType)).
-                SelectMany(a => a.Accounts);
+            Wallet wallet = this.GetWalletByName(walletName);
+
+            return wallet.GetAccountsByCoinType(coinType);
         }
 
         public WalletBuildTransactionModel BuildTransaction(string password, string address, Money amount, string feeType, bool allowUnconfirmed)
@@ -342,13 +355,13 @@ namespace Breeze.Wallet
         {
             Console.WriteLine($"transaction notification: tx hash {transaction.GetHash()}, coin type: {coinType}");
 
-            foreach (var k in this.PubKeys)
+            foreach (var pubKey in this.PubKeys)
             {
                 // check if the outputs contain one of our addresses
-                var utxo = transaction.Outputs.SingleOrDefault(o => k == o.ScriptPubKey);
+                var utxo = transaction.Outputs.SingleOrDefault(o => pubKey == o.ScriptPubKey);
                 if (utxo != null)
                 {
-                    AddTransactionToWallet(coinType, transaction.GetHash(), transaction.Time, transaction.Outputs.IndexOf(utxo), utxo.Value, k, blockHeight, blockTime);
+                    AddTransactionToWallet(coinType, transaction.GetHash(), transaction.Time, transaction.Outputs.IndexOf(utxo), utxo.Value, pubKey, blockHeight, blockTime);
                 }
 
                 // if the inputs have a reference to a transaction containing one of our scripts
@@ -359,7 +372,7 @@ namespace Breeze.Wallet
                     // compare the index of the output in its original transaction and the index references in the input
                     if (input.PrevOut.N == tTx.Index)
                     {
-                        AddTransactionToWallet(coinType, transaction.GetHash(), transaction.Time, null, -tTx.Amount, k, blockHeight, blockTime);
+                        AddTransactionToWallet(coinType, transaction.GetHash(), transaction.Time, null, -tTx.Amount, pubKey, blockHeight, blockTime, tTx.Hash, tTx.Index);                                                
                     }
                 }
             }
@@ -376,7 +389,9 @@ namespace Breeze.Wallet
         /// <param name="script">The script.</param>
         /// <param name="blockHeight">Height of the block.</param>
         /// <param name="blockTime">The block time.</param>
-        private void AddTransactionToWallet(CoinType coinType, uint256 transactionHash, uint time, int? index, Money amount, Script script, int? blockHeight = null, uint? blockTime = null)
+        /// <param name="spendingTransactionId">The id of the transaction containing the output being spent, if this is a spending transaction.</param>
+        /// <param name="spendingTransactionIndex">The index of the output in the transaction being referenced, if this is a spending transaction.</param>
+        private void AddTransactionToWallet(CoinType coinType, uint256 transactionHash, uint time, int? index, Money amount, Script script, int? blockHeight = null, uint? blockTime = null, uint256 spendingTransactionId = null, int? spendingTransactionIndex = null)
         {
             // selects all the transactions we already have in the wallet
             var txs = this.Wallets.
@@ -403,7 +418,7 @@ namespace Breeze.Wallet
                                         Amount = amount,
                                         BlockHeight = blockHeight,
                                         Confirmed = blockHeight.HasValue,
-                                        Id = transactionHash,
+                                        Id = transactionHash,                                        
                                         CreationTime = DateTimeOffset.FromUnixTimeMilliseconds(blockTime ?? time),
                                         Index = index
                                     }
@@ -411,6 +426,16 @@ namespace Breeze.Wallet
 
                                 // notify a transaction has been found
                                 this.TransactionFound?.Invoke(this, new TransactionFoundEventArgs(wallet, accountRoot.CoinType, account, address, false));
+                            }
+
+                            // if this is a spending transaction, mark the spent transaction as such
+                            if (spendingTransactionId != null)
+                            {
+                                var transactions = account.GetTransactionsById(spendingTransactionId);
+                                if (transactions.Any())
+                                {
+                                    transactions.Single(t => t.Index == spendingTransactionIndex).SpentInTransaction = transactionHash;
+                                }
                             }
                         }
                     }
@@ -518,7 +543,7 @@ namespace Breeze.Wallet
         /// <param name="walletFilePath">The wallet file path.</param>
         /// <returns></returns>
         /// <exception cref="System.IO.FileNotFoundException"></exception>
-        private Wallet GetWallet(string walletFilePath)
+        private Wallet DeserializeWallet(string walletFilePath)
         {
             if (!File.Exists(walletFilePath))
                 throw new FileNotFoundException($"No wallet file found at {walletFilePath}");
@@ -600,8 +625,8 @@ namespace Breeze.Wallet
                 SelectMany(a => a.Accounts).
                 SelectMany(a => a.ExternalAddresses).
                 Select(s => s.ScriptPubKey));
-            // uncomment the following for testing on a random address 
-            //Select(t => (new BitcoinPubKeyAddress(t.Address, Network.Main)).ScriptPubKey));
+                // uncomment the following for testing on a random address 
+                //Select(t => (new BitcoinPubKeyAddress(t.Address, Network.Main)).ScriptPubKey));
         }
 
         /// <summary>
@@ -622,6 +647,22 @@ namespace Breeze.Wallet
                     Index = t.Index,
                     Amount = t.Amount
                 }));
+        }
+
+        /// <summary>
+        /// Gets a wallet given its name.
+        /// </summary>
+        /// <param name="walletName">The name of the wallet to get.</param>
+        /// <returns>A wallet or null if it doesn't exist</returns>
+        private Wallet GetWalletByName(string walletName)
+        {
+            Wallet wallet = this.Wallets.SingleOrDefault(w => w.Name == walletName);
+            if (wallet == null)
+            {
+                throw new Exception($"No wallet with name {walletName} could be found.");
+            }
+
+            return wallet;
         }
     }
 

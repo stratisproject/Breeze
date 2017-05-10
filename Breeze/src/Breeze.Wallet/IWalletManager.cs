@@ -74,7 +74,7 @@ namespace Breeze.Wallet
         /// </remarks>
         /// <returns>An unused account.</returns>
         HdAccount GetUnusedAccount(Wallet wallet, CoinType coinType, string password);
-        
+
         /// <summary>
         /// Creates a new account.
         /// </summary>
@@ -96,6 +96,22 @@ namespace Breeze.Wallet
         /// <param name="accountName">The name of the account in which this address is contained.</param>
         /// <returns>An unused address or a newly created address, in Base58 format.</returns>
         string GetUnusedAddress(string walletName, CoinType coinType, string accountName);
+
+        /// <summary>
+        /// Gets a collection of addresses containing transactions for this coin.
+        /// </summary>
+        /// <param name="walletName">The name of the wallet to get history from.</param>
+        /// <param name="coinType">Type of the coin.</param>
+        /// <returns></returns>
+        IEnumerable<HdAddress> GetHistoryByCoinType(string walletName, CoinType coinType);
+
+        /// <summary>
+        /// Gets a collection of addresses containing transactions for this coin.
+        /// </summary>
+        /// <param name="wallet">The wallet to get history from.</param>
+        /// <param name="coinType">Type of the coin.</param>
+        /// <returns></returns>
+        IEnumerable<HdAddress> GetHistoryByCoinType(Wallet wallet, CoinType coinType);
 
         WalletGeneralInfoModel GetGeneralInfo(string walletName);
 
@@ -126,6 +142,6 @@ namespace Breeze.Wallet
         /// <param name="transaction">The transaction.</param>
         /// <param name="blockHeight">The height of the block this transaction came from. Null if it was not a transaction included in a block.</param>
         /// <param name="blockTime">The block time.</param>
-        void ProcessTransaction(CoinType coinType, NBitcoin.Transaction transaction, int? blockHeight = null, uint? blockTime = null);       
+        void ProcessTransaction(CoinType coinType, NBitcoin.Transaction transaction, int? blockHeight = null, uint? blockTime = null);
     }
 }

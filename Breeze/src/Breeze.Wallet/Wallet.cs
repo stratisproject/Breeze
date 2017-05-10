@@ -57,6 +57,33 @@ namespace Breeze.Wallet
         /// </summary>
         [JsonProperty(PropertyName = "accountsRoot")]
         public IEnumerable<AccountRoot> AccountsRoot { get; set; }
+
+        /// <summary>
+        /// Gets the type of the accounts by coin.
+        /// </summary>
+        /// <param name="coinType">Type of the coin.</param>
+        /// <returns></returns>
+        public IEnumerable<HdAccount> GetAccountsByCoinType(CoinType coinType)
+        {
+            return this.AccountsRoot.Where(a => a.CoinType == coinType).SelectMany(a => a.Accounts);
+        }
+
+        /// <summary>
+        /// Gets all the transactions by coin type.
+        /// </summary>
+        /// <param name="coinType">Type of the coin.</param>
+        /// <returns></returns>
+        public IEnumerable<TransactionData> GetAllTransactionsByCoinType(CoinType coinType)
+        {
+            List<TransactionData> result = new List<TransactionData>();
+            var accounts = this.GetAccountsByCoinType(coinType).ToList();
+            
+            foreach (var address in accounts.SelectMany(a => a.ExternalAddresses).Concat(accounts.SelectMany(a => a.InternalAddresses)))
+            {
+                result.AddRange(address.Transactions);
+            }
+            return result;
+        }
     }
 
     /// <summary>
@@ -219,7 +246,18 @@ namespace Breeze.Wallet
             // gets the used address with the highest index
             var index = usedAddresses.Max(a => a.Index);
             return usedAddresses.Single(a => a.Index == index);
-        }        
+        }
+
+        /// <summary>
+        /// Gets a collection of transactions by id.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        public IEnumerable<TransactionData> GetTransactionsById(uint256 id)
+        {
+            var addresses = this.ExternalAddresses.Concat(this.InternalAddresses);
+            return addresses.SelectMany(a => a.Transactions.Where(t => t.Id == id));
+        }
     }
 
     /// <summary>
@@ -232,14 +270,7 @@ namespace Breeze.Wallet
         /// </summary>
         [JsonProperty(PropertyName = "index")]
         public int Index { get; set; }
-
-        /// <summary>
-        /// Gets or sets the creation time.
-        /// </summary>
-        [JsonProperty(PropertyName = "creationTime")]
-        [JsonConverter(typeof(DateTimeOffsetConverter))]
-        public DateTimeOffset CreationTime { get; set; }
-
+        
         /// <summary>
         /// The script pub key for this address.
         /// </summary>
@@ -283,6 +314,13 @@ namespace Breeze.Wallet
         [JsonProperty(PropertyName = "id")]
         [JsonConverter(typeof(UInt256JsonConverter))]
         public uint256 Id { get; set; }
+
+        /// <summary>
+        /// The id of the transaction in which the output referenced in this transaction is spent.
+        /// </summary>
+        [JsonProperty(PropertyName = "spentIn", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(UInt256JsonConverter))]
+        public uint256 SpentInTransaction { get; set; }
 
         /// <summary>
         /// The transaction amount.
