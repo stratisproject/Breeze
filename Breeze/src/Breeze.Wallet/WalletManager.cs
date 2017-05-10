@@ -28,12 +28,14 @@ namespace Breeze.Wallet
 
         private const int WalletCreationAccountsCount = 2;
 
+        private readonly CoinType coinType;
+
         /// <summary>
         /// Occurs when a transaction is found.
         /// </summary>
         public event EventHandler<TransactionFoundEventArgs> TransactionFound;
 
-        public WalletManager()
+        public WalletManager(ConcurrentChain chain)
         {
             this.Wallets = new List<Wallet>();
 
@@ -43,10 +45,12 @@ namespace Breeze.Wallet
                 this.Load(this.DeserializeWallet(path));
             }
 
+            this.coinType = chain.GetCoinType();
+
             // load data in memory for faster lookups
             // TODO get the coin type from somewhere else
-            this.PubKeys = this.LoadKeys(CoinType.Bitcoin);
-            this.TrackedTransactions = this.LoadTransactions(CoinType.Bitcoin);
+            this.PubKeys = this.LoadKeys(this.coinType);
+            this.TrackedTransactions = this.LoadTransactions(this.coinType);
             this.TransactionFound += this.OnTransactionFound;
         }
 
@@ -72,14 +76,14 @@ namespace Breeze.Wallet
             // generate multiple accounts and addresses from the get-go
             for (int i = 0; i < WalletCreationAccountsCount; i++)
             {
-                HdAccount account = CreateNewAccount(wallet, CoinType.Bitcoin, password);
+                HdAccount account = CreateNewAccount(wallet, this.coinType, password);
                 this.CreateAddressesInAccount(account, coinNetwork, UnusedAddressesBuffer);
                 this.CreateAddressesInAccount(account, coinNetwork, UnusedAddressesBuffer, true);
             }
 
             // save the changes to the file and add addresses to be tracked
             this.SaveToFile(wallet);
-            this.PubKeys = this.LoadKeys(CoinType.Bitcoin);
+            this.PubKeys = this.LoadKeys(this.coinType);
             this.Load(wallet);
 
             return mnemonic;
@@ -117,14 +121,14 @@ namespace Breeze.Wallet
             // generate multiple accounts and addresses from the get-go
             for (int i = 0; i < WalletRecoveryAccountsCount; i++)
             {
-                HdAccount account = CreateNewAccount(wallet, CoinType.Bitcoin, password);
+                HdAccount account = CreateNewAccount(wallet, this.coinType, password);
                 this.CreateAddressesInAccount(account, coinNetwork, UnusedAddressesBuffer);
                 this.CreateAddressesInAccount(account, coinNetwork, UnusedAddressesBuffer, true);
             }
 
             // save the changes to the file and add addresses to be tracked
             this.SaveToFile(wallet);
-            this.PubKeys = this.LoadKeys(CoinType.Bitcoin);
+            this.PubKeys = this.LoadKeys(this.coinType);
             this.Load(wallet);
 
             return wallet;
