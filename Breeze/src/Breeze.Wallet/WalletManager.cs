@@ -242,6 +242,32 @@ namespace Breeze.Wallet
             return account.GetFirstUnusedExternalAddress().Address;
         }
 
+        /// <inheritdoc />
+        public IEnumerable<HdAddress> GetHistoryByCoinType(string walletName, CoinType coinType)
+        {
+            Wallet wallet = this.Wallets.SingleOrDefault(w => w.Name == walletName);
+            if (wallet == null)
+            {
+                throw new Exception($"No wallet with name {walletName} could be found.");
+            }
+
+            return this.GetHistoryByCoinType(wallet, coinType);
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<HdAddress> GetHistoryByCoinType(Wallet wallet, CoinType coinType)
+        {
+            var accounts = wallet.GetAccountsByCoinType(coinType).ToList();
+
+            foreach (var address in accounts.SelectMany(a => a.ExternalAddresses).Concat(accounts.SelectMany(a => a.InternalAddresses)))
+            {
+                if (address.Transactions.Any())
+                {
+                    yield return address;
+                }                
+            }            
+        }
+
         /// <summary>
         /// Creates a number of addresses in the provided account.
         /// </summary>
@@ -301,9 +327,13 @@ namespace Breeze.Wallet
         /// <inheritdoc />
         public IEnumerable<HdAccount> GetAccountsByCoinType(string walletName, CoinType coinType)
         {
-            return this.Wallets.
-                SelectMany(w => w.AccountsRoot.Where(a => a.CoinType == coinType)).
-                SelectMany(a => a.Accounts);
+            Wallet wallet = this.Wallets.SingleOrDefault(w => w.Name == walletName);
+            if (wallet == null)
+            {
+                throw new Exception($"No wallet with name {walletName} could be found.");
+            }
+
+            return wallet.GetAccountsByCoinType(coinType);
         }
 
         public WalletBuildTransactionModel BuildTransaction(string password, string address, Money amount, string feeType, bool allowUnconfirmed)

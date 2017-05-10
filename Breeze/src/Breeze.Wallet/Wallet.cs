@@ -57,6 +57,33 @@ namespace Breeze.Wallet
         /// </summary>
         [JsonProperty(PropertyName = "accountsRoot")]
         public IEnumerable<AccountRoot> AccountsRoot { get; set; }
+
+        /// <summary>
+        /// Gets the type of the accounts by coin.
+        /// </summary>
+        /// <param name="coinType">Type of the coin.</param>
+        /// <returns></returns>
+        public IEnumerable<HdAccount> GetAccountsByCoinType(CoinType coinType)
+        {
+            return this.AccountsRoot.Where(a => a.CoinType == coinType).SelectMany(a => a.Accounts);
+        }
+
+        /// <summary>
+        /// Gets all the transactions by coin type.
+        /// </summary>
+        /// <param name="coinType">Type of the coin.</param>
+        /// <returns></returns>
+        public IEnumerable<TransactionData> GetAllTransactionsByCoinType(CoinType coinType)
+        {
+            List<TransactionData> result = new List<TransactionData>();
+            var accounts = this.GetAccountsByCoinType(coinType).ToList();
+            
+            foreach (var address in accounts.SelectMany(a => a.ExternalAddresses).Concat(accounts.SelectMany(a => a.InternalAddresses)))
+            {
+                result.AddRange(address.Transactions);
+            }
+            return result;
+        }
     }
 
     /// <summary>
