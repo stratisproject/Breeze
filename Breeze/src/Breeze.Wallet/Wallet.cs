@@ -246,7 +246,18 @@ namespace Breeze.Wallet
             // gets the used address with the highest index
             var index = usedAddresses.Max(a => a.Index);
             return usedAddresses.Single(a => a.Index == index);
-        }        
+        }
+
+        /// <summary>
+        /// Gets a collection of transactions by id.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        public IEnumerable<TransactionData> GetTransactionsById(uint256 id)
+        {
+            var addresses = this.ExternalAddresses.Concat(this.InternalAddresses);
+            return addresses.SelectMany(a => a.Transactions.Where(t => t.Id == id));
+        }
     }
 
     /// <summary>
@@ -303,6 +314,13 @@ namespace Breeze.Wallet
         [JsonProperty(PropertyName = "id")]
         [JsonConverter(typeof(UInt256JsonConverter))]
         public uint256 Id { get; set; }
+
+        /// <summary>
+        /// The id of the transaction in which the output referenced in this transaction is spent.
+        /// </summary>
+        [JsonProperty(PropertyName = "spentIn", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(UInt256JsonConverter))]
+        public uint256 SpentInTransaction { get; set; }
 
         /// <summary>
         /// The transaction amount.

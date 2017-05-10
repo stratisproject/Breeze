@@ -355,13 +355,13 @@ namespace Breeze.Wallet
         {
             Console.WriteLine($"transaction notification: tx hash {transaction.GetHash()}, coin type: {coinType}");
 
-            foreach (var k in this.PubKeys)
+            foreach (var pubKey in this.PubKeys)
             {
                 // check if the outputs contain one of our addresses
-                var utxo = transaction.Outputs.SingleOrDefault(o => k == o.ScriptPubKey);
+                var utxo = transaction.Outputs.SingleOrDefault(o => pubKey == o.ScriptPubKey);
                 if (utxo != null)
                 {
-                    AddTransactionToWallet(coinType, transaction.GetHash(), transaction.Time, transaction.Outputs.IndexOf(utxo), utxo.Value, k, blockHeight, blockTime);
+                    AddTransactionToWallet(coinType, transaction.GetHash(), transaction.Time, transaction.Outputs.IndexOf(utxo), utxo.Value, pubKey, blockHeight, blockTime);
                 }
 
                 // if the inputs have a reference to a transaction containing one of our scripts
@@ -372,7 +372,7 @@ namespace Breeze.Wallet
                     // compare the index of the output in its original transaction and the index references in the input
                     if (input.PrevOut.N == tTx.Index)
                     {
-                        AddTransactionToWallet(coinType, transaction.GetHash(), transaction.Time, null, -tTx.Amount, k, blockHeight, blockTime);
+                        AddTransactionToWallet(coinType, transaction.GetHash(), transaction.Time, null, -tTx.Amount, pubKey, blockHeight, blockTime, tTx.Hash, tTx.Index);                                                
                     }
                 }
             }
@@ -389,7 +389,9 @@ namespace Breeze.Wallet
         /// <param name="script">The script.</param>
         /// <param name="blockHeight">Height of the block.</param>
         /// <param name="blockTime">The block time.</param>
-        private void AddTransactionToWallet(CoinType coinType, uint256 transactionHash, uint time, int? index, Money amount, Script script, int? blockHeight = null, uint? blockTime = null)
+        /// <param name="spendingTransactionId">The id of the transaction containing the output being spent, if this is a spending transaction.</param>
+        /// <param name="spendingTransactionIndex">The index of the output in the transaction being referenced, if this is a spending transaction.</param>
+        private void AddTransactionToWallet(CoinType coinType, uint256 transactionHash, uint time, int? index, Money amount, Script script, int? blockHeight = null, uint? blockTime = null, uint256 spendingTransactionId = null, int? spendingTransactionIndex = null)
         {
             // selects all the transactions we already have in the wallet
             var txs = this.Wallets.
@@ -407,7 +409,7 @@ namespace Breeze.Wallet
                     {
                         foreach (var account in accountRoot.Accounts)
                         {
-                            foreach (var address in account.ExternalAddresses.Where(a => a.Address == "1H2jbtknP6jRYx2riaXJf3H9Mb1JC6kcL2"))
+                            foreach (var address in account.ExternalAddresses.Where(a => a.ScriptPubKey == script))
                             {
                                 address.Transactions = address.Transactions.Concat(new[]
                                 {
@@ -416,7 +418,7 @@ namespace Breeze.Wallet
                                         Amount = amount,
                                         BlockHeight = blockHeight,
                                         Confirmed = blockHeight.HasValue,
-                                        Id = transactionHash,
+                                        Id = transactionHash,                                        
                                         CreationTime = DateTimeOffset.FromUnixTimeMilliseconds(blockTime ?? time),
                                         Index = index
                                     }
@@ -424,6 +426,16 @@ namespace Breeze.Wallet
 
                                 // notify a transaction has been found
                                 this.TransactionFound?.Invoke(this, new TransactionFoundEventArgs(wallet, accountRoot.CoinType, account, address, false));
+                            }
+
+                            // if this is a spending transaction, mark the spent transaction as such
+                            if (spendingTransactionId != null)
+                            {
+                                var transactions = account.GetTransactionsById(spendingTransactionId);
+                                if (transactions.Any())
+                                {
+                                    transactions.Single(t => t.Index == spendingTransactionIndex).SpentInTransaction = transactionHash;
+                                }
                             }
                         }
                     }
@@ -612,9 +624,9 @@ namespace Breeze.Wallet
                 SelectMany(w => w.AccountsRoot.Where(a => a.CoinType == coinType)).
                 SelectMany(a => a.Accounts).
                 SelectMany(a => a.ExternalAddresses).
-                //Select(s => s.ScriptPubKey));
+                Select(s => s.ScriptPubKey));
                 // uncomment the following for testing on a random address 
-                Select(t => (new BitcoinPubKeyAddress(t.Address, Network.Main)).ScriptPubKey));
+                //Select(t => (new BitcoinPubKeyAddress(t.Address, Network.Main)).ScriptPubKey));
         }
 
         /// <summary>
