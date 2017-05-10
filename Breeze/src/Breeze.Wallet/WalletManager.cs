@@ -40,14 +40,14 @@ namespace Breeze.Wallet
             // find wallets and load them in memory
             foreach (var path in this.GetWalletFilesPaths())
             {
-                this.Load(this.GetWallet(path));
+                this.Load(this.DeserializeWallet(path));
             }
 
             // load data in memory for faster lookups
             // TODO get the coin type from somewhere else
             this.PubKeys = this.LoadKeys(CoinType.Bitcoin);
             this.TrackedTransactions = this.LoadTransactions(CoinType.Bitcoin);
-            this.TransactionFound += this.OnTransactionFound;           
+            this.TransactionFound += this.OnTransactionFound;
         }
 
         /// <inheritdoc />
@@ -91,7 +91,7 @@ namespace Breeze.Wallet
             string walletFilePath = Path.Combine(folderPath, $"{name}.json");
 
             // load the file from the local system
-            Wallet wallet = this.GetWallet(walletFilePath);
+            Wallet wallet = this.DeserializeWallet(walletFilePath);
 
             this.Load(wallet);
             return wallet;
@@ -133,11 +133,7 @@ namespace Breeze.Wallet
         /// <inheritdoc />
         public HdAccount GetUnusedAccount(string walletName, CoinType coinType, string password)
         {
-            Wallet wallet = this.Wallets.SingleOrDefault(w => w.Name == walletName);
-            if (wallet == null)
-            {
-                throw new Exception($"No wallet with name {walletName} could be found.");
-            }
+            Wallet wallet = this.GetWalletByName(walletName);
 
             return this.GetUnusedAccount(wallet, coinType, password);
         }
@@ -207,11 +203,7 @@ namespace Breeze.Wallet
         /// <inheritdoc />
         public string GetUnusedAddress(string walletName, CoinType coinType, string accountName)
         {
-            Wallet wallet = this.Wallets.SingleOrDefault(w => w.Name == walletName);
-            if (wallet == null)
-            {
-                throw new Exception($"No wallet with name {walletName} could be found.");
-            }
+            Wallet wallet = this.GetWalletByName(walletName);
 
             // get the account
             HdAccount account = wallet.AccountsRoot.Single(a => a.CoinType == coinType).Accounts.SingleOrDefault(a => a.Name == accountName);
@@ -245,11 +237,7 @@ namespace Breeze.Wallet
         /// <inheritdoc />
         public IEnumerable<HdAddress> GetHistoryByCoinType(string walletName, CoinType coinType)
         {
-            Wallet wallet = this.Wallets.SingleOrDefault(w => w.Name == walletName);
-            if (wallet == null)
-            {
-                throw new Exception($"No wallet with name {walletName} could be found.");
-            }
+            Wallet wallet = this.GetWalletByName(walletName);
 
             return this.GetHistoryByCoinType(wallet, coinType);
         }
@@ -264,8 +252,8 @@ namespace Breeze.Wallet
                 if (address.Transactions.Any())
                 {
                     yield return address;
-                }                
-            }            
+                }
+            }
         }
 
         /// <summary>
@@ -327,11 +315,7 @@ namespace Breeze.Wallet
         /// <inheritdoc />
         public IEnumerable<HdAccount> GetAccountsByCoinType(string walletName, CoinType coinType)
         {
-            Wallet wallet = this.Wallets.SingleOrDefault(w => w.Name == walletName);
-            if (wallet == null)
-            {
-                throw new Exception($"No wallet with name {walletName} could be found.");
-            }
+            Wallet wallet = this.GetWalletByName(walletName);
 
             return wallet.GetAccountsByCoinType(coinType);
         }
@@ -423,7 +407,7 @@ namespace Breeze.Wallet
                     {
                         foreach (var account in accountRoot.Accounts)
                         {
-                            foreach (var address in account.ExternalAddresses.Where(a => a.ScriptPubKey == script))
+                            foreach (var address in account.ExternalAddresses.Where(a => a.Address == "1H2jbtknP6jRYx2riaXJf3H9Mb1JC6kcL2"))
                             {
                                 address.Transactions = address.Transactions.Concat(new[]
                                 {
@@ -547,7 +531,7 @@ namespace Breeze.Wallet
         /// <param name="walletFilePath">The wallet file path.</param>
         /// <returns></returns>
         /// <exception cref="System.IO.FileNotFoundException"></exception>
-        private Wallet GetWallet(string walletFilePath)
+        private Wallet DeserializeWallet(string walletFilePath)
         {
             if (!File.Exists(walletFilePath))
                 throw new FileNotFoundException($"No wallet file found at {walletFilePath}");
@@ -628,9 +612,9 @@ namespace Breeze.Wallet
                 SelectMany(w => w.AccountsRoot.Where(a => a.CoinType == coinType)).
                 SelectMany(a => a.Accounts).
                 SelectMany(a => a.ExternalAddresses).
-                Select(s => s.ScriptPubKey));
-            // uncomment the following for testing on a random address 
-            //Select(t => (new BitcoinPubKeyAddress(t.Address, Network.Main)).ScriptPubKey));
+                //Select(s => s.ScriptPubKey));
+                // uncomment the following for testing on a random address 
+                Select(t => (new BitcoinPubKeyAddress(t.Address, Network.Main)).ScriptPubKey));
         }
 
         /// <summary>
@@ -651,6 +635,22 @@ namespace Breeze.Wallet
                     Index = t.Index,
                     Amount = t.Amount
                 }));
+        }
+
+        /// <summary>
+        /// Gets a wallet given its name.
+        /// </summary>
+        /// <param name="walletName">The name of the wallet to get.</param>
+        /// <returns>A wallet or null if it doesn't exist</returns>
+        private Wallet GetWalletByName(string walletName)
+        {
+            Wallet wallet = this.Wallets.SingleOrDefault(w => w.Name == walletName);
+            if (wallet == null)
+            {
+                throw new Exception($"No wallet with name {walletName} could be found.");
+            }
+
+            return wallet;
         }
     }
 
