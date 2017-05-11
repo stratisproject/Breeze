@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div>Active Balance</div>
+      <div>Balance: {{confirmedBalance | coinNotation | coinAbbreviation}}</div>
+    </div>
+    <div class="col">
+      <div>Current Value</div>
+      <div>Over 9000</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div>Transactions</div>
+      <table *ngIf="transactions; else noTransactions">
+        <thead>
+          <th>Timestamp</th>
+          <th>Amount</th>
+          <th>Confirmed</th>
+          <th>Transaction ID</th>
+        </thead>
+        <tr *ngFor="let transaction of transactions; let i=index">
+          <div *ngIf="i<5">
+            <!--<td *ngIf="{{ transaction.amount }} < 0; else received">SENT</td>
+            <td #received>RECEIVED</td>-->
+            <td>{{ transaction.timestamp }}</td>
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.confirmed }}</td>
+            <td>{{ transaction.txId }}</td>
+          </div>
+        </tr>
+      </table>
+    <ng-template #noTransactions>Looks like you haven't had any transactions yet</ng-template>
+    </div>
+  </div>
+</div>
