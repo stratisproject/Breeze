@@ -583,6 +583,9 @@ namespace Breeze.Wallet
             // TODO look in user-chosen folder as well.
             // maybe the api can maintain a list of wallet paths it knows about
             var defaultFolderPath = GetDefaultWalletFolderPath();
+
+            // create the directory if it doesn't exist
+            Directory.CreateDirectory(defaultFolderPath);
             return Directory.EnumerateFiles(defaultFolderPath, "*.json", SearchOption.TopDirectoryOnly);
         }
 
