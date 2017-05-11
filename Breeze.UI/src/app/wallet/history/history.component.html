@@ -1,15 +1,18 @@
 <h1>History</h1>
-<table *ngIf="transactions">
-    <thead>
-        <th>Timestamp</th>
-        <th>Amount</th>
-        <th>Confirmed</th>
-        <th>Transaction ID</th>
-    </thead>
-    <tr *ngFor="let transaction of transactions">
-        <td>{{ transaction.timestamp }}</td>
-        <td>{{ transaction.amount }}</td>
-        <td>{{ transaction.confirmed }}</td>
-        <td>{{ transaction.txId }}</td>
-    </tr>
+<table *ngIf="transactions; else noTransactions">
+  <thead>
+    <th>Timestamp</th>
+    <th>Amount</th>
+    <th>Confirmed</th>
+    <th>Transaction ID</th>
+  </thead>
+  <tr *ngFor="let transaction of transactions">
+    <!--<td *ngIf="{{ transaction.amount }} < 0; else received">SENT</td>
+    <td #received>RECEIVED</td>-->
+    <td>{{ transaction.timestamp }}</td>
+    <td>{{ transaction.amount }}</td>
+    <td>{{ transaction.confirmed }}</td>
+    <td>{{ transaction.txId }}</td>
+  </tr>
 </table>
+<ng-template #noTransactions>Looks like you haven't made any transactions yet.</ng-template>
