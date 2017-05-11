@@ -203,18 +203,14 @@ namespace Breeze.Wallet
 
             return newAccount;
         }
-
+       
         /// <inheritdoc />
         public string GetUnusedAddress(string walletName, CoinType coinType, string accountName)
         {
             Wallet wallet = this.GetWalletByName(walletName);
 
             // get the account
-            HdAccount account = wallet.AccountsRoot.Single(a => a.CoinType == coinType).Accounts.SingleOrDefault(a => a.Name == accountName);
-            if (account == null)
-            {
-                throw new Exception($"No account with name {accountName} could be found.");
-            }
+            HdAccount account = wallet.AccountsRoot.Single(a => a.CoinType == coinType).GetAccountByName(accountName);
 
             // validate address creation
             if (account.ExternalAddresses.Any())

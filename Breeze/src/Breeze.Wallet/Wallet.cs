@@ -125,6 +125,23 @@ namespace Breeze.Wallet
             var index = unusedAccounts.Min(a => a.Index);
             return unusedAccounts.Single(a => a.Index == index);
         }
+
+        /// <summary>
+        /// Gets the account matching the name passed as a parameter.
+        /// </summary>
+        /// <param name="accountName">The name of the account to get.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Exception"></exception>
+        public HdAccount GetAccountByName(string accountName)
+        {
+            // get the account
+            HdAccount account = this.Accounts.SingleOrDefault(a => a.Name == accountName);
+            if (account == null)
+            {
+                throw new Exception($"No account with name {accountName} could be found.");
+            }
+            return account;
+        }
     }
 
     /// <summary>
@@ -257,7 +274,7 @@ namespace Breeze.Wallet
         {
             var addresses = this.ExternalAddresses.Concat(this.InternalAddresses);
             return addresses.SelectMany(a => a.Transactions.Where(t => t.Id == id));
-        }
+        }      
     }
 
     /// <summary>
