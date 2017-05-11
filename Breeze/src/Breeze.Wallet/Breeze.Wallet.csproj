@@ -18,7 +18,7 @@
   <ItemGroup>
     <PackageReference Include="ConcurrentHashSet" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="1.0.3" />
-    <PackageReference Include="Stratis.Bitcoin" Version="1.0.1.5-alpha" />
+    <PackageReference Include="Stratis.Bitcoin" Version="1.0.1.6-alpha" />
   </ItemGroup>
 
 </Project>

@@ -35,7 +35,7 @@ namespace Breeze.Wallet
         /// </summary>
         public event EventHandler<TransactionFoundEventArgs> TransactionFound;
 
-        public WalletManager(ConcurrentChain chain)
+        public WalletManager(ConcurrentChain chain, Network netwrok)
         {
             this.Wallets = new List<Wallet>();
 
@@ -45,7 +45,7 @@ namespace Breeze.Wallet
                 this.Load(this.DeserializeWallet(path));
             }
 
-            this.coinType = chain.GetCoinType();
+			this.coinType = (CoinType)netwrok.Consensus.CoinType;
 
             // load data in memory for faster lookups
             // TODO get the coin type from somewhere else
