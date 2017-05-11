@@ -22,13 +22,13 @@ namespace Breeze.Wallet
         private readonly BlockNotification blockNotification;
         private readonly CoinType coinType;
 
-        public Tracker(IWalletManager walletManager, ConcurrentChain chain, Signals signals, BlockNotification blockNotification)
+        public Tracker(IWalletManager walletManager, ConcurrentChain chain, Signals signals, BlockNotification blockNotification, Network network)
         {
             this.walletManager = walletManager as WalletManager;
             this.chain = chain;
             this.signals = signals;
             this.blockNotification = blockNotification;
-            this.coinType = chain.GetCoinType();
+			this.coinType = (CoinType)network.Consensus.CoinType;
         }
 
         /// <inheritdoc />
