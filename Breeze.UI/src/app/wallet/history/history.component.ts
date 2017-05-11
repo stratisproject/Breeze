@@ -18,16 +18,18 @@ export class HistoryComponent {
   private errorMessage: string;
 
   ngOnInit() {
-    this.getWalletHistory();
+    this.getHistory();
   }
 
-  private getWalletHistory() {
+  private getHistory() {
     let walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getCoinType())
     this.apiService.getWalletHistory(walletInfo)
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            this.transactions = response.json().transactions;
+            if (response.json().transactions.length > 0) {
+              this.transactions = response.json().transactions;
+            }
           }
         },
         error => {
