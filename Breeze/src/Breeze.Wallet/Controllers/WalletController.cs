@@ -287,8 +287,14 @@ namespace Breeze.Wallet.Controllers
 
             try
             {
-                return this.Json(this.walletManager.BuildTransaction(request.Password, request.Address, request.Amount, request.FeeType, request.AllowUnconfirmed));
-
+                var transaction = this.walletManager.BuildTransaction(request.WalletName, request.AccountName, request.CoinType, request.Password, request.DestinationAddress, request.Amount, request.FeeType, request.AllowUnconfirmed);
+                var fee = transaction.TotalOut - request.Amount;
+                var model = new WalletBuildTransactionModel
+                {
+                    Hex = transaction.ToHex(),
+                    Fee = fee
+                };
+                return this.Json(model);
             }
             catch (Exception e)
             {

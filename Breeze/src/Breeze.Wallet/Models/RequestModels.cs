@@ -79,11 +79,20 @@ namespace Breeze.Wallet.Models
 
     public class BuildTransactionRequest
     {
+        [Required(ErrorMessage = "The name of the wallet is missing.")]
+        public string WalletName { get; set; }
+
+        [Required]
+        public CoinType CoinType { get; set; }
+
+        [Required(ErrorMessage = "The name of the account is missing.")]
+        public string AccountName { get; set; }
+
         [Required(ErrorMessage = "A password is required.")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "A destination address is required.")]
-        public string Address { get; set; }
+        public string DestinationAddress { get; set; }
 
         [Required(ErrorMessage = "An amount is required.")]
         public string Amount { get; set; }
