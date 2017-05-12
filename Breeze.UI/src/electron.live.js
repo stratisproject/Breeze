@@ -15,7 +15,7 @@ let mainWindow = null;
 function createWindow () {
   setTimeout(() => {
     // Create the browser window.
-    mainWindow = new BrowserWindow({width: 1000, height: 600, frame: true, minWidth: 1000, minHeight: 600, icon: "./src/assets/images/stratis-tray.png"})
+    mainWindow = new BrowserWindow({width: 1200, height: 700, frame: true, minWidth: 1200, minHeight: 700, icon: "./src/assets/images/stratis-tray.png"})
 
     mainWindow.loadURL(url.format({
         pathname: 'localhost:4200',
