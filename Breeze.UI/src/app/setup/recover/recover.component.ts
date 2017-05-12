@@ -24,6 +24,7 @@ export class RecoverComponent implements OnInit {
   }
 
   private recoverWalletForm: FormGroup;
+  private creationDate: Date;
   private walletRecovery: WalletRecovery;
 
   private responseMessage: string;
@@ -42,7 +43,8 @@ export class RecoverComponent implements OnInit {
       this.recoverWalletForm.get("walletPassword").value,
       this.recoverWalletForm.get("selectNetwork").value,
       this.globalService.getWalletPath(),
-      this.recoverWalletForm.get("walletName").value
+      this.recoverWalletForm.get("walletName").value,
+      this.creationDate
       );
     this.recoverWallet(this.walletRecovery);
   }
