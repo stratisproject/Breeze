@@ -123,8 +123,20 @@ namespace Breeze.Wallet
         /// <returns></returns>
         IEnumerable<HdAccount> GetAccountsByCoinType(string walletName, CoinType coinType);
 
-        WalletBuildTransactionModel BuildTransaction(string password, string address, Money amount, string feeType, bool allowUnconfirmed);
-
+        /// <summary>
+        /// Builds a transaction to be sent to the network.
+        /// </summary>
+        /// <param name="walletName">The name of the wallet in which this address is contained.</param>
+        /// <param name="coinType">The type of coin for which to get the address.</param>
+        /// <param name="accountName">The name of the account in which this address is contained.</param>
+        /// <param name="password">The password used to decrypt the private key.</param>
+        /// <param name="destinationAddress">The destination address to send the funds to.</param>
+        /// <param name="amount">The amount of funds to be sent.</param>
+        /// <param name="feeType">The type of fee to be included.</param>
+        /// <param name="allowUnconfirmed">Whether or not we allow this transaction to rely on unconfirmed outputs.</param>
+        /// <returns></returns>
+        NBitcoin.Transaction BuildTransaction(string walletName, string accountName, CoinType coinType, string password, string destinationAddress, Money amount, string feeType, bool allowUnconfirmed);
+        
         bool SendTransaction(string transactionHex);
 
         /// <summary>

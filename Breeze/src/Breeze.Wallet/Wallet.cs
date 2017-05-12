@@ -125,6 +125,23 @@ namespace Breeze.Wallet
             var index = unusedAccounts.Min(a => a.Index);
             return unusedAccounts.Single(a => a.Index == index);
         }
+
+        /// <summary>
+        /// Gets the account matching the name passed as a parameter.
+        /// </summary>
+        /// <param name="accountName">The name of the account to get.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Exception"></exception>
+        public HdAccount GetAccountByName(string accountName)
+        {
+            // get the account
+            HdAccount account = this.Accounts.SingleOrDefault(a => a.Name == accountName);
+            if (account == null)
+            {
+                throw new Exception($"No account with name {accountName} could be found.");
+            }
+            return account;
+        }
     }
 
     /// <summary>
@@ -216,9 +233,28 @@ namespace Breeze.Wallet
         /// Gets the first receiving address that contains no transaction.
         /// </summary>
         /// <returns>An unused address</returns>
-        public HdAddress GetFirstUnusedExternalAddress()
+        public HdAddress GetFirstUnusedReceivingAddress()
         {
-            var unusedAddresses = this.ExternalAddresses.Where(acc => !acc.Transactions.Any()).ToList();
+            return this.GetFirstUnusedAddress(false);
+        }
+
+        /// <summary>
+        /// Gets the first change address that contains no transaction.
+        /// </summary>
+        /// <returns>An unused address</returns>
+        public HdAddress GetFirstUnusedChangeAddress()
+        {
+            return this.GetFirstUnusedAddress(true);
+        }
+
+        /// <summary>
+        /// Gets the first receiving address that contains no transaction.
+        /// </summary>
+        /// <returns>An unused address</returns>
+        private HdAddress GetFirstUnusedAddress(bool isChange)
+        {
+            IEnumerable<HdAddress> addresses = isChange ? this.InternalAddresses : this.ExternalAddresses;
+            var unusedAddresses = addresses.Where(acc => !acc.Transactions.Any()).ToList();
             if (!unusedAddresses.Any())
             {
                 return null;
@@ -257,6 +293,27 @@ namespace Breeze.Wallet
         {
             var addresses = this.ExternalAddresses.Concat(this.InternalAddresses);
             return addresses.SelectMany(a => a.Transactions.Where(t => t.Id == id));
+        }
+
+        /// <summary>
+        /// Gets a collection of transactions with spendable outputs.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<TransactionData> GetSpendableTransactions()
+        {
+            var addresses = this.ExternalAddresses.Concat(this.InternalAddresses);           
+            return addresses.SelectMany(a => a.Transactions.Where(t => t.SpentInTransaction == null && t.Amount > Money.Zero));
+        }
+
+        /// <summary>
+        /// Finds the address in which the transaction is contained.
+        /// </summary>
+        /// <param name="transactionId">The transaction identifier.</param>
+        /// <returns></returns>
+        public HdAddress FindAddressForTransaction(uint256 transactionId)
+        {
+            var addresses = this.ExternalAddresses.Concat(this.InternalAddresses);
+            return addresses.SingleOrDefault(a => a.Transactions.Any(t => t.Id == transactionId));
         }
     }
 
@@ -353,5 +410,6 @@ namespace Breeze.Wallet
         [JsonProperty(PropertyName = "creationTime")]
         [JsonConverter(typeof(DateTimeOffsetConverter))]
         public DateTimeOffset CreationTime { get; set; }
+        
     }
 }

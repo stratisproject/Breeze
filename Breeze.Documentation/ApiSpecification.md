@@ -264,12 +264,15 @@ This endpoint will get the last address containing no transaction or will create
 Confirmed balance is the (amount of unspent confirmed outputs - unconfirmed outgoing transactions). It cannot be negative.  
 Unconfirmed balance is the difference of unconfirmed incoming and outgoing transactions. It can be negative.  
 
-## POST /wallet/build-transaction/[account1/account2] - Attempts to build a transaction with the specified wallet account
+## POST /wallet/build-transaction/ - Attempts to build a transaction with the specified wallet account
 ### Parameters
 ```
 {
+  "walletName": "myFirstWallet",    
+  "accountName": "account 0",      
+  "coinType": 0,
   "password": "password",
-  "address": "1Xyz...",
+  "destinationAddress": "1Xyz...",
   "amount": "0.12", // in btc, if 0, then spends all available
   "feeType": "low", // "low"/"medium"/"high"
   "allowUnconfirmed": true // if spending unconfirmed outputs is allowed
@@ -280,51 +283,8 @@ Unconfirmed balance is the difference of unconfirmed incoming and outgoing trans
 #### Successful
 ```
 {
-    "spendsUnconfirmed": false, // If spends unconfirmed you can ask the user if it's sure about spending unconfirmed transaction (if inputs are malleated or inputs never confirm then this transaction will never confirm either"
     "fee": "0.0001",
-    "feePercentOfSent": "0.1" // Percentage of the total spent amount, there must be a safety limit implemented here
-    "hex": "0100000002d9dced2b6fc80c706d3564670cb6706afe7a798863a9218efcdcf415d58f0f82000000006a473044022030b8bea478444bd52f08de33b082cde1176d3137111f506eefefa91b47b1f6bf02204f12746abd1aeac5805872d163592cf145967fa0619339a9c5348d674852ef4801210224ec1e4c270ce373e6999eebfa01d0a7e7db3c537c026f265233350d5aab81fbfeffffffa0706db65c5e3594d43df5a2a8b6dfd3c9ee506b678f8c26f7820b324b26aa0f000000006a473044022061b718034f876590d6d80bac77a63248b2548d934849acd02c4f4236309e853002201aded6b24f553b6902cf571276b37b12f76b75650164d8738c74469b4edd547e012103d649294a0ca4db920a69eacd6a75cb8a38ae1b81129900621ce45e6ba3438a7bfeffffff0280a90300000000001976a914d0965947ebb329b776328624ebde8f8b32dc639788ac1cc80f00000000001976a914c2a420d34fc86cff932b8c3191549a0ddfd2b0d088acba770f00"
-    "transaction": // NBitcoin.Transaction.ToString()
-    {
-      "transaction": "0100000002d9dced2b6fc80c706d3564670cb6706afe7a798863a9218efcdcf415d58f0f82000000006a473044022030b8bea478444bd52f08de33b082cde1176d3137111f506eefefa91b47b1f6bf02204f12746abd1aeac5805872d163592cf145967fa0619339a9c5348d674852ef4801210224ec1e4c270ce373e6999eebfa01d0a7e7db3c537c026f265233350d5aab81fbfeffffffa0706db65c5e3594d43df5a2a8b6dfd3c9ee506b678f8c26f7820b324b26aa0f000000006a473044022061b718034f876590d6d80bac77a63248b2548d934849acd02c4f4236309e853002201aded6b24f553b6902cf571276b37b12f76b75650164d8738c74469b4edd547e012103d649294a0ca4db920a69eacd6a75cb8a38ae1b81129900621ce45e6ba3438a7bfeffffff0280a90300000000001976a914d0965947ebb329b776328624ebde8f8b32dc639788ac1cc80f00000000001976a914c2a420d34fc86cff932b8c3191549a0ddfd2b0d088acba770f00",
-      "transactionId": "22ab5e9b703c0d4cb6023e3a1622b493adc8f83a79771c83a73dfa38ef35b07c",
-      "isCoinbase": false,
-      "block": null,
-      "spentCoins": [
-        {
-          "transactionId": "820f8fd515f4dcfc8e21a96388797afe6a70b60c6764356d700cc86f2beddcd9",
-          "index": 0,
-          "value": 100000,
-          "scriptPubKey": "76a914e7c1345fc8f87c68170b3aa798a956c2fe6a9eff88ac",
-          "redeemScript": null
-        },
-        {
-          "transactionId": "0faa264b320b82f7268c8f676b50eec9d3dfb6a8a2f53dd494355e5cb66d70a0",
-          "index": 0,
-          "value": 1180443,
-          "scriptPubKey": "76a914f3821cff5a90328271d8596198f68e97fbe2ea0e88ac",
-          "redeemScript": null
-        }
-      ],
-      "receivedCoins": [
-        {
-          "transactionId": "22ab5e9b703c0d4cb6023e3a1622b493adc8f83a79771c83a73dfa38ef35b07c",
-          "index": 0,
-          "value": 240000,
-          "scriptPubKey": "76a914d0965947ebb329b776328624ebde8f8b32dc639788ac",
-          "redeemScript": null
-        },
-        {
-          "transactionId": "22ab5e9b703c0d4cb6023e3a1622b493adc8f83a79771c83a73dfa38ef35b07c",
-          "index": 1,
-          "value": 1034268,
-          "scriptPubKey": "76a914c2a420d34fc86cff932b8c3191549a0ddfd2b0d088ac",
-          "redeemScript": null
-        }
-      ],
-      "firstSeen": "2016-10-31T09:13:18.4420023+00:00",
-      "fees": 6175
-    }
+    "hex": "0100000002d9dced2b6fc80c706d3564670cb6706afe7a798863a9218efcdcf415d58f0f82000000006a473044022030b8bea478444bd52f08de33b082cde1176d3137111f506eefefa91b47b1f6bf02204f12746abd1aeac5805872d163592cf145967fa0619339a9c5348d674852ef4801210224ec1e4c270ce373e6999eebfa01d0a7e7db3c537c026f265233350d5aab81fbfeffffffa0706db65c5e3594d43df5a2a8b6dfd3c9ee506b678f8c26f7820b324b26aa0f000000006a473044022061b718034f876590d6d80bac77a63248b2548d934849acd02c4f4236309e853002201aded6b24f553b6902cf571276b37b12f76b75650164d8738c74469b4edd547e012103d649294a0ca4db920a69eacd6a75cb8a38ae1b81129900621ce45e6ba3438a7bfeffffff0280a90300000000001976a914d0965947ebb329b776328624ebde8f8b32dc639788ac1cc80f00000000001976a914c2a420d34fc86cff932b8c3191549a0ddfd2b0d088acba770f00"    
 }
 ```
 

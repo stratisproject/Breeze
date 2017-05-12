@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using Breeze.Wallet.Helpers;
 using Breeze.Wallet.Models;
 using NBitcoin;
+using NBitcoin.DataEncoders;
 using Newtonsoft.Json;
 using Transaction = NBitcoin.Transaction;
 
@@ -203,24 +204,20 @@ namespace Breeze.Wallet
 
             return newAccount;
         }
-
+       
         /// <inheritdoc />
         public string GetUnusedAddress(string walletName, CoinType coinType, string accountName)
         {
             Wallet wallet = this.GetWalletByName(walletName);
 
             // get the account
-            HdAccount account = wallet.AccountsRoot.Single(a => a.CoinType == coinType).Accounts.SingleOrDefault(a => a.Name == accountName);
-            if (account == null)
-            {
-                throw new Exception($"No account with name {accountName} could be found.");
-            }
+            HdAccount account = wallet.AccountsRoot.Single(a => a.CoinType == coinType).GetAccountByName(accountName);
 
             // validate address creation
             if (account.ExternalAddresses.Any())
             {
                 // check last created address contains transactions.
-                var firstUnusedExternalAddress = account.GetFirstUnusedExternalAddress();
+                var firstUnusedExternalAddress = account.GetFirstUnusedReceivingAddress();
                 if (firstUnusedExternalAddress != null)
                 {
                     return firstUnusedExternalAddress.Address;
@@ -235,7 +232,7 @@ namespace Breeze.Wallet
 
             // adds the address to the list of tracked addresses
             this.PubKeys = this.LoadKeys(coinType);
-            return account.GetFirstUnusedExternalAddress().Address;
+            return account.GetFirstUnusedReceivingAddress().Address;
         }
 
         /// <inheritdoc />
@@ -284,7 +281,7 @@ namespace Breeze.Wallet
             for (int i = firstNewAddressIndex; i < firstNewAddressIndex + addressesQuantity; i++)
             {
                 // generate new receiving address
-                BitcoinPubKeyAddress address = this.GenerateAddress(account.ExtendedPubKey, i, false, network);
+                BitcoinPubKeyAddress address = this.GenerateAddress(account.ExtendedPubKey, i, isChange, network);
 
                 // add address details
                 addresses = addresses.Concat(new[] {new HdAddress
@@ -324,9 +321,94 @@ namespace Breeze.Wallet
             return wallet.GetAccountsByCoinType(coinType);
         }
 
-        public WalletBuildTransactionModel BuildTransaction(string password, string address, Money amount, string feeType, bool allowUnconfirmed)
+        /// <inheritdoc />
+        public Transaction BuildTransaction(string walletName, string accountName, CoinType coinType, string password, string destinationAddress, Money amount, string feeType, bool allowUnconfirmed)
         {
-            throw new System.NotImplementedException();
+            if (amount == Money.Zero)
+            {
+                throw new Exception($"Cannot send transaction with 0 {this.coinType}");
+            }
+            
+            // get the wallet and the account
+            Wallet wallet = this.GetWalletByName(walletName);            
+            HdAccount account = wallet.AccountsRoot.Single(a => a.CoinType == coinType).GetAccountByName(accountName);
+            
+            // get a list of transactions outputs that have not been spent
+            IEnumerable<TransactionData> spendableTransactions = account.GetSpendableTransactions();
+
+            // get total spendable balance in the account.
+            var balance = spendableTransactions.Sum(t => t.Amount);
+
+            // make sure we have enough funds
+            if (balance < amount)
+            {
+                throw new Exception("Not enough funds.");
+            }
+
+            // calculate which addresses needs to be used as well as the fee to be charged
+            var calculationResult = this.CalculateFees(spendableTransactions, amount);
+            
+            // get extended private key
+            var privateKey = Key.Parse(wallet.EncryptedSeed, password, wallet.Network);
+            var seedExtKey = new ExtKey(privateKey, wallet.ChainCode);
+            
+            var signingKeys = new HashSet<ISecret>();
+            var coins = new List<Coin>();
+            foreach (var transactionToUse in calculationResult.transactionsToUse)
+            {
+                var address = account.FindAddressForTransaction(transactionToUse.Id);                                
+                ExtKey addressExtKey = seedExtKey.Derive(new KeyPath(address.HdPath));                
+                BitcoinExtKey addressPrivateKey = addressExtKey.GetWif(wallet.Network);                
+                signingKeys.Add(addressPrivateKey);
+
+                coins.Add(new Coin(transactionToUse.Id, (uint)transactionToUse.Index, transactionToUse.Amount, address.ScriptPubKey));
+            }
+
+            // get address to send the change to
+            var changeAddress = account.GetFirstUnusedChangeAddress();
+
+            // get script destination address
+            Script destinationScript = PayToPubkeyHashTemplate.Instance.GenerateScriptPubKey(new BitcoinPubKeyAddress(destinationAddress, wallet.Network));
+
+            // build transaction
+            var builder = new TransactionBuilder();
+            Transaction tx = builder
+                .AddCoins(coins)
+                .AddKeys(signingKeys.ToArray())
+                .Send(destinationScript, amount)
+                .SetChange(changeAddress.ScriptPubKey)
+                .SendFees(calculationResult.fee)
+                .BuildTransaction(true);
+
+            if (!builder.Verify(tx))
+            {
+                throw new Exception("Could not build transaction, please make sure you entered the correct data.");
+            }
+
+            return tx;
+        }
+
+        /// <summary>
+        /// Calculates which outputs are to be used in the transaction, as well as the fees that will be charged.
+        /// </summary>
+        /// <param name="spendableTransactions">The transactions with unspent funds.</param>
+        /// <param name="amount">The amount to be sent.</param>
+        /// <returns>The collection of transactions to be used and the fee to be charged</returns>
+        private (List<TransactionData> transactionsToUse, Money fee) CalculateFees(IEnumerable<TransactionData> spendableTransactions, Money amount)
+        {
+            // TODO make this a bit smarter!
+            List<TransactionData> transactionsToUse = new List<TransactionData>();
+            foreach (var transaction in spendableTransactions)
+            {
+                transactionsToUse.Add(transaction);
+                if (transactionsToUse.Sum(t => t.Amount) >= amount)
+                {
+                    break;
+                }
+            }
+
+            Money fee = new Money(new decimal(0.001), MoneyUnit.BTC);
+            return (transactionsToUse, fee);
         }
 
         public bool SendTransaction(string transactionHex)
