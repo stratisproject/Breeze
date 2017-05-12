@@ -7,7 +7,9 @@ using Breeze.Wallet.Helpers;
 using Breeze.Wallet.Models;
 using NBitcoin;
 using NBitcoin.DataEncoders;
+using NBitcoin.Protocol;
 using Newtonsoft.Json;
+using Stratis.Bitcoin.Connection;
 using Transaction = NBitcoin.Transaction;
 
 namespace Breeze.Wallet
@@ -31,12 +33,14 @@ namespace Breeze.Wallet
 
         private readonly CoinType coinType;
 
+        private readonly ConnectionManager connectionManager;
+
         /// <summary>
         /// Occurs when a transaction is found.
         /// </summary>
         public event EventHandler<TransactionFoundEventArgs> TransactionFound;
 
-        public WalletManager(ConcurrentChain chain, Network netwrok)
+        public WalletManager(ConnectionManager connectionManager, Network netwrok)
         {
             this.Wallets = new List<Wallet>();
 
@@ -46,13 +50,14 @@ namespace Breeze.Wallet
                 this.Load(this.DeserializeWallet(path));
             }
 
+            this.connectionManager = connectionManager;
 			this.coinType = (CoinType)netwrok.Consensus.CoinType;
 
             // load data in memory for faster lookups
             // TODO get the coin type from somewhere else
             this.PubKeys = this.LoadKeys(this.coinType);
             this.TrackedTransactions = this.LoadTransactions(this.coinType);
-            this.TransactionFound += this.OnTransactionFound;
+            this.TransactionFound += this.OnTransactionFound;            
         }
 
         /// <inheritdoc />
@@ -322,7 +327,7 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public Transaction BuildTransaction(string walletName, string accountName, CoinType coinType, string password, string destinationAddress, Money amount, string feeType, bool allowUnconfirmed)
+        public (string hex, Money fee) BuildTransaction(string walletName, string accountName, CoinType coinType, string password, string destinationAddress, Money amount, string feeType, bool allowUnconfirmed)
         {
             if (amount == Money.Zero)
             {
@@ -385,7 +390,7 @@ namespace Breeze.Wallet
                 throw new Exception("Could not build transaction, please make sure you entered the correct data.");
             }
 
-            return tx;
+            return (tx.ToHex(), calculationResult.fee);
         }
 
         /// <summary>
@@ -396,7 +401,7 @@ namespace Breeze.Wallet
         /// <returns>The collection of transactions to be used and the fee to be charged</returns>
         private (List<TransactionData> transactionsToUse, Money fee) CalculateFees(IEnumerable<TransactionData> spendableTransactions, Money amount)
         {
-            // TODO make this a bit smarter!
+            // TODO make this a bit smarter!            
             List<TransactionData> transactionsToUse = new List<TransactionData>();
             foreach (var transaction in spendableTransactions)
             {
@@ -411,9 +416,20 @@ namespace Breeze.Wallet
             return (transactionsToUse, fee);
         }
 
+        /// <inheritdoc />
         public bool SendTransaction(string transactionHex)
         {
-            throw new System.NotImplementedException();
+            // TODO move this to a behavior on the full node
+            // parse transaction
+            Transaction transaction = Transaction.Parse(transactionHex);
+            TxPayload payload = new TxPayload(transaction);
+
+            foreach (var node in connectionManager.ConnectedNodes)
+            {
+                node.SendMessage(payload);
+            }
+
+            return true;
         }
 
         /// <inheritdoc />
