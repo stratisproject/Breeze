@@ -5,12 +5,14 @@ import { WalletComponent }   from './wallet.component';
 import { SendComponent } from './send/send.component';
 import { ReceiveComponent } from './receive/receive.component';
 import { HistoryComponent } from './history/history.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'wallet', pathMatch: 'full' },
   { path: 'wallet', component: WalletComponent,
     children: [
-      { path: '', redirectTo:'history', pathMatch:'full' },
+      { path: '', redirectTo:'dashboard', pathMatch:'full' },
+      { path: 'dashboard', component: DashboardComponent},
       { path: 'send', component: SendComponent},
       { path: 'receive', component: ReceiveComponent},
       { path: 'history', component: HistoryComponent}

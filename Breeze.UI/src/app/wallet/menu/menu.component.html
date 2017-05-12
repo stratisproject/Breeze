@@ -1,12 +1,12 @@
-<nav class="navbar navbar-fixed-top">
-    <div class="container">
-        <a class="navbar-brand">Breeze</a>
-        <dashboard-component></dashboard-component>
-        <ul class="nav navbar-nav" routerLinkActive="active">
-            <li class="nav-item"><a class="nav-link" routerLink="send">Send</a></li>
-            <li class="nav-item"><a class="nav-link" routerLink="receive">Receive</a></li>
-            <li class="nav-item"><a class="nav-link" routerLink="history">History</a></li>
-            <li class="nav-item"><a class="nav-link" (click)="logOut()">Logout</a></li>
-        </ul>
-    </div>
+<nav class="navbar navbar-toggleable-sm navbar-fixed-top navbar-light bg-faded ">
+  <div class="container">
+    <ul class="navbar-nav mr-auto" routerLinkActive="active">
+      <li class="nav-item"><a class="nav-link" routerLink="dashboard">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="send">Send</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="receive">Receive</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="history">History</a></li>
+      <li class="nav-item"><a class="nav-link" (click)="logOut()">Logout</a></li>
+    </ul>
+    <div class="navbar-brand">Breeze</div>
+  </div>
 </nav>
