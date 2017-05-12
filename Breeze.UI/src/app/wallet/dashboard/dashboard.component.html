@@ -8,6 +8,12 @@
       <div>Current Value</div>
       <div>Over 9000</div>
     </div>
+    <div class="col">
+      <div>
+        <button (click)="openSendDialog()" class="btn">SEND</button>
+        <button (click)="openReceiveDialog()" class="btn">RECEIVE</button>
+      </div>
+    </div>
   </div>
   <div class="row">
     <div class="col">
@@ -20,17 +26,15 @@
           <th>Transaction ID</th>
         </thead>
         <tr *ngFor="let transaction of transactions; let i=index">
-          <div *ngIf="i<5">
-            <!--<td *ngIf="{{ transaction.amount }} < 0; else received">SENT</td>
-            <td #received>RECEIVED</td>-->
-            <td>{{ transaction.timestamp }}</td>
-            <td>{{ transaction.amount }}</td>
-            <td>{{ transaction.confirmed }}</td>
-            <td>{{ transaction.txId }}</td>
-          </div>
+            <!--<td *ngIf="{{ transaction.amount }} < 0">SENT</td>
+            <td *ngIf="{{ transaction.amount }} > 0">RECEIVED</td>-->
+            <td *ngIf="i<5">{{ transaction.timestamp }}</td>
+            <td *ngIf="i<5">{{ transaction.amount }}</td>
+            <td *ngIf="i<5">{{ transaction.confirmed }}</td>
+            <td *ngIf="i<5">{{ transaction.txId }}</td>
         </tr>
       </table>
-    <ng-template #noTransactions>Looks like you haven't had any transactions yet</ng-template>
+    <ng-template #noTransactions>Looks like you haven't made any transactions yet</ng-template>
     </div>
   </div>
 </div>

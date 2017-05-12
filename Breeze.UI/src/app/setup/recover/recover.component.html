@@ -1,31 +1,47 @@
-<h1>Recover your wallet</h1>
-<p>
-  Welcome, please complete the form below to recover your wallet.
-</p>
-<form [formGroup]="recoverWalletForm" (ngSubmit)="onRecoverClicked()">
-  <div class="form-group">
-    <label>Mnemonic:</label>
-    <input class="form-control" formControlName="walletMnemonic" type="text" placeholder="Enter your saved mnemonic.">
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>Recover your wallet</h1>
+    </div>
   </div>
-  <div class="form-group">
-    <label>Wallet password: </label>
-    <input class="form-control" type="password" formControlName="walletPassword" placeholder="Enter password here.">
+  <div class="row">
+    <div class="col">
+      <p>Welcome, please complete the form below to recover your wallet.</p>
+    </div>
   </div>
-  <div class="form-group">
-    <label>Name:</label>
-    <input class="form-control" formControlName="walletName" type="text" placeholder="Enter a name for your wallet.">
+  <div class="row">
+    <div class="col">
+      <form [formGroup]="recoverWalletForm" (ngSubmit)="onRecoverClicked()">
+        <div class="form-group">
+          <label>Mnemonic:</label>
+          <input class="form-control" formControlName="walletMnemonic" type="text" placeholder="Enter your saved mnemonic.">
+        </div>
+        <div class="form-group">
+          <label>Wallet password: </label>
+          <input class="form-control" type="password" formControlName="walletPassword" placeholder="Enter password here.">
+        </div>
+        <div class="form-group">
+          <label>Name:</label>
+          <input class="form-control" formControlName="walletName" type="text" placeholder="Enter a name for your wallet.">
+        </div>
+        <div class="form-group">
+          <label>Network:</label>
+          <select name="network" formControlName="selectNetwork">
+            <option value="main">Main</option>
+            <option value="test">Testnet</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Creation date:</label>
+          <material-datepicker [(date)]="creationDate"></material-datepicker>
+        </div>
+        <div class="form-group">
+          <button type="submit" [disabled]="!recoverWalletForm.valid" class="btn btn-success">Recover Wallet</button>
+        </div>
+        <div class="form-group">
+          <button type="button" class="btn btn-success" (click)="onBackClicked()">Back</button>
+        </div>
+      </form>
+    </div>
   </div>
-  <div class="form-group">
-    <label>Network:</label>
-    <select name="network" formControlName="selectNetwork">
-      <option value="main">Main</option>
-      <option value="test">Testnet</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <button type="submit" [disabled]="!recoverWalletForm.valid" class="btn btn-success">Recover Wallet</button>
-  </div>
-  <div class="form-group">
-    <button type="button" class="btn btn-success" (click)="onBackClicked()">Back</button>
-  </div>
-</form>
+</div>

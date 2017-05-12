@@ -23,6 +23,14 @@ export class DashboardComponent {
       this.getHistory();
   };
 
+  private openSendDialog() {
+
+  };
+
+  private openReceiveDialog() {
+
+  };
+
   private getWalletBalance() {
     let walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getCoinType())
     this.apiService.getWalletBalance(walletInfo)
