@@ -121,7 +121,7 @@ namespace Breeze.Wallet
         /// The accounts used in the wallet.
         /// </summary>
         [JsonProperty(PropertyName = "accounts")]
-        public IEnumerable<HdAccount> Accounts { get; set; }
+        public ICollection<HdAccount> Accounts { get; set; }
 
         /// <summary>
         /// Gets the first account that contains no transaction.
@@ -227,13 +227,13 @@ namespace Breeze.Wallet
         /// The list of external addresses, typically used for receiving money.
         /// </summary>
         [JsonProperty(PropertyName = "externalAddresses")]
-        public IEnumerable<HdAddress> ExternalAddresses { get; set; }
+        public ICollection<HdAddress> ExternalAddresses { get; set; }
 
         /// <summary>
         /// The list of internal addresses, typically used to receive change.
         /// </summary>
         [JsonProperty(PropertyName = "internalAddresses")]
-        public IEnumerable<HdAddress> InternalAddresses { get; set; }
+        public ICollection<HdAddress> InternalAddresses { get; set; }
 
         /// <summary>
         /// Gets the type of coin this account is for.
@@ -374,7 +374,7 @@ namespace Breeze.Wallet
         /// A list of transactions involving this address.
         /// </summary>
         [JsonProperty(PropertyName = "transactions")]
-        public IEnumerable<TransactionData> Transactions { get; set; }
+        public ICollection<TransactionData> Transactions { get; set; }
     }
 
     /// <summary>

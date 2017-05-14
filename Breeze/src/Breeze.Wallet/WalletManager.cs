@@ -289,14 +289,14 @@ namespace Breeze.Wallet
                 BitcoinPubKeyAddress address = this.GenerateAddress(account.ExtendedPubKey, i, isChange, network);
 
                 // add address details
-                addresses = addresses.Concat(new[] {new HdAddress
+                addresses.Add(new HdAddress
                 {
                     Index = i,
                     HdPath = CreateBip44Path(account.GetCoinType(), account.Index, i, isChange),
                     ScriptPubKey = address.ScriptPubKey,
                     Address = address.ToString(),
                     Transactions = new List<TransactionData>()
-                }});
+                });
 
                 addressesCreated.Add(address.ToString());
             }
@@ -497,7 +497,7 @@ namespace Breeze.Wallet
         {
             // selects all the transactions we already have in the wallet
             var txs = this.Wallets.SelectMany(w => w.GetAllTransactionsByCoinType(coinType));
-            
+
             // add this transaction if it is not in the list
             if (txs.All(t => t.Id != transactionHash || t.Index != index))
             {
@@ -514,17 +514,14 @@ namespace Breeze.Wallet
                             var address = receivingAddress ?? changeAddress;
                             if (address != null)
                             {
-                                address.Transactions = address.Transactions.Concat(new[]
+                                address.Transactions.Add(new TransactionData
                                 {
-                                    new TransactionData
-                                    {
-                                        Amount = amount,
-                                        BlockHeight = blockHeight,
-                                        Confirmed = blockHeight.HasValue,
-                                        Id = transactionHash,
-                                        CreationTime = DateTimeOffset.FromUnixTimeMilliseconds(blockTime ?? time),
-                                        Index = index
-                                    }
+                                    Amount = amount,
+                                    BlockHeight = blockHeight,
+                                    Confirmed = blockHeight.HasValue,
+                                    Id = transactionHash,
+                                    CreationTime = DateTimeOffset.FromUnixTimeMilliseconds(blockTime ?? time),
+                                    Index = index
                                 });
 
                                 // notify a transaction has been found
