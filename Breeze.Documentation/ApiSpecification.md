@@ -147,10 +147,18 @@ POST /wallet/send-transaction - Attempts to send a transaction
 ## POST /wallet/load - Loads the wallet and starts syncing
 ### Parameters
 ```
-{
-  "password": "password"
+{ 
+	"password": "123456",
+	"folderPath": "Wallets", // optional, if the folder path is not the default one
+	"name": "myWallet"
 }
 ```
+
+### Response
+```
+200 (OK)
+```
+
 ## POST /wallet/recover - Recovers the wallet
 ### Parameters
 ```
@@ -158,11 +166,16 @@ POST /wallet/send-transaction - Attempts to send a transaction
   "network": "main", // "main" or "testnet"
   "password": "password",  
   "mnemonic": "foo bar buz",
-  "creationTime": "2017-02-03" // DateTimeOffset.ParseExact("1998-01-01", "yyyy-MM-dd", CultureInfo.InvariantCulture), utc time
+  "name": "testwallet-recovered",
+  "folderPath": "Wallets", // optional, if the folder path is not the default one
+  "creationTime": "2017-02-25 16:20:33" // date from which to start looking for transactions
 }
 ```
 ### Response
 Cannot check if the password is good or not. If the password is wrong it'll recover a wallet with the wrong password.
+```
+200 (OK)
+```
 
 ## DELETE /wallet - Deletes the wallet
 Works as expected.
