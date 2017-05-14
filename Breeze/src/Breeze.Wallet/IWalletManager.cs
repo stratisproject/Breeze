@@ -147,18 +147,16 @@ namespace Breeze.Wallet
         /// <summary>
         /// Processes a block received from the network.
         /// </summary>
-        /// <param name="coinType">The type of coin this block relates to.</param>
         /// <param name="height">The height of the block in the blockchain.</param>
         /// <param name="block">The block.</param>
-        void ProcessBlock(CoinType coinType, int height, Block block);
+        void ProcessBlock(int height, Block block);
 
         /// <summary>
         /// Processes a transaction received from the network.
         /// </summary>
-        /// <param name="coinType">The type of coin this transaction relates to.</param>
         /// <param name="transaction">The transaction.</param>
         /// <param name="blockHeight">The height of the block this transaction came from. Null if it was not a transaction included in a block.</param>
         /// <param name="blockTime">The block time.</param>
-        void ProcessTransaction(CoinType coinType, NBitcoin.Transaction transaction, int? blockHeight = null, uint? blockTime = null);
+        void ProcessTransaction(Transaction transaction, int? blockHeight = null, uint? blockTime = null);
     }
 }

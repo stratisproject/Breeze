@@ -424,7 +424,7 @@ namespace Breeze.Wallet
             Transaction transaction = Transaction.Parse(transactionHex);
             TxPayload payload = new TxPayload(transaction);
 
-            foreach (var node in connectionManager.ConnectedNodes)
+            foreach (var node in this.connectionManager.ConnectedNodes)
             {
                 node.SendMessage(payload);
             }
@@ -433,19 +433,19 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public void ProcessBlock(CoinType coinType, int height, Block block)
+        public void ProcessBlock(int height, Block block)
         {
             Console.WriteLine($"block notification: height: {height}, block hash: {block.Header.GetHash()}, coin type: {coinType}");
 
             foreach (Transaction transaction in block.Transactions)
             {
-                this.ProcessTransaction(coinType, transaction, height, block.Header.Time);
+                this.ProcessTransaction(transaction, height, block.Header.Time);
             }
 
             // update the wallets with the last processed block height
             foreach (var wallet in this.Wallets)
             {
-                foreach (var accountRoot in wallet.AccountsRoot.Where(a => a.CoinType == coinType))
+                foreach (var accountRoot in wallet.AccountsRoot.Where(a => a.CoinType == this.coinType))
                 {
                     accountRoot.LastBlockSyncedHeight = height;
                 }
@@ -453,9 +453,9 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public void ProcessTransaction(CoinType coinType, Transaction transaction, int? blockHeight = null, uint? blockTime = null)
+        public void ProcessTransaction(Transaction transaction, int? blockHeight = null, uint? blockTime = null)
         {
-            Console.WriteLine($"transaction notification: tx hash {transaction.GetHash()}, coin type: {coinType}");
+            Console.WriteLine($"transaction notification: tx hash {transaction.GetHash()}, coin type: {this.coinType}");
 
             foreach (var pubKey in this.PubKeys)
             {
@@ -463,7 +463,7 @@ namespace Breeze.Wallet
                 var utxo = transaction.Outputs.SingleOrDefault(o => pubKey == o.ScriptPubKey);
                 if (utxo != null)
                 {
-                    AddTransactionToWallet(coinType, transaction.GetHash(), transaction.Time, transaction.Outputs.IndexOf(utxo), utxo.Value, pubKey, blockHeight, blockTime);
+                    AddTransactionToWallet(transaction.GetHash(), transaction.Time, transaction.Outputs.IndexOf(utxo), utxo.Value, pubKey, blockHeight, blockTime);
                 }
 
                 // if the inputs have a reference to a transaction containing one of our scripts
@@ -474,7 +474,7 @@ namespace Breeze.Wallet
                     // compare the index of the output in its original transaction and the index references in the input
                     if (input.PrevOut.N == tTx.Index)
                     {
-                        AddTransactionToWallet(coinType, transaction.GetHash(), transaction.Time, null, -tTx.Amount, pubKey, blockHeight, blockTime, tTx.Hash, tTx.Index);
+                        AddTransactionToWallet(transaction.GetHash(), transaction.Time, null, -tTx.Amount, pubKey, blockHeight, blockTime, tTx.Hash, tTx.Index);
                     }
                 }
             }
@@ -483,7 +483,6 @@ namespace Breeze.Wallet
         /// <summary>
         /// Adds the transaction to the wallet.
         /// </summary>
-        /// <param name="coinType">Type of the coin.</param>
         /// <param name="transactionHash">The transaction hash.</param>
         /// <param name="time">The time.</param>
         /// <param name="index">The index.</param>
@@ -493,17 +492,17 @@ namespace Breeze.Wallet
         /// <param name="blockTime">The block time.</param>
         /// <param name="spendingTransactionId">The id of the transaction containing the output being spent, if this is a spending transaction.</param>
         /// <param name="spendingTransactionIndex">The index of the output in the transaction being referenced, if this is a spending transaction.</param>
-        private void AddTransactionToWallet(CoinType coinType, uint256 transactionHash, uint time, int? index, Money amount, Script script, int? blockHeight = null, uint? blockTime = null, uint256 spendingTransactionId = null, int? spendingTransactionIndex = null)
+        private void AddTransactionToWallet(uint256 transactionHash, uint time, int? index, Money amount, Script script, int? blockHeight = null, uint? blockTime = null, uint256 spendingTransactionId = null, int? spendingTransactionIndex = null)
         {
             // selects all the transactions we already have in the wallet
-            var txs = this.Wallets.SelectMany(w => w.GetAllTransactionsByCoinType(coinType));
+            var txs = this.Wallets.SelectMany(w => w.GetAllTransactionsByCoinType(this.coinType));
 
             // add this transaction if it is not in the list
             if (txs.All(t => t.Id != transactionHash || t.Index != index))
             {
                 foreach (var wallet in this.Wallets)
                 {
-                    foreach (var accountRoot in wallet.AccountsRoot.Where(a => a.CoinType == coinType))
+                    foreach (var accountRoot in wallet.AccountsRoot.Where(a => a.CoinType == this.coinType))
                     {
                         foreach (var account in accountRoot.Accounts)
                         {

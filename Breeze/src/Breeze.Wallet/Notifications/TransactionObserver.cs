@@ -7,14 +7,11 @@ namespace Breeze.Wallet.Notifications
     /// Observer that receives notifications about the arrival of new <see cref="Transaction"/>s.
     /// </summary>
 	public class TransactionObserver : SignalObserver<Transaction>
-    {
-        private readonly CoinType coinType;
-
+    {        
         private readonly IWalletManager walletManager;
 
-        public TransactionObserver(CoinType coinType, IWalletManager walletManager)
+        public TransactionObserver(IWalletManager walletManager)
         {
-            this.coinType = coinType;
             this.walletManager = walletManager;            
         }
 
@@ -24,7 +21,7 @@ namespace Breeze.Wallet.Notifications
         /// <param name="transaction">The new transaction</param>
         protected override void OnNextCore(Transaction transaction)
         {
-            this.walletManager.ProcessTransaction(this.coinType, transaction);
+            this.walletManager.ProcessTransaction(transaction);
         }
     }
 }
