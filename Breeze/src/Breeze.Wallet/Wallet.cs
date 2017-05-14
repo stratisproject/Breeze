@@ -84,6 +84,20 @@ namespace Breeze.Wallet
             }
             return result;
         }
+
+        /// <summary>
+        /// Gets all the pub keys conatined in this wallet.
+        /// </summary>
+        /// <param name="coinType">Type of the coin.</param>
+        /// <returns></returns>
+        public IEnumerable<Script> GetAllPubKeysByCoinType(CoinType coinType)
+        {            
+            var accounts = this.GetAccountsByCoinType(coinType).ToList();
+            foreach (var address in accounts.SelectMany(a => a.ExternalAddresses).Concat(accounts.SelectMany(a => a.InternalAddresses)))
+            {
+                yield return address.ScriptPubKey;
+            }            
+        }
     }
 
     /// <summary>
@@ -142,6 +156,9 @@ namespace Breeze.Wallet
             }
             return account;
         }
+
+       
+
     }
 
     /// <summary>
