@@ -21,10 +21,6 @@ namespace Breeze.Wallet
     {
         public List<Wallet> Wallets { get; }
 
-        public HashSet<Script> PubKeys { get; set; }
-
-        public HashSet<TransactionDetails> TrackedTransactions { get; }
-
         private const int UnusedAddressesBuffer = 20;
 
         private const int WalletRecoveryAccountsCount = 3;
@@ -34,6 +30,8 @@ namespace Breeze.Wallet
         private readonly CoinType coinType;
 
         private readonly ConnectionManager connectionManager;
+
+        private readonly Dictionary<Script, ICollection<TransactionData>> keysLookup;
 
         /// <summary>
         /// Occurs when a transaction is found.
@@ -54,9 +52,9 @@ namespace Breeze.Wallet
             this.coinType = (CoinType)netwrok.Consensus.CoinType;
 
             // load data in memory for faster lookups
-            // TODO get the coin type from somewhere else
-            this.PubKeys = this.LoadKeys(this.coinType);
-            this.TrackedTransactions = this.LoadTransactions(this.coinType);
+            this.LoadKeysLookup();
+
+            // register events
             this.TransactionFound += this.OnTransactionFound;
         }
 
@@ -89,7 +87,7 @@ namespace Breeze.Wallet
 
             // save the changes to the file and add addresses to be tracked
             this.SaveToFile(wallet);
-            this.PubKeys = this.LoadKeys(this.coinType);
+            this.LoadKeysLookup();
             this.Load(wallet);
 
             return mnemonic;
@@ -134,7 +132,7 @@ namespace Breeze.Wallet
 
             // save the changes to the file and add addresses to be tracked
             this.SaveToFile(wallet);
-            this.PubKeys = this.LoadKeys(this.coinType);
+            this.LoadKeysLookup();
             this.Load(wallet);
 
             return wallet;
@@ -236,7 +234,7 @@ namespace Breeze.Wallet
             this.SaveToFile(wallet);
 
             // adds the address to the list of tracked addresses
-            this.PubKeys = this.LoadKeys(coinType);
+            this.LoadKeysLookup();
             return account.GetFirstUnusedReceivingAddress().Address;
         }
 
@@ -435,7 +433,7 @@ namespace Breeze.Wallet
         /// <inheritdoc />
         public void ProcessBlock(int height, Block block)
         {
-            Console.WriteLine($"block notification: height: {height}, block hash: {block.Header.GetHash()}, coin type: {coinType}");
+            Console.WriteLine($"block notification: height: {height}, block hash: {block.Header.GetHash()}, coin type: {this.coinType}");
 
             foreach (Transaction transaction in block.Transactions)
             {
@@ -457,7 +455,8 @@ namespace Breeze.Wallet
         {
             Console.WriteLine($"transaction notification: tx hash {transaction.GetHash()}, coin type: {this.coinType}");
 
-            foreach (var pubKey in this.PubKeys)
+            // check the outputs
+            foreach (var pubKey in this.keysLookup.Keys)
             {
                 // check if the outputs contain one of our addresses
                 var utxo = transaction.Outputs.SingleOrDefault(o => pubKey == o.ScriptPubKey);
@@ -465,18 +464,16 @@ namespace Breeze.Wallet
                 {
                     AddTransactionToWallet(transaction.GetHash(), transaction.Time, transaction.Outputs.IndexOf(utxo), utxo.Value, pubKey, blockHeight, blockTime);
                 }
+            }
 
-                // if the inputs have a reference to a transaction containing one of our scripts
-                foreach (TxIn input in transaction.Inputs.Where(txIn => this.TrackedTransactions.Any(trackedTx => trackedTx.Hash == txIn.PrevOut.Hash)))
-                {
-                    TransactionDetails tTx = this.TrackedTransactions.Single(trackedTx => trackedTx.Hash == input.PrevOut.Hash);
+            // check the inputs - include those that have a reference to a transaction containing one of our scripts and the same index            
+            foreach (TxIn input in transaction.Inputs.Where(txIn => this.keysLookup.Values.SelectMany(v => v).Any(trackedTx => trackedTx.Id == txIn.PrevOut.Hash && trackedTx.Index == txIn.PrevOut.N)))
+            {
+                TransactionData tTx = this.keysLookup.Values.SelectMany(v => v).Single(trackedTx => trackedTx.Id == input.PrevOut.Hash && trackedTx.Index == input.PrevOut.N);
 
-                    // compare the index of the output in its original transaction and the index references in the input
-                    if (input.PrevOut.N == tTx.Index)
-                    {
-                        AddTransactionToWallet(transaction.GetHash(), transaction.Time, null, -tTx.Amount, pubKey, blockHeight, blockTime, tTx.Hash, tTx.Index);
-                    }
-                }
+                // find the script this input references
+                var keyToSpend = this.keysLookup.Single(v => v.Value.Contains(tTx)).Key;
+                AddTransactionToWallet(transaction.GetHash(), transaction.Time, null, -tTx.Amount, keyToSpend, blockHeight, blockTime, tTx.Id, tTx.Index);
             }
         }
 
@@ -494,81 +491,64 @@ namespace Breeze.Wallet
         /// <param name="spendingTransactionIndex">The index of the output in the transaction being referenced, if this is a spending transaction.</param>
         private void AddTransactionToWallet(uint256 transactionHash, uint time, int? index, Money amount, Script script, int? blockHeight = null, uint? blockTime = null, uint256 spendingTransactionId = null, int? spendingTransactionIndex = null)
         {
-            // selects all the transactions we already have in the wallet
-            var txs = this.Wallets.SelectMany(w => w.GetAllTransactionsByCoinType(this.coinType));
-
-            // add this transaction if it is not in the list
-            if (txs.All(t => t.Id != transactionHash || t.Index != index))
+            this.keysLookup.TryGetValue(script, out ICollection<TransactionData> trans);
+            trans.Add(new TransactionData
             {
-                foreach (var wallet in this.Wallets)
+                Amount = amount,
+                BlockHeight = blockHeight,
+                Confirmed = blockHeight.HasValue,
+                Id = transactionHash,
+                CreationTime = DateTimeOffset.FromUnixTimeMilliseconds(blockTime ?? time),
+                Index = index
+            });
+
+            // if this is a spending transaction, mark the spent transaction as such
+            if (spendingTransactionId != null)
+            {
+                var transactions = this.keysLookup.Values.SelectMany(v => v).Where(t => t.Id == spendingTransactionId);
+                if (transactions.Any())
                 {
-                    foreach (var accountRoot in wallet.AccountsRoot.Where(a => a.CoinType == this.coinType))
-                    {
-                        foreach (var account in accountRoot.Accounts)
-                        {
-                            var receivingAddress = account.ExternalAddresses.SingleOrDefault(a => a.ScriptPubKey == script);
-                            var changeAddress = account.InternalAddresses.SingleOrDefault(a => a.ScriptPubKey == script);
-                            bool isChange = receivingAddress == null && changeAddress != null;
-
-                            var address = receivingAddress ?? changeAddress;
-                            if (address != null)
-                            {
-                                address.Transactions.Add(new TransactionData
-                                {
-                                    Amount = amount,
-                                    BlockHeight = blockHeight,
-                                    Confirmed = blockHeight.HasValue,
-                                    Id = transactionHash,
-                                    CreationTime = DateTimeOffset.FromUnixTimeMilliseconds(blockTime ?? time),
-                                    Index = index
-                                });
-
-                                // notify a transaction has been found
-                                this.TransactionFound?.Invoke(this, new TransactionFoundEventArgs(wallet, accountRoot.CoinType, account, address, isChange));
-
-                                // if this is a spending transaction, mark the spent transaction as such
-                                if (spendingTransactionId != null)
-                                {
-                                    var transactions = account.GetTransactionsById(spendingTransactionId);
-                                    if (transactions.Any())
-                                    {
-                                        transactions.Single(t => t.Index == spendingTransactionIndex).SpentInTransaction = transactionHash;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    transactions.Single(t => t.Index == spendingTransactionIndex).SpentInTransaction = transactionHash;
                 }
-
-                this.TrackedTransactions.Add(new TransactionDetails
-                {
-                    Hash = transactionHash,
-                    Index = index,
-                    Amount = amount
-                });
             }
+
+            // notify a transaction has been found
+            this.TransactionFound?.Invoke(this, new TransactionFoundEventArgs(script, transactionHash));
         }
 
         private void OnTransactionFound(object sender, TransactionFoundEventArgs a)
         {
-            Console.WriteLine("event raised");
+            foreach (Wallet wallet in this.Wallets)
+            {
+                foreach (var account in wallet.GetAccountsByCoinType(this.coinType))
+                {
+                    bool isChange;
+                    if (account.ExternalAddresses.Any(address => address.ScriptPubKey == a.Script))
+                    {
+                        isChange = false;
+                    }
+                    else if (account.InternalAddresses.Any(address => address.ScriptPubKey == a.Script))
+                    {
+                        isChange = true;
+                    }
+                    else
+                    {
+                        continue;
+                    }
 
-            var wallet = this.Wallets.Single(w => w.Name == a.WalletName);
-            var accountsRoot = wallet.AccountsRoot.Single(ar => ar.CoinType == a.CoinType);
-            var account = accountsRoot.Accounts.Single(acc => acc.Name == a.AccountName);
+                    // calculate how many accounts to add to keep a buffer of 20 unused addresses
+                    int lastUsedAddressIndex = account.GetLastUsedAddress(isChange).Index;
+                    int addressesCount = isChange ? account.InternalAddresses.Count() : account.ExternalAddresses.Count();
+                    int emptyAddressesCount = addressesCount - lastUsedAddressIndex - 1;
+                    int accountsToAdd = UnusedAddressesBuffer - emptyAddressesCount;
+                    this.CreateAddressesInAccount(account, wallet.Network, accountsToAdd, isChange);
 
-            // calculate how many accounts to add to keep a buffer of 20 unused addresses
-            int lastUsedAddressIndex = account.GetLastUsedAddress(a.IsChange).Index;
-            int addressesCount = a.IsChange ? account.InternalAddresses.Count() : account.ExternalAddresses.Count();
-            int emptyAddressesCount = addressesCount - lastUsedAddressIndex - 1;
-            int accountsToAdd = UnusedAddressesBuffer - emptyAddressesCount;
-            this.CreateAddressesInAccount(account, wallet.Network, accountsToAdd, a.IsChange);
+                    // persists the address to the wallet file
+                    this.SaveToFile(wallet);
+                }
+            }
 
-            // persists the address to the wallet file
-            this.SaveToFile(wallet);
-
-            // adds the address to the list of tracked addresses
-            this.LoadKeys(a.CoinType);
+            this.LoadKeysLookup();
         }
 
         /// <inheritdoc />
@@ -716,40 +696,24 @@ namespace Breeze.Wallet
         }
 
         /// <summary>
-        /// Loads the script pub key we're tracking for faster lookups.
+        /// Loads the keys and transactions we're tracking in memory for faster lookups.
         /// </summary>
-        /// <param name="coinType">Type of the coin.</param>
         /// <returns></returns>
-        private HashSet<Script> LoadKeys(CoinType coinType)
+        private void LoadKeysLookup()
         {
-            var keys = new HashSet<Script>();
-            foreach (Wallet wallet in this.Wallets)
+            this.keysLookup = new Dictionary<Script, ICollection<TransactionData>>();
+            foreach (var wallet in this.Wallets)
             {
-                keys.UnionWith(wallet.GetAllPubKeysByCoinType(coinType));
-            }
-            return keys;
-        }
-
-        /// <summary>
-        /// Loads the transactions we're tracking in memory for faster lookups.
-        /// </summary>
-        /// <param name="coinType">Type of the coin.</param>
-        /// <returns></returns>
-        private HashSet<TransactionDetails> LoadTransactions(CoinType coinType)
-        {
-            var keys = new HashSet<TransactionDetails>();
-            foreach (Wallet wallet in this.Wallets)
-            {
-                keys.UnionWith(wallet.GetAllTransactionsByCoinType(coinType)
-                    .Select(t =>
-                    new TransactionDetails
+                var accounts = wallet.GetAccountsByCoinType(this.coinType);
+                foreach (var account in accounts)
+                {
+                    var addresses = account.ExternalAddresses.Concat(account.InternalAddresses);
+                    foreach (var address in addresses)
                     {
-                        Hash = t.Id,
-                        Index = t.Index,
-                        Amount = t.Amount
-                    }));
+                        this.keysLookup.Add(address.ScriptPubKey, address.Transactions);
+                    }
+                }
             }
-            return keys;
         }
 
         /// <summary>
@@ -781,19 +745,14 @@ namespace Breeze.Wallet
 
     public class TransactionFoundEventArgs : EventArgs
     {
-        public string WalletName { get; set; }
-        public string AccountName { get; set; }
-        public CoinType CoinType { get; set; }
-        public string Address { get; set; }
-        public bool IsChange { get; set; }
+        public Script Script { get; set; }
 
-        public TransactionFoundEventArgs(Wallet wallet, CoinType coinType, HdAccount account, HdAddress address, bool isChange)
+        public uint256 TransactionHash { get; set; }
+
+        public TransactionFoundEventArgs(Script script, uint256 transactionHash)
         {
-            this.WalletName = wallet.Name;
-            this.CoinType = coinType;
-            this.AccountName = account.Name;
-            this.Address = address.Address;
-            this.IsChange = isChange;
+            this.Script = script;
+            this.TransactionHash = transactionHash;
         }
     }
 }
