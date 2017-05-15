@@ -3,7 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ClipboardModule } from 'ngx-clipboard';
 
 import { SharedModule } from './shared/shared.module';
 
@@ -24,6 +25,7 @@ import { ReceiveComponent } from './wallet/receive/receive.component';
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
+    ClipboardModule,
     ReactiveFormsModule,
     FormsModule,
     HttpModule,

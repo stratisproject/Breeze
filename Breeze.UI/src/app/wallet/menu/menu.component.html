@@ -1,8 +1,8 @@
-<nav class="navbar navbar-toggleable-sm navbar-fixed-top navbar-light bg-faded ">
+<nav class="navbar navbar-toggleable-sm navbar-fixed-top">
   <div class="container">
     <ul class="navbar-nav mr-auto" routerLinkActive="active">
-      <li class="nav-item"><a class="nav-link" routerLink="dashboard">Dashboard</a></li>
-      <li class="nav-item"><a class="nav-link" routerLink="history">History</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="dashboard" [routerLinkActive]="['is-active']">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="history" [routerLinkActive]="['is-active']">History</a></li>
       <li class="nav-item"><a class="nav-link" (click)="logOut()">Logout</a></li>
     </ul>
     <div class="navbar-brand">Breeze</div>

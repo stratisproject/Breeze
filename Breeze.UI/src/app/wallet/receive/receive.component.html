@@ -1,16 +1,25 @@
-<div class="content-wrapper" id="receiveForm">
-    <h1>Receive</h1>
-    <div>
-        <div>
-            <table *ngIf="address">
-                <thead>
-                    <th>Receive address: </th>
-                </thead>
-                <tr>
-                    <td>{{ address }}</td>
-                </tr>
-            </table>
-            <button type="button" class="btn" (click)="activeModal.close('Close click')">Close</button>
-        </div>
+<div class="container" id="receiveForm">
+  <div class="row">
+    <div class="col">
+      <h1>Receive</h1>
     </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <table *ngIf="address">
+        <thead>
+          <th>Receive address: </th>
+        </thead>
+        <tr>
+          <td>{{ address }}</td>
+          <td><button class="btn" type="button" ngxClipboard [cbContent]="address" (cbOnSuccess)="isCopied1=true" [class.btn-success]= "isCopied1">Copy</button>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button type="button" class="btn" (click)="activeModal.close('Close click')">Close</button>
+    </div>
+  </div>
 </div>
