@@ -1,5 +1,5 @@
-<div class="container">
-  <div class="row">
+<div class="container nopadding">
+  <div class="row nopadding" id="dashboard">
     <div class="col">
       <div>Active Balance</div>
       <div>Balance: {{confirmedBalance | coinNotation | coinAbbreviation}}</div>
@@ -11,8 +11,8 @@
     </div>
     <div class="col">
       <div>
-        <button (click)="openSendDialog()" class="btn">SEND</button>
-        <button (click)="openReceiveDialog()" class="btn">RECEIVE</button>
+        <button (click)="openSendDialog()" class="btn" id="sendButton">Send</button>
+        <button (click)="openReceiveDialog()" class="btn" id="receiveButton">Receive</button>
       </div>
     </div>
   </div>

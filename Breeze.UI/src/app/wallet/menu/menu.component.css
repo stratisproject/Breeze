@@ -1,6 +1,23 @@
 .navbar {
-  height: 100px;
+  height: 60px;
   width: 100%;
   margin: 0;
   padding: 0;
+}
+
+.nav-link {
+  margin: 0 auto;
+  text-align: center;
+  width: 120px;
+  background-color: white;
+  color: black;
+  border: none;
+}
+
+.is-active {
+  background-color: white;
+  color: #FF9900;
+  border-bottom: 2px solid;
+  border-color: #FF9900;
+  padding-bottom:25px;
 }

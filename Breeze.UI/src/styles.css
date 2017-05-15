@@ -13,3 +13,24 @@ td {
   width: 100%;
   height: 100%;
 }
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+.row {
+  padding: 0;
+  margin: 0;
+}
+
+.col {
+  padding: 0;
+  margin: 0;
+}
