@@ -9,6 +9,8 @@ import { WalletRecovery } from '../classes/wallet-recovery';
 import { WalletLoad } from '../classes/wallet-load';
 import { WalletInfo } from '../classes/wallet-info';
 import { Mnemonic } from '../classes/mnemonic';
+import { TransactionBuilding } from '../classes/transaction-building';
+import { TransactionSending } from '../classes/transaction-sending';
 
 /**
  * For information on the API specification have a look at our Github:
@@ -104,6 +106,18 @@ export class ApiService {
 
       return this.http
         .get(this.webApiUrl + '/wallet/address', new RequestOptions({headers: this.headers, search: params}))
+        .map((response: Response) => response);
+    }
+
+    buildTransaction(data: TransactionBuilding): Observable<any> {
+      return this.http
+        .post(this.webApiUrl + '/wallet/build-transaction/', JSON.stringify(data), {headers: this.headers})
+        .map((response: Response) => response);
+    }
+
+    sendTransaction(data: TransactionSending): Observable<any> {
+      return this.http
+        .post(this.webApiUrl + '/wallet/send-transaction/', JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
 }
