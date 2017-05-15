@@ -323,14 +323,17 @@ namespace Breeze.Wallet
         }
 
         /// <summary>
-        /// Finds the address in which the transaction is contained.
+        /// Finds the addresses in which a transaction is contained.
         /// </summary>
-        /// <param name="transactionId">The transaction identifier.</param>
+        /// <remarks>
+        /// Returns a collection because a transaction can be contained in a change address as well as in a receive address (as a spend).
+        /// </remarks>
+        /// <param name="predicate">A predicate by which to filter the transactions.</param>
         /// <returns></returns>
-        public HdAddress FindAddressForTransaction(uint256 transactionId)
+        public IEnumerable<HdAddress> FindAddressesForTransaction(Func<TransactionData, bool> predicate)
         {
             var addresses = this.ExternalAddresses.Concat(this.InternalAddresses);
-            return addresses.SingleOrDefault(a => a.Transactions.Any(t => t.Id == transactionId));
+            return addresses.Where(a => a.Transactions.Any(predicate));
         }
     }
 
@@ -412,7 +415,7 @@ namespace Breeze.Wallet
         /// <summary>
         /// The height of the block including this transaction.
         /// </summary>
-        [JsonProperty(PropertyName = "blockHeight")]
+        [JsonProperty(PropertyName = "blockHeight", NullValueHandling = NullValueHandling.Ignore)]
         public int? BlockHeight { get; set; }
 
         /// <summary>
