@@ -26,7 +26,9 @@ export class SendComponent {
   private buildSendForm(): void {
     this.sendForm = this.fb.group({
       "address": ["", Validators.required],
-      "amount": ["", Validators.required]
+      "amount": ["", Validators.required],
+      "fee": [2, Validators.required],
+      "password": ["", Validators.required]
     });
 
     this.sendForm.valueChanges
@@ -52,7 +54,9 @@ export class SendComponent {
 
   formErrors = {
     'address': '',
-    'amount': ''
+    'amount': '',
+    'fee': '',
+    'password': ''
   };
 
   validationMessages = {
@@ -61,6 +65,12 @@ export class SendComponent {
     },
     'amount': {
       'required': 'An amount is required.'
+    },
+    'fee': {
+      'required': 'A fee is required.'
+    },
+    'password': {
+      'required': 'Your password is required.'
     }
   };
 
@@ -70,10 +80,10 @@ export class SendComponent {
       this.globalService.getWalletName(),
       this.globalService.getCoinType(),
       "account 0",
-      "123",
+      this.sendForm.get("password").value,
       this.sendForm.get("address").value,
       this.sendForm.get("amount").value,
-      "medium",
+      this.getFeeType(),
       true
     );
 
@@ -95,6 +105,19 @@ export class SendComponent {
         () => this.sendTransaction(this.responseMessage.hex)
       );
   };
+
+  private getFeeType(){
+    let feeValue = this.sendForm.get("fee").value;
+
+    switch(feeValue){
+      case 1:
+        return "low";
+      case 2:
+        return "medium";
+      case 3:
+        return "high";
+    }
+  }
 
   private sendTransaction(hex: string) {
     let transaction = new TransactionSending(hex);
