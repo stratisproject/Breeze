@@ -491,24 +491,38 @@ namespace Breeze.Wallet
         /// <param name="spendingTransactionIndex">The index of the output in the transaction being referenced, if this is a spending transaction.</param>
         private void AddTransactionToWallet(uint256 transactionHash, uint time, int? index, Money amount, Script script, int? blockHeight = null, uint? blockTime = null, uint256 spendingTransactionId = null, int? spendingTransactionIndex = null)
         {
+            // get the collection of transactions to add to.
             this.keysLookup.TryGetValue(script, out ICollection<TransactionData> trans);
-            trans.Add(new TransactionData
-            {
-                Amount = amount,
-                BlockHeight = blockHeight,
-                Confirmed = blockHeight.HasValue,
-                Id = transactionHash,
-                CreationTime = DateTimeOffset.FromUnixTimeMilliseconds(blockTime ?? time),
-                Index = index
-            });
 
-            // if this is a spending transaction, mark the spent transaction as such
-            if (spendingTransactionId != null)
+            // if it's the first time we see this transaction
+            if (trans != null && trans.All(t => t.Id != transactionHash))
             {
-                var transactions = this.keysLookup.Values.SelectMany(v => v).Where(t => t.Id == spendingTransactionId);
-                if (transactions.Any())
+                trans.Add(new TransactionData
                 {
-                    transactions.Single(t => t.Index == spendingTransactionIndex).SpentInTransaction = transactionHash;
+                    Amount = amount,
+                    BlockHeight = blockHeight,
+                    Confirmed = blockHeight.HasValue,
+                    Id = transactionHash,
+                    CreationTime = DateTimeOffset.FromUnixTimeMilliseconds(blockTime ?? time),
+                    Index = index
+                });
+
+                // if this is a spending transaction, mark the spent transaction as such
+                if (spendingTransactionId != null)
+                {
+                    var transactions = this.keysLookup.Values.SelectMany(v => v).Where(t => t.Id == spendingTransactionId);
+                    if (transactions.Any())
+                    {
+                        transactions.Single(t => t.Index == spendingTransactionIndex).SpentInTransaction = transactionHash;
+                    }
+                }
+            }
+            else if (trans.Any(t => t.Id == transactionHash && !t.Confirmed)) // if this is an unconfirmed transaction now received in a block
+            {
+                var foundTransaction = trans.Single(t => t.Id == transactionHash && !t.Confirmed);
+                if (blockHeight != null)
+                {
+                    foundTransaction.Confirmed = true;
                 }
             }
 
