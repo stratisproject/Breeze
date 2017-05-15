@@ -16,11 +16,15 @@ import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 export class ReceiveComponent {
   constructor(private apiService: ApiService, private globalService: GlobalService, public activeModal: NgbActiveModal) {}
 
-  private address: any;
+  private address: any = "";
   private errorMessage: string;
 
   ngOnInit() {
     this.getUnusedReceiveAddresses();
+  }
+
+  private copyAddress() {
+
   }
 
   private getUnusedReceiveAddresses() {
