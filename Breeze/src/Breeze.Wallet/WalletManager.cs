@@ -359,7 +359,7 @@ namespace Breeze.Wallet
             var coins = new List<Coin>();
             foreach (var transactionToUse in calculationResult.transactionsToUse)
             {
-                var address = account.FindAddressForTransaction(transactionToUse.Id);
+                var address = account.FindAddressesForTransaction(t => t.Id == transactionToUse.Id && t.Amount > 0).Single();
                 ExtKey addressExtKey = seedExtKey.Derive(new KeyPath(address.HdPath));
                 BitcoinExtKey addressPrivateKey = addressExtKey.GetWif(wallet.Network);
                 signingKeys.Add(addressPrivateKey);
