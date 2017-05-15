@@ -31,7 +31,7 @@ namespace Breeze.Wallet
 
         private readonly ConnectionManager connectionManager;
 
-        private readonly Dictionary<Script, ICollection<TransactionData>> keysLookup;
+        private Dictionary<Script, ICollection<TransactionData>> keysLookup;
 
         /// <summary>
         /// Occurs when a transaction is found.
