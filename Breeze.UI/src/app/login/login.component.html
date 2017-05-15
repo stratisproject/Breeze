@@ -1,27 +1,48 @@
-<h1>Welcome to Breeze</h1>
-<form *ngIf="hasWallet" [formGroup]="openWalletForm" (ngSubmit)="onDecryptClicked()">
-  <p>Choose the wallet you want to open:</p>
-  <div class="form-group">
-    <label>Select wallet name to open:</label>
-    <select class="form-control" formControlName="selectWallet">
-      <option *ngFor="let wallet of wallets" [value]="wallet">{{wallet}}</option>
-    </select>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>Welcome to Breeze</h1>
+    </div>
   </div>
-  <p>Please enter your password to decrypt your wallet</p>
-  <div class="form-group">
-    <label>Your password: </label>
-    <input class="form-control" type="password" formControlName="password" placeholder="Enter password here">
+  <div class="row">
+    <div class="col">
+      <form *ngIf="hasWallet" [formGroup]="openWalletForm" (ngSubmit)="onDecryptClicked()">
+        <div class="form-group">
+          <label>Select wallet name to open</label>
+          <select class="form-control" formControlName="selectWallet">
+            <option *ngFor="let wallet of wallets" [value]="wallet">{{wallet}}</option>
+          </select>
+        </div>
+        <p>Please enter your password to decrypt your wallet</p>
+        <div class="form-group">
+          <label>Your password: </label>
+          <input class="form-control" type="password" formControlName="password" placeholder="Enter password here">
+        </div>
+        <div class="form-group">
+          <button type="submit" [disabled]="!openWalletForm.valid" class="btn btn-success">Decrypt</button>
+        </div>
+      </form>
+    </div>
   </div>
-  <div class="form-group">
-    <button type="submit" [disabled]="!openWalletForm.valid" class="btn btn-success">Decrypt</button>
+  <div class="row">
+    <div class="col" *ngIf="hasWallet;else no_wallet">
+      If you like to create or restore a wallet please click the button below.
+    </div>
   </div>
-</form>
-
-<div *ngIf="hasWallet;else no_wallet">
-  <p> If you like to create or restore a wallet please click the button below.</p>
+  <div class="row">
+    <div class="col">
+      <ng-template #no_wallet>
+        <p> Looks like you're new here. Please create or restore a wallet.</p>
+      </ng-template>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button type="button" (click)="onCreateClicked()" class="btn btn-success">Create or restore wallet</button>
+    </div>
+  </div>
 </div>
-<ng-template #no_wallet>
-  <p> Looks like you're new here. Please create or restore a wallet.</p>
-</ng-template>
 
-<button type="button" (click)="onCreateClicked()" class="btn btn-success">Create or restore wallet</button>
+
+
+
