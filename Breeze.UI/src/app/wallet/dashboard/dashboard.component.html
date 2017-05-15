@@ -19,19 +19,19 @@
   <div class="row" id="transactions">
     <div class="col">
       <div>Transactions</div>
-      <table *ngIf="transactions; else noTransactions">
+      <table cellspacing="5px" cellpadding="5px" class="transactionsTable" *ngIf="transactions; else noTransactions">
         <thead>
-          <th>Timestamp</th>
           <th>Amount</th>
           <th>Confirmed</th>
+          <th>Timestamp</th>
           <th>Transaction ID</th>
         </thead>
         <tr *ngFor="let transaction of transactions; let i=index">
             <!--<td *ngIf="{{ transaction.amount }} < 0">SENT</td>
             <td *ngIf="{{ transaction.amount }} > 0">RECEIVED</td>-->
-            <td *ngIf="i<5">{{ transaction.timestamp }}</td>
             <td *ngIf="i<5">{{ transaction.amount | coinNotation | coinAbbreviation }}</td>
             <td *ngIf="i<5">{{ transaction.confirmed }}</td>
+            <td *ngIf="i<5">{{ transaction.timestamp * 1000 | date:'medium' }}</td>
             <td *ngIf="i<5">{{ transaction.txId }}</td>
         </tr>
       </table>
