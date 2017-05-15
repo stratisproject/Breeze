@@ -325,7 +325,7 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public (string hex, Money fee) BuildTransaction(string walletName, string accountName, CoinType coinType, string password, string destinationAddress, Money amount, string feeType, bool allowUnconfirmed)
+        public (string hex, uint256 transactionId, Money fee) BuildTransaction(string walletName, string accountName, CoinType coinType, string password, string destinationAddress, Money amount, string feeType, bool allowUnconfirmed)
         {
             if (amount == Money.Zero)
             {
@@ -388,7 +388,7 @@ namespace Breeze.Wallet
                 throw new Exception("Could not build transaction, please make sure you entered the correct data.");
             }
 
-            return (tx.ToHex(), calculationResult.fee);
+            return (tx.ToHex(), tx.GetHash(), calculationResult.fee);
         }
 
         /// <summary>

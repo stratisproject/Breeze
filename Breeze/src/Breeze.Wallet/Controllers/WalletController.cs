@@ -280,7 +280,8 @@ namespace Breeze.Wallet.Controllers
                 var model = new WalletBuildTransactionModel
                 {
                     Hex = transactionResult.hex,
-                    Fee = transactionResult.fee
+                    Fee = transactionResult.fee,
+                    TransactionId = transactionResult.transactionId
                 };
                 return this.Json(model);
             }
