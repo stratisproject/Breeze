@@ -1,4 +1,4 @@
-<div class="content-wrapper">
+<div class="content-wrapper" id="receiveForm">
     <h1>Receive</h1>
     <div>
         <div>
@@ -10,6 +10,7 @@
                     <td>{{ address }}</td>
                 </tr>
             </table>
+            <button type="button" class="btn" (click)="activeModal.close('Close click')">Close</button>
         </div>
     </div>
 </div>

@@ -1,16 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+
 import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
 import { WalletInfo } from '../../shared/classes/wallet-info';
 
+import { SendComponent } from '../send/send.component';
+import { ReceiveComponent } from '../receive/receive.component';
+
 @Component({
   selector: 'dashboard-component',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
+  styleUrls: ['./dashboard.component.css']
 })
 
 export class DashboardComponent {
-  constructor(private apiService: ApiService, private globalService: GlobalService) {}
+  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal) {}
 
   private balanceResponse: any;
   private confirmedBalance: number;
@@ -24,11 +29,11 @@ export class DashboardComponent {
   };
 
   private openSendDialog() {
-
+    const modalRef = this.modalService.open(SendComponent);
   };
 
   private openReceiveDialog() {
-
+    const modalRef = this.modalService.open(ReceiveComponent);
   };
 
   private getWalletBalance() {

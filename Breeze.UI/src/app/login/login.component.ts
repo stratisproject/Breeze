@@ -83,7 +83,6 @@ export class LoginComponent implements OnInit {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            let responseMessage = response.json();
             this.globalService.setWalletName(walletLoad.name)
             this.globalService.setCoinType(1);
             this.router.navigate(['/wallet']);

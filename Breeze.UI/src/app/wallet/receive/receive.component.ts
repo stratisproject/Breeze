@@ -5,6 +5,8 @@ import { GlobalService } from '../../shared/services/global.service';
 
 import { WalletInfo } from '../../shared/classes/wallet-info';
 
+import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
   selector: 'receive-component',
   templateUrl: './receive.component.html',
@@ -12,7 +14,7 @@ import { WalletInfo } from '../../shared/classes/wallet-info';
 })
 
 export class ReceiveComponent {
-  constructor(private apiService: ApiService, private globalService: GlobalService) {}
+  constructor(private apiService: ApiService, private globalService: GlobalService, public activeModal: NgbActiveModal) {}
 
   private address: any;
   private errorMessage: string;

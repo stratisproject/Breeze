@@ -33,6 +33,7 @@
     "@angular/platform-browser-dynamic": "^4.1.2",
     "@angular/platform-server": "^4.1.2",
     "@angular/router": "^4.1.2",
+    "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.25",
     "angular2-material-datepicker": "^0.5.0",
     "bootstrap": "^4.0.0-alpha.6",
     "core-js": "^2.4.1",

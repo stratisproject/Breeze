@@ -15,7 +15,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row" id="transactions">
     <div class="col">
       <div>Transactions</div>
       <table *ngIf="transactions; else noTransactions">
@@ -29,7 +29,7 @@
             <!--<td *ngIf="{{ transaction.amount }} < 0">SENT</td>
             <td *ngIf="{{ transaction.amount }} > 0">RECEIVED</td>-->
             <td *ngIf="i<5">{{ transaction.timestamp }}</td>
-            <td *ngIf="i<5">{{ transaction.amount }}</td>
+            <td *ngIf="i<5">{{ transaction.amount | coinNotation | coinAbbreviation }}</td>
             <td *ngIf="i<5">{{ transaction.confirmed }}</td>
             <td *ngIf="i<5">{{ transaction.txId }}</td>
         </tr>
