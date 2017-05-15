@@ -1,14 +1,17 @@
-<div class="content-wrapper">
+<div class="content-wrapper" id="sendForm">
   <h1>Send</h1>
-  <form (ngSubmit)="onSubmit()" #sendForm="ngForm">
+  <form [formGroup]="sendForm" (ngSubmit)="send()">
       <div class="form-group">
-        <label for="toAddress">Pay To: </label>
-        <input type="text" class="form-control" id="name" required name="toAddress">
+        <label>Pay To: </label>
+        <input class="form-control" formControlName="address" type="text" placeholder="Please enter the recipients address.">
+        <div *ngIf="formErrors.address" class="alert alert-danger">{{formErrors.address}}</div>
       </div>
       <div class="form-group">
-        <label for="amount">Amount</label>
-        <input type="text" class="form-control" id="amount" required name="amount">
+        <label>Amount</label>
+        <input class="form-control" formControlName="amount" type="text" placeholder="Please enter the amount you want to send.">
+        <div *ngIf="formErrors.amount" class="alert alert-danger">{{formErrors.amount}}</div>
       </div>
-      <button type="submit" class="btn btn-success">Submit</button>
+      <button type="submit" [disabled]="!sendForm.valid" class="btn btn-success">Send</button>
+      <button type="button" class="btn" (click)="activeModal.close('Close click')">Close</button>
   </form>
 </div>
