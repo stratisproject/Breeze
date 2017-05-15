@@ -9,13 +9,11 @@ namespace Breeze.Wallet.Notifications
 	public class BlockObserver : SignalObserver<Block>
     {
         private readonly ConcurrentChain chain;
-        private readonly CoinType coinType;
         private readonly IWalletManager walletManager;
 
-        public BlockObserver(ConcurrentChain chain, CoinType coinType, IWalletManager walletManager)
+        public BlockObserver(ConcurrentChain chain, IWalletManager walletManager)
         {
             this.chain = chain;
-            this.coinType = coinType;
             this.walletManager = walletManager;
         }
 
@@ -28,7 +26,7 @@ namespace Breeze.Wallet.Notifications
             var hash = block.Header.GetHash();
             var height = this.chain.GetBlock(hash).Height;
 
-            this.walletManager.ProcessBlock(this.coinType, height, block);
+            this.walletManager.ProcessBlock(height, block);
         }
     }
 }

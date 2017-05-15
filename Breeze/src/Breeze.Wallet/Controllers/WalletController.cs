@@ -78,14 +78,9 @@ namespace Breeze.Wallet.Controllers
             {
                 // get the wallet folder 
                 DirectoryInfo walletFolder = GetWalletFolder(request.FolderPath);
-
                 Wallet wallet = this.walletManager.LoadWallet(request.Password, walletFolder.FullName, request.Name);
-                return this.Json(new WalletModel
-                {
-                    Network = wallet.Network.Name,
-                    //	Addresses = wallet.GetFirstNAddresses(10).Select(a => a.ToWif()),
-                    FileName = wallet.WalletFilePath
-                });
+
+                return this.Ok();
             }
             catch (FileNotFoundException e)
             {
@@ -122,18 +117,12 @@ namespace Breeze.Wallet.Controllers
             {
                 // get the wallet folder 
                 DirectoryInfo walletFolder = GetWalletFolder(request.FolderPath);
-
                 Wallet wallet = this.walletManager.RecoverWallet(request.Password, walletFolder.FullName, request.Name, request.Network, request.Mnemonic, null, request.CreationDate);
                 
                 // start syncing the wallet from the creation date
                 this.tracker.SyncFrom(request.CreationDate);
 
-                return this.Json(new WalletModel
-                {
-                    Network = wallet.Network.Name,
-                    //	Addresses = wallet.GetFirstNAddresses(10).Select(a => a.ToWif()),
-                    FileName = wallet.WalletFilePath
-                });
+                return this.Ok();
             }
             catch (InvalidOperationException e)
             {
@@ -287,12 +276,11 @@ namespace Breeze.Wallet.Controllers
 
             try
             {
-                var transaction = this.walletManager.BuildTransaction(request.WalletName, request.AccountName, request.CoinType, request.Password, request.DestinationAddress, request.Amount, request.FeeType, request.AllowUnconfirmed);
-                var fee = transaction.TotalOut - request.Amount;
+                var transactionResult = this.walletManager.BuildTransaction(request.WalletName, request.AccountName, request.CoinType, request.Password, request.DestinationAddress, request.Amount, request.FeeType, request.AllowUnconfirmed);                
                 var model = new WalletBuildTransactionModel
                 {
-                    Hex = transaction.ToHex(),
-                    Fee = fee
+                    Hex = transactionResult.hex,
+                    Fee = transactionResult.fee
                 };
                 return this.Json(model);
             }

@@ -84,6 +84,20 @@ namespace Breeze.Wallet
             }
             return result;
         }
+
+        /// <summary>
+        /// Gets all the pub keys conatined in this wallet.
+        /// </summary>
+        /// <param name="coinType">Type of the coin.</param>
+        /// <returns></returns>
+        public IEnumerable<Script> GetAllPubKeysByCoinType(CoinType coinType)
+        {            
+            var accounts = this.GetAccountsByCoinType(coinType).ToList();
+            foreach (var address in accounts.SelectMany(a => a.ExternalAddresses).Concat(accounts.SelectMany(a => a.InternalAddresses)))
+            {
+                yield return address.ScriptPubKey;
+            }            
+        }
     }
 
     /// <summary>
@@ -107,7 +121,7 @@ namespace Breeze.Wallet
         /// The accounts used in the wallet.
         /// </summary>
         [JsonProperty(PropertyName = "accounts")]
-        public IEnumerable<HdAccount> Accounts { get; set; }
+        public ICollection<HdAccount> Accounts { get; set; }
 
         /// <summary>
         /// Gets the first account that contains no transaction.
@@ -142,6 +156,9 @@ namespace Breeze.Wallet
             }
             return account;
         }
+
+       
+
     }
 
     /// <summary>
@@ -210,13 +227,13 @@ namespace Breeze.Wallet
         /// The list of external addresses, typically used for receiving money.
         /// </summary>
         [JsonProperty(PropertyName = "externalAddresses")]
-        public IEnumerable<HdAddress> ExternalAddresses { get; set; }
+        public ICollection<HdAddress> ExternalAddresses { get; set; }
 
         /// <summary>
         /// The list of internal addresses, typically used to receive change.
         /// </summary>
         [JsonProperty(PropertyName = "internalAddresses")]
-        public IEnumerable<HdAddress> InternalAddresses { get; set; }
+        public ICollection<HdAddress> InternalAddresses { get; set; }
 
         /// <summary>
         /// Gets the type of coin this account is for.
@@ -357,7 +374,7 @@ namespace Breeze.Wallet
         /// A list of transactions involving this address.
         /// </summary>
         [JsonProperty(PropertyName = "transactions")]
-        public IEnumerable<TransactionData> Transactions { get; set; }
+        public ICollection<TransactionData> Transactions { get; set; }
     }
 
     /// <summary>
