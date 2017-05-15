@@ -135,7 +135,7 @@ namespace Breeze.Wallet
         /// <param name="feeType">The type of fee to be included.</param>
         /// <param name="allowUnconfirmed">Whether or not we allow this transaction to rely on unconfirmed outputs.</param>
         /// <returns></returns>
-        (string hex, Money fee) BuildTransaction(string walletName, string accountName, CoinType coinType, string password, string destinationAddress, Money amount, string feeType, bool allowUnconfirmed);
+        (string hex, uint256 transactionId, Money fee) BuildTransaction(string walletName, string accountName, CoinType coinType, string password, string destinationAddress, Money amount, string feeType, bool allowUnconfirmed);
         
         /// <summary>
         /// Sends a transaction to the network.
