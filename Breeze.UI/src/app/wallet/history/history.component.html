@@ -10,7 +10,7 @@
     <!--<td *ngIf="{{ transaction.amount }} < 0; else received">SENT</td>
     <td #received>RECEIVED</td>-->
     <td>{{ transaction.timestamp }}</td>
-    <td>{{ transaction.amount }}</td>
+    <td>{{ transaction.amount | coinNotation | coinAbbreviation }}</td>
     <td>{{ transaction.confirmed }}</td>
     <td>{{ transaction.txId }}</td>
   </tr>
