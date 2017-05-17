@@ -196,7 +196,7 @@ namespace Breeze.Wallet.Controllers
                         model.Transactions.Add(new TransactionItem
                         {
                             Amount = transaction.Amount,
-                            Confirmed = transaction.Confirmed,
+                            Confirmed = transaction.IsConfirmed(),
                             Timestamp = transaction.CreationTime,
                             TransactionId = transaction.Id,
                             Address = address.Address
@@ -244,8 +244,8 @@ namespace Breeze.Wallet.Controllers
                         CoinType = request.CoinType,
                         Name = account.Name,
                         HdPath = account.HdPath,
-                        AmountConfirmed = allTransactions.Where(t => t.Confirmed).Sum(t => t.Amount),
-                        AmountUnconfirmed = allTransactions.Where(t => !t.Confirmed).Sum(t => t.Amount)
+                        AmountConfirmed = allTransactions.Where(t => t.IsConfirmed()).Sum(t => t.Amount),
+                        AmountUnconfirmed = allTransactions.Where(t => !t.IsConfirmed()).Sum(t => t.Amount)
                     };
                     model.AccountsBalances.Add(balance);
                 }

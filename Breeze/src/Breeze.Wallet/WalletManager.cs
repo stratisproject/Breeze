@@ -506,7 +506,6 @@ namespace Breeze.Wallet
                 {
                     Amount = amount,
                     BlockHeight = blockHeight,
-                    Confirmed = blockHeight.HasValue,
                     Id = transactionHash,
                     CreationTime = DateTimeOffset.FromUnixTimeMilliseconds(blockTime ?? time),
                     Index = index
@@ -522,13 +521,21 @@ namespace Breeze.Wallet
                     }
                 }
             }
-            else if (trans.Any(t => t.Id == transactionHash && !t.Confirmed)) // if this is an unconfirmed transaction now received in a block
+            else if (trans.Any(t => t.Id == transactionHash)) // if this is an unconfirmed transaction now received in a block
             {
-                var foundTransaction = trans.Single(t => t.Id == transactionHash && !t.Confirmed);
-                if (blockHeight != null)
+                var foundTransaction = trans.Single(t => t.Id == transactionHash);
+
+                // update the block height
+                if (foundTransaction.BlockHeight == null && blockHeight != null)
                 {
-                    foundTransaction.Confirmed = true;
+                    foundTransaction.BlockHeight = blockHeight;
                 }
+
+                // update the block time
+                if (blockTime != null)
+                {
+                    foundTransaction.CreationTime = DateTimeOffset.FromUnixTimeMilliseconds(blockTime.Value);
+                }                
             }
 
             // notify a transaction has been found

@@ -428,19 +428,20 @@ namespace Breeze.Wallet
         /// </summary>
         [JsonProperty(PropertyName = "blockHeight", NullValueHandling = NullValueHandling.Ignore)]
         public int? BlockHeight { get; set; }
-
-        /// <summary>
-        /// Whether this transaction has been confirmed or not.
-        /// </summary>
-        [JsonProperty(PropertyName = "confirmed")]
-        public bool Confirmed { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the creation time.
         /// </summary>
         [JsonProperty(PropertyName = "creationTime")]
         [JsonConverter(typeof(DateTimeOffsetConverter))]
         public DateTimeOffset CreationTime { get; set; }
-        
+
+        /// <summary>
+        /// Determines whether this transaction is confirmed.
+        /// </summary>    
+        public bool IsConfirmed()
+        {
+            return this.BlockHeight != null;
+        }
     }
 }
