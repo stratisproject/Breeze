@@ -235,20 +235,28 @@ This endpoint will get the last address containing no transaction or will create
 ### Responses
 ```
 {
-  "transactions": [
+  "transactionsHistory": [    
     {
-      "address": "1H2jbtknP6jRYx2riaXJf3H9Mb1JC6kcL2",
-      "txId": "b800f9b24a9c49a375cddf4fc8c484722af0bec7d23ac65b782daf1b0089bb29",
-      "amount": -50360386,
-      "confirmed": true,
-      "timestamp": "1337803568"
+      "type": "send",
+      "id": "6358161c713688e372481fce7f20f3f8692ab2e4e657f3d9afa750ebee54e6c3",
+      "amount": 500000,
+      "payments": [
+        {
+          "destinationAddress": "mt7W2Zf69KC9472TPCzUeLLhBDSmC82AWz",
+          "amount": 500000
+        }
+      ],
+      "fee": 100000,
+      "confirmedInBlock": 1122310,
+      "timestamp": "1494594937"
     },
     {
-      "address": "1H2jbtknP6jRYx2riaXJf3H9Mb1JC6kcL2",
-      "txId": "9c0560a34f88573a71ebf68a2540cb7215b55bc2ddee0af3cb1dc343f2f3e0da",
-      "amount": 53845026,
-      "confirmed": true,
-      "timestamp": "1337605326"
+      "type": "received",
+      "toAddress": "mnDsG7kTYCeVNqnEmfvdYeNgZwxhjqm2jc",
+      "id": "75ce74643aae01ccbe2bbc05efb4788cc9a16a9192add4d7082561a40a541057",
+      "amount": 110000000,
+      "confirmedInBlock": 1122292,
+      "timestamp": "1494591670"
     }
   ]
 }
