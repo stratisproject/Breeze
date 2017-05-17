@@ -29,16 +29,18 @@ namespace Breeze.Wallet
 
         private readonly CoinType coinType;
 
+        private readonly Network network;
+
         private readonly ConnectionManager connectionManager;
 
-        private Dictionary<Script, ICollection<TransactionData>> keysLookup;
+        private Dictionary<Script, HdAddress> keysLookup;
 
         /// <summary>
         /// Occurs when a transaction is found.
         /// </summary>
         public event EventHandler<TransactionFoundEventArgs> TransactionFound;
 
-        public WalletManager(ConnectionManager connectionManager, Network netwrok)
+        public WalletManager(ConnectionManager connectionManager, Network network)
         {
             this.Wallets = new List<Wallet>();
 
@@ -49,7 +51,8 @@ namespace Breeze.Wallet
             }
 
             this.connectionManager = connectionManager;
-            this.coinType = (CoinType)netwrok.Consensus.CoinType;
+            this.network = network;
+            this.coinType = (CoinType)network.Consensus.CoinType;
 
             // load data in memory for faster lookups
             this.LoadKeysLookup();
@@ -467,13 +470,17 @@ namespace Breeze.Wallet
             }
 
             // check the inputs - include those that have a reference to a transaction containing one of our scripts and the same index            
-            foreach (TxIn input in transaction.Inputs.Where(txIn => this.keysLookup.Values.SelectMany(v => v).Any(trackedTx => trackedTx.Id == txIn.PrevOut.Hash && trackedTx.Index == txIn.PrevOut.N)))
+            foreach (TxIn input in transaction.Inputs.Where(txIn => this.keysLookup.Values.SelectMany(v => v.Transactions).Any(trackedTx => trackedTx.Id == txIn.PrevOut.Hash && trackedTx.Index == txIn.PrevOut.N)))
             {
-                TransactionData tTx = this.keysLookup.Values.SelectMany(v => v).Single(trackedTx => trackedTx.Id == input.PrevOut.Hash && trackedTx.Index == input.PrevOut.N);
+                TransactionData tTx = this.keysLookup.Values.SelectMany(v => v.Transactions).Single(trackedTx => trackedTx.Id == input.PrevOut.Hash && trackedTx.Index == input.PrevOut.N);
 
                 // find the script this input references
-                var keyToSpend = this.keysLookup.Single(v => v.Value.Contains(tTx)).Key;
-                AddTransactionToWallet(transaction.GetHash(), transaction.Time, null, -tTx.Amount, keyToSpend, blockHeight, blockTime, tTx.Id, tTx.Index);
+                var keyToSpend = this.keysLookup.Single(v => v.Value.Transactions.Contains(tTx)).Key;                
+                
+                // get the details of the outputs paid out
+                IEnumerable<TxOut> paidoutto = transaction.Outputs.Where(o => !this.keysLookup.Keys.Contains(o.ScriptPubKey));
+
+                AddTransactionToWallet(transaction.GetHash(), transaction.Time, null, -tTx.Amount, keyToSpend, blockHeight, blockTime, tTx.Id, tTx.Index, paidoutto);                
             }
         }
 
@@ -489,41 +496,68 @@ namespace Breeze.Wallet
         /// <param name="blockTime">The block time.</param>
         /// <param name="spendingTransactionId">The id of the transaction containing the output being spent, if this is a spending transaction.</param>
         /// <param name="spendingTransactionIndex">The index of the output in the transaction being referenced, if this is a spending transaction.</param>
-        private void AddTransactionToWallet(uint256 transactionHash, uint time, int? index, Money amount, Script script, int? blockHeight = null, uint? blockTime = null, uint256 spendingTransactionId = null, int? spendingTransactionIndex = null)
+        private void AddTransactionToWallet(uint256 transactionHash, uint time, int? index, Money amount, Script script, int? blockHeight = null, uint? blockTime = null, uint256 spendingTransactionId = null, int? spendingTransactionIndex = null, IEnumerable<TxOut> paidToOutputs = null)
         {
             // get the collection of transactions to add to.
-            this.keysLookup.TryGetValue(script, out ICollection<TransactionData> trans);
+            this.keysLookup.TryGetValue(script, out HdAddress address);
+
+            var trans = address.Transactions;
 
             // if it's the first time we see this transaction
-            if (trans != null && trans.All(t => t.Id != transactionHash))
+            if (trans.All(t => t.Id != transactionHash))
             {
-                trans.Add(new TransactionData
+                var newTransaction = new TransactionData
                 {
                     Amount = amount,
                     BlockHeight = blockHeight,
-                    Confirmed = blockHeight.HasValue,
                     Id = transactionHash,
                     CreationTime = DateTimeOffset.FromUnixTimeMilliseconds(blockTime ?? time),
                     Index = index
-                });
+                };
+                trans.Add(newTransaction);
+
+                // if this is a spending transaction, keep a record of the payments made out to other scripts.
+                if (paidToOutputs != null && paidToOutputs.Any())
+                {
+                    List<PaymentDetails> payments = new List<PaymentDetails>();
+                    foreach (var paidToOutput in paidToOutputs)
+                    {
+                        payments.Add(new PaymentDetails
+                        {
+                            DestinationScriptPubKey = paidToOutput.ScriptPubKey,
+                            DestinationAddress = paidToOutput.ScriptPubKey.GetDestinationAddress(this.network).ToString(),
+                            Amount = paidToOutput.Value
+                        });
+                    }
+
+                    newTransaction.Payments = payments;
+                }
 
                 // if this is a spending transaction, mark the spent transaction as such
                 if (spendingTransactionId != null)
                 {
-                    var transactions = this.keysLookup.Values.SelectMany(v => v).Where(t => t.Id == spendingTransactionId);
+                    var transactions = this.keysLookup.Values.SelectMany(v => v.Transactions).Where(t => t.Id == spendingTransactionId);
                     if (transactions.Any())
                     {
                         transactions.Single(t => t.Index == spendingTransactionIndex).SpentInTransaction = transactionHash;
                     }
                 }
             }
-            else if (trans.Any(t => t.Id == transactionHash && !t.Confirmed)) // if this is an unconfirmed transaction now received in a block
+            else if (trans.Any(t => t.Id == transactionHash)) // if this is an unconfirmed transaction now received in a block
             {
-                var foundTransaction = trans.Single(t => t.Id == transactionHash && !t.Confirmed);
-                if (blockHeight != null)
+                var foundTransaction = trans.Single(t => t.Id == transactionHash);
+
+                // update the block height
+                if (foundTransaction.BlockHeight == null && blockHeight != null)
                 {
-                    foundTransaction.Confirmed = true;
+                    foundTransaction.BlockHeight = blockHeight;
                 }
+
+                // update the block time
+                if (blockTime != null)
+                {
+                    foundTransaction.CreationTime = DateTimeOffset.FromUnixTimeMilliseconds(blockTime.Value);
+                }                
             }
 
             // notify a transaction has been found
@@ -715,7 +749,7 @@ namespace Breeze.Wallet
         /// <returns></returns>
         private void LoadKeysLookup()
         {
-            this.keysLookup = new Dictionary<Script, ICollection<TransactionData>>();
+            this.keysLookup = new Dictionary<Script, HdAddress>();
             foreach (var wallet in this.Wallets)
             {
                 var accounts = wallet.GetAccountsByCoinType(this.coinType);
@@ -724,7 +758,7 @@ namespace Breeze.Wallet
                     var addresses = account.ExternalAddresses.Concat(account.InternalAddresses);
                     foreach (var address in addresses)
                     {
-                        this.keysLookup.Add(address.ScriptPubKey, address.Transactions);
+                        this.keysLookup.Add(address.ScriptPubKey, address);
                     }
                 }
             }

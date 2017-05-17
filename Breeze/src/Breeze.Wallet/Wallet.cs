@@ -155,10 +155,7 @@ namespace Breeze.Wallet
                 throw new Exception($"No account with name {accountName} could be found.");
             }
             return account;
-        }
-
-       
-
+        }        
     }
 
     /// <summary>
@@ -378,6 +375,17 @@ namespace Breeze.Wallet
         /// </summary>
         [JsonProperty(PropertyName = "transactions")]
         public ICollection<TransactionData> Transactions { get; set; }
+
+        /// <summary>
+        /// Determines whether this is a change address or a receive address.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if it is a change address; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsChangeAddress()
+        {            
+            return int.Parse(this.HdPath.Split('/')[4]) == 1;
+        }
     }
 
     /// <summary>
@@ -407,6 +415,12 @@ namespace Breeze.Wallet
         public Money Amount { get; set; }
 
         /// <summary>
+        /// A list of payments made out in this transaction.
+        /// </summary>
+        [JsonProperty(PropertyName = "payments", NullValueHandling = NullValueHandling.Ignore)]
+        public ICollection<PaymentDetails> Payments { get; set; }
+
+        /// <summary>
         /// The index of this scriptPubKey in the transaction it is contained.
         /// </summary>
         [JsonProperty(PropertyName = "index", NullValueHandling = NullValueHandling.Ignore)]
@@ -417,19 +431,46 @@ namespace Breeze.Wallet
         /// </summary>
         [JsonProperty(PropertyName = "blockHeight", NullValueHandling = NullValueHandling.Ignore)]
         public int? BlockHeight { get; set; }
-
-        /// <summary>
-        /// Whether this transaction has been confirmed or not.
-        /// </summary>
-        [JsonProperty(PropertyName = "confirmed")]
-        public bool Confirmed { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the creation time.
         /// </summary>
         [JsonProperty(PropertyName = "creationTime")]
         [JsonConverter(typeof(DateTimeOffsetConverter))]
         public DateTimeOffset CreationTime { get; set; }
-        
+
+        /// <summary>
+        /// Determines whether this transaction is confirmed.
+        /// </summary>    
+        public bool IsConfirmed()
+        {
+            return this.BlockHeight != null;
+        }
+    }
+
+    /// <summary>
+    /// An object representing a payment.
+    /// </summary>
+    public class PaymentDetails
+    {
+        /// <summary>
+        /// The script pub key of the destination address.
+        /// </summary>
+        [JsonProperty(PropertyName = "destinationScriptPubKey")]
+        [JsonConverter(typeof(ScriptJsonConverter))]
+        public Script DestinationScriptPubKey { get; set; }
+
+        /// <summary>
+        /// The Base58 representation of the destination  address.
+        /// </summary>
+        [JsonProperty(PropertyName = "destinationAddress")]
+        public string DestinationAddress { get; set; }
+
+        /// <summary>
+        /// The transaction amount.
+        /// </summary>
+        [JsonProperty(PropertyName = "amount")]
+        [JsonConverter(typeof(MoneyJsonConverter))]
+        public Money Amount { get; set; }
     }
 }

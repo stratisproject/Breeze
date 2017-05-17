@@ -185,26 +185,50 @@ namespace Breeze.Wallet.Controllers
 
             try
             {
-                WalletHistoryModel model = new WalletHistoryModel { Transactions = new List<TransactionItem>() };
+                WalletHistoryModel model = new WalletHistoryModel { TransactionsHistory = new List<TransactionItemModel>() };
 
                 // get transactions contained in the wallet
                 var addresses = this.walletManager.GetHistoryByCoinType(request.WalletName, request.CoinType);
-                foreach (var address in addresses)
+                foreach (var address in addresses.Where(a => !a.IsChangeAddress()))
                 {
                     foreach (var transaction in address.Transactions)
                     {
-                        model.Transactions.Add(new TransactionItem
+                        TransactionItemModel item = new TransactionItemModel();
+                        if (transaction.Amount > Money.Zero)
                         {
-                            Amount = transaction.Amount,
-                            Confirmed = transaction.Confirmed,
-                            Timestamp = transaction.CreationTime,
-                            TransactionId = transaction.Id,
-                            Address = address.Address
-                        });
+                            item.Type = TransactionItemType.Received;
+                            item.ToAddress = address.Address;
+                            item.Amount = transaction.Amount;
+                        }
+                        else
+                        {
+                            item.Type = TransactionItemType.Send;
+                            item.Amount = Money.Zero;
+                            item.Payments = new List<PaymentDetailModel>();
+                            foreach (var payment in transaction.Payments)
+                            {
+                                item.Payments.Add(new PaymentDetailModel
+                                {
+                                    DestinationAddress = payment.DestinationAddress,
+                                    Amount = payment.Amount
+                                });
+
+                                item.Amount += payment.Amount;
+                            }
+
+                            var changeAddress = addresses.Single(a => a.IsChangeAddress() && a.Transactions.Any(t => t.Id == transaction.Id));
+                            item.Fee =  transaction.Amount.Abs() - item.Amount - changeAddress.Transactions.First(t => t.Id == transaction.Id).Amount;
+                        }
+
+                        item.Id = transaction.Id;
+                        item.Timestamp = transaction.CreationTime;
+                        item.ConfirmedInBlock = transaction.BlockHeight;
+
+                        model.TransactionsHistory.Add(item);
                     }
                 }
                 
-                model.Transactions = model.Transactions.OrderByDescending(t => t.Timestamp).ToList();
+                model.TransactionsHistory = model.TransactionsHistory.OrderByDescending(t => t.Timestamp).ToList();
                 return this.Json(model);
             }
             catch (Exception e)
@@ -244,8 +268,8 @@ namespace Breeze.Wallet.Controllers
                         CoinType = request.CoinType,
                         Name = account.Name,
                         HdPath = account.HdPath,
-                        AmountConfirmed = allTransactions.Where(t => t.Confirmed).Sum(t => t.Amount),
-                        AmountUnconfirmed = allTransactions.Where(t => !t.Confirmed).Sum(t => t.Amount)
+                        AmountConfirmed = allTransactions.Where(t => t.IsConfirmed()).Sum(t => t.Amount),
+                        AmountUnconfirmed = allTransactions.Where(t => !t.IsConfirmed()).Sum(t => t.Amount)
                     };
                     model.AccountsBalances.Add(balance);
                 }
