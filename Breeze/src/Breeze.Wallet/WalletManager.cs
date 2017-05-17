@@ -475,8 +475,12 @@ namespace Breeze.Wallet
                 TransactionData tTx = this.keysLookup.Values.SelectMany(v => v.Transactions).Single(trackedTx => trackedTx.Id == input.PrevOut.Hash && trackedTx.Index == input.PrevOut.N);
 
                 // find the script this input references
-                var keyToSpend = this.keysLookup.Single(v => v.Value.Transactions.Contains(tTx)).Key;
-                AddTransactionToWallet(transaction.GetHash(), transaction.Time, null, -tTx.Amount, keyToSpend, blockHeight, blockTime, tTx.Id, tTx.Index);
+                var keyToSpend = this.keysLookup.Single(v => v.Value.Transactions.Contains(tTx)).Key;                
+                
+                // get the details of the outputs paid out
+                IEnumerable<TxOut> paidoutto = transaction.Outputs.Where(o => !this.keysLookup.Keys.Contains(o.ScriptPubKey));
+
+                AddTransactionToWallet(transaction.GetHash(), transaction.Time, null, -tTx.Amount, keyToSpend, blockHeight, blockTime, tTx.Id, tTx.Index, paidoutto);                
             }
         }
 
@@ -492,7 +496,7 @@ namespace Breeze.Wallet
         /// <param name="blockTime">The block time.</param>
         /// <param name="spendingTransactionId">The id of the transaction containing the output being spent, if this is a spending transaction.</param>
         /// <param name="spendingTransactionIndex">The index of the output in the transaction being referenced, if this is a spending transaction.</param>
-        private void AddTransactionToWallet(uint256 transactionHash, uint time, int? index, Money amount, Script script, int? blockHeight = null, uint? blockTime = null, uint256 spendingTransactionId = null, int? spendingTransactionIndex = null)
+        private void AddTransactionToWallet(uint256 transactionHash, uint time, int? index, Money amount, Script script, int? blockHeight = null, uint? blockTime = null, uint256 spendingTransactionId = null, int? spendingTransactionIndex = null, IEnumerable<TxOut> paidToOutputs = null)
         {
             // get the collection of transactions to add to.
             this.keysLookup.TryGetValue(script, out HdAddress address);
@@ -502,14 +506,32 @@ namespace Breeze.Wallet
             // if it's the first time we see this transaction
             if (trans.All(t => t.Id != transactionHash))
             {
-                trans.Add(new TransactionData
+                var newTransaction = new TransactionData
                 {
                     Amount = amount,
                     BlockHeight = blockHeight,
                     Id = transactionHash,
                     CreationTime = DateTimeOffset.FromUnixTimeMilliseconds(blockTime ?? time),
                     Index = index
-                });
+                };
+                trans.Add(newTransaction);
+
+                // if this is a spending transaction, keep a record of the payments made out to other scripts.
+                if (paidToOutputs != null && paidToOutputs.Any())
+                {
+                    List<PaymentDetails> payments = new List<PaymentDetails>();
+                    foreach (var paidToOutput in paidToOutputs)
+                    {
+                        payments.Add(new PaymentDetails
+                        {
+                            DestinationScriptPubKey = paidToOutput.ScriptPubKey,
+                            DestinationAddress = paidToOutput.ScriptPubKey.GetDestinationAddress(this.network).ToString(),
+                            Amount = paidToOutput.Value
+                        });
+                    }
+
+                    newTransaction.Payments = payments;
+                }
 
                 // if this is a spending transaction, mark the spent transaction as such
                 if (spendingTransactionId != null)
