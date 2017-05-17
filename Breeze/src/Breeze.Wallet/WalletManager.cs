@@ -29,16 +29,18 @@ namespace Breeze.Wallet
 
         private readonly CoinType coinType;
 
+        private readonly Network network;
+
         private readonly ConnectionManager connectionManager;
 
-        private Dictionary<Script, ICollection<TransactionData>> keysLookup;
+        private Dictionary<Script, HdAddress> keysLookup;
 
         /// <summary>
         /// Occurs when a transaction is found.
         /// </summary>
         public event EventHandler<TransactionFoundEventArgs> TransactionFound;
 
-        public WalletManager(ConnectionManager connectionManager, Network netwrok)
+        public WalletManager(ConnectionManager connectionManager, Network network)
         {
             this.Wallets = new List<Wallet>();
 
@@ -49,7 +51,8 @@ namespace Breeze.Wallet
             }
 
             this.connectionManager = connectionManager;
-            this.coinType = (CoinType)netwrok.Consensus.CoinType;
+            this.network = network;
+            this.coinType = (CoinType)network.Consensus.CoinType;
 
             // load data in memory for faster lookups
             this.LoadKeysLookup();
@@ -467,12 +470,12 @@ namespace Breeze.Wallet
             }
 
             // check the inputs - include those that have a reference to a transaction containing one of our scripts and the same index            
-            foreach (TxIn input in transaction.Inputs.Where(txIn => this.keysLookup.Values.SelectMany(v => v).Any(trackedTx => trackedTx.Id == txIn.PrevOut.Hash && trackedTx.Index == txIn.PrevOut.N)))
+            foreach (TxIn input in transaction.Inputs.Where(txIn => this.keysLookup.Values.SelectMany(v => v.Transactions).Any(trackedTx => trackedTx.Id == txIn.PrevOut.Hash && trackedTx.Index == txIn.PrevOut.N)))
             {
-                TransactionData tTx = this.keysLookup.Values.SelectMany(v => v).Single(trackedTx => trackedTx.Id == input.PrevOut.Hash && trackedTx.Index == input.PrevOut.N);
+                TransactionData tTx = this.keysLookup.Values.SelectMany(v => v.Transactions).Single(trackedTx => trackedTx.Id == input.PrevOut.Hash && trackedTx.Index == input.PrevOut.N);
 
                 // find the script this input references
-                var keyToSpend = this.keysLookup.Single(v => v.Value.Contains(tTx)).Key;
+                var keyToSpend = this.keysLookup.Single(v => v.Value.Transactions.Contains(tTx)).Key;
                 AddTransactionToWallet(transaction.GetHash(), transaction.Time, null, -tTx.Amount, keyToSpend, blockHeight, blockTime, tTx.Id, tTx.Index);
             }
         }
@@ -492,10 +495,12 @@ namespace Breeze.Wallet
         private void AddTransactionToWallet(uint256 transactionHash, uint time, int? index, Money amount, Script script, int? blockHeight = null, uint? blockTime = null, uint256 spendingTransactionId = null, int? spendingTransactionIndex = null)
         {
             // get the collection of transactions to add to.
-            this.keysLookup.TryGetValue(script, out ICollection<TransactionData> trans);
+            this.keysLookup.TryGetValue(script, out HdAddress address);
+
+            var trans = address.Transactions;
 
             // if it's the first time we see this transaction
-            if (trans != null && trans.All(t => t.Id != transactionHash))
+            if (trans.All(t => t.Id != transactionHash))
             {
                 trans.Add(new TransactionData
                 {
@@ -510,7 +515,7 @@ namespace Breeze.Wallet
                 // if this is a spending transaction, mark the spent transaction as such
                 if (spendingTransactionId != null)
                 {
-                    var transactions = this.keysLookup.Values.SelectMany(v => v).Where(t => t.Id == spendingTransactionId);
+                    var transactions = this.keysLookup.Values.SelectMany(v => v.Transactions).Where(t => t.Id == spendingTransactionId);
                     if (transactions.Any())
                     {
                         transactions.Single(t => t.Index == spendingTransactionIndex).SpentInTransaction = transactionHash;
@@ -715,7 +720,7 @@ namespace Breeze.Wallet
         /// <returns></returns>
         private void LoadKeysLookup()
         {
-            this.keysLookup = new Dictionary<Script, ICollection<TransactionData>>();
+            this.keysLookup = new Dictionary<Script, HdAddress>();
             foreach (var wallet in this.Wallets)
             {
                 var accounts = wallet.GetAccountsByCoinType(this.coinType);
@@ -724,7 +729,7 @@ namespace Breeze.Wallet
                     var addresses = account.ExternalAddresses.Concat(account.InternalAddresses);
                     foreach (var address in addresses)
                     {
-                        this.keysLookup.Add(address.ScriptPubKey, address.Transactions);
+                        this.keysLookup.Add(address.ScriptPubKey, address);
                     }
                 }
             }

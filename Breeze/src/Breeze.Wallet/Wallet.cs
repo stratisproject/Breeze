@@ -378,6 +378,17 @@ namespace Breeze.Wallet
         /// </summary>
         [JsonProperty(PropertyName = "transactions")]
         public ICollection<TransactionData> Transactions { get; set; }
+
+        /// <summary>
+        /// Determines whether this is a change address or a receive address.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if it is a change address; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsChangeAddress()
+        {            
+            return int.Parse(this.HdPath.Split('/')[4]) == 1;
+        }
     }
 
     /// <summary>
