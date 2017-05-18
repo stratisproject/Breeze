@@ -8,6 +8,7 @@ using Breeze.Wallet.Errors;
 using Microsoft.AspNetCore.Mvc;
 using Breeze.Wallet.Models;
 using NBitcoin;
+using Stratis.Bitcoin.Connection;
 
 namespace Breeze.Wallet.Controllers
 {
@@ -21,10 +22,22 @@ namespace Breeze.Wallet.Controllers
 
         private readonly ITracker tracker;
 
-        public WalletController(IWalletManager walletManager, ITracker tracker)
+        private readonly CoinType coinType;
+
+        private readonly Network network;
+
+        private readonly ConnectionManager connectionManager;
+
+        private readonly ConcurrentChain chain;
+
+        public WalletController(IWalletManager walletManager, ITracker tracker, ConnectionManager connectionManager, Network network, ConcurrentChain chain)
         {
             this.walletManager = walletManager;
             this.tracker = tracker;
+            this.connectionManager = connectionManager;
+            this.network = network;
+            this.coinType = (CoinType)network.Consensus.CoinType;
+            this.chain = chain;
         }
 
         /// <summary>
@@ -143,11 +156,11 @@ namespace Breeze.Wallet.Controllers
         /// <summary>
         /// Get some general info about a wallet.
         /// </summary>
-        /// <param name="model">The name of the wallet.</param>
+        /// <param name="request">The name of the wallet.</param>
         /// <returns></returns>
         [Route("general-info")]
         [HttpGet]
-        public IActionResult GetGeneralInfo([FromQuery] WalletName model)
+        public IActionResult GetGeneralInfo([FromQuery] WalletName request)
         {
             // checks the request is valid
             if (!this.ModelState.IsValid)
@@ -158,7 +171,19 @@ namespace Breeze.Wallet.Controllers
 
             try
             {
-                return this.Json(this.walletManager.GetGeneralInfo(model.Name));
+                Wallet wallet = this.walletManager.GetWallet(request.Name);
+
+                var model = new WalletGeneralInfoModel
+                {
+                    Network = wallet.Network,
+                    WalletFilePath = wallet.WalletFilePath,
+                    CreationTime = wallet.CreationTime,
+                    LastBlockSyncedHeight = wallet.AccountsRoot.Single(a => a.CoinType == this.coinType).LastBlockSyncedHeight,
+                    ConnectedNodes = this.connectionManager.ConnectedNodes.Count(),
+                    ChainTip = this.chain.Tip.Height,
+                    IsDecrypted = true
+                };
+                return this.Json(model);
 
             }
             catch (Exception e)

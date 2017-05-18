@@ -314,11 +314,13 @@ namespace Breeze.Wallet
             return addressesCreated;
         }
 
-        public WalletGeneralInfoModel GetGeneralInfo(string name)
+        /// <inheritdoc />
+        public Wallet GetWallet(string walletName)
         {
-            throw new System.NotImplementedException();
+            Wallet wallet = this.GetWalletByName(walletName);
+            return wallet;
         }
-
+        
         /// <inheritdoc />
         public IEnumerable<HdAccount> GetAccountsByCoinType(string walletName, CoinType coinType)
         {
@@ -511,7 +513,7 @@ namespace Breeze.Wallet
                     Amount = amount,
                     BlockHeight = blockHeight,
                     Id = transactionHash,
-                    CreationTime = DateTimeOffset.FromUnixTimeMilliseconds(blockTime ?? time),
+                    CreationTime = DateTimeOffset.FromUnixTimeSeconds(blockTime ?? time),
                     Index = index
                 };
                 trans.Add(newTransaction);
@@ -556,7 +558,7 @@ namespace Breeze.Wallet
                 // update the block time
                 if (blockTime != null)
                 {
-                    foundTransaction.CreationTime = DateTimeOffset.FromUnixTimeMilliseconds(blockTime.Value);
+                    foundTransaction.CreationTime = DateTimeOffset.FromUnixTimeSeconds(blockTime.Value);
                 }                
             }
 
