@@ -90,9 +90,9 @@ namespace Breeze.Wallet
 
             // save the changes to the file and add addresses to be tracked
             this.SaveToFile(wallet);
-            this.LoadKeysLookup();
             this.Load(wallet);
-
+            this.LoadKeysLookup();
+           
             return mnemonic;
         }
 
@@ -135,8 +135,8 @@ namespace Breeze.Wallet
 
             // save the changes to the file and add addresses to be tracked
             this.SaveToFile(wallet);
-            this.LoadKeysLookup();
             this.Load(wallet);
+            this.LoadKeysLookup();
 
             return wallet;
         }
