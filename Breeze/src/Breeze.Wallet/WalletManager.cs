@@ -314,11 +314,13 @@ namespace Breeze.Wallet
             return addressesCreated;
         }
 
-        public WalletGeneralInfoModel GetGeneralInfo(string name)
+        /// <inheritdoc />
+        public Wallet GetWallet(string walletName)
         {
-            throw new System.NotImplementedException();
+            Wallet wallet = this.GetWalletByName(walletName);
+            return wallet;
         }
-
+        
         /// <inheritdoc />
         public IEnumerable<HdAccount> GetAccountsByCoinType(string walletName, CoinType coinType)
         {

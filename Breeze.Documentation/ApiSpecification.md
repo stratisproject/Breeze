@@ -89,16 +89,20 @@ POST /wallet/send-transaction - Attempts to send a transaction
 # Details
 
 ## GET /wallet/general-info - Displays general information on the wallet
+
+### Query parameters
+`walletName` (required) - the name of the wallet.
+
 ### Responses
 ```
 {
-  "walletFilePath": "path to the wallet file",
-  "encryptedSeed": "6PYKWP34en1wELfcJDgXaFRPugjgkDdEk2p2Pzytm1158dxgNyLAUXwpKL",
-  "chainCode": "q/Fn7+RSIVM0p0Nj6rIuNkybF+0WKeSZPMQS2QCbDzY=",
-  "network": "main", // main/testnet
-  "creationTime": "2017-03-21",
-  "isDecrypted": true,
-  "uniqueId": "sadwpiqjdpijwqdpijwqidjoi" // can only get if decrypted, if not it's empty string
+   "walletFilePath":"path to the wallet file",
+   "network":"main", //"testnet", "stratismain", "stratistest"
+   "creationTime":"2017-03-21",
+   "isDecrypted":true,
+   "lastBlockHeight":123234,
+   "chainTip": 173721,         
+   "connectedNodes": 5
 }
 ```
 ## GET /wallet/sensitive - Displays sensitive information on the wallet

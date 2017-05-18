@@ -113,7 +113,12 @@ namespace Breeze.Wallet
         /// <returns></returns>
         IEnumerable<HdAddress> GetHistoryByCoinType(Wallet wallet, CoinType coinType);
 
-        WalletGeneralInfoModel GetGeneralInfo(string walletName);
+        /// <summary>
+        /// Gets some general information about a wallet.
+        /// </summary>
+        /// <param name="walletName">The name of the wallet.</param>
+        /// <returns></returns>
+        Wallet GetWallet(string walletName);
 
         /// <summary>
         /// Gets a list of accounts filtered by coin type.
