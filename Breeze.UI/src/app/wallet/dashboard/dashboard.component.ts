@@ -17,11 +17,9 @@ import { ReceiveComponent } from '../receive/receive.component';
 export class DashboardComponent {
   constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal) {}
 
-  private balanceResponse: any;
   private confirmedBalance: number;
   private unconfirmedBalance: number;
   private transactions: any;
-  private errorMessage: string;
 
   ngOnInit() {
       this.getWalletBalance();
@@ -42,15 +40,15 @@ export class DashboardComponent {
         .subscribe(
             response =>  {
                 if (response.status >= 200 && response.status < 400) {
-                    this.balanceResponse = response.json();
-                    this.confirmedBalance = this.balanceResponse.balances[0].amountConfirmed;
-                    this.unconfirmedBalance = this.balanceResponse.balances[0].amountUnconfirmed;
+                    let balanceResponse = response.json();
+                    this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
+                    this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
                 }
             },
             error => {
                 if (error.status >= 400) {
-                    this.errorMessage = <any>error;
-                    console.log(this.errorMessage);
+                    let errorMessage = <any>error;
+                    console.log(errorMessage);
                 }
             }
       );
@@ -62,15 +60,15 @@ export class DashboardComponent {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            if (response.json().transactions.length > 0) {
-              this.transactions = response.json().transactions;
+            if (response.json().transactionsHistory.length > 0) {
+              this.transactions = response.json().transactionHistory;
             }
           }
         },
         error => {
           if (error.status >= 400) {
-            this.errorMessage = <any>error;
-            console.log(this.errorMessage);
+            let errorMessage = <any>error;
+            console.log(errorMessage);
           }
         }
     );

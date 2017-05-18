@@ -27,8 +27,8 @@ export class HistoryComponent {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            if (response.json().transactions.length > 0) {
-              this.transactions = response.json().transactions;
+            if (response.json().transactionsHistory.length > 0) {
+              this.transactions = response.json().transactionsHistory;
             }
           }
         },
