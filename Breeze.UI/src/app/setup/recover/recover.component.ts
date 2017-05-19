@@ -19,7 +19,7 @@ export class RecoverComponent implements OnInit {
       "walletMnemonic": ["", Validators.required],
       "walletPassword": ["", Validators.required],
       "walletName": ["", Validators.required],
-      "selectNetwork": ["main", Validators.required]
+      "selectNetwork": ["test", Validators.required]
     });
   }
 
