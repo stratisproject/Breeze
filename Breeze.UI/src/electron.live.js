@@ -30,7 +30,7 @@ function createWindow () {
       // when you should delete the corresponding element.
       mainWindow = null
     })
-  }, 12000)
+  }, 50000)
 }
 
 // This method will be called when Electron has finished
