@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container col-md-8 offset-md-2">
   <div class="row">
     <div class="col">
       <h1>Recover your wallet</h1>
@@ -38,11 +38,9 @@
           <label>Creation date:</label>
           <material-datepicker [(date)]="creationDate"></material-datepicker>
         </div>
-        <div class="form-group">
-          <button type="submit" [disabled]="!recoverWalletForm.valid" class="btn">Recover Wallet</button>
-        </div>
-        <div class="form-group">
-          <button type="button" class="btn" (click)="onBackClicked()">Back</button>
+        <div class="form-group" id="buttons">
+          <button type="button" class="btn btn-outline-secondary" (click)="onBackClicked()">Back</button>
+          <button type="submit" [disabled]="!recoverWalletForm.valid" class="btn ml-2">Recover Wallet</button>
         </div>
       </form>
     </div>

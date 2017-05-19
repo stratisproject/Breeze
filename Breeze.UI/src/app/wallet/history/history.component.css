@@ -1,0 +1,24 @@
+#transactions {
+  margin-top: 10px;
+}
+
+.transactionsTable {
+  border-collapse: separate;
+  border-spacing: 10px;
+}
+
+.transactionsTable tr {
+  border: 1px solid #D5E3F0;
+  text-align: left;
+  border-spacing: 10px;
+}
+
+.transactionsTable th {
+  text-align: left;
+  border-spacing: 10px;
+}
+
+.transactionsTable td {
+  height: 50px;
+  vertical-align: center;
+}

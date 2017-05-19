@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container col-md-8 offset-md-2">
   <div class="row">
     <div class="col">
       <h1>Welcome to Breeze</h1>
@@ -13,9 +13,8 @@
             <option *ngFor="let wallet of wallets" [value]="wallet">{{wallet}}</option>
           </select>
         </div>
-        <p>Please enter your password to decrypt your wallet</p>
         <div class="form-group">
-          <label>Your password: </label>
+          <label>Please enter your password to decrypt your wallet</label>
           <input class="form-control" type="password" formControlName="password" placeholder="Enter password here">
           <div *ngIf="formErrors.password" class="alert alert-danger">{{formErrors.password}}</div>
         </div>

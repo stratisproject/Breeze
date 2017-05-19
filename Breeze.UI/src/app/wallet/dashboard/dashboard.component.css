@@ -3,8 +3,9 @@
 }
 
 #dashboard {
-  padding-top: 50px !important;
+  /*padding-top: 50px !important;*/
   padding-left: 100px !important;
+  padding-right: 100px !important;
   border: 2px solid;
   border-color: #D5E3F0;
   background-color: #DAE6F2;
