@@ -26,7 +26,7 @@
           <input class="form-control" formControlName="password" type="password" placeholder="Please enter your wallet password.">
           <div *ngIf="formErrors.password" class="alert alert-danger">{{formErrors.password}}</div>
         </div>
-        <button type="submit" [disabled]="!sendForm.valid" class="btn btn-success">Send</button>
+        <button type="submit" [disabled]="!sendForm.valid" class="btn">Send</button>
         <button type="button" class="btn" (click)="activeModal.close('Close click')">Close</button>
       </form>
     </div>

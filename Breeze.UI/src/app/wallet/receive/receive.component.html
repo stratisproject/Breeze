@@ -12,7 +12,7 @@
         </thead>
         <tr>
           <td>{{ address }}</td>
-          <td><button class="btn" type="button" ngxClipboard [cbContent]="address" (cbOnSuccess)="isCopied1=true" [class.btn-success]= "isCopied1">Copy</button>
+          <td><button class="btn" type="button" ngxClipboard [cbContent]="address" (cbOnSuccess)="isCopied1=true" [class.btn]= "isCopied1">Copy</button>
         </tr>
       </table>
     </div>
