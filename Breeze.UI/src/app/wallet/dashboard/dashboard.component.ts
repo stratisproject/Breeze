@@ -61,7 +61,7 @@ export class DashboardComponent {
         response => {
           if (response.status >= 200 && response.status < 400) {
             if (response.json().transactionsHistory.length > 0) {
-              this.transactions = response.json().transactionHistory;
+              this.transactions = response.json().transactionsHistory;
             }
           }
         },
