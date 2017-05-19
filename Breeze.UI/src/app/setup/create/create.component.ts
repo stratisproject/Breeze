@@ -34,7 +34,7 @@ export class CreateComponent {
         ]
       ],
       "walletPassword": ["", Validators.required],
-      "selectNetwork": ["main", Validators.required]
+      "selectNetwork": ["test", Validators.required]
     });
 
     this.createWalletForm.valueChanges
