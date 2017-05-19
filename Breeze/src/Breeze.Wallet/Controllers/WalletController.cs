@@ -229,16 +229,19 @@ namespace Breeze.Wallet.Controllers
                         {
                             item.Type = TransactionItemType.Send;
                             item.Amount = Money.Zero;
-                            item.Payments = new List<PaymentDetailModel>();
-                            foreach (var payment in transaction.Payments)
+                            if (transaction.Payments != null)
                             {
-                                item.Payments.Add(new PaymentDetailModel
+                                item.Payments = new List<PaymentDetailModel>();
+                                foreach (var payment in transaction.Payments)
                                 {
-                                    DestinationAddress = payment.DestinationAddress,
-                                    Amount = payment.Amount
-                                });
+                                    item.Payments.Add(new PaymentDetailModel
+                                    {
+                                        DestinationAddress = payment.DestinationAddress,
+                                        Amount = payment.Amount
+                                    });
 
-                                item.Amount += payment.Amount;
+                                    item.Amount += payment.Amount;
+                                }
                             }
 
                             var changeAddress = addresses.Single(a => a.IsChangeAddress() && a.Transactions.Any(t => t.Id == transaction.Id));

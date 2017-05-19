@@ -477,10 +477,11 @@ namespace Breeze.Wallet
                 TransactionData tTx = this.keysLookup.Values.SelectMany(v => v.Transactions).Single(trackedTx => trackedTx.Id == input.PrevOut.Hash && trackedTx.Index == input.PrevOut.N);
 
                 // find the script this input references
-                var keyToSpend = this.keysLookup.Single(v => v.Value.Transactions.Contains(tTx)).Key;                
-                
-                // get the details of the outputs paid out
-                IEnumerable<TxOut> paidoutto = transaction.Outputs.Where(o => !this.keysLookup.Keys.Contains(o.ScriptPubKey));
+                var keyToSpend = this.keysLookup.Single(v => v.Value.Transactions.Contains(tTx)).Key;
+
+                // get the details of the outputs paid out. 
+                // We first include the keys we don't hold and then we include the keys we do hold but that are for receiving addresses (which would mean the user paid itself).
+                IEnumerable<TxOut> paidoutto = transaction.Outputs.Where(o => !this.keysLookup.Keys.Contains(o.ScriptPubKey) || (this.keysLookup.ContainsKey(o.ScriptPubKey) && !this.keysLookup[o.ScriptPubKey].IsChangeAddress()));
 
                 AddTransactionToWallet(transaction.GetHash(), transaction.Time, null, -tTx.Amount, keyToSpend, blockHeight, blockTime, tTx.Id, tTx.Index, paidoutto);                
             }
