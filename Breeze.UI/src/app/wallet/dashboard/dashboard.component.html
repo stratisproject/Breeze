@@ -21,18 +21,20 @@
       <div>Transactions</div>
       <table cellspacing="5px" cellpadding="5px" class="transactionsTable" *ngIf="transactions; else noTransactions">
         <thead>
+          <th>Type</th>
           <th>Amount</th>
-          <th>Confirmed</th>
-          <th>Timestamp</th>
           <th>Transaction ID</th>
+          <th>Confirmed in block</th>
+          <th>Timestamp</th>
         </thead>
         <tr *ngFor="let transaction of transactions; let i=index">
             <!--<td *ngIf="{{ transaction.amount }} < 0">SENT</td>
             <td *ngIf="{{ transaction.amount }} > 0">RECEIVED</td>-->
+            <td *ngIf="i<5">{{ transaction.type }}</td>
             <td *ngIf="i<5">{{ transaction.amount | coinNotation | coinAbbreviation }}</td>
-            <td *ngIf="i<5">{{ transaction.confirmed }}</td>
+            <td *ngIf="i<5">{{ transaction.id }}</td>
+            <td *ngIf="i<5">{{ transaction.confirmedInBlock }}</td>
             <td *ngIf="i<5">{{ transaction.timestamp * 1000 | date:'medium' }}</td>
-            <td *ngIf="i<5">{{ transaction.txId }}</td>
         </tr>
       </table>
       <ng-template #noTransactions>Looks like you haven't made any transactions yet</ng-template>

@@ -3,18 +3,20 @@
     <div class="col">
       <table *ngIf="transactions; else noTransactions">
         <thead>
-          <th>Timestamp</th>
+          <th>Type</th>
           <th>Amount</th>
-          <th>Confirmed</th>
           <th>Transaction ID</th>
+          <th>Confirmed in block</th>
+          <th>Timestamp</th>
         </thead>
         <tr *ngFor="let transaction of transactions">
           <!--<td *ngIf="{{ transaction.amount }} < 0; else received">SENT</td>
           <td #received>RECEIVED</td>-->
-          <td>{{ transaction.timestamp }}</td>
+          <td>{{ transaction.type }}</td>
           <td>{{ transaction.amount | coinNotation | coinAbbreviation }}</td>
-          <td>{{ transaction.confirmed }}</td>
-          <td>{{ transaction.txId }}</td>
+          <td>{{ transaction.id }}</td>
+          <td>{{ transaction.confirmedInBlock }}</td>
+          <td>{{ transaction.timestamp * 1000 | date:'medium' }}</td>
         </tr>
       </table>
     </div>
