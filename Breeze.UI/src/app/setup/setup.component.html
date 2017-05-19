@@ -1,29 +1,33 @@
-<div class="container">
+<div class="container col-md-8 offset-md-2">
   <div class="row">
     <div class="col">
-      <h1>Welcome to Breeze.</h1>
+      <h1>Welcome to Breeze</h1>
     </div>
   </div>
   <div class="row">
     <div vlass="col">
       <p>
         If you haven't used Breeze before, please create a new wallet.
+      <br>
+      <button (click)="onCreateClicked()" class="btn">Create</button>
       </p>
-      <p>
+      <p style="margin-top: 30px;">
         Users who have previously used Breeze, can choose to recover their wallet.
+      <br>
+      <button (click)="onRecoverClicked()" class="btn">Recover</button>
       </p>
     </div>
   </div>
   <div class="row">
     <div class="col">
+      <button (click)="onBackClicked()" class="btn btn-outline-secondary" id="backButton">Back</button>
+    </div>
+    <!--<div class="col">
       <button (click)="onCreateClicked()" class="btn">Create</button>
     </div>
     <div class="col">
       <button (click)="onRecoverClicked()" class="btn">Recover</button>
-    </div>
-    <div class="col">
-      <button (click)="onBackClicked()" class="btn">Back</button>
-    </div>
+    </div>-->
   </div>
 </div>
 

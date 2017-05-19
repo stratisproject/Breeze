@@ -6,7 +6,29 @@
 
 /* Temporary min td with */
 td {
-  min-width: 150px;
+  min-width: 100px;
+}
+
+h1 {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  color: #444444;
+}
+
+button {
+  font-family: "Lato Black";
+  color: white;
+  background-color: #20B9FF;
+  border-radius: 25px;
+}
+
+label {
+  color: #666666;
+}
+
+.form-control::-webkit-input-placeholder
+{
+  color: #BBBBBB;
 }
 
 .content-wrapper {
@@ -23,13 +45,6 @@ td {
     display: inline-block;
     vertical-align: middle;
     float: none;
-}
-
-.btn {
-  font-family: "Lato Black";
-  color: white;
-  background-color: #20B9FF;
-  border-radius: 25px;
 }
 
 .row {

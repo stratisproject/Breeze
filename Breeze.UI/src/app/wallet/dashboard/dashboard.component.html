@@ -1,18 +1,18 @@
 <div class="container nopadding">
-  <div class="row nopadding" id="dashboard">
-    <div class="col">
-      <div>Active Balance</div>
-      <div>Balance: {{confirmedBalance | coinNotation | coinAbbreviation}}</div>
-      <div>Unconfirmed Balance: {{unconfirmedBalance | coinNotation | coinAbbreviation}}</div>
+  <div class="d-flex flex-row align-items-center nopadding" id="dashboard">
+    <div class="d-flex flex-column">
+      <div class="p">Active Balance</div>
+      <div class="p">Balance: {{confirmedBalance | coinNotation | coinAbbreviation}}</div>
+      <div class="p">Unconfirmed Balance: {{unconfirmedBalance | coinNotation | coinAbbreviation}}</div>
     </div>
-    <div class="col">
-      <div>Current Value</div>
-      <div>Over 9000</div>
+    <div class="d-flex flex-column">
+      <!--<div>Current Value</div>
+      <div>Over 9000</div>-->
     </div>
-    <div class="col">
+    <div class="d-flex flex-column ml-auto">
       <div>
         <button (click)="openSendDialog()" class="btn" id="sendButton">Send</button>
-        <button (click)="openReceiveDialog()" class="btn" id="receiveButton">Receive</button>
+        <button (click)="openReceiveDialog()" class="btn ml-2" id="receiveButton">Receive</button>
       </div>
     </div>
   </div>

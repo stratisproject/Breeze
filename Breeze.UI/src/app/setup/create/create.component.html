@@ -1,7 +1,7 @@
-<div class="container">
+<div class="container col-md-8 offset-md-2">
   <div class="row">
     <div class="col">
-      <h1>Please create a new wallet.</h1>
+      <h1>Please create a new wallet</h1>
     </div>
   </div>
   <div class="row">
@@ -25,20 +25,16 @@
           </select>
         </div>
         <div class="form-group">
+          <button type="button" class="btn btn-outline-secondary" (click)="onBackClicked()">Back</button>
           <button type="submit" [disabled]="!createWalletForm.valid" class="btn">Create Wallet</button>
         </div>
       </form>
     </div>
   </div>
   <div class="row">
-    <div class="col">
+    <div class="col" id="mnemonic">
       <label>Mnemonic:</label>
       <label>{{responseMessage}}</label>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col">
-      <button type="button" class="btn" (click)="onBackClicked()">Back</button>
     </div>
   </div>
 </div>

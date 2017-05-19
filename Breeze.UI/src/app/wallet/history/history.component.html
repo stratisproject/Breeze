@@ -1,7 +1,7 @@
 <div class="container">
-  <div class="row">
+  <div class="row" id="transactions">
     <div class="col">
-      <table *ngIf="transactions; else noTransactions">
+      <table class="transactionsTable" *ngIf="transactions; else noTransactions">
         <thead>
           <th>Type</th>
           <th>Amount</th>
