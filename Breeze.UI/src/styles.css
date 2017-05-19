@@ -25,6 +25,13 @@ td {
     float: none;
 }
 
+.btn {
+  font-family: "Lato Black";
+  color: white;
+  background-color: #20B9FF;
+  border-radius: 25px;
+}
+
 .row {
   padding: 0;
   margin: 0;
