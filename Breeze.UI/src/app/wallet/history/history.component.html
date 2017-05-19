@@ -3,10 +3,11 @@
     <div class="col">
       <table *ngIf="transactions; else noTransactions">
         <thead>
-          <th>Timestamp</th>
+          <th>Type</th>
           <th>Amount</th>
-          <th>Confirmed</th>
           <th>Transaction ID</th>
+          <th>Confirmed in block</th>
+          <th>Timestamp</th>
         </thead>
         <tr *ngFor="let transaction of transactions">
           <!--<td *ngIf="{{ transaction.amount }} < 0; else received">SENT</td>
