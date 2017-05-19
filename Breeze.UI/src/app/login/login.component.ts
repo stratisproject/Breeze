@@ -13,10 +13,7 @@ import { WalletLoad } from '../shared/classes/wallet-load';
 })
 export class LoginComponent implements OnInit {
   constructor(private globalService: GlobalService, private apiService: ApiService, private router: Router, private fb: FormBuilder) {
-    this.openWalletForm = fb.group({
-      "selectWallet": ["", Validators.required],
-      "password": ["", Validators.required]
-    });
+    this.buildDecryptForm();
    }
 
   private openWalletForm: FormGroup;
@@ -26,6 +23,43 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.getWalletFiles();
   }
+
+  private buildDecryptForm(): void {
+    this.openWalletForm = this.fb.group({
+      "selectWallet": ["", Validators.required],
+      "password": ["", Validators.required]
+    });
+
+    this.openWalletForm.valueChanges
+      .subscribe(data => this.onValueChanged(data));
+
+    this.onValueChanged();
+  }
+
+  onValueChanged(data?: any) {
+    if (!this.openWalletForm) { return; }
+    const form = this.openWalletForm;
+    for (const field in this.formErrors) {
+      this.formErrors[field] = '';
+      const control = form.get(field);
+      if (control && control.dirty && !control.valid) {
+        const messages = this.validationMessages[field];
+        for (const key in control.errors) {
+          this.formErrors[field] += messages[key] + ' ';
+        }
+      }
+    }
+  }
+
+  formErrors = {
+    'password': ''
+  };
+
+  validationMessages = {
+    'password': {
+      'required': 'Please enter your password.'
+    }
+  };
 
   private updateWalletFileDisplay(walletName: string) {
     this.openWalletForm.patchValue({selectWallet: walletName})

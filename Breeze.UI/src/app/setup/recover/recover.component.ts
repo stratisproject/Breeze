@@ -15,12 +15,8 @@ import { WalletRecovery } from '../../shared/classes/wallet-recovery';
 export class RecoverComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private apiService: ApiService, private router: Router, private fb: FormBuilder) {
-    this.recoverWalletForm = fb.group({
-      "walletMnemonic": ["", Validators.required],
-      "walletPassword": ["", Validators.required],
-      "walletName": ["", Validators.required],
-      "selectNetwork": ["test", Validators.required]
-    });
+    this.buildRecoverForm();
+
   }
 
   private recoverWalletForm: FormGroup;
@@ -32,6 +28,60 @@ export class RecoverComponent implements OnInit {
 
   ngOnInit() {
   }
+
+  private buildRecoverForm(): void {
+    this.recoverWalletForm = this.fb.group({
+      "walletMnemonic": ["", Validators.required],
+      "walletPassword": ["", Validators.required],
+      "walletName": ["", [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(24)
+        ]
+      ],
+      "selectNetwork": ["test", Validators.required]
+    });
+
+    this.recoverWalletForm.valueChanges
+      .subscribe(data => this.onValueChanged(data));
+
+    this.onValueChanged();
+  }
+
+  onValueChanged(data?: any) {
+    if (!this.recoverWalletForm) { return; }
+    const form = this.recoverWalletForm;
+    for (const field in this.formErrors) {
+      this.formErrors[field] = '';
+      const control = form.get(field);
+      if (control && control.dirty && !control.valid) {
+        const messages = this.validationMessages[field];
+        for (const key in control.errors) {
+          this.formErrors[field] += messages[key] + ' ';
+        }
+      }
+    }
+  }
+
+  formErrors = {
+    'walletMnemonic': '',
+    'walletPassword': '',
+    'walletName': ''
+  };
+
+  validationMessages = {
+    'walletMnemonic': {
+      'required': 'Please enter your 12 word phrase.'
+    },
+    'walletPassword': {
+      'required': 'A password is required.'
+    },
+    'walletName': {
+      'required':      'Name is required.',
+      'minlength':     'Name must be at least 3 characters long.',
+      'maxlength':     'Name cannot be more than 24 characters long.'
+    }
+  };
 
   private onBackClicked() {
     this.router.navigate(["/setup"]);

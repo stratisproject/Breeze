@@ -17,6 +17,7 @@
         <div class="form-group">
           <label>Your password: </label>
           <input class="form-control" type="password" formControlName="password" placeholder="Enter password here">
+          <div *ngIf="formErrors.password" class="alert alert-danger">{{formErrors.password}}</div>
         </div>
         <div class="form-group">
           <button type="submit" [disabled]="!openWalletForm.valid" class="btn btn-success">Decrypt</button>
