@@ -107,6 +107,8 @@ export class RecoverComponent implements OnInit {
         response => {
           if (response.status >= 200 && response.status < 400) {
             this.responseMessage = response;
+            alert("Your wallet has been recovered. \nYou will be redirected to the decryption page.");
+            this.router.navigate([''])
           }
         },
         error => {
