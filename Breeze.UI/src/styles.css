@@ -2,6 +2,7 @@
 
 * {
   font-family: "Lato";
+  user-select: none;
 }
 
 /* Temporary min td with */
