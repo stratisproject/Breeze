@@ -41,7 +41,7 @@ namespace Breeze.Wallet
         /// <param name="passphrase">The passphrase used in the seed.</param>
         /// <param name="creationTime">The date and time this wallet was created.</param>
         /// <returns>The recovered wallet.</returns>
-        Wallet RecoverWallet(string password, string folderPath, string name, string network, string mnemonic, string passphrase = null, DateTime? creationTime = null);
+        Wallet RecoverWallet(string password, string folderPath, string name, string network, string mnemonic, DateTime creationTime, string passphrase = null);
 
         /// <summary>
         /// Deletes a wallet.
@@ -163,5 +163,29 @@ namespace Breeze.Wallet
         /// <param name="blockHeight">The height of the block this transaction came from. Null if it was not a transaction included in a block.</param>
         /// <param name="blockTime">The block time.</param>
         void ProcessTransaction(Transaction transaction, int? blockHeight = null, uint? blockTime = null);
+
+        /// <summary>
+        /// Saves the wallet into the file system.
+        /// </summary>
+        /// <param name="wallet">The wallet to save.</param>
+        void SaveToFile(Wallet wallet);
+
+        /// <summary>
+        /// Saves all the loaded wallets into the file system.
+        /// </summary>        
+        void SaveToFile();
+
+        /// <summary>
+        /// Updates the wallet with the height of the last block synced.
+        /// </summary>
+        /// <param name="wallet">The wallet to update.</param>
+        /// <param name="height">The height of the last block synced.</param>
+        void UpdateLastBlockSyncedHeight(Wallet wallet, int height);
+
+        /// <summary>
+        /// Updates all the loaded wallets with the height of the last block synced.
+        /// </summary>
+        /// <param name="height">The height of the last block synced.</param>
+        void UpdateLastBlockSyncedHeight(int height);
     }
 }
