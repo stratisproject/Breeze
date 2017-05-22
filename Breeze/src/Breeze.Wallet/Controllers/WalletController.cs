@@ -130,7 +130,7 @@ namespace Breeze.Wallet.Controllers
             {
                 // get the wallet folder 
                 DirectoryInfo walletFolder = GetWalletFolder(request.FolderPath);
-                Wallet wallet = this.walletManager.RecoverWallet(request.Password, walletFolder.FullName, request.Name, request.Network, request.Mnemonic, null, request.CreationDate);
+                Wallet wallet = this.walletManager.RecoverWallet(request.Password, walletFolder.FullName, request.Name, request.Network, request.Mnemonic, request.CreationDate, null);
                 
                 // start syncing the wallet from the creation date
                 this.tracker.SyncFrom(request.CreationDate);

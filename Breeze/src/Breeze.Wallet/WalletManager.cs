@@ -33,6 +33,8 @@ namespace Breeze.Wallet
 
         private readonly ConnectionManager connectionManager;
 
+        private readonly ConcurrentChain chain;
+
         private Dictionary<Script, HdAddress> keysLookup;
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace Breeze.Wallet
         /// </summary>
         public event EventHandler<TransactionFoundEventArgs> TransactionFound;
 
-        public WalletManager(ConnectionManager connectionManager, Network network)
+        public WalletManager(ConnectionManager connectionManager, Network network, ConcurrentChain chain)
         {
             this.Wallets = new List<Wallet>();
 
@@ -53,6 +55,7 @@ namespace Breeze.Wallet
             this.connectionManager = connectionManager;
             this.network = network;
             this.coinType = (CoinType)network.Consensus.CoinType;
+            this.chain = chain;
 
             // load data in memory for faster lookups
             this.LoadKeysLookup();
@@ -88,11 +91,14 @@ namespace Breeze.Wallet
                 this.CreateAddressesInAccount(account, coinNetwork, UnusedAddressesBuffer, true);
             }
 
+            // update the height of the we start syncing from
+            this.UpdateLastBlockSyncedHeight(wallet, this.chain.Tip.Height);
+
             // save the changes to the file and add addresses to be tracked
             this.SaveToFile(wallet);
             this.Load(wallet);
             this.LoadKeysLookup();
-           
+
             return mnemonic;
         }
 
@@ -109,7 +115,7 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public Wallet RecoverWallet(string password, string folderPath, string name, string network, string mnemonic, string passphrase = null, DateTime? creationTime = null)
+        public Wallet RecoverWallet(string password, string folderPath, string name, string network, string mnemonic, DateTime creationTime, string passphrase = null)
         {
             // for now the passphrase is set to be the password by default.
             if (passphrase == null)
@@ -132,6 +138,9 @@ namespace Breeze.Wallet
                 this.CreateAddressesInAccount(account, coinNetwork, UnusedAddressesBuffer);
                 this.CreateAddressesInAccount(account, coinNetwork, UnusedAddressesBuffer, true);
             }
+
+            int blockSyncStart = this.chain.GetHeightAtTime(creationTime);
+            this.UpdateLastBlockSyncedHeight(wallet, blockSyncStart);
 
             // save the changes to the file and add addresses to be tracked
             this.SaveToFile(wallet);
@@ -320,7 +329,7 @@ namespace Breeze.Wallet
             Wallet wallet = this.GetWalletByName(walletName);
             return wallet;
         }
-        
+
         /// <inheritdoc />
         public IEnumerable<HdAccount> GetAccountsByCoinType(string walletName, CoinType coinType)
         {
@@ -446,13 +455,7 @@ namespace Breeze.Wallet
             }
 
             // update the wallets with the last processed block height
-            foreach (var wallet in this.Wallets)
-            {
-                foreach (var accountRoot in wallet.AccountsRoot.Where(a => a.CoinType == this.coinType))
-                {
-                    accountRoot.LastBlockSyncedHeight = height;
-                }
-            }
+            this.UpdateLastBlockSyncedHeight(height);
         }
 
         /// <inheritdoc />
@@ -483,7 +486,7 @@ namespace Breeze.Wallet
                 // We first include the keys we don't hold and then we include the keys we do hold but that are for receiving addresses (which would mean the user paid itself).
                 IEnumerable<TxOut> paidoutto = transaction.Outputs.Where(o => !this.keysLookup.Keys.Contains(o.ScriptPubKey) || (this.keysLookup.ContainsKey(o.ScriptPubKey) && !this.keysLookup[o.ScriptPubKey].IsChangeAddress()));
 
-                AddTransactionToWallet(transaction.GetHash(), transaction.Time, null, -tTx.Amount, keyToSpend, blockHeight, blockTime, tTx.Id, tTx.Index, paidoutto);                
+                AddTransactionToWallet(transaction.GetHash(), transaction.Time, null, -tTx.Amount, keyToSpend, blockHeight, blockTime, tTx.Id, tTx.Index, paidoutto);
             }
         }
 
@@ -560,7 +563,7 @@ namespace Breeze.Wallet
                 if (blockTime != null)
                 {
                     foundTransaction.CreationTime = DateTimeOffset.FromUnixTimeSeconds(blockTime.Value);
-                }                
+                }
             }
 
             // notify a transaction has been found
@@ -606,6 +609,41 @@ namespace Breeze.Wallet
         public void DeleteWallet(string walletFilePath)
         {
             File.Delete(walletFilePath);
+        }
+
+        /// <inheritdoc />
+        public void SaveToFile(Wallet wallet)
+        {
+            File.WriteAllText(wallet.WalletFilePath, JsonConvert.SerializeObject(wallet, Formatting.Indented));
+        }
+
+        /// <inheritdoc />
+        public void UpdateLastBlockSyncedHeight(int height)
+        {
+            // update the wallets with the last processed block height
+            foreach (var wallet in this.Wallets)
+            {
+                this.UpdateLastBlockSyncedHeight(wallet, height);
+            }
+        }
+
+        /// <inheritdoc />
+        public void UpdateLastBlockSyncedHeight(Wallet wallet, int height)
+        {
+            // update the wallets with the last processed block height
+            foreach (var accountRoot in wallet.AccountsRoot.Where(a => a.CoinType == this.coinType))
+            {
+                accountRoot.LastBlockSyncedHeight = height;
+            }
+        }
+
+        /// <inheritdoc />
+        public void SaveToFile()
+        {
+            foreach (var wallet in this.Wallets)
+            {
+                this.SaveToFile(wallet);
+            }
         }
 
         /// <inheritdoc />
@@ -656,15 +694,6 @@ namespace Breeze.Wallet
             File.WriteAllText(walletFilePath, JsonConvert.SerializeObject(walletFile, Formatting.Indented));
 
             return walletFile;
-        }
-
-        /// <summary>
-        /// Saves the wallet into the file system.
-        /// </summary>
-        /// <param name="wallet">The wallet to save.</param>
-        private void SaveToFile(Wallet wallet)
-        {
-            File.WriteAllText(wallet.WalletFilePath, JsonConvert.SerializeObject(wallet, Formatting.Indented));
         }
 
         /// <summary>

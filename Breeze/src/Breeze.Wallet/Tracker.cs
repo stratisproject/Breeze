@@ -90,7 +90,13 @@ namespace Breeze.Wallet
             int blockSyncStart = this.chain.GetHeightAtTime(date);
             
             // start syncing blocks
-            this.blockNotification.SyncFrom(this.chain.GetBlock(blockSyncStart).HashBlock);
+            this.SyncFrom(blockSyncStart);
+        }
+
+        /// <inheritdoc />
+        public void SyncFrom(int height)
+        {                       
+            this.blockNotification.SyncFrom(this.chain.GetBlock(height).HashBlock);
         }
 
         private bool BlocksSynced()
