@@ -22,7 +22,14 @@ namespace Breeze.Wallet
         /// Synchronize the wallet starting from the date passed as a parameter.
         /// </summary>
         /// <param name="date">The date from which to start the sync process.</param>
-        /// <returns></returns>
+        /// <returns>The height of the block sync will start from</returns>
         void SyncFrom(DateTime date);
+
+        /// <summary>
+        /// Synchronize the wallet starting from the height passed as a parameter.
+        /// </summary>
+        /// <param name="height">The height from which to start the sync process.</param>
+        /// <returns>The height of the block sync will start from</returns>
+        void SyncFrom(int height);        
     }
 }
