@@ -7,10 +7,18 @@ using Newtonsoft.Json.Converters;
 
 namespace Breeze.Wallet.Models
 {
+    public class RequestModel
+    {
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
+        }
+    }
+
     /// <summary>
     /// Object used to create a new wallet
     /// </summary>
-    public class WalletCreationRequest
+    public class WalletCreationRequest : RequestModel
     {
         [Required(ErrorMessage = "A password is required.")]
         public string Password { get; set; }
@@ -23,7 +31,7 @@ namespace Breeze.Wallet.Models
         public string Name { get; set; }
     }
 
-    public class WalletLoadRequest
+    public class WalletLoadRequest : RequestModel
     {
         [Required(ErrorMessage = "A password is required.")]
         public string Password { get; set; }
@@ -34,7 +42,7 @@ namespace Breeze.Wallet.Models
         public string Name { get; set; }
     }
 
-    public class WalletRecoveryRequest
+    public class WalletRecoveryRequest : RequestModel
     {
         [Required(ErrorMessage = "A mnemonic is required.")]
         public string Mnemonic { get; set; }
@@ -53,7 +61,7 @@ namespace Breeze.Wallet.Models
         public DateTime CreationDate { get; set; }
     }
 
-    public class WalletHistoryRequest
+    public class WalletHistoryRequest : RequestModel
     {
         [Required(ErrorMessage = "The name of the wallet is missing.")]
         public string WalletName { get; set; }
@@ -62,7 +70,7 @@ namespace Breeze.Wallet.Models
         public CoinType CoinType { get; set; }
     }
 
-    public class WalletBalanceRequest
+    public class WalletBalanceRequest : RequestModel
     {
         [Required(ErrorMessage = "The name of the wallet is missing.")]
         public string WalletName { get; set; }
@@ -71,13 +79,13 @@ namespace Breeze.Wallet.Models
         public CoinType CoinType { get; set; }
     }
 
-    public class WalletName
+    public class WalletName : RequestModel
     {
         [Required(ErrorMessage = "The name of the wallet is missing.")]
         public string Name { get; set; }
     }
 
-    public class BuildTransactionRequest
+    public class BuildTransactionRequest : RequestModel
     {
         [Required(ErrorMessage = "The name of the wallet is missing.")]
         public string WalletName { get; set; }
@@ -103,13 +111,13 @@ namespace Breeze.Wallet.Models
         public bool AllowUnconfirmed { get; set; }
     }
 
-    public class SendTransactionRequest
+    public class SendTransactionRequest : RequestModel
     {
         [Required(ErrorMessage = "A transaction in hexadecimal format is required.")]
         public string Hex { get; set; }
     }
 
-    public class GetUnusedAddressModel
+    public class GetUnusedAddressModel : RequestModel
     {
         /// <summary>
         /// The name of the wallet from which to get the address.
@@ -130,7 +138,7 @@ namespace Breeze.Wallet.Models
         public string AccountName { get; set; }
     }
 
-    public class GetUnusedAccountModel
+    public class GetUnusedAccountModel : RequestModel
     {
         /// <summary>
         /// The name of the wallet in which to create the account.
