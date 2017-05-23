@@ -1,9 +1,9 @@
 ﻿using Stratis.Bitcoin.Builder.Feature;
 using Breeze.Wallet.Controllers;
 using Microsoft.Extensions.DependencyInjection;
-using NBitcoin;
-using Stratis.Bitcoin;
 using Stratis.Bitcoin.Builder;
+using Stratis.Bitcoin.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace Breeze.Wallet
 {
@@ -41,6 +41,7 @@ namespace Breeze.Wallet
                 .FeatureServices(services =>
                 {
                     services.AddSingleton<ITracker, Tracker>();
+                    services.AddSingleton<ILoggerFactory>(Logs.LoggerFactory);
                     services.AddSingleton<IWalletManager, WalletManager>();
                     services.AddSingleton<WalletController>();
                 });

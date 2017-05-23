@@ -51,7 +51,7 @@ namespace Breeze.Api
 			});
 			
 			// Add framework services.
-			services.AddMvc()
+			services.AddMvc(options => options.Filters.Add(typeof(LoggingActionFilter)))
 				// add serializers for NBitcoin objects
 				.AddJsonOptions(options => NBitcoin.JsonConverters.Serializer.RegisterFrontConverters(options.SerializerSettings))
 				.AddControllers(services);
