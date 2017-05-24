@@ -22,8 +22,7 @@ export class CreateComponent {
   private createWalletForm: FormGroup;
   private newWallet: WalletCreation;
 
-  private responseMessage: string;
-  private errorMessage: string;
+  private mnemonic: string;
 
   private buildCreateForm(): void {
     this.createWalletForm = this.fb.group({
@@ -94,13 +93,15 @@ export class CreateComponent {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400){
-            this.responseMessage = response.json();
+            this.mnemonic = response.json();
+            alert("Your wallet has been created. Please write down your 12 word passphrase: \n" + this.mnemonic + "\nYou will be redirected to the decryption page.");
+            this.router.navigate(['']);
           }
         },
         error => {
           if (error.status >= 400) {
-            this.errorMessage = error;
-            console.log(this.errorMessage);
+            let errorMessage = error;
+            console.log(errorMessage);
           }
         }
       );
