@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Breeze.Wallet.Notifications;
+using Microsoft.Extensions.Logging;
 using NBitcoin;
 using Stratis.Bitcoin;
 using Stratis.Bitcoin.Notifications;
@@ -21,14 +22,16 @@ namespace Breeze.Wallet
         private readonly Signals signals;
         private readonly BlockNotification blockNotification;
         private readonly CoinType coinType;
+        private readonly ILogger logger;
 
-        public Tracker(IWalletManager walletManager, ConcurrentChain chain, Signals signals, BlockNotification blockNotification, Network network)
+        public Tracker(ILoggerFactory loggerFactory, IWalletManager walletManager, ConcurrentChain chain, Signals signals, BlockNotification blockNotification, Network network)
         {
             this.walletManager = walletManager as WalletManager;
             this.chain = chain;
             this.signals = signals;
             this.blockNotification = blockNotification;
-			this.coinType = (CoinType)network.Consensus.CoinType;
+            this.coinType = (CoinType)network.Consensus.CoinType;
+            this.logger = loggerFactory.CreateLogger(this.GetType().FullName);
         }
 
         /// <inheritdoc />
@@ -44,7 +47,9 @@ namespace Breeze.Wallet
             txSub.Subscribe();
 
             // start syncing blocks
-            this.blockNotification.SyncFrom(this.chain.GetBlock(this.FindBestHeightForSyncing()).HashBlock);
+            var bestHeightForSyncing = this.FindBestHeightForSyncing();
+            this.SyncFrom(bestHeightForSyncing);
+            this.logger.LogInformation($"Tracker initialized. Syncing from {bestHeightForSyncing}.");
         }
 
         private int FindBestHeightForSyncing()
@@ -75,6 +80,7 @@ namespace Breeze.Wallet
                     // wait until the chain is downloaded. We wait until a block is from an hour ago.
                     if (this.chain.IsDownloaded())
                     {
+                        this.logger.LogInformation($"Chain downloaded. Tip height is {this.chain.Tip.Height}.");
                         cancellationTokenSource.Cancel();
                     }
 
@@ -88,21 +94,15 @@ namespace Breeze.Wallet
         public void SyncFrom(DateTime date)
         {
             int blockSyncStart = this.chain.GetHeightAtTime(date);
-            
+
             // start syncing blocks
             this.SyncFrom(blockSyncStart);
         }
 
         /// <inheritdoc />
         public void SyncFrom(int height)
-        {                       
+        {
             this.blockNotification.SyncFrom(this.chain.GetBlock(height).HashBlock);
         }
-
-        private bool BlocksSynced()
-        {
-            return this.walletManager.Wallets.All(w => w.AccountsRoot.Single(a => a.CoinType == this.coinType).LastBlockSyncedHeight == this.chain.Tip.Height);
-        }
-
     }
 }
