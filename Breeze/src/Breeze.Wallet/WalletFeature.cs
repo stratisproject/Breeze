@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Stratis.Bitcoin.Builder;
 using Stratis.Bitcoin.Logging;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Breeze.Wallet
 {
@@ -11,7 +12,7 @@ namespace Breeze.Wallet
     {
         private readonly ITracker tracker;
         private readonly IWalletManager walletManager;
-        
+
         public WalletFeature(ITracker tracker, IWalletManager walletManager)
         {
             this.tracker = tracker;
@@ -19,7 +20,7 @@ namespace Breeze.Wallet
         }
 
         public override void Start()
-        {            
+        {
             this.tracker.Initialize();
         }
 
@@ -39,12 +40,15 @@ namespace Breeze.Wallet
                 features
                 .AddFeature<WalletFeature>()
                 .FeatureServices(services =>
-                {
-                    services.AddSingleton<ITracker, Tracker>();
-                    services.AddSingleton<ILoggerFactory>(Logs.LoggerFactory);
-                    services.AddSingleton<IWalletManager, WalletManager>();
-                    services.AddSingleton<WalletController>();
-                });
+                    {
+                        var loggerFactory = Logs.LoggerFactory;                        
+                        loggerFactory.AddFile("Logs/Breeze-{Date}.json", isJson: true, minimumLevel:LogLevel.Debug, fileSizeLimitBytes: 10000000);
+
+                        services.AddSingleton<ITracker, Tracker>();
+                        services.AddSingleton<ILoggerFactory>(loggerFactory);
+                        services.AddSingleton<IWalletManager, WalletManager>();
+                        services.AddSingleton<WalletController>();
+                    });
             });
 
             return fullNodeBuilder;

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Breeze.Wallet.Helpers;
 using Breeze.Wallet.Models;
+using Microsoft.Extensions.Logging;
 using NBitcoin;
 using NBitcoin.DataEncoders;
 using NBitcoin.Protocol;
@@ -37,13 +38,16 @@ namespace Breeze.Wallet
 
         private Dictionary<Script, HdAddress> keysLookup;
 
+        private readonly ILogger logger;
+
         /// <summary>
         /// Occurs when a transaction is found.
         /// </summary>
         public event EventHandler<TransactionFoundEventArgs> TransactionFound;
 
-        public WalletManager(ConnectionManager connectionManager, Network network, ConcurrentChain chain)
+        public WalletManager(ILoggerFactory loggerFactory, ConnectionManager connectionManager, Network network, ConcurrentChain chain)
         {
+            this.logger = loggerFactory.CreateLogger(this.GetType().FullName);
             this.Wallets = new List<Wallet>();
 
             // find wallets and load them in memory
@@ -447,7 +451,7 @@ namespace Breeze.Wallet
         /// <inheritdoc />
         public void ProcessBlock(int height, Block block)
         {
-            Console.WriteLine($"block notification: height: {height}, block hash: {block.Header.GetHash()}, coin type: {this.coinType}");
+            this.logger.LogDebug($"block notification - height: {height}, hash: {block.Header.GetHash()}, coin: {this.coinType}");
 
             foreach (Transaction transaction in block.Transactions)
             {
@@ -461,7 +465,7 @@ namespace Breeze.Wallet
         /// <inheritdoc />
         public void ProcessTransaction(Transaction transaction, int? blockHeight = null, Block block = null)
         {
-            Console.WriteLine($"transaction notification: tx hash {transaction.GetHash()}, coin type: {this.coinType}");
+            this.logger.LogDebug($"transaction received - hash: {transaction.GetHash()}, coin: {this.coinType}");
 
             // check the outputs
             foreach (var pubKey in this.keysLookup.Keys)
