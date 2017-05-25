@@ -31,7 +31,7 @@ namespace Breeze.Wallet
         [JsonProperty(PropertyName = "chainCode")]
         [JsonConverter(typeof(ByteArrayConverter))]
         public byte[] ChainCode { get; set; }
-        
+
         /// <summary>
         /// The network this wallet is for.
         /// </summary>
@@ -77,7 +77,7 @@ namespace Breeze.Wallet
         {
             List<TransactionData> result = new List<TransactionData>();
             var accounts = this.GetAccountsByCoinType(coinType).ToList();
-            
+
             foreach (var address in accounts.SelectMany(a => a.ExternalAddresses).Concat(accounts.SelectMany(a => a.InternalAddresses)))
             {
                 result.AddRange(address.Transactions);
@@ -91,12 +91,12 @@ namespace Breeze.Wallet
         /// <param name="coinType">Type of the coin.</param>
         /// <returns></returns>
         public IEnumerable<Script> GetAllPubKeysByCoinType(CoinType coinType)
-        {            
+        {
             var accounts = this.GetAccountsByCoinType(coinType).ToList();
             foreach (var address in accounts.SelectMany(a => a.ExternalAddresses).Concat(accounts.SelectMany(a => a.InternalAddresses)))
             {
                 yield return address.ScriptPubKey;
-            }            
+            }
         }
     }
 
@@ -116,7 +116,7 @@ namespace Breeze.Wallet
         /// </summary>
         [JsonProperty(PropertyName = "lastBlockSyncedHeight", NullValueHandling = NullValueHandling.Ignore)]
         public int? LastBlockSyncedHeight { get; set; }
-        
+
         /// <summary>
         /// The accounts used in the wallet.
         /// </summary>
@@ -155,7 +155,7 @@ namespace Breeze.Wallet
                 throw new Exception($"No account with name {accountName} could be found.");
             }
             return account;
-        }        
+        }
     }
 
     /// <summary>
@@ -315,7 +315,7 @@ namespace Breeze.Wallet
         /// <returns></returns>
         public IEnumerable<TransactionData> GetSpendableTransactions()
         {
-            var addresses = this.ExternalAddresses.Concat(this.InternalAddresses);           
+            var addresses = this.ExternalAddresses.Concat(this.InternalAddresses);
             return addresses.SelectMany(a => a.Transactions.Where(t => t.SpentInTransaction == null && t.Amount > Money.Zero));
         }
 
@@ -344,7 +344,7 @@ namespace Breeze.Wallet
         /// </summary>
         [JsonProperty(PropertyName = "index")]
         public int Index { get; set; }
-        
+
         /// <summary>
         /// The script pub key for this address.
         /// </summary>
@@ -355,7 +355,7 @@ namespace Breeze.Wallet
         /// <summary>
         /// The Base58 representation of this address.
         /// </summary>
-        [JsonProperty(PropertyName = "address")]        
+        [JsonProperty(PropertyName = "address")]
         public string Address { get; set; }
 
         /// <summary>
@@ -383,7 +383,7 @@ namespace Breeze.Wallet
         ///   <c>true</c> if it is a change address; otherwise, <c>false</c>.
         /// </returns>
         public bool IsChangeAddress()
-        {            
+        {
             return int.Parse(this.HdPath.Split('/')[4]) == 1;
         }
     }
@@ -431,13 +431,20 @@ namespace Breeze.Wallet
         /// </summary>
         [JsonProperty(PropertyName = "blockHeight", NullValueHandling = NullValueHandling.Ignore)]
         public int? BlockHeight { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the creation time.
         /// </summary>
         [JsonProperty(PropertyName = "creationTime")]
         [JsonConverter(typeof(DateTimeOffsetConverter))]
         public DateTimeOffset CreationTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Merkle proof for this transaction.
+        /// </summary>
+        [JsonProperty(PropertyName = "merkleProof", NullValueHandling = NullValueHandling.Ignore)]
+        public MerkleProof MerkleProof { get; set; }
+
 
         /// <summary>
         /// Determines whether this transaction is confirmed.
@@ -472,5 +479,24 @@ namespace Breeze.Wallet
         [JsonProperty(PropertyName = "amount")]
         [JsonConverter(typeof(MoneyJsonConverter))]
         public Money Amount { get; set; }
+    }
+
+    /// <summary>
+    /// An object representing a Merkle proof
+    /// </summary>
+    public class MerkleProof
+    {
+        /// <summary>
+        /// Gets or sets the merkle root.
+        /// </summary>
+        [JsonProperty(PropertyName = "merkleRoot")]
+        [JsonConverter(typeof(UInt256JsonConverter))]
+        public uint256 MerkleRoot { get; set; }
+
+        /// <summary>
+        /// Gets or sets the merkle path.
+        /// </summary>
+        [JsonProperty(PropertyName = "merklePath", ItemConverterType = typeof(UInt256JsonConverter))]
+        public ICollection<uint256> MerklePath { get; set; }
     }
 }

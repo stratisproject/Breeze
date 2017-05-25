@@ -141,7 +141,7 @@ namespace Breeze.Wallet
         /// <param name="allowUnconfirmed">Whether or not we allow this transaction to rely on unconfirmed outputs.</param>
         /// <returns></returns>
         (string hex, uint256 transactionId, Money fee) BuildTransaction(string walletName, string accountName, CoinType coinType, string password, string destinationAddress, Money amount, string feeType, bool allowUnconfirmed);
-        
+
         /// <summary>
         /// Sends a transaction to the network.
         /// </summary>
@@ -161,8 +161,8 @@ namespace Breeze.Wallet
         /// </summary>
         /// <param name="transaction">The transaction.</param>
         /// <param name="blockHeight">The height of the block this transaction came from. Null if it was not a transaction included in a block.</param>
-        /// <param name="blockTime">The block time.</param>
-        void ProcessTransaction(Transaction transaction, int? blockHeight = null, uint? blockTime = null);
+        /// <param name="block">The block in which this transaction was included.</param>
+        void ProcessTransaction(Transaction transaction, int? blockHeight = null, Block block = null);
 
         /// <summary>
         /// Saves the wallet into the file system.
