@@ -442,7 +442,7 @@ namespace Breeze.Wallet
         /// <summary>
         /// Gets or sets the Merkle proof for this transaction.
         /// </summary>
-        [JsonProperty(PropertyName = "merkleProof")]        
+        [JsonProperty(PropertyName = "merkleProof", NullValueHandling = NullValueHandling.Ignore)]
         public MerkleProof MerkleProof { get; set; }
 
 

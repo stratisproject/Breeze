@@ -525,13 +525,7 @@ namespace Breeze.Wallet
                 // add the Merkle proof to the (non-spending) transaction
                 if (block != null && !isSpendingTransaction)
                 {
-                    MerkleBlock merkleBlock = new MerkleBlock(block, new[] { transactionHash });
-                    
-                    newTransaction.MerkleProof = new MerkleProof
-                    {
-                        MerkleRoot = block.Header.HashMerkleRoot,
-                        MerklePath = merkleBlock.PartialMerkleTree.Hashes
-                    };
+                    newTransaction.MerkleProof = this.CreateMerkleProof(block, transactionHash);
                 }
                 
                 // if this is a spending transaction, keep a record of the payments made out to other scripts.
@@ -549,19 +543,18 @@ namespace Breeze.Wallet
                     }
 
                     newTransaction.Payments = payments;
-                }
 
-                trans.Add(newTransaction);
-
-                // if this is a spending transaction, mark the spent transaction as such
-                if (spendingTransactionId != null)
-                {
+                    // mark the transaction spent by this transaction as such
                     var transactions = this.keysLookup.Values.SelectMany(v => v.Transactions).Where(t => t.Id == spendingTransactionId);
                     if (transactions.Any())
                     {
-                        transactions.Single(t => t.Index == spendingTransactionIndex).SpentInTransaction = transactionHash;
+                        var spentTransaction = transactions.Single(t => t.Index == spendingTransactionIndex);
+                        spentTransaction.SpentInTransaction = transactionHash;
+                        spentTransaction.MerkleProof = null;
                     }
                 }
+
+                trans.Add(newTransaction);
             }
             else if (trans.Any(t => t.Id == transactionHash)) // if this is an unconfirmed transaction now received in a block
             {
@@ -578,10 +571,27 @@ namespace Breeze.Wallet
                 {
                     foundTransaction.CreationTime = DateTimeOffset.FromUnixTimeSeconds(block.Header.Time);
                 }
+
+                // add the Merkle proof now that the transaction is confirmed in a block
+                if (!isSpendingTransaction && foundTransaction.MerkleProof == null)
+                {
+                    foundTransaction.MerkleProof = this.CreateMerkleProof(block, transactionHash);
+                }
             }
 
             // notify a transaction has been found
             this.TransactionFound?.Invoke(this, new TransactionFoundEventArgs(script, transactionHash));
+        }
+
+        private MerkleProof CreateMerkleProof(Block block, uint256 transactionHash)
+        {
+            MerkleBlock merkleBlock = new MerkleBlock(block, new[] { transactionHash });
+
+            return new MerkleProof
+            {
+                MerkleRoot = block.Header.HashMerkleRoot,
+                MerklePath = merkleBlock.PartialMerkleTree.Hashes
+            };
         }
 
         private void OnTransactionFound(object sender, TransactionFoundEventArgs a)
