@@ -451,7 +451,7 @@ namespace Breeze.Wallet
 
             foreach (Transaction transaction in block.Transactions)
             {
-                this.ProcessTransaction(transaction, height, block.Header.Time);
+                this.ProcessTransaction(transaction, height, block);
             }
 
             // update the wallets with the last processed block height
@@ -459,7 +459,7 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public void ProcessTransaction(Transaction transaction, int? blockHeight = null, uint? blockTime = null)
+        public void ProcessTransaction(Transaction transaction, int? blockHeight = null, Block block = null)
         {
             Console.WriteLine($"transaction notification: tx hash {transaction.GetHash()}, coin type: {this.coinType}");
 
@@ -470,7 +470,7 @@ namespace Breeze.Wallet
                 var utxo = transaction.Outputs.SingleOrDefault(o => pubKey == o.ScriptPubKey);
                 if (utxo != null)
                 {
-                    AddTransactionToWallet(transaction.GetHash(), transaction.Time, transaction.Outputs.IndexOf(utxo), utxo.Value, pubKey, blockHeight, blockTime);
+                    AddTransactionToWallet(transaction.GetHash(), transaction.Time, transaction.Outputs.IndexOf(utxo), utxo.Value, pubKey, blockHeight, block);
                 }
             }
 
@@ -486,7 +486,7 @@ namespace Breeze.Wallet
                 // We first include the keys we don't hold and then we include the keys we do hold but that are for receiving addresses (which would mean the user paid itself).
                 IEnumerable<TxOut> paidoutto = transaction.Outputs.Where(o => !this.keysLookup.Keys.Contains(o.ScriptPubKey) || (this.keysLookup.ContainsKey(o.ScriptPubKey) && !this.keysLookup[o.ScriptPubKey].IsChangeAddress()));
 
-                AddTransactionToWallet(transaction.GetHash(), transaction.Time, null, -tTx.Amount, keyToSpend, blockHeight, blockTime, tTx.Id, tTx.Index, paidoutto);
+                AddTransactionToWallet(transaction.GetHash(), transaction.Time, null, -tTx.Amount, keyToSpend, blockHeight, block, tTx.Id, tTx.Index, paidoutto);
             }
         }
 
@@ -499,14 +499,15 @@ namespace Breeze.Wallet
         /// <param name="amount">The amount.</param>
         /// <param name="script">The script.</param>
         /// <param name="blockHeight">Height of the block.</param>
-        /// <param name="blockTime">The block time.</param>
+        /// <param name="block">The block containing the transaction to add.</param>
         /// <param name="spendingTransactionId">The id of the transaction containing the output being spent, if this is a spending transaction.</param>
         /// <param name="spendingTransactionIndex">The index of the output in the transaction being referenced, if this is a spending transaction.</param>
-        private void AddTransactionToWallet(uint256 transactionHash, uint time, int? index, Money amount, Script script, int? blockHeight = null, uint? blockTime = null, uint256 spendingTransactionId = null, int? spendingTransactionIndex = null, IEnumerable<TxOut> paidToOutputs = null)
+        private void AddTransactionToWallet(uint256 transactionHash, uint time, int? index, Money amount, Script script, int? blockHeight = null, Block block = null, uint256 spendingTransactionId = null, int? spendingTransactionIndex = null, IEnumerable<TxOut> paidToOutputs = null)
         {
             // get the collection of transactions to add to.
             this.keysLookup.TryGetValue(script, out HdAddress address);
 
+            var isSpendingTransaction = paidToOutputs != null && paidToOutputs.Any();
             var trans = address.Transactions;
 
             // if it's the first time we see this transaction
@@ -517,13 +518,24 @@ namespace Breeze.Wallet
                     Amount = amount,
                     BlockHeight = blockHeight,
                     Id = transactionHash,
-                    CreationTime = DateTimeOffset.FromUnixTimeSeconds(blockTime ?? time),
+                    CreationTime = DateTimeOffset.FromUnixTimeSeconds(block?.Header.Time ?? time),
                     Index = index
                 };
-                trans.Add(newTransaction);
 
+                // add the Merkle proof to the (non-spending) transaction
+                if (block != null && !isSpendingTransaction)
+                {
+                    MerkleBlock merkleBlock = new MerkleBlock(block, new[] { transactionHash });
+                    
+                    newTransaction.MerkleProof = new MerkleProof
+                    {
+                        MerkleRoot = block.Header.HashMerkleRoot,
+                        MerklePath = merkleBlock.PartialMerkleTree.Hashes
+                    };
+                }
+                
                 // if this is a spending transaction, keep a record of the payments made out to other scripts.
-                if (paidToOutputs != null && paidToOutputs.Any())
+                if (isSpendingTransaction)
                 {
                     List<PaymentDetails> payments = new List<PaymentDetails>();
                     foreach (var paidToOutput in paidToOutputs)
@@ -538,6 +550,8 @@ namespace Breeze.Wallet
 
                     newTransaction.Payments = payments;
                 }
+
+                trans.Add(newTransaction);
 
                 // if this is a spending transaction, mark the spent transaction as such
                 if (spendingTransactionId != null)
@@ -560,9 +574,9 @@ namespace Breeze.Wallet
                 }
 
                 // update the block time
-                if (blockTime != null)
+                if (block != null)
                 {
-                    foundTransaction.CreationTime = DateTimeOffset.FromUnixTimeSeconds(blockTime.Value);
+                    foundTransaction.CreationTime = DateTimeOffset.FromUnixTimeSeconds(block.Header.Time);
                 }
             }
 
