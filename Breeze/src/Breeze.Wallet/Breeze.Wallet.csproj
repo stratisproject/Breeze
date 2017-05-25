@@ -16,7 +16,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="1.0.3" />    
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="1.0.3" />
+    <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.0.1" />    
     <PackageReference Include="System.ValueTuple" Version="4.3.1" />
     <PackageReference Include="Stratis.Bitcoin" Version="1.0.1.8-alpha" />
   </ItemGroup>
