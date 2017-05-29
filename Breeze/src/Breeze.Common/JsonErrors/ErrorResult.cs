@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Breeze.Wallet.Errors;
+using Breeze.Common.JsonErrors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Breeze.Wallet.Errors
+namespace Breeze.Common.JsonErrors
 {
     public class ErrorResult : ObjectResult
     {

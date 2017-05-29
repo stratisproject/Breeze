@@ -16,4 +16,8 @@
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Breeze.Common\Breeze.Common.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security;
-using Breeze.Wallet.Errors;
+using Breeze.Common.JsonErrors;
 using Microsoft.AspNetCore.Mvc;
 using Breeze.Wallet.Models;
 using NBitcoin;

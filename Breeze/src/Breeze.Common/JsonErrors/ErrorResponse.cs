@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Breeze.Wallet.Errors
+namespace Breeze.Common.JsonErrors
 {
 	public class ErrorResponse
 	{
