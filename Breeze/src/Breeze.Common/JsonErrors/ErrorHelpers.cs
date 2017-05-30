@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 
-namespace Breeze.Wallet.Errors
+namespace Breeze.Common.JsonErrors
 {
 	public static class ErrorHelpers
     {
