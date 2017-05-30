@@ -17,7 +17,6 @@ namespace Breeze.TumbleBit.Client
         /// Gets the tumbler's parameters.
         /// </summary>
         /// <returns></returns>
-        [Get("/api/v1/tumblers/0/parameters")]
         Task<ClassicTumblerParameters> GetClassicTumblerParametersAsync();
     }
 }
