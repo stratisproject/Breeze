@@ -7,13 +7,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="1.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="1.1.3" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.AspNetCore.Mvc.Core">
-      <HintPath>C:\Users\Jeremy\.nuget\packages\microsoft.aspnetcore.mvc.core\1.1.2\lib\netstandard1.6\Microsoft.AspNetCore.Mvc.Core.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
