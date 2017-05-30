@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using NTumbleBit.ClassicTumbler;
-using Refit;
-using NBitcoin.JsonConverters;
-using NTumbleBit.JsonConverters;
 
 namespace Breeze.TumbleBit.Client
 {
@@ -29,15 +23,7 @@ namespace Breeze.TumbleBit.Client
         /// <param name="serverAddress">The server address.</param>
         public void InitializeTumblerService(Uri serverAddress)
         {
-            this.tumblerService = RestService.For<ITumblerService>(serverAddress.ToString(),
-                new RefitSettings
-                {
-                    JsonSerializerSettings = new JsonSerializerSettings
-                    {
-                        Converters = new List<JsonConverter> { new NetworkJsonConverter(), new RsaKeyJsonConverter(), new UInt256JsonConverter() }
-
-                    }
-                });
+            this.tumblerService = new TumblerService(serverAddress);
         }
 
         /// <inheritdoc />

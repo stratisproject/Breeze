@@ -4,7 +4,6 @@ using System.Text;
 using System.Threading.Tasks;
 using NTumbleBit;
 using NTumbleBit.ClassicTumbler;
-using Refit;
 
 namespace Breeze.TumbleBit.Client
 {
@@ -17,7 +16,6 @@ namespace Breeze.TumbleBit.Client
         /// Gets the tumbler's parameters.
         /// </summary>
         /// <returns></returns>
-        [Get("/api/v1/tumblers/0/parameters")]
         Task<ClassicTumblerParameters> GetClassicTumblerParametersAsync();
     }
 }
