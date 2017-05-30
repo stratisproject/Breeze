@@ -4,7 +4,6 @@ using System.Text;
 using System.Threading.Tasks;
 using NTumbleBit;
 using NTumbleBit.ClassicTumbler;
-using Refit;
 
 namespace Breeze.TumbleBit.Client
 {
