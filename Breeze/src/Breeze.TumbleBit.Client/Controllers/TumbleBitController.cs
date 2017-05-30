@@ -1,5 +1,10 @@
-﻿using Breeze.TumbleBit.Models;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Breeze.Common.JsonErrors;
 using Microsoft.AspNetCore.Mvc;
+using Breeze.TumbleBit.Client;
 
 namespace Breeze.TumbleBit.Controllers
 {
@@ -9,15 +14,36 @@ namespace Breeze.TumbleBit.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     public class TumbleBitController : Controller
     {
+        private readonly ITumbleBitManager tumbleBitManager;
+
+        public TumbleBitController(ITumbleBitManager tumbleBitManager)
+        {
+            this.tumbleBitManager = tumbleBitManager;
+        }
+
         /// <summary>
         /// Connect to a tumbler.
         /// </summary>
-        /// <param name="request">The object containing the parameters used to connect to a tumbler.</param>        
         [Route("connect")]
-        [HttpPost]
-        public IActionResult Connect([FromBody]TumblerConnectionRequest request)
+        [HttpGet]
+        public async Task<IActionResult> ConnectAsync()
         {
-            return this.Ok();
+            // checks the request is valid
+            if (!this.ModelState.IsValid)
+            {
+                var errors = this.ModelState.Values.SelectMany(e => e.Errors.Select(m => m.ErrorMessage));
+                return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, "Formatting error", string.Join(Environment.NewLine, errors));
+            }
+
+            try
+            {
+                var tumblerParameters = await this.tumbleBitManager.ConnectToTumblerAsync();
+                return this.Json(tumblerParameters);
+            }
+            catch (Exception e)
+            {                
+                return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, $"An error occured connecting to the tumbler.", e.ToString());
+            }
         }
     }
 }
