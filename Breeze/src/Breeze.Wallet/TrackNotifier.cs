@@ -6,50 +6,44 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Breeze.Wallet.Notifications;
 using Microsoft.Extensions.Logging;
 using NBitcoin;
 using Stratis.Bitcoin;
 using Stratis.Bitcoin.Notifications;
 using Stratis.Bitcoin.Utilities;
+using Stratis.Bitcoin.Wallet;
+using Stratis.Bitcoin.Wallet.Notifications;
 
 namespace Breeze.Wallet
 {
-    public class Tracker : ITracker
+    public class TrackNotifier
     {
         private readonly WalletManager walletManager;
         private readonly ConcurrentChain chain;
-        private readonly Signals signals;
         private readonly BlockNotification blockNotification;
         private readonly CoinType coinType;
         private readonly ILogger logger;
 
-        public Tracker(ILoggerFactory loggerFactory, IWalletManager walletManager, ConcurrentChain chain, Signals signals, BlockNotification blockNotification, Network network)
+        public TrackNotifier(ILoggerFactory loggerFactory, IWalletManager walletManager, 
+			ConcurrentChain chain, BlockNotification blockNotification, Network network)
         {
             this.walletManager = walletManager as WalletManager;
             this.chain = chain;
-            this.signals = signals;
             this.blockNotification = blockNotification;
             this.coinType = (CoinType)network.Consensus.CoinType;
             this.logger = loggerFactory.CreateLogger(this.GetType().FullName);
         }
 
         /// <inheritdoc />
-        public async Task Initialize()
+        public Task Initialize()
         {
             // get the chain headers. This needs to be up-to-date before we really do anything
-            await this.WaitForChainDownloadAsync();
-
-            // subscribe to receiving blocks and transactions
-            BlockSubscriber sub = new BlockSubscriber(this.signals.Blocks, new BlockObserver(this.chain, this.walletManager));
-            sub.Subscribe();
-            TransactionSubscriber txSub = new TransactionSubscriber(this.signals.Transactions, new TransactionObserver(this.walletManager));
-            txSub.Subscribe();
+            //await this.WaitForChainDownloadAsync();
 
             // start syncing blocks
             var bestHeightForSyncing = this.FindBestHeightForSyncing();
             this.SyncFrom(bestHeightForSyncing);
-            this.logger.LogInformation($"Tracker initialized. Syncing from {bestHeightForSyncing}.");
+	        return Task.CompletedTask;
         }
 
         private int FindBestHeightForSyncing()
