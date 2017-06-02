@@ -21,11 +21,11 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="1.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="1.0.3" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.0.1" />
-    <PackageReference Include="Stratis.Bitcoin" Version="1.0.1.8-alpha" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Breeze.Common\Breeze.Common.csproj" />
+    <ProjectReference Include="..\..\..\..\StratisBitcoinFullNode\Stratis.Bitcoin.Common\Stratis.Bitcoin.Common.csproj" />
+    <ProjectReference Include="..\..\..\..\StratisBitcoinFullNode\Stratis.Bitcoin\Stratis.Bitcoin.csproj" />
     <ProjectReference Include="..\NTumbleBit\NTumbleBit.csproj" />
   </ItemGroup>
 
