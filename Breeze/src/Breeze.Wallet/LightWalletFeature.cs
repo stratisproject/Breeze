@@ -5,21 +5,22 @@ using Stratis.Bitcoin.Logging;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Stratis.Bitcoin.Wallet;
+using Stratis.Bitcoin.Wallet.Controllers;
 
 namespace Breeze.Wallet
 {
     public class LightWalletFeature : FullNodeFeature
     {
-	    private readonly TrackNotifier trackNotifier;
+	    private readonly LightWalletSyncManager lightWalletSyncManager;
 
-	    public LightWalletFeature(TrackNotifier trackNotifier)
+	    public LightWalletFeature(LightWalletSyncManager lightWalletSyncManager)
 	    {
-		    this.trackNotifier = trackNotifier;
+		    this.lightWalletSyncManager = lightWalletSyncManager;
 	    }
 
         public override void Start()
         {
-			this.trackNotifier.Initialize().GetAwaiter().GetResult();
+			this.lightWalletSyncManager.Initialize();
         }
 
         public override void Stop()
@@ -28,21 +29,21 @@ namespace Breeze.Wallet
         }
     }
 
-    public static class WalletFeatureExtension
-    {
+    public static class LightWalletFeatureExtension
+	{
         public static IFullNodeBuilder UseLightWallet(this IFullNodeBuilder fullNodeBuilder)
         {
-			// use the wallet and on top of that start to notifier
-	        fullNodeBuilder.UseWallet();
-
             fullNodeBuilder.ConfigureFeature(features =>
             {
                 features
                 .AddFeature<LightWalletFeature>()
                 .FeatureServices(services =>
                     {
-                        services.AddSingleton<TrackNotifier>();
-                    });
+                        services.AddSingleton<IWalletSyncManager, LightWalletSyncManager>();
+	                    services.AddSingleton<IWalletManager, WalletManager>();
+	                    services.AddSingleton<WalletController>();
+
+					});
             });
 
             return fullNodeBuilder;

@@ -297,3 +297,4 @@ Thumbs.db
 project.lock.json
 /Breeze/src/Breeze.Daemon/Wallets
 /Breeze/src/Breeze.Daemon/Logs
+/Breeze.UI/.vscode/.BROWSE.VC.DB-wal

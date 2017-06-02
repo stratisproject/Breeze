@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reactive.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -12,11 +8,10 @@ using Stratis.Bitcoin;
 using Stratis.Bitcoin.Notifications;
 using Stratis.Bitcoin.Utilities;
 using Stratis.Bitcoin.Wallet;
-using Stratis.Bitcoin.Wallet.Notifications;
 
 namespace Breeze.Wallet
 {
-    public class TrackNotifier
+    public class LightWalletSyncManager : WalletSyncManager
     {
         private readonly WalletManager walletManager;
         private readonly ConcurrentChain chain;
@@ -24,26 +19,21 @@ namespace Breeze.Wallet
         private readonly CoinType coinType;
         private readonly ILogger logger;
 
-        public TrackNotifier(ILoggerFactory loggerFactory, IWalletManager walletManager, 
-			ConcurrentChain chain, BlockNotification blockNotification, Network network)
+        public LightWalletSyncManager(ILoggerFactory loggerFactory, IWalletManager walletManager, ConcurrentChain chain, Network network, 
+			BlockNotification blockNotification):base(loggerFactory, walletManager, chain, network)
         {
-            this.walletManager = walletManager as WalletManager;
-            this.chain = chain;
             this.blockNotification = blockNotification;
-            this.coinType = (CoinType)network.Consensus.CoinType;
-            this.logger = loggerFactory.CreateLogger(this.GetType().FullName);
         }
 
         /// <inheritdoc />
-        public Task Initialize()
+        public override void Initialize()
         {
             // get the chain headers. This needs to be up-to-date before we really do anything
-            //await this.WaitForChainDownloadAsync();
+            this.WaitForChainDownloadAsync().GetAwaiter().GetResult();
 
             // start syncing blocks
             var bestHeightForSyncing = this.FindBestHeightForSyncing();
             this.SyncFrom(bestHeightForSyncing);
-	        return Task.CompletedTask;
         }
 
         private int FindBestHeightForSyncing()
@@ -85,7 +75,7 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public void SyncFrom(DateTime date)
+        public override void SyncFrom(DateTime date)
         {
             int blockSyncStart = this.chain.GetHeightAtTime(date);
 
@@ -94,7 +84,7 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public void SyncFrom(int height)
+        public override void SyncFrom(int height)
         {
             this.blockNotification.SyncFrom(this.chain.GetBlock(height).HashBlock);
         }

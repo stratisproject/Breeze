@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratis.Bitcoin", "..\..\St
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratis.Bitcoin.Common", "..\..\StratisBitcoinFullNode\Stratis.Bitcoin.Common\Stratis.Bitcoin.Common.csproj", "{4F9F7CF7-326C-4FC0-9EFB-209536A42030}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Breeze.Daemon", "src\Breeze.Daemon\Breeze.Daemon.csproj", "{3F0937A2-3182-42D9-866F-3DEDEE28EC5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Breeze.Daemon", "src\Breeze.Daemon\Breeze.Daemon.csproj", "{AAF6163B-1BE2-48CE-9F9F-577C6D7AAB8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,10 +63,10 @@ Global
 		{4F9F7CF7-326C-4FC0-9EFB-209536A42030}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F9F7CF7-326C-4FC0-9EFB-209536A42030}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F9F7CF7-326C-4FC0-9EFB-209536A42030}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3F0937A2-3182-42D9-866F-3DEDEE28EC5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3F0937A2-3182-42D9-866F-3DEDEE28EC5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3F0937A2-3182-42D9-866F-3DEDEE28EC5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3F0937A2-3182-42D9-866F-3DEDEE28EC5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAF6163B-1BE2-48CE-9F9F-577C6D7AAB8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAF6163B-1BE2-48CE-9F9F-577C6D7AAB8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAF6163B-1BE2-48CE-9F9F-577C6D7AAB8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAF6163B-1BE2-48CE-9F9F-577C6D7AAB8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,6 +77,5 @@ Global
 		{D16CD478-9D1E-4C69-91AD-43539E94A215} = {807563C4-7259-434D-B604-A14C3DCF8E30}
 		{2490DD1A-6C14-47F2-A9C6-56761A52E2D9} = {807563C4-7259-434D-B604-A14C3DCF8E30}
 		{29E411B1-5687-43EE-A71B-6CCEC2289129} = {1B724678-2B73-483E-B981-3A6733C2194E}
-		{3F0937A2-3182-42D9-866F-3DEDEE28EC5A} = {807563C4-7259-434D-B604-A14C3DCF8E30}
 	EndGlobalSection
 EndGlobal

@@ -33,7 +33,7 @@ namespace Breeze.Api
                body = string.Join(Environment.NewLine, arguments.Values);
             }
 
-            this.logger.LogInformation($"Received {request.Method} {request.GetDisplayUrl()}. Body: '{body}'");
+            this.logger.LogDebug($"Received {request.Method} {request.GetDisplayUrl()}. Body: '{body}'");
             await next();            
         }
     }
