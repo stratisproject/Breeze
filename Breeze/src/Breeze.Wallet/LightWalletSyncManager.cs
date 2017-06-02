@@ -8,32 +8,46 @@ using Stratis.Bitcoin;
 using Stratis.Bitcoin.Notifications;
 using Stratis.Bitcoin.Utilities;
 using Stratis.Bitcoin.Wallet;
+using Stratis.Bitcoin.Wallet.Notifications;
 
 namespace Breeze.Wallet
 {
-    public class LightWalletSyncManager : WalletSyncManager
+    public class LightWalletSyncManager : IWalletSyncManager
     {
         private readonly WalletManager walletManager;
         private readonly ConcurrentChain chain;
         private readonly BlockNotification blockNotification;
         private readonly CoinType coinType;
         private readonly ILogger logger;
+        private readonly Signals signals;
 
-        public LightWalletSyncManager(ILoggerFactory loggerFactory, IWalletManager walletManager, ConcurrentChain chain, Network network, 
-			BlockNotification blockNotification):base(loggerFactory, walletManager, chain, network)
+        public LightWalletSyncManager(ILoggerFactory loggerFactory, IWalletManager walletManager, ConcurrentChain chain, Network network,
+            BlockNotification blockNotification, Signals signals)// :base(loggerFactory, walletManager, chain, network)
         {
+            this.walletManager = walletManager as WalletManager;
+            this.chain = chain;
+            this.signals = signals;
             this.blockNotification = blockNotification;
+            this.coinType = (CoinType)network.Consensus.CoinType;
+            this.logger = loggerFactory.CreateLogger(this.GetType().FullName);
         }
 
         /// <inheritdoc />
-        public override void Initialize()
+        public async Task Initialize()
         {
             // get the chain headers. This needs to be up-to-date before we really do anything
-            this.WaitForChainDownloadAsync().GetAwaiter().GetResult();
+            await this.WaitForChainDownloadAsync();
+
+            // subscribe to receiving blocks and transactions
+            BlockSubscriber sub = new BlockSubscriber(this.signals.Blocks, new BlockObserver(this.chain, this));
+            sub.Subscribe();
+            TransactionSubscriber txSub = new TransactionSubscriber(this.signals.Transactions, new TransactionObserver(this));
+            txSub.Subscribe();
 
             // start syncing blocks
             var bestHeightForSyncing = this.FindBestHeightForSyncing();
             this.SyncFrom(bestHeightForSyncing);
+            this.logger.LogInformation($"Tracker initialized. Syncing from {bestHeightForSyncing}.");
         }
 
         private int FindBestHeightForSyncing()
@@ -75,7 +89,7 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public override void SyncFrom(DateTime date)
+        public void SyncFrom(DateTime date)
         {
             int blockSyncStart = this.chain.GetHeightAtTime(date);
 
@@ -84,9 +98,22 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public override void SyncFrom(int height)
+        public void SyncFrom(int height)
         {
             this.blockNotification.SyncFrom(this.chain.GetBlock(height).HashBlock);
+        }
+
+        public void ProcessBlock(Block block)
+        {
+            var hash = block.Header.GetHash();
+            var height = this.chain.GetBlock(hash).Height;
+
+            this.walletManager.ProcessBlock(height, block);
+        }
+
+        public void ProcessTransaction(Transaction transaction)
+        {
+            this.walletManager.ProcessTransaction(transaction);
         }
     }
 }
