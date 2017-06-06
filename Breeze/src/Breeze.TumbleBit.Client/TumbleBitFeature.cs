@@ -35,7 +35,7 @@ namespace Breeze.TumbleBit
                 .AddFeature<TumbleBitFeature>()
                 .FeatureServices(services =>
                     {
-                        services.AddSingleton<ITumbleBitManager>(new TumbleBitManager(serverAddress));
+                        services.AddSingleton<ITumbleBitManager, TumbleBitManager> ();
                         services.AddSingleton<TumbleBitController>();
                     });
             });
