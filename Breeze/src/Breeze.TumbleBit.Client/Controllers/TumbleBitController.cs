@@ -43,7 +43,7 @@ namespace Breeze.TumbleBit.Controllers
             }
             catch (Exception e)
             {                
-                return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, $"An error occured connecting to the tumbler.", e.ToString());
+                return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, $"An error occured connecting to the tumbler with uri {request.ServerAddress}.", e.ToString());
             }
         }
 
@@ -68,7 +68,7 @@ namespace Breeze.TumbleBit.Controllers
             }
             catch (Exception e)
             {
-                return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, $"An error occured connecting to the tumbler.", e.ToString());
+                return ErrorHelpers.BuildErrorResponse(HttpStatusCode.BadRequest, "An error occured starting tumbling session.", e.ToString());
             }
         }
     }
