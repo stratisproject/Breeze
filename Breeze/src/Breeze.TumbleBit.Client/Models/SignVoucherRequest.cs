@@ -1,9 +1,5 @@
 ﻿using NBitcoin;
 using NTumbleBit.ClassicTumbler;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Breeze.TumbleBit.Models
 {

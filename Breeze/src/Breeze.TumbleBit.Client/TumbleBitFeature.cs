@@ -1,21 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using Breeze.TumbleBit.Client;
 using Breeze.TumbleBit.Controllers;
 using Stratis.Bitcoin.Builder.Feature;
 using Microsoft.Extensions.DependencyInjection;
 using Stratis.Bitcoin.Builder;
-using Stratis.Bitcoin.Logging;
-using Microsoft.Extensions.Logging;
-using Serilog;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Stratis.Bitcoin.Wallet.JsonConverters;
 
 namespace Breeze.TumbleBit
 {
     public class TumbleBitFeature : FullNodeFeature
-    {
-        public TumbleBitFeature()
-        {
-        }
-
+    {       
         public override void Start()
         {
         }
@@ -35,6 +32,13 @@ namespace Breeze.TumbleBit
                 .AddFeature<TumbleBitFeature>()
                 .FeatureServices(services =>
                     {
+                        JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+                        {
+                            Formatting = Formatting.Indented,                            
+                            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                            Converters = new List<JsonConverter> { new NetworkConverter() }
+                        };
+
                         services.AddSingleton<ITumbleBitManager, TumbleBitManager> ();
                         services.AddSingleton<TumbleBitController>();
                     });
