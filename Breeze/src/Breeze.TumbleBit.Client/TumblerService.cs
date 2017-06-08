@@ -42,7 +42,7 @@ namespace Breeze.TumbleBit.Client
         }
 
         /// <inheritdoc />
-        public async Task<UnsignedVoucherInformation> AskUnsignedVoucher()
+        public async Task<UnsignedVoucherInformation> AskUnsignedVoucherAsync()
         {
             UnsignedVoucherInformation result = await this.serverAddress.AppendPathSegment("api/v1/tumblers/0/vouchers/").GetJsonAsync<UnsignedVoucherInformation>();
             return result;
