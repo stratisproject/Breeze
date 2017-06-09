@@ -29,8 +29,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratis.Bitcoin.Common", ".
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Breeze.Daemon", "src\Breeze.Daemon\Breeze.Daemon.csproj", "{AAF6163B-1BE2-48CE-9F9F-577C6D7AAB8D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NTumbleBit.Common", "src\NTumbleBit.Common\NTumbleBit.Common.csproj", "{280992D6-3412-464E-84D3-CB3C86EA0C57}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,10 +67,6 @@ Global
 		{AAF6163B-1BE2-48CE-9F9F-577C6D7AAB8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAF6163B-1BE2-48CE-9F9F-577C6D7AAB8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAF6163B-1BE2-48CE-9F9F-577C6D7AAB8D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{280992D6-3412-464E-84D3-CB3C86EA0C57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{280992D6-3412-464E-84D3-CB3C86EA0C57}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{280992D6-3412-464E-84D3-CB3C86EA0C57}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{280992D6-3412-464E-84D3-CB3C86EA0C57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +78,5 @@ Global
 		{2490DD1A-6C14-47F2-A9C6-56761A52E2D9} = {807563C4-7259-434D-B604-A14C3DCF8E30}
 		{29E411B1-5687-43EE-A71B-6CCEC2289129} = {1B724678-2B73-483E-B981-3A6733C2194E}
 		{AAF6163B-1BE2-48CE-9F9F-577C6D7AAB8D} = {807563C4-7259-434D-B604-A14C3DCF8E30}
-		{280992D6-3412-464E-84D3-CB3C86EA0C57} = {1B724678-2B73-483E-B981-3A6733C2194E}
 	EndGlobalSection
 EndGlobal
