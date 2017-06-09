@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NBitcoin;
@@ -22,11 +23,13 @@ namespace Breeze.TumbleBit.Client
         private readonly Network network;
         private TumblingState tumblingState;
         private IDisposable blockReceiver;
-        
+        int lastCycleStarted;
+
         private ClassicTumblerParameters TumblerParameters { get; set; }
 
         public TumbleBitManager(ILoggerFactory loggerFactory, IWalletManager walletManager, ConcurrentChain chain, Network network, Signals signals)
         {
+            this.lastCycleStarted = 0;
             this.walletManager = walletManager;
             this.chain = chain;
             this.signals = signals;
@@ -52,7 +55,7 @@ namespace Breeze.TumbleBit.Client
             {
                 this.tumblingState = new TumblingState();
             }
-            
+
             // update and save the state
             this.tumblingState.TumblerParameters = this.TumblerParameters;
             this.tumblingState.Save();
@@ -115,12 +118,27 @@ namespace Breeze.TumbleBit.Client
             this.logger.LogDebug($"Receive block with height {height}");
 
             // update the block height in the tumbling state
-            if (this.tumblingState.LastBlockReceivedHeight == 0)
-            {
-                this.tumblingState.StartHeight = height;
-            }
             this.tumblingState.LastBlockReceivedHeight = height;
             this.tumblingState.Save();
+            
+            // get the next cycle to be started
+            var cycle = this.TumblerParameters.CycleGenerator.GetRegistratingCycle(height);
+
+            // check if we need to start a new session starting from the registration cycle
+            if (this.lastCycleStarted != cycle.Start)
+            {
+                this.lastCycleStarted = cycle.Start;
+                this.logger.LogDebug($"new registration cycle at {cycle.Start}");
+
+                if (this.tumblingState.Sessions.SingleOrDefault(s => s.StartCycle == cycle.Start) == null)
+                {
+                    this.tumblingState.CreateNewSession(cycle.Start);
+                    this.logger.LogDebug($"new session created at {cycle.Start}");
+                }
+            }
+
+            // update the state of the tumbling session in this new block
+            this.tumblingState.Update();
         }
     }
 }
