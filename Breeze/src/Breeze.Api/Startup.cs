@@ -56,29 +56,10 @@ namespace Breeze.Api
 				.AddJsonOptions(options => NBitcoin.JsonConverters.Serializer.RegisterFrontConverters(options.SerializerSettings))
 				.AddControllers(services);
 
-			services.AddApiVersioning(options =>
-			{				
-				options.DefaultApiVersion = new ApiVersion(1, 0);
-			});
-
 			// Register the Swagger generator, defining one or more Swagger documents
 			services.AddSwaggerGen(setup =>
 			{
 				setup.SwaggerDoc("v1", new Info { Title = "Breeze.Api", Version = "v1" });
-
-				// FIXME: prepopulates the version in the URL of the Swagger UI found at http://localhost:5000/swagger
-				// temporary needed until Swashbuckle supports it out-of-the-box  
-				setup.DocInclusionPredicate((version, apiDescription) =>
-				{
-					apiDescription.RelativePath = apiDescription.RelativePath.Replace("v{version}", version);					
-					var versionParameter = apiDescription.ParameterDescriptions.SingleOrDefault(p => p.Name == "version");
-					if (versionParameter != null)
-					{
-						apiDescription.ParameterDescriptions.Remove(versionParameter);
-					}
-
-					return true;
-				});
 
 			    //Set the comments path for the swagger json and ui.
 			    var basePath = PlatformServices.Default.Application.ApplicationBasePath;
