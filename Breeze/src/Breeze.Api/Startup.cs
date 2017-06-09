@@ -66,20 +66,6 @@ namespace Breeze.Api
 			{
 				setup.SwaggerDoc("v1", new Info { Title = "Breeze.Api", Version = "v1" });
 
-				// FIXME: prepopulates the version in the URL of the Swagger UI found at http://localhost:5000/swagger
-				// temporary needed until Swashbuckle supports it out-of-the-box  
-				setup.DocInclusionPredicate((version, apiDescription) =>
-				{
-					apiDescription.RelativePath = apiDescription.RelativePath.Replace("v{version}", version);					
-					var versionParameter = apiDescription.ParameterDescriptions.SingleOrDefault(p => p.Name == "version");
-					if (versionParameter != null)
-					{
-						apiDescription.ParameterDescriptions.Remove(versionParameter);
-					}
-
-					return true;
-				});
-
 			    //Set the comments path for the swagger json and ui.
 			    var basePath = PlatformServices.Default.Application.ApplicationBasePath;
 			    var apiXmlPath = Path.Combine(basePath, "Breeze.Api.xml");

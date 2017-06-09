@@ -20,8 +20,8 @@ import { TransactionSending } from '../classes/transaction-sending';
 export class ApiService {
     constructor(private http: Http) {};
 
-    private mockApiUrl = 'http://localhost:3000/api/v1';
-    private webApiUrl = 'http://localhost:5000/api/v1';
+    private mockApiUrl = 'http://localhost:3000/api';
+    private webApiUrl = 'http://localhost:5000/api';
     private headers = new Headers({'Content-Type': 'application/json'});
 
     /**
