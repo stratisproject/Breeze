@@ -56,11 +56,6 @@ namespace Breeze.Api
 				.AddJsonOptions(options => NBitcoin.JsonConverters.Serializer.RegisterFrontConverters(options.SerializerSettings))
 				.AddControllers(services);
 
-			services.AddApiVersioning(options =>
-			{				
-				options.DefaultApiVersion = new ApiVersion(1, 0);
-			});
-
 			// Register the Swagger generator, defining one or more Swagger documents
 			services.AddSwaggerGen(setup =>
 			{

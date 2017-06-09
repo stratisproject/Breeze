@@ -5,7 +5,7 @@ using Stratis.Bitcoin.Notifications;
 
 namespace Breeze.Api.Controllers
 {	
-	[Route("api/v{version:apiVersion}/[controller]")]
+	[Route("api/[controller]")]
 	public class NodeController : Controller
 	{
 		private readonly BlockNotification blockNotification;
