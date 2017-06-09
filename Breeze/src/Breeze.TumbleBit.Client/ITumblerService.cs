@@ -21,7 +21,7 @@ namespace Breeze.TumbleBit.Client
         /// <returns></returns>
         Task<ClassicTumblerParameters> GetClassicTumblerParametersAsync();
 
-        Task<UnsignedVoucherInformation> AskUnsignedVoucher();
+        Task<UnsignedVoucherInformation> AskUnsignedVoucherAsync();
 
         Task<PuzzleSolution> SignVoucherAsync(SignVoucherRequest signVoucherRequest);
 
