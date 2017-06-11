@@ -12,7 +12,7 @@ namespace Breeze.TumbleBit.Controllers
     /// <summary>
     /// Controller providing TumbleBit operations.
     /// </summary>
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/[controller]")]
     public class TumbleBitController : Controller
     {
         private readonly ITumbleBitManager tumbleBitManager;
