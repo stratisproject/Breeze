@@ -9,15 +9,18 @@ namespace Breeze.Wallet
     public class LightWalletFeature : FullNodeFeature
     {
         private readonly IWalletSyncManager walletSyncManager;
+        private readonly IWalletManager walletManager;
 
-        public LightWalletFeature(IWalletSyncManager walletSyncManager)
+        public LightWalletFeature(IWalletSyncManager walletSyncManager, IWalletManager walletManager)
         {
             this.walletSyncManager = walletSyncManager;
+            this.walletManager = walletManager;
         }
 
         public override void Start()
         {
             this.walletSyncManager.Initialize();
+            this.walletManager.Initialize();
         }
 
         public override void Stop()

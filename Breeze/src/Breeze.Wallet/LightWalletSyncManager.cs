@@ -103,11 +103,22 @@ namespace Breeze.Wallet
             this.blockNotification.SyncFrom(this.chain.GetBlock(height).HashBlock);
         }
 
+        /// <inheritdoc />
         public void ProcessBlock(Block block)
         {
+            var chainedBlock = this.chain.GetBlock(block.GetHash());
+
+            // if the newly received block is too far forward, ignore it (for example when we start receiving blocks before the wallets start their syncing)
+            if (chainedBlock.Height > this.walletManager.LastBlockHeight() + 1)
+            {
+                this.logger.LogDebug($"block received with height: {chainedBlock.Height} and hash: {block.Header.GetHash()} is too far in advance. Ignoring.");
+                return;
+            }
+
             this.walletManager.ProcessBlock(block);
         }
 
+        /// <inheritdoc />
         public void ProcessTransaction(Transaction transaction)
         {
             this.walletManager.ProcessTransaction(transaction);
