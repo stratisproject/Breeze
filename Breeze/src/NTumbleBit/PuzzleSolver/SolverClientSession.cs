@@ -318,6 +318,15 @@ namespace NTumbleBit.PuzzleSolver
 			return signature;
 		}
 
+		public TransactionSignature SignEscape()
+		{
+			AssertState(SolverClientStates.Completed);
+			var dummy = new Transaction();
+			dummy.Inputs.Add(new TxIn(InternalState.EscrowedCoin.Outpoint));
+			dummy.Outputs.Add(new TxOut());
+			return dummy.SignInput(InternalState.EscrowKey, InternalState.EscrowedCoin, SigHash.None | SigHash.AnyoneCanPay);
+		}
+
 		private Transaction CreateUnsignedOfferTransaction()
 		{
 			Script offer = CreateOfferScript();
@@ -333,14 +342,16 @@ namespace NTumbleBit.PuzzleSolver
 		{
 			var coin = CreateUnsignedOfferTransaction().Outputs.AsCoins().First().ToScriptCoin(CreateOfferScript());
 
+			var unknownOutpoints = new OutPoint(uint256.Zero, 0);
 			Transaction tx = new Transaction();
 			tx.LockTime = CreateOfferScriptParameters().Expiration;
-			tx.Inputs.Add(new TxIn(coin.Outpoint));
+			tx.Inputs.Add(new TxIn(unknownOutpoints));
 			tx.Inputs[0].Sequence = 0;
 			tx.Outputs.Add(new TxOut(coin.Amount, redeemDestination));
-			var vSize = tx.GetVirtualSize() + 80;
-			tx.Outputs[0].Value -= feeRate.GetFee(vSize);
 			tx.Inputs[0].ScriptSig = new Script(OpcodeType.OP_0) + Op.GetPushOp(coin.Redeem.ToBytes());
+
+			var vSize = tx.GetVirtualSize() + 80; // Size without signature + the signature size
+			tx.Outputs[0].Value -= feeRate.GetFee(vSize);
 
 			var redeemTransaction = new TrustedBroadcastRequest
 			{
@@ -349,7 +360,7 @@ namespace NTumbleBit.PuzzleSolver
 				Transaction = tx
 			};
 			//Strip redeem script information so we check if TrustedBroadcastRequest can sign correctly
-			redeemTransaction.Transaction = redeemTransaction.ReSign(new Coin(coin.Outpoint, coin.TxOut));
+			redeemTransaction.Transaction = redeemTransaction.ReSign(new Coin(unknownOutpoints, coin.TxOut));
 			return redeemTransaction;
 		}
 
