@@ -59,28 +59,28 @@ namespace Breeze.TumbleBit.Client
             // get a list of cycles we expect to have at this height
             var cycles = this.TumblerParameters.CycleGenerator.GetCycles(this.LastBlockReceivedHeight);
 
-            var states = cycles.SelectMany(c => this.Sessions.Where(s => s.StartCycle == c.Start)).ToList();
-            foreach (var state in states)
+            var existingSessions = cycles.SelectMany(c => this.Sessions.Where(s => s.StartCycle == c.Start)).ToList();
+            foreach (var existingSession in existingSessions)
             {
                 try
                 {
                     // create a new session to be updated
                     var session = new Session();
-                    if (state.NegotiationClientState != null)
+                    if (existingSession.NegotiationClientState != null)
                     {
-                        session.StartCycle = state.NegotiationClientState.CycleStart;
-                        session.ClientChannelNegotiation = new ClientChannelNegotiation(this.TumblerParameters, state.NegotiationClientState);
+                        session.StartCycle = existingSession.NegotiationClientState.CycleStart;
+                        session.ClientChannelNegotiation = new ClientChannelNegotiation(this.TumblerParameters, existingSession.NegotiationClientState);
                     }
-                    if (state.PromiseClientState != null)
-                        session.PromiseClientSession = new PromiseClientSession(this.TumblerParameters.CreatePromiseParamaters(), state.PromiseClientState);
-                    if (state.SolverClientState != null)
-                        session.SolverClientSession = new SolverClientSession(this.TumblerParameters.CreateSolverParamaters(), state.SolverClientState);
+                    if (existingSession.PromiseClientState != null)
+                        session.PromiseClientSession = new PromiseClientSession(this.TumblerParameters.CreatePromiseParamaters(), existingSession.PromiseClientState);
+                    if (existingSession.SolverClientState != null)
+                        session.SolverClientSession = new SolverClientSession(this.TumblerParameters.CreateSolverParamaters(), existingSession.SolverClientState);
 
                     // update the session
                     session.Update();
 
                     // replace the updated session in the list of existing sessions
-                    int index = this.Sessions.IndexOf(state);
+                    int index = this.Sessions.IndexOf(existingSession);
                     if (index != -1)
                     {
                         this.Sessions[index] = session;
