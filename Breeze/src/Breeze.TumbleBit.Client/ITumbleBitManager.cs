@@ -17,7 +17,7 @@ namespace Breeze.TumbleBit.Client
         /// <returns></returns>
         Task<ClassicTumblerParameters> ConnectToTumblerAsync(Uri serverAddress);
 
-        Task TumbleAsync(string destinationWalletName);
+        Task TumbleAsync(string originWalletName, string destinationWalletName);
 
         /// <summary>
         /// Processes a block received from the network.

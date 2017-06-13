@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.Logging;
+using NBitcoin;
 using Newtonsoft.Json;
 using NTumbleBit.ClassicTumbler;
 using NTumbleBit.PuzzlePromise;
 using NTumbleBit.PuzzleSolver;
+using Stratis.Bitcoin.Wallet;
 
 namespace Breeze.TumbleBit.Client
 {
@@ -24,16 +26,20 @@ namespace Breeze.TumbleBit.Client
         [JsonProperty("lastBlockReceivedHeight")]
         public int LastBlockReceivedHeight { get; set; }
 
+        [JsonProperty("originWalletName")]
+        public string OriginWalletName { get; set; }
+
         [JsonProperty("destinationWalletName")]
         public string DestinationWalletName { get; set; }
 
+        [JsonProperty("sessions")]
         public IList<Session> Sessions { get; set; }
-
+        
         public TumblingState()
         {
             this.Sessions = new List<Session>();
         }
-
+        
         /// <inheritdoc />
         public void Save()
         {
@@ -56,9 +62,22 @@ namespace Breeze.TumbleBit.Client
         /// <inheritdoc />
         public void Update()
         {
+            // get the next cycle to be started
+            var cycle = this.TumblerParameters.CycleGenerator.GetRegistratingCycle(this.LastBlockReceivedHeight);
+            var lastCycleStarted = this.Sessions.Max(s => s.StartCycle);
+
+            // check if we need to start a new session starting from the registration cycle
+            // TODO remove the limitation to have only 1 session
+            if (lastCycleStarted != cycle.Start && this.Sessions.Count == 0)
+            {                
+                if (this.Sessions.SingleOrDefault(s => s.StartCycle == cycle.Start) == null)
+                {
+                    this.CreateNewSession(cycle.Start);
+                }
+            }
+            
             // get a list of cycles we expect to have at this height
             var cycles = this.TumblerParameters.CycleGenerator.GetCycles(this.LastBlockReceivedHeight);
-
             var existingSessions = cycles.SelectMany(c => this.Sessions.Where(s => s.StartCycle == c.Start)).ToList();
             foreach (var existingSession in existingSessions)
             {
@@ -75,7 +94,7 @@ namespace Breeze.TumbleBit.Client
                         session.PromiseClientSession = new PromiseClientSession(this.TumblerParameters.CreatePromiseParamaters(), existingSession.PromiseClientState);
                     if (existingSession.SolverClientState != null)
                         session.SolverClientSession = new SolverClientSession(this.TumblerParameters.CreateSolverParamaters(), existingSession.SolverClientState);
-
+                    
                     // update the session
                     session.Update();
 
@@ -152,10 +171,13 @@ namespace Breeze.TumbleBit.Client
 
         public SolverClientSession.State SolverClientState { get; set; }
 
+        [JsonIgnore]
         public ClientChannelNegotiation ClientChannelNegotiation { get; set; }
 
+        [JsonIgnore]
         public SolverClientSession SolverClientSession { get; set; }
 
+        [JsonIgnore]
         public PromiseClientSession PromiseClientSession { get; set; }
 
         public void Update()

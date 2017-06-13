@@ -28,7 +28,10 @@ namespace Breeze.TumbleBit.Models
 
     public class TumbleRequest
     {
-        [Required(ErrorMessage = "A wallet name is required.")]
+        [Required(ErrorMessage = "The name of the origin wallet is required.")]
+        public string OriginWalletName { get; set; }
+
+        [Required(ErrorMessage = "The name of the destination wallet is required.")]
         public string DestinationWalletName { get; set; }
     }
 }

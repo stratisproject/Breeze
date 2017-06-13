@@ -63,7 +63,7 @@ namespace Breeze.TumbleBit.Controllers
 
             try
             {
-                await this.tumbleBitManager.TumbleAsync(request.DestinationWalletName);
+                await this.tumbleBitManager.TumbleAsync(request.OriginWalletName, request.DestinationWalletName);
                 return this.Ok();
             }
             catch (Exception e)
