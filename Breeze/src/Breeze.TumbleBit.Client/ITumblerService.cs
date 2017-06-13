@@ -40,5 +40,7 @@ namespace Breeze.TumbleBit.Client
         Task<PuzzleSolver.ServerCommitment[]> SolvePuzzlesAsync(int cycleId, string channelId, PuzzleValue[] puzzles);
 
         Task<SolutionKey[]> FulfillOfferAsync(int cycleId, string channelId, TransactionSignature clientSignature);
+
+        Task GiveEscapeKeyAsync(int cycleId, string channelId, TransactionSignature signature);
     }
 }

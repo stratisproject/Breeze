@@ -110,5 +110,11 @@ namespace Breeze.TumbleBit.Client
             SolutionKey[] result = await this.serverAddress.AppendPathSegment($"api/v1/tumblers/0/clientchannels/{cycleId}/{channelId}/offer").PostJsonAsync(clientSignature).ReceiveJson<SolutionKey[]>();
             return result;
         }
+
+        /// <inheritdoc />
+        public async Task GiveEscapeKeyAsync(int cycleId, string channelId, TransactionSignature signature)
+        {
+            await this.serverAddress.AppendPathSegment($"api/v1/tumblers/0/clientchannels/{cycleId}/{channelId}/escape").PostJsonAsync(signature);            
+        }
     }
 }
