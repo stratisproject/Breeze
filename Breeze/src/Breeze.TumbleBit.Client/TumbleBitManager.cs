@@ -23,21 +23,18 @@ namespace Breeze.TumbleBit.Client
         private readonly Network network;
         private TumblingState tumblingState;
         private IDisposable blockReceiver;
-        int lastCycleStarted;
-
+     
         private ClassicTumblerParameters TumblerParameters { get; set; }
 
         public TumbleBitManager(ILoggerFactory loggerFactory, IWalletManager walletManager, ConcurrentChain chain, Network network, Signals signals)
         {
-            this.lastCycleStarted = 0;
             this.walletManager = walletManager;
             this.chain = chain;
             this.signals = signals;
             this.network = network;
             this.logger = loggerFactory.CreateLogger(this.GetType().FullName);
 
-            // load the persisted tumbling state 
-            this.tumblingState = TumblingState.LoadState();
+            this.tumblingState = new TumblingState(loggerFactory, this.chain, this.walletManager, this.network);
         }
 
         /// <inheritdoc />
@@ -50,21 +47,21 @@ namespace Breeze.TumbleBit.Client
             {
                 throw new Exception($"The tumbler is on network {this.TumblerParameters.Network} while the wallet is on network {this.network}.");
             }
-
-            if (this.tumblingState == null)
-            {
-                this.tumblingState = new TumblingState();
-            }
-
+            
+            // load the current tumbling state fromt he file system
+            this.tumblingState.LoadStateFromMemory();
+            
             // update and save the state
+            this.tumblingState.TumblerUri = serverAddress;
             this.tumblingState.TumblerParameters = this.TumblerParameters;
+            this.tumblingState.SetClients(this.tumblerService);
             this.tumblingState.Save();
 
             return this.TumblerParameters;
         }
 
         /// <inheritdoc />
-        public Task TumbleAsync(string destinationWalletName)
+        public Task TumbleAsync(string originWalletName, string destinationWalletName)
         {
             // make sure the tumbler service is initialized
             if (this.TumblerParameters == null || this.tumblerService == null)
@@ -81,11 +78,21 @@ namespace Breeze.TumbleBit.Client
             Wallet destinationWallet = this.walletManager.GetWallet(destinationWalletName);
             if (destinationWallet == null)
             {
-                throw new Exception($"Destination not found. Have you created a wallet with name {destinationWalletName}?");
+                throw new Exception($"Destination wallet not found. Have you created a wallet with name {destinationWalletName}?");
+            }
+
+            Wallet originWallet = this.walletManager.GetWallet(originWalletName);
+            if (originWallet == null)
+            {
+                throw new Exception($"Origin wallet not found. Have you created a wallet with name {originWalletName}?");
             }
 
             // update the state and save
+            this.tumblingState.DestinationWallet = destinationWallet;
             this.tumblingState.DestinationWalletName = destinationWalletName;
+            this.tumblingState.OriginWallet = originWallet;
+            this.tumblingState.OriginWalletName = originWalletName;
+
             this.tumblingState.Save();
 
             // subscribe to receiving blocks
@@ -113,30 +120,13 @@ namespace Breeze.TumbleBit.Client
 
         /// <inheritdoc />
         public void ProcessBlock(int height, Block block)
-        {
-            // TODO start the state machine 
-            this.logger.LogDebug($"Receive block with height {height}");
+        {            
+            this.logger.LogDebug($"Received block with height {height} during tumbling session.");
 
             // update the block height in the tumbling state
             this.tumblingState.LastBlockReceivedHeight = height;
             this.tumblingState.Save();
             
-            // get the next cycle to be started
-            var cycle = this.TumblerParameters.CycleGenerator.GetRegistratingCycle(height);
-
-            // check if we need to start a new session starting from the registration cycle
-            if (this.lastCycleStarted != cycle.Start)
-            {
-                this.lastCycleStarted = cycle.Start;
-                this.logger.LogDebug($"new registration cycle at {cycle.Start}");
-
-                if (this.tumblingState.Sessions.SingleOrDefault(s => s.StartCycle == cycle.Start) == null)
-                {
-                    this.tumblingState.CreateNewSession(cycle.Start);
-                    this.logger.LogDebug($"new session created at {cycle.Start}");
-                }
-            }
-
             // update the state of the tumbling session in this new block
             this.tumblingState.Update();
         }
