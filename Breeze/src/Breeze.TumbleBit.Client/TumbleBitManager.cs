@@ -34,8 +34,7 @@ namespace Breeze.TumbleBit.Client
             this.network = network;
             this.logger = loggerFactory.CreateLogger(this.GetType().FullName);
 
-            // load the persisted tumbling state 
-            this.tumblingState = TumblingState.LoadState();
+            this.tumblingState = new TumblingState(loggerFactory);
         }
 
         /// <inheritdoc />
@@ -48,13 +47,12 @@ namespace Breeze.TumbleBit.Client
             {
                 throw new Exception($"The tumbler is on network {this.TumblerParameters.Network} while the wallet is on network {this.network}.");
             }
-
-            if (this.tumblingState == null)
-            {
-                this.tumblingState = new TumblingState();
-            }
-
+            
+            // load the current tumbling state fromt he file system
+            this.tumblingState.LoadStateFromMemory();
+            
             // update and save the state
+            this.tumblingState.TumblerUri = serverAddress;
             this.tumblingState.TumblerParameters = this.TumblerParameters;
             this.tumblingState.Save();
 

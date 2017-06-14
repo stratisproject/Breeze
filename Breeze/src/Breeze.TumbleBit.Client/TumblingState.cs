@@ -15,31 +15,38 @@ namespace Breeze.TumbleBit.Client
 {
     public class TumblingState : IStateMachine
     {
+        private readonly ILogger logger;
+
         private const string StateFileName = "tumblebit_state.json";
-        
+
         [JsonProperty("tumblerParameters")]
         public ClassicTumblerParameters TumblerParameters { get; set; }
 
         [JsonProperty("tumblerUri")]
         public Uri TumblerUri { get; set; }
-        
-        [JsonProperty("lastBlockReceivedHeight")]
+
+        [JsonProperty("lastBlockReceivedHeight", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int LastBlockReceivedHeight { get; set; }
 
-        [JsonProperty("originWalletName")]
+        [JsonProperty("originWalletName", NullValueHandling = NullValueHandling.Ignore)]
         public string OriginWalletName { get; set; }
 
-        [JsonProperty("destinationWalletName")]
+        [JsonProperty("destinationWalletName", NullValueHandling = NullValueHandling.Ignore)]
         public string DestinationWalletName { get; set; }
 
-        [JsonProperty("sessions")]
+        [JsonProperty("sessions", NullValueHandling = NullValueHandling.Ignore)]
         public IList<Session> Sessions { get; set; }
-        
+
+        [JsonConstructor]
         public TumblingState()
         {
-            this.Sessions = new List<Session>();
         }
-        
+
+        public TumblingState(ILoggerFactory loggerFactory)
+        {
+            this.logger = loggerFactory.CreateLogger(this.GetType().FullName);
+        }
+
         /// <inheritdoc />
         public void Save()
         {
@@ -47,9 +54,23 @@ namespace Breeze.TumbleBit.Client
         }
 
         /// <inheritdoc />
-        public IStateMachine Load()
+        public void LoadStateFromMemory()
         {
-            return LoadState();
+            var stateFilePath = GetStateFilePath();
+            if (!File.Exists(stateFilePath))
+            {
+                return;
+            }
+
+            // load the file from the local system
+            var savedState = JsonConvert.DeserializeObject<TumblingState>(File.ReadAllText(stateFilePath));
+
+            this.Sessions = savedState.Sessions ?? new List<Session>();
+            this.OriginWalletName = savedState.OriginWalletName;
+            this.DestinationWalletName = savedState.DestinationWalletName;
+            this.LastBlockReceivedHeight = savedState.LastBlockReceivedHeight;
+            this.TumblerParameters = savedState.TumblerParameters;
+            this.TumblerUri = savedState.TumblerUri;            
         }
 
         /// <inheritdoc />
@@ -64,77 +85,67 @@ namespace Breeze.TumbleBit.Client
         {
             // get the next cycle to be started
             var cycle = this.TumblerParameters.CycleGenerator.GetRegistratingCycle(this.LastBlockReceivedHeight);
-            var lastCycleStarted = this.Sessions.Max(s => s.StartCycle);
 
-            // check if we need to start a new session starting from the registration cycle
-            // TODO remove the limitation to have only 1 session
-            if (lastCycleStarted != cycle.Start && this.Sessions.Count == 0)
-            {                
-                if (this.Sessions.SingleOrDefault(s => s.StartCycle == cycle.Start) == null)
-                {
-                    this.CreateNewSession(cycle.Start);
-                }
+            // create a new session if allowed
+            if (this.Sessions.Count == 0)
+            {
+                this.CreateNewSession(cycle.Start);
             }
-            
+            else
+            {
+                // TODO remove the limitation to have only 1 session
+                //var lastCycleStarted = this.Sessions.Max(s => s.StartCycle);
+
+                //// check if we need to start a new session starting from the registration cycle
+                //if (lastCycleStarted != cycle.Start)
+                //{
+                //    if (this.Sessions.SingleOrDefault(s => s.StartCycle == cycle.Start) == null)
+                //    {
+                //        this.CreateNewSession(cycle.Start);
+                //    }
+                //}
+            }
+
             // get a list of cycles we expect to have at this height
             var cycles = this.TumblerParameters.CycleGenerator.GetCycles(this.LastBlockReceivedHeight);
             var existingSessions = cycles.SelectMany(c => this.Sessions.Where(s => s.StartCycle == c.Start)).ToList();
             foreach (var existingSession in existingSessions)
-            {
-                try
+            {                
+                // create a new session to be updated
+                var session = new Session();
+                if (existingSession.NegotiationClientState != null)
                 {
-                    // create a new session to be updated
-                    var session = new Session();
-                    if (existingSession.NegotiationClientState != null)
-                    {
-                        session.StartCycle = existingSession.NegotiationClientState.CycleStart;
-                        session.ClientChannelNegotiation = new ClientChannelNegotiation(this.TumblerParameters, existingSession.NegotiationClientState);
-                    }
-                    if (existingSession.PromiseClientState != null)
-                        session.PromiseClientSession = new PromiseClientSession(this.TumblerParameters.CreatePromiseParamaters(), existingSession.PromiseClientState);
-                    if (existingSession.SolverClientState != null)
-                        session.SolverClientSession = new SolverClientSession(this.TumblerParameters.CreateSolverParamaters(), existingSession.SolverClientState);
-                    
-                    // update the session
-                    session.Update();
-
-                    // replace the updated session in the list of existing sessions
-                    int index = this.Sessions.IndexOf(existingSession);
-                    if (index != -1)
-                    {
-                        this.Sessions[index] = session;
-                    }
-
-                    this.Save();
+                    session.StartCycle = existingSession.NegotiationClientState.CycleStart;
+                    session.ClientChannelNegotiation = new ClientChannelNegotiation(this.TumblerParameters, existingSession.NegotiationClientState);
                 }
-                catch (Exception)
+                if (existingSession.PromiseClientState != null)
+                    session.PromiseClientSession = new PromiseClientSession(this.TumblerParameters.CreatePromiseParamaters(), existingSession.PromiseClientState);
+                if (existingSession.SolverClientState != null)
+                    session.SolverClientSession = new SolverClientSession(this.TumblerParameters.CreateSolverParamaters(), existingSession.SolverClientState);
+
+                // update the session
+                this.MoveToNextPhase(session);
+
+                // replace the updated session in the list of existing sessions
+                int index = this.Sessions.IndexOf(existingSession);
+                if (index != -1)
                 {
-                    throw;
+                    this.Sessions[index] = session;
                 }
 
+                this.Save();              
             }
         }
-        
+
+        public void MoveToNextPhase(Session session)
+        {
+            this.logger.LogInformation($"Entering next phase for cycle {session.StartCycle}.");
+        }
+
         public void CreateNewSession(int start)
         {
             this.Sessions.Add(new Session { StartCycle = start });
             this.Save();
-        }
-        
-        /// <summary>
-        /// Loads the saved state of the tumbling execution to the file system.
-        /// </summary>
-        /// <returns></returns>
-        public static TumblingState LoadState()
-        {
-            var stateFilePath = GetStateFilePath();
-            if (!File.Exists(stateFilePath))
-            {
-                return null;
-            }
-
-            // load the file from the local system
-            return JsonConvert.DeserializeObject<TumblingState>(File.ReadAllText(stateFilePath));
         }
 
         /// <summary>
@@ -179,10 +190,5 @@ namespace Breeze.TumbleBit.Client
 
         [JsonIgnore]
         public PromiseClientSession PromiseClientSession { get; set; }
-
-        public void Update()
-        {
-
-        }
     }
 }

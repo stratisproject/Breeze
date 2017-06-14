@@ -8,10 +8,10 @@
         void Save();
 
         /// <summary>
-        /// Loads the state of the current tumbling session.
+        /// Loads the saved state of the tumbling execution to the file system.
         /// </summary>
         /// <returns></returns>
-        IStateMachine Load();
+        void LoadStateFromMemory();
 
         /// <summary>
         /// Deletes the state of the current tumbling session..
