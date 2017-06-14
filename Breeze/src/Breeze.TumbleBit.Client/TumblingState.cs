@@ -13,7 +13,7 @@ using Stratis.Bitcoin.Wallet;
 
 namespace Breeze.TumbleBit.Client
 {
-    public class TumblingState : IStateMachine
+    public partial class TumblingState : IStateMachine
     {
         private const string StateFileName = "tumblebit_state.json";
 
