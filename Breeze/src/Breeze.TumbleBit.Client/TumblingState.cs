@@ -15,10 +15,13 @@ namespace Breeze.TumbleBit.Client
 {
     public class TumblingState : IStateMachine
     {
-        private readonly ILogger logger;
-
         private const string StateFileName = "tumblebit_state.json";
 
+        private readonly ILogger logger;
+        private readonly ConcurrentChain chain;
+        private readonly IWalletManager walletManager;
+        private readonly CoinType coinType;
+        
         [JsonProperty("tumblerParameters")]
         public ClassicTumblerParameters TumblerParameters { get; set; }
 
@@ -37,14 +40,38 @@ namespace Breeze.TumbleBit.Client
         [JsonProperty("sessions", NullValueHandling = NullValueHandling.Ignore)]
         public IList<Session> Sessions { get; set; }
 
+        [JsonIgnore]
+        public Wallet OriginWallet { get; set; }
+
+        [JsonIgnore]
+        public Wallet DestinationWallet { get; set; }
+
+        [JsonIgnore]
+        public ITumblerService AliceClient { get; set; }
+
+        [JsonIgnore]
+        public ITumblerService BobClient { get; set; }
+
         [JsonConstructor]
         public TumblingState()
         {
         }
 
-        public TumblingState(ILoggerFactory loggerFactory)
+        public TumblingState(ILoggerFactory loggerFactory, 
+            ConcurrentChain chain,
+            IWalletManager walletManager,
+            Network network)
         {
             this.logger = loggerFactory.CreateLogger(this.GetType().FullName);
+            this.chain = chain;
+            this.walletManager = walletManager;
+            this.coinType = (CoinType)network.Consensus.CoinType;
+        }
+
+        public void SetClients(ITumblerService tumblerService)
+        {
+            this.AliceClient = tumblerService;
+            this.BobClient = tumblerService;
         }
 
         /// <inheritdoc />
@@ -70,7 +97,7 @@ namespace Breeze.TumbleBit.Client
             this.DestinationWalletName = savedState.DestinationWalletName;
             this.LastBlockReceivedHeight = savedState.LastBlockReceivedHeight;
             this.TumblerParameters = savedState.TumblerParameters;
-            this.TumblerUri = savedState.TumblerUri;            
+            this.TumblerUri = savedState.TumblerUri;
         }
 
         /// <inheritdoc />
@@ -110,7 +137,7 @@ namespace Breeze.TumbleBit.Client
             var cycles = this.TumblerParameters.CycleGenerator.GetCycles(this.LastBlockReceivedHeight);
             var existingSessions = cycles.SelectMany(c => this.Sessions.Where(s => s.StartCycle == c.Start)).ToList();
             foreach (var existingSession in existingSessions)
-            {                
+            {
                 // create a new session to be updated
                 var session = new Session();
                 if (existingSession.NegotiationClientState != null)
@@ -133,7 +160,7 @@ namespace Breeze.TumbleBit.Client
                     this.Sessions[index] = session;
                 }
 
-                this.Save();              
+                this.Save();
             }
         }
 

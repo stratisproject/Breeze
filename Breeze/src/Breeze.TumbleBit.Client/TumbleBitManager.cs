@@ -34,7 +34,7 @@ namespace Breeze.TumbleBit.Client
             this.network = network;
             this.logger = loggerFactory.CreateLogger(this.GetType().FullName);
 
-            this.tumblingState = new TumblingState(loggerFactory);
+            this.tumblingState = new TumblingState(loggerFactory, this.chain, this.walletManager, this.network);
         }
 
         /// <inheritdoc />
@@ -54,6 +54,7 @@ namespace Breeze.TumbleBit.Client
             // update and save the state
             this.tumblingState.TumblerUri = serverAddress;
             this.tumblingState.TumblerParameters = this.TumblerParameters;
+            this.tumblingState.SetClients(this.tumblerService);
             this.tumblingState.Save();
 
             return this.TumblerParameters;
@@ -87,7 +88,9 @@ namespace Breeze.TumbleBit.Client
             }
 
             // update the state and save
+            this.tumblingState.DestinationWallet = destinationWallet;
             this.tumblingState.DestinationWalletName = destinationWalletName;
+            this.tumblingState.OriginWallet = originWallet;
             this.tumblingState.OriginWalletName = originWalletName;
 
             this.tumblingState.Save();
