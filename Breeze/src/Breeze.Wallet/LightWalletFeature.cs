@@ -19,8 +19,8 @@ namespace Breeze.Wallet
 
         public override void Start()
         {
-            this.walletSyncManager.Initialize();
             this.walletManager.Initialize();
+            this.walletSyncManager.Initialize();
         }
 
         public override void Stop()
