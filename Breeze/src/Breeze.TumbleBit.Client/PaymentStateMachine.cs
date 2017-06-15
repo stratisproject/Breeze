@@ -54,6 +54,8 @@ namespace Breeze.TumbleBit.Client
             FeeRate feeRate = null;
             switch (phase)
             {
+                // in the registration phase, Bob asks the tumbler for a voucher.
+                // he cannot open it so he gives it to Alice.
                 case CyclePhase.Registration:
                     if (session.ClientChannelNegotiation == null)
                     {
@@ -69,6 +71,9 @@ namespace Breeze.TumbleBit.Client
                         logger.LogInformation("Registration Complete");
                     }
                     break;
+                // in this phase, Alice creates 2 transactions: an escrow transaction and a redeem transaction (in case things don't go as planned) 
+                // on the next phase, she sends the blinded voucher to the tumbler, who doesn't know this voucher is coming from Bob.
+                // the tumbler signs the voucher and replies with a solution to the voucher.
                 case CyclePhase.ClientChannelEstablishment:
                     if (session.ClientChannelNegotiation.Status == TumblerClientSessionStates.WaitingTumblerClientTransactionKey)
                     {
@@ -89,16 +94,13 @@ namespace Breeze.TumbleBit.Client
                             break;
                         }
 
-                        session.SolverClientSession = session.ClientChannelNegotiation.SetClientSignedTransaction(clientEscrowTx);
-
-
+                        session.SolverClientSession = session.ClientChannelNegotiation.SetClientSignedTransaction(clientEscrowTx);                        
                         correlation = GetCorrelation(session.SolverClientSession.EscrowedCoin.ScriptPubKey);
 
                         // Tracker.AddressCreated(cycle.Start, TransactionType.ClientEscrow, escrowTxOut.ScriptPubKey, correlation);
                         // Tracker.TransactionCreated(cycle.Start, TransactionType.ClientEscrow, clientEscrowTx.GetHash(), correlation);
                         services.Track(escrowTxOut.ScriptPubKey);
-
-
+                        
                         var redeemDestination = this.OriginWallet.GetAccountsByCoinType(this.coinType).First().GetFirstUnusedReceivingAddress().ScriptPubKey;// Services.WalletService.GenerateAddress().ScriptPubKey;
                         var redeemTx = session.SolverClientSession.CreateRedeemTransaction(feeRate, redeemDestination);
 
@@ -106,7 +108,6 @@ namespace Breeze.TumbleBit.Client
                         //redeemTx does not be to be recorded to the tracker, this is TrustedBroadcastService job
 
                         services.Broadcast(clientEscrowTx);
-
                         services.TrustedBroadcast(cycle.Start, TransactionType.ClientRedeem, correlation, redeemTx);
 
                         logger.LogInformation("Client escrow broadcasted " + clientEscrowTx.GetHash());
@@ -133,6 +134,11 @@ namespace Breeze.TumbleBit.Client
                         }
                     }
                     break;
+                // in this phase, Bob now opens a channel with the tumbler by sending the unblinded voucher he received from Alice.
+                // at this point, the tumbler knows that there is an Alice somewhere that wants to tumble with Bob.
+                // the tumbler then creates a new transaction that spends the money and sends it to Bob.
+                // but the transaction is locked and Bob doesn't know the signature.
+                // to prove to Bob that behind the lock there is a signature, the tumbler uses the puzzle promise protocol.
                 case CyclePhase.TumblerChannelEstablishment:
                     if (session.ClientChannelNegotiation != null && session.ClientChannelNegotiation.Status == TumblerClientSessionStates.WaitingGenerateTumblerTransactionKey)
                     {
@@ -159,6 +165,8 @@ namespace Breeze.TumbleBit.Client
                         logger.LogInformation("Tumbler escrow broadcasted " + session.PromiseClientSession.EscrowedCoin.Outpoint.Hash);
                     }
                     break;
+                // the tumbler then creates 2 transactions: an escrow transaction and a redeem transaction (in case things don't go as planned with Bob)
+                
                 case CyclePhase.PaymentPhase:
                     if (session.PromiseClientSession != null)
                     {
@@ -219,6 +227,7 @@ namespace Breeze.TumbleBit.Client
                         }
                     }
                     break;
+                // now Bob can unlock the signature of the transaction and broadcast it to take his coin.
                 case CyclePhase.ClientCashoutPhase:
                     if (session.SolverClientSession != null)
                     {
