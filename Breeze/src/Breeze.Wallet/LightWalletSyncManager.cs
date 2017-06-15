@@ -9,10 +9,11 @@ using Stratis.Bitcoin.Notifications;
 using Stratis.Bitcoin.Utilities;
 using Stratis.Bitcoin.Wallet;
 using Stratis.Bitcoin.Wallet.Notifications;
+using System.Collections.Generic;
 
 namespace Breeze.Wallet
 {
-    public class LightWalletSyncManager : IWalletSyncManager
+    public class LightWalletSyncManager : WalletSyncManager
     {
         private readonly WalletManager walletManager;
         private readonly ConcurrentChain chain;
@@ -22,7 +23,7 @@ namespace Breeze.Wallet
         private readonly Signals signals;
 
         public LightWalletSyncManager(ILoggerFactory loggerFactory, IWalletManager walletManager, ConcurrentChain chain, Network network,
-            BlockNotification blockNotification, Signals signals)// :base(loggerFactory, walletManager, chain, network)
+            BlockNotification blockNotification, Signals signals) :base(loggerFactory, walletManager, chain, network)
         {
             this.walletManager = walletManager as WalletManager;
             this.chain = chain;
@@ -33,8 +34,12 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public async Task Initialize()
+        public override async Task Initialize()
         {
+            this.lastReceivedBlock = this.chain.GetBlock(this.walletManager.LastReceivedBlock);
+            if (this.lastReceivedBlock == null)
+                throw new WalletException("the wallet tip was not found in the main chain");
+
             // get the chain headers. This needs to be up-to-date before we really do anything
             await this.WaitForChainDownloadAsync();
 
@@ -45,8 +50,9 @@ namespace Breeze.Wallet
             txSub.Subscribe();
 
             // start syncing blocks
+
             var bestHeightForSyncing = this.FindBestHeightForSyncing();
-            this.SyncFrom(bestHeightForSyncing);
+            this.blockNotification.SyncFrom(this.chain.GetBlock(bestHeightForSyncing).HashBlock);
             this.logger.LogInformation($"Tracker initialized. Syncing from {bestHeightForSyncing}.");
         }
 
@@ -89,39 +95,44 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public void SyncFrom(DateTime date)
+        public override void ProcessBlock(Block block)
         {
-            int blockSyncStart = this.chain.GetHeightAtTime(date);
-
-            // start syncing blocks
-            this.SyncFrom(blockSyncStart);
-        }
-
-        /// <inheritdoc />
-        public void SyncFrom(int height)
-        {
-            this.blockNotification.SyncFrom(this.chain.GetBlock(height).HashBlock);
-        }
-
-        /// <inheritdoc />
-        public void ProcessBlock(Block block)
-        {
-            var chainedBlock = this.chain.GetBlock(block.GetHash());
-
-            // if the newly received block is too far forward, ignore it (for example when we start receiving blocks before the wallets start their syncing)
-            if (chainedBlock.Height > this.walletManager.LastBlockHeight() + 1)
+            // if the new block previous hash is the same as the 
+            // wallet hash then just pass the block to the manager 
+            if (block.Header.HashPrevBlock != this.lastReceivedBlock.HashBlock)
             {
-                this.logger.LogDebug($"block received with height: {chainedBlock.Height} and hash: {block.Header.GetHash()} is too far in advance. Ignoring.");
-                return;
+                // if previous block does not match there might have 
+                // been a reorg, check if the wallet is still on the main chain
+                var current = this.chain.GetBlock(this.lastReceivedBlock.HashBlock);
+                if (current == null)
+                {
+                    // the current wallet hash was not found on the main chain
+                    // a reorg happenend so bring the wallet back top the last known fork
+
+                    var fork = this.lastReceivedBlock;
+
+                    // we walk back the chained block object to find the fork
+                    while (this.chain.GetBlock(fork.HashBlock) == null)
+                        fork = fork.Previous;
+
+                    Guard.Assert(fork.HashBlock == block.Header.HashPrevBlock);
+                    this.walletManager.RemoveBlocks(fork);
+                }
+                else
+                {
+                    var chainedBlock = this.chain.GetBlock(block.GetHash());
+                    if (chainedBlock.Height > this.lastReceivedBlock.Height)
+                    {
+                        // the wallet is falling behind we need to catch up
+                        this.logger.LogDebug($"block received with height: {current.Height} and hash: {block.Header.GetHash()} is too far in advance. put the pull back.");
+                        this.blockNotification.SyncFrom(this.lastReceivedBlock.HashBlock);
+                        return;
+                    }
+                }
             }
 
-            this.walletManager.ProcessBlock(block);
-        }
-
-        /// <inheritdoc />
-        public void ProcessTransaction(Transaction transaction)
-        {
-            this.walletManager.ProcessTransaction(transaction);
+            this.lastReceivedBlock = this.chain.GetBlock(block.GetHash());
+            this.walletManager.ProcessBlock(block, this.lastReceivedBlock);
         }
     }
 }
