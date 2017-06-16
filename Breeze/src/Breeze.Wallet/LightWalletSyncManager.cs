@@ -45,7 +45,7 @@ namespace Breeze.Wallet
             await this.WaitForChainDownloadAsync();
 
             // subscribe to receiving blocks and transactions
-            BlockSubscriber sub = new BlockSubscriber(this.signals.Blocks, new BlockObserver(this.chain, this));
+            BlockSubscriber sub = new BlockSubscriber(this.signals.Blocks, new BlockObserver(this));
             sub.Subscribe();
             TransactionSubscriber txSub = new TransactionSubscriber(this.signals.Transactions, new TransactionObserver(this));
             txSub.Subscribe();
