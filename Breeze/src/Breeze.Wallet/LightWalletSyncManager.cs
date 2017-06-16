@@ -121,8 +121,8 @@ namespace Breeze.Wallet
                 }
                 else
                 {
-                    var chainedBlock = this.chain.GetBlock(block.GetHash());
-                    if (chainedBlock.Height > this.walletTip.Height)
+                    ChainedBlock incomingBlock = this.chain.GetBlock(block.GetHash());
+                    if (incomingBlock.Height > this.walletTip.Height)
                     {
                         // the wallet is falling behind we need to catch up
                         this.logger.LogDebug($"block received with height: {inBestChain.Height} and hash: {block.Header.GetHash()} is too far in advance. put the pull back.");
