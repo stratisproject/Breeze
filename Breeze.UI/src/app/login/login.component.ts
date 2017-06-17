@@ -94,7 +94,7 @@ export class LoginComponent implements OnInit {
             if (this.wallets.length > 0) {
               this.hasWallet = true;
               for (let wallet in this.wallets) {
-                this.wallets[wallet] = this.wallets[wallet].slice(0, -5);
+                this.wallets[wallet] = this.wallets[wallet].slice(0, -12);
               }
               this.updateWalletFileDisplay(this.wallets[0]);
             } else {
