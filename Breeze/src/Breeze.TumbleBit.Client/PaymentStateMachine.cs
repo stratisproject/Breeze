@@ -98,8 +98,8 @@ namespace Breeze.TumbleBit.Client
                         correlation = GetCorrelation(session.SolverClientSession.EscrowedCoin.ScriptPubKey);
 
                         // Tracker.AddressCreated(cycle.Start, TransactionType.ClientEscrow, escrowTxOut.ScriptPubKey, correlation);
-                        // Tracker.TransactionCreated(cycle.Start, TransactionType.ClientEscrow, clientEscrowTx.GetHash(), correlation);
-                        services.Track(escrowTxOut.ScriptPubKey);
+                        // Tracker.TransactionCreated(cycle.Start, TransactionType.ClientEscrow, clientEscrowTx.GetHash(), correlation);                        
+                        this.watchOnlyWalletManager.Watch(escrowTxOut.ScriptPubKey);
                         
                         var redeemDestination = this.OriginWallet.GetAccountsByCoinType(this.coinType).First().GetFirstUnusedReceivingAddress().ScriptPubKey;// Services.WalletService.GenerateAddress().ScriptPubKey;
                         var redeemTx = session.SolverClientSession.CreateRedeemTransaction(feeRate, redeemDestination);
@@ -147,7 +147,7 @@ namespace Breeze.TumbleBit.Client
                         var tumblerInformation = await this.BobClient.OpenChannelAsync(bobEscrowInformation);
                         session.PromiseClientSession = session.ClientChannelNegotiation.ReceiveTumblerEscrowedCoin(tumblerInformation);
                         //Tell to the block explorer we need to track that address (for checking if it is confirmed in payment phase)
-                        services.Track(session.PromiseClientSession.EscrowedCoin.ScriptPubKey);
+                        this.watchOnlyWalletManager.Watch(session.PromiseClientSession.EscrowedCoin.ScriptPubKey);
                         //Tracker.AddressCreated(cycle.Start, TransactionType.TumblerEscrow, PromiseClientSession.EscrowedCoin.ScriptPubKey, correlation);
                         //Tracker.TransactionCreated(cycle.Start, TransactionType.TumblerEscrow, PromiseClientSession.EscrowedCoin.Outpoint.Hash, correlation);
 
@@ -194,8 +194,8 @@ namespace Breeze.TumbleBit.Client
 
                             var offerRedeemAddress = this.OriginWallet.GetAccountsByCoinType(this.coinType).First().GetFirstUnusedReceivingAddress(); // Services.WalletService.GenerateAddress($"Cycle {cycle.Start} Tumbler Redeem").ScriptPubKey);
                             var offerRedeem = session.SolverClientSession.CreateOfferRedeemTransaction(feeRate, offerRedeemAddress.ScriptPubKey);
-                            //May need to find solution in the fulfillment transaction                            
-                            services.Track(offerRedeem.PreviousScriptPubKey);
+                            //May need to find solution in the fulfillment transaction                                                        
+                            this.watchOnlyWalletManager.Watch(offerRedeem.PreviousScriptPubKey);
                             //Tracker.AddressCreated(cycle.Start, TransactionType.ClientOfferRedeem, offerRedeemAddress.ScriptPubKey, correlation);
                             services.TrustedBroadcast(cycle.Start, TransactionType.ClientOfferRedeem, correlation, offerRedeem);
                             logger.LogInformation("Offer redeem " + offerRedeem.Transaction.GetHash() + " locked until " + offerRedeem.Transaction.LockTime.Height);
