@@ -6,6 +6,7 @@ using NBitcoin;
 using NTumbleBit.ClassicTumbler;
 using Stratis.Bitcoin;
 using Stratis.Bitcoin.Wallet;
+using Stratis.Bitcoin.WatchOnlyWallet;
 
 namespace Breeze.TumbleBit.Client
 {
@@ -17,6 +18,7 @@ namespace Breeze.TumbleBit.Client
     {
         private ITumblerService tumblerService;
         private readonly IWalletManager walletManager;
+        private readonly IWatchOnlyWalletManager watchOnlyWalletManager;
         private readonly ILogger logger;
         private readonly Signals signals;
         private readonly ConcurrentChain chain;
@@ -26,15 +28,16 @@ namespace Breeze.TumbleBit.Client
      
         private ClassicTumblerParameters TumblerParameters { get; set; }
 
-        public TumbleBitManager(ILoggerFactory loggerFactory, IWalletManager walletManager, ConcurrentChain chain, Network network, Signals signals)
+        public TumbleBitManager(ILoggerFactory loggerFactory, IWalletManager walletManager, IWatchOnlyWalletManager watchOnlyWalletManager, ConcurrentChain chain, Network network, Signals signals)
         {
             this.walletManager = walletManager;
+            this.watchOnlyWalletManager = watchOnlyWalletManager;
             this.chain = chain;
             this.signals = signals;
             this.network = network;
             this.logger = loggerFactory.CreateLogger(this.GetType().FullName);
 
-            this.tumblingState = new TumblingState(loggerFactory, this.chain, this.walletManager, this.network);
+            this.tumblingState = new TumblingState(loggerFactory, this.chain, this.walletManager, this.watchOnlyWalletManager, this.network);
         }
 
         /// <inheritdoc />

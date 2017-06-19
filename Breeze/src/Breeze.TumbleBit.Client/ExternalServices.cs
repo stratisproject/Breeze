@@ -13,11 +13,7 @@ namespace Breeze.TumbleBit.Client
         {
             return null;
         }
-
-        public void Track(Script scriptPubkey)
-        {
-        }
-
+        
         public bool Broadcast(Transaction tx)
         {
             return true;
