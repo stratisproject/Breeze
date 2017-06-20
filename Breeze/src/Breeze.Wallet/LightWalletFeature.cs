@@ -41,6 +41,7 @@ namespace Breeze.Wallet
                     {
                         services.AddSingleton<IWalletSyncManager, LightWalletSyncManager>();
                         services.AddSingleton<IWalletManager, WalletManager>();
+                        services.AddSingleton<IWalletFeePolicy, LightWalletFeePolicy>();
                         services.AddSingleton<WalletController>();
 
                     });
