@@ -166,13 +166,15 @@ response
 ```
 {
   "network": "main", // "main" or "testnet"
-  "password": "password"  
+  "password": "password",
+  "name": "wallet-btc",
+  "mnemonic": "gravity sock glove cage divert creek mountain connect small banana depend thunder" // optional
 }
 ```
 ### Responses
 ```
 {
-  "mnemonic": "foo bar buz",
+  "mnemonic": "gravity sock glove cage divert creek mountain connect small banana depend thunder",
 }
 ```
 ## POST /wallet/load - Loads the wallet and starts syncing
