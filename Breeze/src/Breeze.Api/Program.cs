@@ -9,16 +9,16 @@ namespace Breeze.Api
 	public class Program
 	{
 		public static void Main(string[] args)
-		{
-			Initialize();
+		{	    
 		}
 
-		public static void Initialize(IEnumerable<ServiceDescriptor> services = null, FullNode fullNode = null)
+		public static void Initialize(IEnumerable<ServiceDescriptor> services, FullNode fullNode)
 		{
 			var host = new WebHostBuilder()
 				.UseKestrel()
 				.UseContentRoot(Directory.GetCurrentDirectory())
 				.UseIISIntegration()
+				.UseUrls(fullNode.Settings.ApiUri.ToString())
 				.ConfigureServices(collection =>
 				{
 					if (services == null || fullNode == null)
