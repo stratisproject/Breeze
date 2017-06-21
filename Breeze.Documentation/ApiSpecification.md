@@ -1,4 +1,4 @@
-﻿`/api/v1/`  
+﻿`/api/`  
 
 ## Request/Response
 
