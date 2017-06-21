@@ -1,4 +1,4 @@
-`/api/v1/`  
+﻿`/api/`  
 
 ## Request/Response
 
@@ -88,6 +88,33 @@ POST /wallet/send-transaction - Attempts to send a transaction
 
 # Details
 
+## GET /wallet/mnemonic - Generate a mnemonic
+
+### Query parameters
+`language`  (optional) - the language for the words in the mnemonic. Options are: English, French, Spanish, Japanese, ChineseSimplified and ChineseTraditional. The default is 'English'.
+
+`wordcount` (optional) - the number of words in the mnemonic. Options are: 12,15,18,21 or 24. the default is 12.
+
+### Examples
+request
+```
+http://localhost:5000/api/wallet/mnemonic?wordcount=15&language=French
+```
+response
+```
+"larme essorer sabre casque gentil flamme érosion acheter caribou broder endiguer ordonner vacarme dosage défrayer"
+```
+
+request
+```
+http://localhost:5000/api/wallet/mnemonic?wordcount=12&language=english
+```
+response
+```
+"gravity sock glove cage divert creek mountain connect small banana depend thunder"
+```
+
+
 ## GET /wallet/general-info - Displays general information on the wallet
 
 ### Query parameters
@@ -139,13 +166,15 @@ POST /wallet/send-transaction - Attempts to send a transaction
 ```
 {
   "network": "main", // "main" or "testnet"
-  "password": "password"  
+  "password": "password",
+  "name": "wallet-btc",
+  "mnemonic": "gravity sock glove cage divert creek mountain connect small banana depend thunder" // optional
 }
 ```
 ### Responses
 ```
 {
-  "mnemonic": "foo bar buz",
+  "mnemonic": "gravity sock glove cage divert creek mountain connect small banana depend thunder",
 }
 ```
 ## POST /wallet/load - Loads the wallet and starts syncing
