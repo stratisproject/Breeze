@@ -21,7 +21,7 @@ namespace Breeze.Wallet
         private readonly ILogger logger;
         private readonly Signals signals;
 
-        protected ChainedBlock walletTip;
+        private ChainedBlock walletTip;
 
         public LightWalletSyncManager(ILoggerFactory loggerFactory, IWalletManager walletManager, ConcurrentChain chain, Network network,
             BlockNotification blockNotification, Signals signals)
@@ -43,6 +43,12 @@ namespace Breeze.Wallet
 
             // get the chain headers. This needs to be up-to-date before we really do anything
             await this.WaitForChainDownloadAsync();
+
+            // if there is no wallet created yet, the wallet tip is the chain tip.
+            if (!this.walletManager.Wallets.Any())
+            {
+                this.walletTip = this.chain.Tip;
+            }            
 
             // subscribe to receiving blocks and transactions
             BlockSubscriber sub = new BlockSubscriber(this.signals.Blocks, new BlockObserver(this));
