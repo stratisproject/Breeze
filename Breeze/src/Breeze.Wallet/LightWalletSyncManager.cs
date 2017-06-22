@@ -21,7 +21,7 @@ namespace Breeze.Wallet
         private readonly ILogger logger;
         private readonly Signals signals;
 
-        protected ChainedBlock walletTip;
+        private ChainedBlock walletTip;
 
         public LightWalletSyncManager(ILoggerFactory loggerFactory, IWalletManager walletManager, ConcurrentChain chain, Network network,
             BlockNotification blockNotification, Signals signals)
@@ -37,12 +37,11 @@ namespace Breeze.Wallet
         /// <inheritdoc />
         public async Task Initialize()
         {
-            this.walletTip = this.chain.GetBlock(this.walletManager.WalletTipHash);
-            if (this.walletTip == null)
-                throw new WalletException("the wallet tip was not found in the main chain");
-
             // get the chain headers. This needs to be up-to-date before we really do anything
             await this.WaitForChainDownloadAsync();
+
+            // if there is no wallet created yet, the wallet tip is the chain tip.
+            this.walletTip = !this.walletManager.Wallets.Any() ? this.chain.Tip : this.chain.GetBlock(this.walletManager.WalletTipHash);
 
             // subscribe to receiving blocks and transactions
             BlockSubscriber sub = new BlockSubscriber(this.signals.Blocks, new BlockObserver(this));
