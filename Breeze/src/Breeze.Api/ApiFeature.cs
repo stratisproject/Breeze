@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Stratis.Bitcoin;
 using Stratis.Bitcoin.Builder;
 using Stratis.Bitcoin.Builder.Feature;
+using Stratis.Bitcoin.Logging;
 
 namespace Breeze.Api
 {
@@ -21,7 +23,8 @@ namespace Breeze.Api
 
 		public override void Start()
 		{
-			Program.Initialize(this.fullNodeBuilder.Services, this.fullNode);
+		    Logs.FullNode.LogInformation($"Api starting on url {this.fullNode.Settings.ApiUri}");
+            Program.Initialize(this.fullNodeBuilder.Services, this.fullNode);
 		}
 	}
 
