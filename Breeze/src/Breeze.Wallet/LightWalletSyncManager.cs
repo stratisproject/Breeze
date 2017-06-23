@@ -35,15 +35,12 @@ namespace Breeze.Wallet
         }
 
         /// <inheritdoc />
-        public async Task Initialize()
+        public Task Initialize()
         {
             this.walletTip = this.chain.GetBlock(this.walletManager.WalletTipHash);
             if (this.walletTip == null)
                 throw new WalletException("the wallet tip was not found in the main chain");
-
-            // get the chain headers. This needs to be up-to-date before we really do anything
-            await this.WaitForChainDownloadAsync();
-
+            
             // if there is no wallet created yet, the wallet tip is the chain tip.
             if (!this.walletManager.Wallets.Any())
             {
@@ -57,10 +54,11 @@ namespace Breeze.Wallet
             txSub.Subscribe();
 
             // start syncing blocks
-
             var bestHeightForSyncing = this.FindBestHeightForSyncing();
             this.blockNotification.SyncFrom(this.chain.GetBlock(bestHeightForSyncing).HashBlock);
             this.logger.LogInformation($"Tracker initialized. Syncing from {bestHeightForSyncing}.");
+
+            return Task.CompletedTask;
         }
 
         private int FindBestHeightForSyncing()
@@ -160,7 +158,7 @@ namespace Breeze.Wallet
                 throw new WalletException("Invalid block height");
             this.walletTip = chainedBlock;
             this.walletManager.WalletTipHash = chainedBlock.HashBlock;
+            this.blockNotification.SyncFrom(chainedBlock.HashBlock);
         }
-
     }
 }
