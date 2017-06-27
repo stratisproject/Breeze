@@ -4,12 +4,7 @@
     "outDir": "../out-tsc/app",
     "module": "es2015",
     "baseUrl": "",
-    "typeRoots": [
-        "../node_modules/@types"
-    ],
-    "types": [
-        "node"
-    ]
+    "types": []
   },
   "exclude": [
     "test.ts",
