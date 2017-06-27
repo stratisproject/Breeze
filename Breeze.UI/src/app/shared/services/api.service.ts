@@ -13,8 +13,7 @@ import { TransactionBuilding } from '../classes/transaction-building';
 import { TransactionSending } from '../classes/transaction-sending';
 
 /**
- * For information on the API specification have a look at our Github:
- * https://github.com/stratisproject/Breeze/blob/master/Breeze.Documentation/ApiSpecification.md
+ * For information on the API specification have a look at our swagger files located at http://localhost:5000/swagger/ when running the daemon
  */
 @Injectable()
 export class ApiService {
