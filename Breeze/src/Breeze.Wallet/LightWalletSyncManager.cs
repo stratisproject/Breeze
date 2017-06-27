@@ -23,6 +23,8 @@ namespace Breeze.Wallet
 
         private ChainedBlock walletTip;
 
+        public ChainedBlock WalletTip => this.walletTip;
+
         public LightWalletSyncManager(ILoggerFactory loggerFactory, IWalletManager walletManager, ConcurrentChain chain, Network network,
             BlockNotification blockNotification, Signals signals)
         {
