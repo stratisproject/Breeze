@@ -207,7 +207,7 @@ module.exports = {
     ],
     "aliasFields": [],
     "alias": { // WORKAROUND See. angular-cli/issues/5433
-      "environments": isProd ? path.resolve(__dirname, 'src/environments/index.prod.ts') : path.resolve(__dirname, 'src/environments/index.ts')
+      "environments": isProd ? path.resolve(__dirname, 'src/environments/environment.prod.ts') : path.resolve(__dirname, 'src/environments/environment.ts')
     },
     "modules": [
       "./node_modules"
