@@ -14,7 +14,9 @@ const args = process.argv.slice(1);
 serve = args.some(val => val === "--serve");
 
 if (serve) {
-  require('electron-reload')(__dirname, {});
+  require('electron-reload')(__dirname, {
+    electron: require('${__dirname}/../../node_modules/electron')
+  });
 }
 
 // Keep a global reference of the window object, if you don't, the window will
