@@ -9,9 +9,6 @@ const path = require('path');
 const url = require('url');
 const os = require('os');
 
-// import { app, BrowserWindow, screen } from 'electron';
-// import * as path from 'path';
-
 let serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === "--serve");
@@ -29,16 +26,12 @@ function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 1200, height: 700, frame: true, minWidth: 1200, minHeight: 700, icon: "./assets/images/stratis-tray.png"});
 
-
-
    // and load the index.html of the app.
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, '/index.html'),
     protocol: 'file:',
     slashes: true
   }));
-  // and load the index.html of the app.
-  // win.loadURL('file://' + __dirname + '/index.html');
 
   if (serve) {
     mainWindow.webContents.openDevTools();
