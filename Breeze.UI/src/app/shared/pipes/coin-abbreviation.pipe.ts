@@ -8,7 +8,7 @@ export class CoinAbbreviationPipe implements PipeTransform {
   transform(value: any): any {
     if (!value) return value;
 
-    let abbreviationAdded = value + " BTC"
+    let abbreviationAdded = value + " TBTC"
     return abbreviationAdded;
   }
 }
