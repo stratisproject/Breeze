@@ -98,9 +98,10 @@ export class CreateComponent {
           }
         },
         error => {
-          if (error.status >= 400) {
-            let errorMessage = error;
-            console.log(errorMessage);
+          if (error.status === 0) {
+            alert("Something went wrong while connecting to the API. Please restart the application.");
+          } else if (error.status >= 400) {
+            alert(error);
           }
         }
       )

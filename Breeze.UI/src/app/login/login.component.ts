@@ -104,10 +104,10 @@ export class LoginComponent implements OnInit {
           }
         },
         error => {
-          let errorMessage = <any>error;
-          if (error.status >= 400) {
-            alert(errorMessage);
-            console.log(errorMessage);
+          if (error.status === 0) {
+            alert("Something went wrong while connecting to the API. Please restart the application.");
+          } else if (error.status >= 400) {
+            alert(error);
           }
         }
       )
@@ -125,12 +125,10 @@ export class LoginComponent implements OnInit {
           }
         },
         error => {
-          let errorMessage = <any>error;
-          if (error.status === 403 && error.json().errors[0].message === "Wrong password, please try again.") {
-            alert("Wrong password, try again.");
+          if (error.status === 0) {
+            alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {
-            alert(errorMessage);
-            console.log(errorMessage);
+            alert(error);
           }
         }
       )

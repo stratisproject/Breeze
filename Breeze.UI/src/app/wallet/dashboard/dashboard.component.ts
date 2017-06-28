@@ -50,17 +50,18 @@ export class DashboardComponent {
     this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
       .subscribe(
         response =>  {
-            if (response.status >= 200 && response.status < 400) {
-                let balanceResponse = response.json();
-                this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
-                this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
-            }
+          if (response.status >= 200 && response.status < 400) {
+              let balanceResponse = response.json();
+              this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
+              this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
+          }
         },
         error => {
-            if (error.status >= 400) {
-                let errorMessage = <any>error;
-                console.log(errorMessage);
-            }
+          if (error.status === 0) {
+            alert("Something went wrong while connecting to the API. Please restart the application.");
+          } else if (error.status >= 400) {
+            alert(error);
+          }
         }
       )
     ;
@@ -78,9 +79,10 @@ export class DashboardComponent {
           }
         },
         error => {
-          if (error.status >= 400) {
-            let errorMessage = <any>error;
-            console.log(errorMessage);
+          if (error.status === 0) {
+            alert("Something went wrong while connecting to the API. Please restart the application.");
+          } else if (error.status >= 400) {
+            alert(error);
           }
         }
       )

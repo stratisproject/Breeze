@@ -9,6 +9,8 @@ const path = require('path');
 const url = require('url');
 const os = require('os');
 
+var apiProcess;
+
 let serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === "--serve");
@@ -66,6 +68,7 @@ app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
+    //apiProcess.kill();
     app.quit();
   }
 });
@@ -79,16 +82,15 @@ app.on('activate', function () {
 });
 
 function startApi() {
-  var apiProcess;
-  const spawn = require('child_process').spawn;
+  const exec = require('child_process').exec;
 
   //Start Breeze Daemon
-  let apipath = path.join(__dirname, '..//..//daemon//Breeze.Daemon');
+  let apipath = path.join(__dirname, './/assets//daemon//Breeze.Daemon');
   if (os.platform() === 'win32') {
       apipath = path.join(__dirname, '.\\assets\\daemon\\Breeze.Daemon.exe');
   }
 
-  apiProcess = spawn(apipath + ' light -testnet', {
+  apiProcess = exec(apipath + ' light -testnet', {
       detached: true
   });
 
