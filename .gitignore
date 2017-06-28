@@ -241,6 +241,7 @@ ModelManifest.xml
 # UI ignores
 # compiled output
 **/app-builds
+**/assets/daemon
 **/dist
 **/tmp
 **/build
