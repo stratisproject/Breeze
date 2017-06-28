@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
 
 import { WalletInfo } from '../../shared/classes/wallet-info';
+
+import { Observable } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'history-component',
@@ -16,14 +19,19 @@ export class HistoryComponent {
 
   private transactions: any;
   private errorMessage: string;
+  private walletHistorySubscription: Subscription;
 
   ngOnInit() {
     this.getHistory();
   }
 
+  ngOnDestroy() {
+    this.walletHistorySubscription.unsubscribe();
+  }
+
   private getHistory() {
     let walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getCoinType())
-    this.apiService.getWalletHistory(walletInfo)
+    this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
