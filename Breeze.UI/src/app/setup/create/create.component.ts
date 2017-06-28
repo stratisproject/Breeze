@@ -21,7 +21,6 @@ export class CreateComponent {
 
   private createWalletForm: FormGroup;
   private newWallet: WalletCreation;
-
   private mnemonic: string;
 
   private buildCreateForm(): void {
@@ -104,6 +103,7 @@ export class CreateComponent {
             console.log(errorMessage);
           }
         }
-      );
+      )
+    ;
   }
 }

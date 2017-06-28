@@ -28,13 +28,13 @@
           <th>Timestamp</th>
         </thead>
         <tr *ngFor="let transaction of transactions; let i=index">
-            <!--<td *ngIf="{{ transaction.amount }} < 0">SENT</td>
-            <td *ngIf="{{ transaction.amount }} > 0">RECEIVED</td>-->
-            <td *ngIf="i<5">{{ transaction.type }}</td>
-            <td *ngIf="i<5">{{ transaction.amount | coinNotation }}</td>
-            <td *ngIf="i<5">{{ transaction.id }}</td>
-            <td *ngIf="i<5">{{ transaction.confirmedInBlock }}</td>
-            <td *ngIf="i<5">{{ transaction.timestamp * 1000 | date:'medium' }}</td>
+          <!--<td *ngIf="{{ transaction.amount }} < 0">SENT</td>
+          <td *ngIf="{{ transaction.amount }} > 0">RECEIVED</td>-->
+          <td *ngIf="i<5">{{ transaction.type }}</td>
+          <td *ngIf="i<5">{{ transaction.amount | coinNotation }}</td>
+          <td *ngIf="i<5">{{ transaction.id }}</td>
+          <td *ngIf="i<5">{{ transaction.confirmedInBlock }}</td>
+          <td *ngIf="i<5">{{ transaction.timestamp * 1000 | date:'medium' }}</td>
         </tr>
       </table>
       <ng-template #noTransactions>Looks like you haven't made any transactions yet</ng-template>

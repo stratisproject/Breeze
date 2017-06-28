@@ -2,33 +2,33 @@ import {Injectable} from "@angular/core";
 
 @Injectable()
 export class GlobalService {
-    constructor() {}
+  constructor() {}
 
-    private walletPath: string;
-    private currentWalletName: string;
-    private coinType: number;
+  private walletPath: string;
+  private currentWalletName: string;
+  private coinType: number;
 
-    getWalletPath() {
-        return this.walletPath;
-    }
+  getWalletPath() {
+    return this.walletPath;
+  }
 
-    setWalletPath(walletPath: string) {
-        this.walletPath = walletPath;
-    }
+  setWalletPath(walletPath: string) {
+    this.walletPath = walletPath;
+  }
 
-    getWalletName() {
-        return this.currentWalletName;
-    }
+  getWalletName() {
+    return this.currentWalletName;
+  }
 
-    setWalletName(currentWalletName: string) {
-        this.currentWalletName = currentWalletName;
-    }
+  setWalletName(currentWalletName: string) {
+    this.currentWalletName = currentWalletName;
+  }
 
-    getCoinType () {
-      return this.coinType;
-    }
+  getCoinType () {
+    return this.coinType;
+  }
 
-    setCoinType (coinType: number) {
-      this.coinType = coinType;
-    }
+  setCoinType (coinType: number) {
+    this.coinType = coinType;
+  }
 }

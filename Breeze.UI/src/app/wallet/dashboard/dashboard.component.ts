@@ -49,20 +49,21 @@ export class DashboardComponent {
     let walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getCoinType())
     this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
       .subscribe(
-            response =>  {
-                if (response.status >= 200 && response.status < 400) {
-                    let balanceResponse = response.json();
-                    this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
-                    this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
-                }
-            },
-            error => {
-                if (error.status >= 400) {
-                    let errorMessage = <any>error;
-                    console.log(errorMessage);
-                }
+        response =>  {
+            if (response.status >= 200 && response.status < 400) {
+                let balanceResponse = response.json();
+                this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
+                this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
             }
-      );
+        },
+        error => {
+            if (error.status >= 400) {
+                let errorMessage = <any>error;
+                console.log(errorMessage);
+            }
+        }
+      )
+    ;
   };
 
   private getHistory() {
@@ -82,6 +83,7 @@ export class DashboardComponent {
             console.log(errorMessage);
           }
         }
-    );
+      )
+    ;
   };
 }
