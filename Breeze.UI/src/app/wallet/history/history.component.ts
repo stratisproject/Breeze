@@ -41,9 +41,10 @@ export class HistoryComponent {
           }
         },
         error => {
-          if (error.status >= 400) {
-            this.errorMessage = <any>error;
-            console.log(this.errorMessage);
+          if (error.status === 0) {
+            alert("Something went wrong while connecting to the API. Please restart the application.");
+          } else if (error.status >= 400) {
+            alert(error);
           }
         }
       )
