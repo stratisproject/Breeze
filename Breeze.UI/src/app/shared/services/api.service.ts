@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
 import "rxjs/add/observable/interval";
+import 'rxjs/add/operator/startWith';
 
 import { WalletCreation } from '../classes/wallet-creation';
 import { WalletRecovery } from '../classes/wallet-recovery';
@@ -24,7 +25,7 @@ export class ApiService {
     private mockApiUrl = 'http://localhost:3000/api';
     private webApiUrl = 'http://localhost:5000/api';
     private headers = new Headers({'Content-Type': 'application/json'});
-    private pollingInterval = 2000;
+    private pollingInterval = 3000;
 
     /**
      * Gets available wallets at the default path
@@ -80,6 +81,7 @@ export class ApiService {
 
       return Observable
         .interval(this.pollingInterval)
+        .startWith(0)
         .switchMap(() => this.http.get(this.webApiUrl + '/wallet/balance', new RequestOptions({headers: this.headers, search: params})))
         .map((response: Response) => response);
 
@@ -97,6 +99,7 @@ export class ApiService {
 
       return Observable
         .interval(this.pollingInterval)
+        .startWith(0)
         .switchMap(() => this.http.get(this.webApiUrl + '/wallet/history', new RequestOptions({headers: this.headers, search: params})))
         .map((response: Response) => response);
 

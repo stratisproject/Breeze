@@ -48,7 +48,6 @@ export class DashboardComponent {
   private getWalletBalance() {
     let walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getCoinType())
     this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
-      .first()
       .subscribe(
             response =>  {
                 if (response.status >= 200 && response.status < 400) {
