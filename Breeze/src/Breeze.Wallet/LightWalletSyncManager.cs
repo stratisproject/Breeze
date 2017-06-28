@@ -23,6 +23,8 @@ namespace Breeze.Wallet
 
         private ChainedBlock walletTip;
 
+        public ChainedBlock WalletTip => this.walletTip;
+
         public LightWalletSyncManager(ILoggerFactory loggerFactory, IWalletManager walletManager, ConcurrentChain chain, Network network,
             BlockNotification blockNotification, Signals signals)
         {
@@ -61,6 +63,7 @@ namespace Breeze.Wallet
                     this.walletManager.RemoveBlocks(fork);
                     this.walletManager.WalletTipHash = fork.HashBlock;
                     this.walletTip = fork;
+                    this.logger.LogWarning($"Wallet tip was out of sync, wallet tip reverted back to Height = {this.walletTip.Height} hash = {this.walletTip.HashBlock}.");
                 }
             }
 
@@ -139,6 +142,7 @@ namespace Breeze.Wallet
 
                     Guard.Assert(fork.HashBlock == block.Header.HashPrevBlock);
                     this.walletManager.RemoveBlocks(fork);
+                    this.logger.LogWarning($"Reorg detected, wallet tip reverted back to Height = {fork.Height} hash = {fork.HashBlock}.");
                 }
                 else
                 {
