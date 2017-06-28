@@ -240,6 +240,7 @@ ModelManifest.xml
 
 # UI ignores
 # compiled output
+**/app-builds
 **/dist
 **/tmp
 **/build
