@@ -2,8 +2,8 @@
   <div class="d-flex flex-row align-items-center nopadding" id="dashboard">
     <div class="d-flex flex-column">
       <div class="p">Active Balance</div>
-      <div class="p">Balance: {{confirmedBalance | coinNotation | coinAbbreviation}}</div>
-      <div class="p">Unconfirmed Balance: {{unconfirmedBalance | coinNotation | coinAbbreviation}}</div>
+      <div class="p">Balance: {{confirmedBalance | coinNotation }}</div>
+      <div class="p">Unconfirmed Balance: {{unconfirmedBalance | coinNotation }}</div>
     </div>
     <div class="d-flex flex-column">
       <!--<div>Current Value</div>
@@ -31,7 +31,7 @@
             <!--<td *ngIf="{{ transaction.amount }} < 0">SENT</td>
             <td *ngIf="{{ transaction.amount }} > 0">RECEIVED</td>-->
             <td *ngIf="i<5">{{ transaction.type }}</td>
-            <td *ngIf="i<5">{{ transaction.amount | coinNotation | coinAbbreviation }}</td>
+            <td *ngIf="i<5">{{ transaction.amount | coinNotation }}</td>
             <td *ngIf="i<5">{{ transaction.id }}</td>
             <td *ngIf="i<5">{{ transaction.confirmedInBlock }}</td>
             <td *ngIf="i<5">{{ transaction.timestamp * 1000 | date:'medium' }}</td>
