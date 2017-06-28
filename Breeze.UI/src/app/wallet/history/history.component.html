@@ -13,7 +13,7 @@
           <!--<td *ngIf="{{ transaction.amount }} < 0; else received">SENT</td>
           <td #received>RECEIVED</td>-->
           <td>{{ transaction.type }}</td>
-          <td>{{ transaction.amount | coinNotation | coinAbbreviation }}</td>
+          <td>{{ transaction.amount | coinNotation }}</td>
           <td>{{ transaction.id }}</td>
           <td>{{ transaction.confirmedInBlock }}</td>
           <td>{{ transaction.timestamp * 1000 | date:'medium' }}</td>

@@ -23,10 +23,6 @@ export class ReceiveComponent {
     this.getUnusedReceiveAddresses();
   }
 
-  private copyAddress() {
-
-  }
-
   private getUnusedReceiveAddresses() {
     let walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getCoinType())
     this.apiService.getUnusedReceiveAddress(walletInfo)
@@ -42,6 +38,7 @@ export class ReceiveComponent {
             console.log(this.errorMessage);
           }
         }
-    );
+      )
+    ;
   }
 }

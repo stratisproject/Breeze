@@ -103,7 +103,8 @@ export class SendComponent {
           }
         },
         () => this.sendTransaction(this.responseMessage.hex)
-      );
+      )
+    ;
   };
 
   private getFeeType(){
@@ -136,6 +137,7 @@ export class SendComponent {
             console.log(this.errorMessage);
           }
         }
-      );
+      )
+    ;
   }
 }

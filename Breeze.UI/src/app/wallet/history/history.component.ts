@@ -46,6 +46,7 @@ export class HistoryComponent {
             console.log(this.errorMessage);
           }
         }
-    );
+      )
+    ;
   }
 }

@@ -33,6 +33,8 @@ npm install -g @angular/cli
 ## To build for development
 
 - **in a terminal window** -> npm start
+This will compile the Angular code and spawn the Electron process in parallel.
+After compilation has completed the Electron UI will refresh.
 
 If you want to seperate the build process from the Electron process you can use:
 - **in a terminal window** -> npm start:webpack

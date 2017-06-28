@@ -51,7 +51,12 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', function () {
-  //startApi();
+  if (serve) {
+    console.log("Breeze UI was started in development mode. This requires the user to be running the Breeze Daemon himself.")
+  }
+  else {
+    startApi();
+  }
   createTray();
   createWindow();
 })
@@ -74,16 +79,16 @@ app.on('activate', function () {
 });
 
 function startApi() {
-  let apiProcess;
-  var spawn = require('child_process').spawn;
+  var apiProcess;
+  const spawn = require('child_process').spawn;
 
   //Start Breeze Daemon
-  apipath = path.join(__dirname, '');
+  let apipath = path.join(__dirname, '..//..//daemon//Breeze.Daemon');
   if (os.platform() === 'win32') {
-      var apipath = path.join(__dirname, '');
+      apipath = path.join(__dirname, '.\\assets\\daemon\\Breeze.Daemon.exe');
   }
 
-  apiProcess = spawn(apipath, {
+  apiProcess = spawn(apipath + ' light -testnet', {
       detached: true
   });
 

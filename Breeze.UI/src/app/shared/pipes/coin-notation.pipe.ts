@@ -7,22 +7,28 @@ export class CoinNotationPipe implements PipeTransform {
 
   private coinUnit = "BTC";
   private coinNotation: number;
+  private decimalLimit = 8;
 
   transform(value: any): any {
-    if (!value) return value;
-
-    this.coinNotation = value;
-
-    switch (this.coinUnit) {
-      case "BTC":
-        this.coinNotation = Number(value.toFixed(8));
-        return this.coinNotation = this.coinNotation / 100000000;
-      case "mBTC":
-        this.coinNotation = Number(value.toFixed(8));
-        return this.coinNotation = this.coinNotation / 100000;
-      case "uBTC":
-        this.coinNotation = Number(value.toFixed(8));
-        return this.coinNotation = this.coinNotation / 100;
+    let temp;
+    if (typeof value === 'number') {
+      switch (this.getCoinUnit()) {
+        case "BTC":
+          temp = value / 100000000;
+          return temp.toFixed(this.decimalLimit) + " TBTC";
+        case "mBTC":
+          temp = value / 100000;
+          return temp.toFixed(this.decimalLimit) + " TmBTC";
+        case "uBTC":
+          temp = value / 100;
+          return temp.toFixed(this.decimalLimit) + " TuBTC";
+      }
     }
   }
+
+  getCoinUnit() {
+    return this.coinUnit;
+  }
 }
+
+

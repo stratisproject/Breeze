@@ -11,10 +11,11 @@ import { WalletLoad } from '../shared/classes/wallet-load';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent implements OnInit {
   constructor(private globalService: GlobalService, private apiService: ApiService, private router: Router, private fb: FormBuilder) {
     this.buildDecryptForm();
-   }
+  }
 
   private openWalletForm: FormGroup;
   private hasWallet: boolean = false;
@@ -109,7 +110,8 @@ export class LoginComponent implements OnInit {
             console.log(errorMessage);
           }
         }
-      );
+      )
+    ;
   }
 
   private loadWallet(walletLoad: WalletLoad) {
@@ -131,6 +133,7 @@ export class LoginComponent implements OnInit {
             console.log(errorMessage);
           }
         }
-      );
+      )
+    ;
   }
 }
