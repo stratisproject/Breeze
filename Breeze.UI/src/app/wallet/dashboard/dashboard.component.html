@@ -6,8 +6,6 @@
       <div class="p">Unconfirmed Balance: {{unconfirmedBalance | coinNotation }}</div>
     </div>
     <div class="d-flex flex-column">
-      <!--<div>Current Value</div>
-      <div>Over 9000</div>-->
     </div>
     <div class="d-flex flex-column ml-auto">
       <div>
@@ -28,8 +26,6 @@
           <th>Timestamp</th>
         </thead>
         <tr *ngFor="let transaction of transactions; let i=index">
-          <!--<td *ngIf="{{ transaction.amount }} < 0">SENT</td>
-          <td *ngIf="{{ transaction.amount }} > 0">RECEIVED</td>-->
           <td *ngIf="i<5">{{ transaction.type }}</td>
           <td *ngIf="i<5">{{ transaction.amount | coinNotation }}</td>
           <td *ngIf="i<5">{{ transaction.id }}</td>
