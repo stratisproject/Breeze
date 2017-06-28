@@ -33,6 +33,9 @@ npm install -g @angular/cli
 ## To build for development
 
 - **in a terminal window** -> npm start
+
+If you want to seperate the build process from the Electron process you can use:
+- **in a terminal window** -> npm start:webpack
 - **in another terminal window** -> npm run electron:serve
 
 ## To build for production

@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions, URLSearchParams} from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
+import "rxjs/add/observable/interval";
+import 'rxjs/add/operator/startWith';
 
 import { WalletCreation } from '../classes/wallet-creation';
 import { WalletRecovery } from '../classes/wallet-recovery';
@@ -22,6 +25,7 @@ export class ApiService {
     private mockApiUrl = 'http://localhost:3000/api';
     private webApiUrl = 'http://localhost:5000/api';
     private headers = new Headers({'Content-Type': 'application/json'});
+    private pollingInterval = 3000;
 
     /**
      * Gets available wallets at the default path
@@ -74,11 +78,16 @@ export class ApiService {
     getWalletBalance(data: WalletInfo): Observable<any> {
       let params: URLSearchParams = new URLSearchParams();
       params.set('walletName', data.walletName);
-      params.set('coinType', data.coinType.toString());
 
-      return this.http
-        .get(this.webApiUrl + '/wallet/balance', new RequestOptions({headers: this.headers, search: params}))
+      return Observable
+        .interval(this.pollingInterval)
+        .startWith(0)
+        .switchMap(() => this.http.get(this.webApiUrl + '/wallet/balance', new RequestOptions({headers: this.headers, search: params})))
         .map((response: Response) => response);
+
+      // return this.http
+      //   .get(this.webApiUrl + '/wallet/balance', new RequestOptions({headers: this.headers, search: params}))
+      //   .map((response: Response) => response);
     }
 
     /**
@@ -87,11 +96,16 @@ export class ApiService {
     getWalletHistory(data: WalletInfo): Observable<any> {
       let params: URLSearchParams = new URLSearchParams();
       params.set('walletName', data.walletName);
-      params.set('coinType', data.coinType.toString());
 
-      return this.http
-        .get(this.webApiUrl + '/wallet/history', new RequestOptions({headers: this.headers, search: params}))
+      return Observable
+        .interval(this.pollingInterval)
+        .startWith(0)
+        .switchMap(() => this.http.get(this.webApiUrl + '/wallet/history', new RequestOptions({headers: this.headers, search: params})))
         .map((response: Response) => response);
+
+      // return this.http
+      //   .get(this.webApiUrl + '/wallet/history', new RequestOptions({headers: this.headers, search: params}))
+      //   .map((response: Response) => response);
     }
 
     /**
@@ -100,7 +114,6 @@ export class ApiService {
     getUnusedReceiveAddress(data: WalletInfo): Observable<any> {
       let params: URLSearchParams = new URLSearchParams();
       params.set('walletName', data.walletName);
-      params.set('coinType', data.coinType.toString());
       params.set('accountName', "account 0"); //temporary
 
       return this.http
