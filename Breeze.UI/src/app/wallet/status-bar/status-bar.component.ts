@@ -18,6 +18,7 @@ export class StatusBarComponent implements OnInit {
   private lastBlockSyncedHeight: number;
   private chainTip: number;
   private connectedNodes: number = 0;
+  private percentSyncedNumber: number = 0;
   private percentSynced: string;
 
   constructor(private apiService: ApiService, private globalService: GlobalService) { }
@@ -40,7 +41,13 @@ export class StatusBarComponent implements OnInit {
               this.lastBlockSyncedHeight = generalWalletInfoResponse.lastBlockSyncedHeight;
               this.chainTip = generalWalletInfoResponse.chainTip;
               this.connectedNodes = generalWalletInfoResponse.connectedNodes;
-              this.percentSynced = ((this.lastBlockSyncedHeight / this.chainTip) * 100).toFixed(0);
+              this.percentSyncedNumber = ((this.lastBlockSyncedHeight / this.chainTip) * 100);
+
+              if (this.percentSyncedNumber.toFixed(0) === "100" && this.lastBlockSyncedHeight != this.chainTip) {
+                this.percentSyncedNumber = 99;
+              }
+
+              this.percentSynced = this.percentSyncedNumber.toFixed(0);
           }
         },
         error => {
