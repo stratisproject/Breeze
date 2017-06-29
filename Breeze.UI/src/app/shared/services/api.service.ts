@@ -73,6 +73,20 @@ export class ApiService {
     }
 
     /**
+     * Get general wallet info from the API.
+     */
+    getGeneralInfo(data: WalletInfo): Observable<any> {
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('Name', data.walletName);
+
+      return Observable
+        .interval(this.pollingInterval)
+        .startWith(0)
+        .switchMap(() => this.http.get(this.webApiUrl + '/wallet/general-info', new RequestOptions({headers: this.headers, search: params})))
+        .map((response: Response) => response);
+    }
+
+    /**
      * Get wallet balance info from the API.
      */
     getWalletBalance(data: WalletInfo): Observable<any> {
