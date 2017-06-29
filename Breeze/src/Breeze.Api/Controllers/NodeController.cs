@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using Breeze.Api.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using NBitcoin;
@@ -11,10 +13,12 @@ namespace Breeze.Api.Controllers
 	public class NodeController : Controller
 	{
 	    private readonly IFullNode fullNode;
+	    private readonly ApiFeatureOptions apiFeatureOptions;
 
-	    public NodeController(IFullNode fullNode)
+	    public NodeController(IFullNode fullNode, ApiFeatureOptions apiFeatureOptions)
 	    {
 	        this.fullNode = fullNode;
+	        this.apiFeatureOptions = apiFeatureOptions;
 	    }
 
         /// <summary>
@@ -41,6 +45,21 @@ namespace Breeze.Api.Controllers
 
 	        return this.Ok();
 	    }
-    }
 
+	    /// <summary>
+	    /// Set the hearbeat flag.
+	    /// </summary>
+	    /// <returns></returns>
+	    [HttpPost]
+	    [Route("heartbeat")]
+	    public IActionResult Heartbeat()
+	    {
+	        if (this.apiFeatureOptions.HeartbeatMonitor == null)
+	            return new ObjectResult("Heartbeat Disabled") {StatusCode = 405}; // (405) Method Not Allowed 
+
+	        this.apiFeatureOptions.HeartbeatMonitor.LastBeat = DateTime.UtcNow;
+
+	        return this.Ok();
+	    }
+	}
 }
