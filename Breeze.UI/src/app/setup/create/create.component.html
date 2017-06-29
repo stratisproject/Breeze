@@ -1,41 +1,39 @@
-<div class="container col-md-8 offset-md-2">
-  <div class="row">
-    <div class="col">
-      <h1>Please create a new wallet</h1>
+<section id="breeze">
+  <div class="login d-flex align-items-center text-center">
+    <div class="container">
+      <p class="textback text-left mb-5 col-6 row"><a (click)="onBackClicked()">Back</a></p>
+      <h3 class="display-5">Welcome</h3>
+      <div class="row d-flex justify-content-center">
+        <form class="col-md-8 col-xs-12 text-left" [formGroup]="createWalletForm">
+          <!--<div class="form-group has-success">-->
+          <div class="form-group">
+            <label class="col-12 row" for="walletName">Name</label>
+            <input type="text" class="form-control form-control-success" formControlName="walletName" id="walletName" placeholder="Enter a wallet name.">
+            <div *ngIf="formErrors.walletName" class="form-control-feedback">{{ formErrors.walletName }}</div>
+          </div>
+          <div class="form-group">
+            <label class="text-left" for="walletPassword">Password</label>
+            <input type="password" class="form-control form-control-success" formControlName="walletPassword" id="walletPassword" placeholder="Enter a password.">
+            <div *ngIf="formErrors.walletPassword" class="form-control-feedback">{{ formErrors.walletPassword }}</div>
+          </div>
+          <div class="form-group">
+            <label class="text-left" for="walletNetwork">Network</label>
+            <select class="form-control custom-select" name="network" formControlName="selectNetwork">
+              <!--<option value="main">Main</option>-->
+              <option value="test">Testnet</option>
+              <!--<option value="stratistest">StratisTest</option>-->
+            </select>
+          </div>
+        </form>
+      </div>
+      <!-- /row-->
+      <div class="row d-flex justify-content-center">
+        <button type="button" class="btn btn-darkgray btn-lg" [disabled]="!createWalletForm.valid" (click)="onCreateClicked()">Create</button>
+      </div>
+      <!-- /row-->
     </div>
+    <!-- /container-->
   </div>
-  <div class="row">
-    <div class="col">
-      <form [formGroup]="createWalletForm" (ngSubmit)="onCreateClicked()">
-        <div class="form-group">
-          <label>Name:</label>
-          <input class="form-control" formControlName="walletName" type="text" placeholder="Enter a name for your wallet.">
-          <div *ngIf="formErrors.walletName" class="alert alert-danger">{{formErrors.walletName}}</div>
-        </div>
-        <div class="form-group">
-          <label>Password:</label>
-          <input class="form-control" formControlName="walletPassword" type="password" placeholder="Enter a password for your wallet.">
-          <div *ngIf="formErrors.walletPassword" class="alert alert-danger">{{formErrors.walletPassword}}</div>
-        </div>
-        <div class="form-group">
-          <label>Network:</label>
-          <select name="network" formControlName="selectNetwork">
-            <!--<option value="main">Main</option>-->
-            <option value="test">Testnet</option>
-            <!--<option value="stratistest">StratisTest</option>-->
-          </select>
-        </div>
-        <div class="form-group">
-          <button type="button" class="btn btn-outline-secondary" (click)="onBackClicked()">Back</button>
-          <button type="submit" [disabled]="!createWalletForm.valid" class="btn">Create Wallet</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col" id="mnemonic">
-      <label>Mnemonic:</label>
-      <label>{{ mnemonic }}</label>
-    </div>
-  </div>
-</div>
+  <!-- /login-->
+</section>
+<!-- /breeze-->

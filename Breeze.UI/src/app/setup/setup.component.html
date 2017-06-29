@@ -1,34 +1,19 @@
-<div class="container col-md-8 offset-md-2">
-  <div class="row">
-    <div class="col">
-      <h1>Welcome to Breeze</h1>
-    </div>
-  </div>
-  <div class="row">
-    <div vlass="col">
-      <p>
-        If you haven't used Breeze before, please create a new wallet.
-      <br>
-      <button (click)="onCreateClicked()" class="btn">Create</button>
+<section id="breeze">
+  <div class="login d-flex align-items-center text-center">
+    <div class="container">
+      <h3 class="display-5">Welcome</h3>
+      <p class="lead">
+        If you would like to create a new wallet, please click Create. <br/>
+        When you have used Breeze before, you can click Restore to recover your wallet.
       </p>
-      <p style="margin-top: 30px;">
-        Users who have previously used Breeze, can choose to recover their wallet.
-      <br>
-      <button (click)="onRecoverClicked()" class="btn">Recover</button>
-      </p>
+      <div class="row d-flex justify-content-center">
+        <button type="button" class="btn btn-darkgray btn-lg" (click)="onBackClicked()">Back</button>
+        <button type="button" class="btn btn-darkgray btn-lg" (click)="onCreateClicked()">Create</button>
+        <button type="button" class="btn btn-darkgray btn-lg" (click)="onRecoverClicked()">Restore</button>
+      </div>
     </div>
+    <!-- /container-->
   </div>
-  <div class="row">
-    <div class="col">
-      <button (click)="onBackClicked()" class="btn btn-outline-secondary" id="backButton">Back</button>
-    </div>
-    <!--<div class="col">
-      <button (click)="onCreateClicked()" class="btn">Create</button>
-    </div>
-    <div class="col">
-      <button (click)="onRecoverClicked()" class="btn">Recover</button>
-    </div>-->
-  </div>
-</div>
-
-
+  <!-- /login-->
+</section>
+<!-- /breeze-->
