@@ -34,30 +34,31 @@ namespace Breeze.Api
 		    Logs.FullNode.LogInformation($"Api starting on url {this.fullNode.Settings.ApiUri}");
             Program.Initialize(this.fullNodeBuilder.Services, this.fullNode);
 
-		    this.TryStartHeartbeat();
+		    this.TryStartKeepaliveMonitor();
 		}
 
         /// <summary>
-        /// A heartbeat monitor that when enabled will shutdown 
-        /// the node if no external beat was made during the trashold
+        /// A KeepaliveMonitor when enabled will shutdown the
+        /// node if no one is calling the keepalive endpoint 
+        /// during a certain trashold window
         /// </summary>
-        public void TryStartHeartbeat()
+        public void TryStartKeepaliveMonitor()
 	    {
-	        if (this.apiFeatureOptions.HeartbeatMonitor?.HeartbeatInterval.TotalSeconds > 0)
+	        if (this.apiFeatureOptions.KeepaliveMonitor?.KeepaliveInterval.TotalSeconds > 0)
 	        {
-	            this.asyncLoopFactory.Run("ApiFeature.MonitorHeartbeat", token =>
+	            this.asyncLoopFactory.Run("ApiFeature.KeepaliveMonitor", token =>
 	                {
 	                    // shortened for redability
-	                    var monitor = this.apiFeatureOptions.HeartbeatMonitor;
+	                    var monitor = this.apiFeatureOptions.KeepaliveMonitor;
 
 	                    // check the trashold to trigger a shutdown
-	                    if (monitor.LastBeat.Add(monitor.HeartbeatInterval) < DateTime.UtcNow)
+	                    if (monitor.LastBeat.Add(monitor.KeepaliveInterval) < DateTime.UtcNow)
 	                        this.fullNode.Stop();
 
 	                    return Task.CompletedTask;
 	                },
 	                this.fullNode.GlobalCancellation.Cancellation.Token,
-	                repeatEvery: this.apiFeatureOptions.HeartbeatMonitor?.HeartbeatInterval,
+	                repeatEvery: this.apiFeatureOptions.KeepaliveMonitor?.KeepaliveInterval,
 	                startAfter: TimeSpans.Minute);
 	        }
 	    }
@@ -65,11 +66,11 @@ namespace Breeze.Api
 
     public class ApiFeatureOptions
     {
-        public HeartbeatMonitor HeartbeatMonitor { get; set; }
+        public KeepaliveMonitor KeepaliveMonitor { get; set; }
 
-        public void Heartbeat(TimeSpan timeSpan)
+        public void Keepalive(TimeSpan timeSpan)
         {
-            this.HeartbeatMonitor = new HeartbeatMonitor {HeartbeatInterval = timeSpan};
+            this.KeepaliveMonitor = new KeepaliveMonitor {KeepaliveInterval = timeSpan};
         }
     }
 

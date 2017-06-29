@@ -47,17 +47,17 @@ namespace Breeze.Api.Controllers
 	    }
 
 	    /// <summary>
-	    /// Set the hearbeat flag.
+	    /// Set the keepalive flag.
 	    /// </summary>
 	    /// <returns></returns>
 	    [HttpPost]
-	    [Route("heartbeat")]
-	    public IActionResult Heartbeat()
+	    [Route("keepalive")]
+	    public IActionResult Keepalive()
 	    {
-	        if (this.apiFeatureOptions.HeartbeatMonitor == null)
-	            return new ObjectResult("Heartbeat Disabled") {StatusCode = 405}; // (405) Method Not Allowed 
+	        if (this.apiFeatureOptions.KeepaliveMonitor == null)
+	            return new ObjectResult("Keepalive Disabled") {StatusCode = 405}; // (405) Method Not Allowed 
 
-	        this.apiFeatureOptions.HeartbeatMonitor.LastBeat = DateTime.UtcNow;
+	        this.apiFeatureOptions.KeepaliveMonitor.LastBeat = DateTime.UtcNow;
 
 	        return this.Ok();
 	    }

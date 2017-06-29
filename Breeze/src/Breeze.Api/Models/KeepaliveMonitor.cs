@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Breeze.Api.Models
 {
-    public class HeartbeatMonitor
+    public class KeepaliveMonitor
     {
         public DateTime LastBeat { get; set; }
-        public TimeSpan HeartbeatInterval { get; set; }
+        public TimeSpan KeepaliveInterval { get; set; }
     }
 }
