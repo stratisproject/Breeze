@@ -77,15 +77,15 @@ namespace Breeze.Wallet
                 // we're looking from where to start syncing the wallets.
                 // we start by looking at the heights of the wallets and we start syncing from the oldest one (the smallest height).
                 // if for some reason we can't find a height, we look at the creation date of the wallets and we start syncing from the earliest date.
-                int? smallestBlockHeightInWallet = this.walletManager.Wallets.Min(w => w.AccountsRoot.Single(a => a.CoinType == this.coinType).LastBlockSyncedHeight);
-                if (smallestBlockHeightInWallet == null)
+                int? earliestWalletHeight = this.walletManager.Wallets.Min(w => w.AccountsRoot.Single(a => a.CoinType == this.coinType).LastBlockSyncedHeight);
+                if (earliestWalletHeight == null)
                 {
                     DateTimeOffset oldestWalletDate = this.walletManager.Wallets.Min(w => w.CreationTime);
                     this.SyncFrom(oldestWalletDate.LocalDateTime);
                 }
                 else
                 {
-                    this.SyncFrom(smallestBlockHeightInWallet.Value);
+                    this.SyncFrom(earliestWalletHeight.Value);
                 }
             }
             return Task.CompletedTask;
@@ -193,6 +193,7 @@ namespace Breeze.Wallet
 
         private void StartSync(int height)
         {
+            // TODO add support for the case where there is a reorg, like in the initialize method
             var chainedBlock = this.chain.GetBlock(height);
             if (chainedBlock == null)
                 throw new WalletException("Invalid block height");
