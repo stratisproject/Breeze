@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using NBitcoin;
+using Stratis.Bitcoin.Builder;
 using Stratis.Bitcoin.Notifications;
 
 namespace Breeze.Api.Controllers
@@ -8,12 +10,12 @@ namespace Breeze.Api.Controllers
 	[Route("api/[controller]")]
 	public class NodeController : Controller
 	{
-		private readonly BlockNotification blockNotification;
+	    private readonly IFullNode fullNode;
 
-		public NodeController(BlockNotification blockNotification)
-		{
-			this.blockNotification = blockNotification;
-		}
+	    public NodeController(IFullNode fullNode)
+	    {
+	        this.fullNode = fullNode;
+	    }
 
         /// <summary>
         /// Returns some general information about the status of the underlying node.
@@ -26,28 +28,19 @@ namespace Breeze.Api.Controllers
 			return this.NotFound();
 		}
 
-        /// <summary>
-        /// Starts sending block to the wallet for synchronisation.
-        /// This is for demo and testing use only.
-        /// </summary>
-        /// <param name="model">The hash of the block from which to start syncing.</param>
-        /// <returns></returns>
-		[HttpPost]
-		[Route("sync")]
-		public IActionResult Sync([FromBody] HashModel model)
-		{
-			if (!ModelState.IsValid)
-			{
-				return this.BadRequest();
-			}
-			this.blockNotification.SyncFrom(uint256.Parse(model.Hash));
-			return this.Ok();
-		}
-	}
+	    /// <summary>
+	    /// Trigger a shoutdown of the current running node.
+	    /// </summary>
+	    /// <returns></returns>
+	    [HttpPost]
+	    [Route("shutdown")]
+	    public IActionResult Shutdown()
+	    {
+            // start the node shutdown process
+            this.fullNode.Stop();
 
-	public class HashModel
-	{
-		[Required(AllowEmptyStrings = false)]
-		public string Hash { get; set; }
-	}
+	        return this.Ok();
+	    }
+    }
+
 }
