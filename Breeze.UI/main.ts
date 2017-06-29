@@ -48,7 +48,23 @@ function createWindow() {
     // when you should delete the corresponding element.
     mainWindow = null;
   });
+
+  // Emitted when the window is going to close.
+  mainWindow.on('close', function () {
+    var http = require('http');
+    const options = {
+      hostname: 'localhost',  
+      port: 5000,
+      path: '/api/node/shutdown',
+      method: 'POST'
+      };
+
+    const req = http.request(options, (res) => {});  
+    req.write('');
+    req.end();    
+  });
 }
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.

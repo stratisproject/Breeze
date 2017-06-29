@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ApiService } from './shared/services/api.service';
@@ -25,24 +25,5 @@ export class AppComponent implements OnInit {
   startApp() {
     this.loading = false;
     this.router.navigate(['/login']);
-  }
-
-  @HostListener('window:unload')
-  unloadHandler() {   
-    this.apiService.shutdownNode().subscribe(
-          response => {},
-          error => {
-            if (error.status === 0) {
-              alert("Error closing application. please close the dotnet process manually.");
-            } else if (error.status >= 400) {
-              if (!error.json().errors[0]) {
-                console.log(error);
-              }
-              else {
-                alert(error.json().errors[0].message);
-              }
-            }
-          }
-        );
   }
 }
