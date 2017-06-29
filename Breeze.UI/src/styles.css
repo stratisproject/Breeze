@@ -50,8 +50,7 @@ code {
 #content {
   width: 100%;
   position: relative;
-  /*padding-left: 0px; 70px; }*/
-  padding-left: 0px; }
+  padding-left: 70px; }
 
 #sidebar {
   z-index: 1000;
