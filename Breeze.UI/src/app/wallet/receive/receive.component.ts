@@ -33,6 +33,7 @@ export class ReceiveComponent {
           }
         },
         error => {
+          console.log(error);
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {
@@ -40,7 +41,7 @@ export class ReceiveComponent {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].message);
+              alert(error.json().errors[0].description);
             }
           }
         }

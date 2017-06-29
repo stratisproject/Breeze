@@ -10,7 +10,6 @@ import { ReceiveComponent } from '../receive/receive.component';
 
 import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/first';
 
 @Component({
   selector: 'dashboard-component',
@@ -57,6 +56,7 @@ export class DashboardComponent {
           }
         },
         error => {
+          console.log(error);
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {
@@ -64,7 +64,7 @@ export class DashboardComponent {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].message);
+              alert(error.json().errors[0].description);
             }
           }
         }
@@ -84,6 +84,7 @@ export class DashboardComponent {
           }
         },
         error => {
+          console.log(error);
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {
@@ -91,7 +92,7 @@ export class DashboardComponent {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].message);
+              alert(error.json().errors[0].description);
             }
           }
         }
