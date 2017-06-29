@@ -1,0 +1,39 @@
+ <div id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="modal_detail" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="bubble"><i class="icon-settings"></i></div>
+      </div>
+      <div class="modal-body">
+        <h5 class="modal-title text-uppercase" id="modalDetail">Transaction Details</h5>
+        <ul class="list-inline row">
+          <li class="list-inline-item col blockLabel">Type</li>
+          <li class="list-inline-item col-9 blockText">{{ transaction.type }}</li>
+        </ul>
+        <ul class="list-inline row">
+          <li class="list-inline-item col blockLabel">Amount</li>
+          <li class="list-inline-item col-9 blockText"><strong class="text-success">{{transaction.amount | coinNotation }}</strong></li>
+        </ul>
+        <!--<ul class="list-inline row">
+          <li class="list-inline-item col blockLabel">From</li>
+          <li class="list-inline-item col-9 blockText"><code>n4kVJQarwwdmsXDdgNnJHgBSpZ8MhSkNBx</code></li>
+        </ul>-->
+        <ul class="list-inline row">
+          <li class="list-inline-item col blockLabel">Date</li>
+          <li class="list-inline-item col-9 blockText"><small>{{ transaction.timestamp * 1000 | date:'medium' }}</small></li>
+        </ul>
+        <ul class="list-inline row">
+          <li class="list-inline-item col blockLabel">Block</li>
+          <li class="list-inline-item col-9 blockText">#{{ transaction.confirmedInBlock }}</li>
+        </ul>
+        <ul class="list-inline row">
+          <li class="list-inline-item col blockLabel">Transaction ID</li>
+          <li class="list-inline-item col-9 blockText blockID"><code>{{ transaction.id }}</code></li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-lg btn-primary" data-dismiss="modal" aria-label="Close" (click)="activeModal.close('Close click')">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
