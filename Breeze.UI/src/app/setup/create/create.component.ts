@@ -93,7 +93,7 @@ export class CreateComponent {
         response => {
           if (response.status >= 200 && response.status < 400){
             this.mnemonic = response.json();
-            alert("Your wallet has been created. Please write down your 12 word passphrase: \n" + this.mnemonic + "\nYou will be redirected to the decryption page.");
+            alert("Your wallet has been created.\n\nPlease write down your 12 word passphrase: \n" + this.mnemonic + "\n\nYou will be redirected to the decryption page.");
             this.router.navigate(['']);
           }
         },
@@ -106,7 +106,7 @@ export class CreateComponent {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].description);
+              alert(error.json().errors[0].message);
             }
           }
         }

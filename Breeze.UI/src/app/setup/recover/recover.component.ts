@@ -120,7 +120,7 @@ export class RecoverComponent implements OnInit {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].description);
+              alert(error.json().errors[0].message);
             }
           }
         }
