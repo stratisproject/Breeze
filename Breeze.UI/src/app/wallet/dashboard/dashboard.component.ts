@@ -7,6 +7,7 @@ import { WalletInfo } from '../../shared/classes/wallet-info';
 
 import { SendComponent } from '../send/send.component';
 import { ReceiveComponent } from '../receive/receive.component';
+import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
 
 import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
@@ -17,7 +18,7 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['./dashboard.component.css']
 })
 
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal) {}
 
   private confirmedBalance: number;
@@ -43,6 +44,11 @@ export class DashboardComponent {
   private openReceiveDialog() {
     const modalRef = this.modalService.open(ReceiveComponent);
   };
+
+  private openTransactionDetailDialog(transaction: any) {
+    const modalRef = this.modalService.open(TransactionDetailsComponent);
+    modalRef.componentInstance.transaction = transaction;
+  }
 
   private getWalletBalance() {
     let walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getCoinType())

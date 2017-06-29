@@ -1,29 +1,47 @@
-<div class="container">
-  <div class="row" id="transactions">
-    <div class="col">
-      <table class="transactionsTable" *ngIf="transactions; else noTransactions">
-        <thead>
-          <th>Type</th>
-          <th>Amount</th>
-          <th>Transaction ID</th>
-          <th>Confirmed in block</th>
-          <th>Timestamp</th>
-        </thead>
-        <tr *ngFor="let transaction of transactions">
-          <!--<td *ngIf="{{ transaction.amount }} < 0; else received">SENT</td>
-          <td #received>RECEIVED</td>-->
-          <td>{{ transaction.type }}</td>
-          <td>{{ transaction.amount | coinNotation }}</td>
-          <td>{{ transaction.id }}</td>
-          <td>{{ transaction.confirmedInBlock }}</td>
-          <td>{{ transaction.timestamp * 1000 | date:'medium' }}</td>
-        </tr>
-      </table>
-    </div>
-    <div class="row">
-      <div class="col">
+<section id="breeze">
+  <!-- CONTENT -->
+  <section id="content" class="bitcoin">
+    <!-- JUMBOTRON-->
+    <!--<div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <div class="row">
+          <div class="col d-flex justify-content-center">
+            <form class="col-md-6 col-xs-12">
+              <h5 class="text-uppercase text-center">Search for a transaction</h5>
+              <div class="form-group">
+                <input type="email" class="form-control mt-3" id="searchEmail" aria-describedby="emailHelp" placeholder="tax ID, amount, block number, ...">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>-->
+    <!-- /JUMBOTRON-->
+
+    <!-- TRANSACTIONS -->
+    <section id="transaction" class="container">
+      <h5 class="text-uppercase">Transactions</h5>
+      <div *ngIf="transactions; else noTransactions">
+        <div *ngFor="let transaction of transactions">
+          <div class="card">
+            <div class="card-block text-nowrap">
+              <ul class="list-inline row">
+                <li class="list-inline-item hidden-xs-down col text-uppercase align-bottom">{{ transaction.type }}</li>
+                <li class="list-inline-item col-4 amount text-left align-baseline"><!--<span class="text-success">+</span>--> {{ transaction.amount | coinNotation }} <!--<small class="text-uppercase">btc</small> <span class="badge badge-danger text-capitalize">unconfirmed</span>--></li>
+                <li class="list-inline-item hidden-sm-down col text-center align-baseline">{{ transaction.timestamp * 1000 | date:'medium' }}</li>
+                <li class="list-inline-item col text-right align-baseline"><a data-toggle="modal" data-target="#modalDetail" (click)="openTransactionDetailDialog(transaction)">details</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /card-->
+      <div>
         <ng-template #noTransactions>Looks like you haven't made any transactions yet.</ng-template>
       </div>
-    </div>
-  </div>
-</div>
+    </section>
+    <!-- /TRANSACTIONS -->
+  </section>
+  <!-- /CONTENT-->
+</section>
+<!-- /breeze-->

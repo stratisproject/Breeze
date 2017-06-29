@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
@@ -8,6 +9,8 @@ import { WalletInfo } from '../../shared/classes/wallet-info';
 import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
 
+import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
+
 @Component({
   selector: 'history-component',
   templateUrl: './history.component.html',
@@ -15,7 +18,7 @@ import { Subscription } from 'rxjs/Subscription';
 })
 
 export class HistoryComponent {
-  constructor(private apiService: ApiService, private globalService: GlobalService) {}
+  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal) {}
 
   private transactions: any;
   private errorMessage: string;
@@ -27,6 +30,11 @@ export class HistoryComponent {
 
   ngOnDestroy() {
     this.walletHistorySubscription.unsubscribe();
+  }
+
+  private openTransactionDetailDialog(transaction: any) {
+    const modalRef = this.modalService.open(TransactionDetailsComponent);
+    modalRef.componentInstance.transaction = transaction;
   }
 
   private getHistory() {
