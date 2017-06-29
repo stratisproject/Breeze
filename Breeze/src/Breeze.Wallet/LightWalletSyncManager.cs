@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NBitcoin;
+using NBitcoin.JsonConverters;
 using Stratis.Bitcoin;
 using Stratis.Bitcoin.Notifications;
 using Stratis.Bitcoin.Utilities;
@@ -20,13 +21,13 @@ namespace Breeze.Wallet
         private readonly CoinType coinType;
         private readonly ILogger logger;
         private readonly Signals signals;
-
+        private readonly FullNode.CancellationProvider cancellationProvider;
         private ChainedBlock walletTip;
 
         public ChainedBlock WalletTip => this.walletTip;
 
         public LightWalletSyncManager(ILoggerFactory loggerFactory, IWalletManager walletManager, ConcurrentChain chain, Network network,
-            BlockNotification blockNotification, Signals signals)
+            BlockNotification blockNotification, Signals signals, FullNode.CancellationProvider cancellationProvider)
         {
             this.walletManager = walletManager as WalletManager;
             this.chain = chain;
@@ -34,11 +35,18 @@ namespace Breeze.Wallet
             this.blockNotification = blockNotification;
             this.coinType = (CoinType)network.Consensus.CoinType;
             this.logger = loggerFactory.CreateLogger(this.GetType().FullName);
+            this.cancellationProvider = cancellationProvider;
         }
 
         /// <inheritdoc />
         public Task Initialize()
-        {            
+        {
+            // subscribe to receiving blocks and transactions
+            BlockSubscriber sub = new BlockSubscriber(this.signals.Blocks, new BlockObserver(this));
+            sub.Subscribe();
+            TransactionSubscriber txSub = new TransactionSubscriber(this.signals.Transactions, new TransactionObserver(this));
+            txSub.Subscribe();
+
             // if there is no wallet created yet, the wallet tip is the chain tip.
             if (!this.walletManager.Wallets.Any())
             {
@@ -47,7 +55,7 @@ namespace Breeze.Wallet
             else
             {
                 this.walletTip = this.chain.GetBlock(this.walletManager.WalletTipHash);
-                if (this.walletTip == null)
+                if (this.walletTip == null && this.chain.Height > 0)
                 {
                     // the wallet tip was not found in the main chain.
                     // this can happen if the node crashes unexpectedly.
@@ -65,60 +73,24 @@ namespace Breeze.Wallet
                     this.walletTip = fork;
                     this.logger.LogWarning($"Wallet tip was out of sync, wallet tip reverted back to Height = {this.walletTip.Height} hash = {this.walletTip.HashBlock}.");
                 }
+
+                // we're looking from where to start syncing the wallets.
+                // we start by looking at the heights of the wallets and we start syncing from the oldest one (the smallest height).
+                // if for some reason we can't find a height, we look at the creation date of the wallets and we start syncing from the earliest date.
+                int? smallestBlockHeightInWallet = this.walletManager.Wallets.Min(w => w.AccountsRoot.Single(a => a.CoinType == this.coinType).LastBlockSyncedHeight);
+                if (smallestBlockHeightInWallet == null)
+                {
+                    DateTimeOffset oldestWalletDate = this.walletManager.Wallets.Min(w => w.CreationTime);
+                    this.SyncFrom(oldestWalletDate.LocalDateTime);
+                }
+                else
+                {
+                    this.SyncFrom(smallestBlockHeightInWallet.Value);
+                }
             }
-
-            // subscribe to receiving blocks and transactions
-            BlockSubscriber sub = new BlockSubscriber(this.signals.Blocks, new BlockObserver(this));
-            sub.Subscribe();
-            TransactionSubscriber txSub = new TransactionSubscriber(this.signals.Transactions, new TransactionObserver(this));
-            txSub.Subscribe();
-
-            // start syncing blocks
-            var bestHeightForSyncing = this.FindBestHeightForSyncing();
-            this.blockNotification.SyncFrom(this.chain.GetBlock(bestHeightForSyncing).HashBlock);
-            this.logger.LogInformation($"Tracker initialized. Syncing from {bestHeightForSyncing}.");
-
             return Task.CompletedTask;
         }
-
-        private int FindBestHeightForSyncing()
-        {
-            // if there are no wallets, get blocks from now
-            if (!this.walletManager.Wallets.Any())
-            {
-                return this.chain.Tip.Height;
-            }
-
-            // sync the accounts with new blocks, starting from the most out of date
-            int? syncFromHeight = this.walletManager.Wallets.Min(w => w.AccountsRoot.Single(a => a.CoinType == this.coinType).LastBlockSyncedHeight);
-            if (syncFromHeight == null)
-            {
-                return this.chain.Tip.Height;
-            }
-
-            return Math.Min(syncFromHeight.Value, this.chain.Tip.Height);
-        }
-
-        /// <inheritdoc />
-        public Task WaitForChainDownloadAsync()
-        {
-            // make sure the chain is downloaded
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            return AsyncLoop.Run("WalletFeature.DownloadChain", token =>
-                {
-                    // wait until the chain is downloaded. We wait until a block is from an hour ago.
-                    if (this.chain.IsDownloaded())
-                    {
-                        this.logger.LogInformation($"Chain downloaded. Tip height is {this.chain.Tip.Height}.");
-                        cancellationTokenSource.Cancel();
-                    }
-
-                    return Task.CompletedTask;
-                },
-                cancellationTokenSource.Token,
-                repeatEvery: TimeSpans.FiveSeconds);
-        }
-
+        
         /// <inheritdoc />
         public void ProcessBlock(Block block)
         {
@@ -161,18 +133,65 @@ namespace Breeze.Wallet
             this.walletManager.ProcessBlock(block, this.walletTip);
         }
 
+        /// <inheritdoc />
         public void ProcessTransaction(Transaction transaction)
         {
             this.walletManager.ProcessTransaction(transaction);
         }
 
+        /// <inheritdoc />
         public void SyncFrom(DateTime date)
         {
-            int blockSyncStart = this.chain.GetHeightAtTime(date);
-            this.SyncFrom(blockSyncStart);
+            // before we start syncing we need to make sure that the chain is at a certain level.
+            // if the chain is behind the date from which we want to sync, we wait for it to catch up, and then we start syncing.
+            // if the chain is already past the date we want to sync from, we don't wait, even though the chain might not be fully downloaded.
+            if (this.chain.Tip.Header.BlockTime.LocalDateTime < date)
+            {
+                AsyncLoop.RunUntil("WalletFeature.DownloadChain", this.cancellationProvider.Cancellation.Token,
+                    () => this.chain.Tip.Header.BlockTime.LocalDateTime >= date,
+                    () => this.StartSync(this.chain.GetHeightAtTime(date)),
+                        (ex) =>
+                        {
+                            // in case of an exception while waiting for the chain to be at a certain height, we just cut our losses and 
+                            // sync from the current height.
+                            this.logger.LogError($"Exception occurred while waiting for chain to download: {ex.Message}");
+                            this.StartSync(this.chain.Tip.Height);
+                        },
+                    TimeSpans.FiveSeconds);
+            }
+            else
+            {               
+                this.StartSync(this.chain.GetHeightAtTime(date));
+            }
         }
 
+        /// <inheritdoc />
         public void SyncFrom(int height)
+        {
+            // before we start syncing we need to make sure that the chain is at a certain level.
+            // if the chain is behind the height from which we want to sync, we wait for it to catch up, and then we start syncing.
+            // if the chain is already past the height we want to sync from, we don't wait, even though the chain might  not be fully downloaded.
+            if (this.chain.Tip.Height < height)
+            {
+                AsyncLoop.RunUntil("WalletFeature.DownloadChain", this.cancellationProvider.Cancellation.Token,
+                    () => this.chain.Tip.Height >= height,
+                    () => this.StartSync(height),
+                    (ex) =>
+                    {
+                        // in case of an exception while waiting for the chain to be at a certain height, we just cut our losses and 
+                        // sync from the current height.
+                        this.logger.LogError($"Exception occurred while waiting for chain to download: {ex.Message}");
+                        this.StartSync(this.chain.Tip.Height);
+                    },
+                    TimeSpans.FiveSeconds);
+            }
+            else
+            {
+                this.StartSync(height);
+            }
+        }
+
+        private void StartSync(int height)
         {
             var chainedBlock = this.chain.GetBlock(height);
             if (chainedBlock == null)
