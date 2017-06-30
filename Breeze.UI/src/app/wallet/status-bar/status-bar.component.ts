@@ -37,17 +37,22 @@ export class StatusBarComponent implements OnInit {
       .subscribe(
         response =>  {
           if (response.status >= 200 && response.status < 400) {
-              let generalWalletInfoResponse = response.json();
-              this.lastBlockSyncedHeight = generalWalletInfoResponse.lastBlockSyncedHeight;
-              this.chainTip = generalWalletInfoResponse.chainTip;
-              this.connectedNodes = generalWalletInfoResponse.connectedNodes;
-              this.percentSyncedNumber = ((this.lastBlockSyncedHeight / this.chainTip) * 100);
+            let generalWalletInfoResponse = response.json();
+            this.lastBlockSyncedHeight = generalWalletInfoResponse.lastBlockSyncedHeight;
+            this.chainTip = generalWalletInfoResponse.chainTip;
+            this.connectedNodes = generalWalletInfoResponse.connectedNodes;
 
-              if (this.percentSyncedNumber.toFixed(0) === "100" && this.lastBlockSyncedHeight != this.chainTip) {
-                this.percentSyncedNumber = 99;
-              }
+            if (this.chainTip === 0) {
+              this.chainTip = 1;
+            }
 
-              this.percentSynced = this.percentSyncedNumber.toFixed(0);
+            this.percentSyncedNumber = ((this.lastBlockSyncedHeight / this.chainTip) * 100);
+
+            if (this.percentSyncedNumber.toFixed(0) === "100" && this.lastBlockSyncedHeight != this.chainTip) {
+              this.percentSyncedNumber = 99;
+            }
+
+            this.percentSynced = this.percentSyncedNumber.toFixed(0);
           }
         },
         error => {
