@@ -58,18 +58,20 @@ function createWindow() {
 
   // Emitted when the window is going to close.
   mainWindow.on('close', function () {
-    var http = require('http');
-    const options = {
-      hostname: 'localhost',  
-      port: 5000,
-      path: '/api/node/shutdown',
-      method: 'POST'
+    if (process.platform !== 'darwin') {
+      var http = require('http');
+      const options = {
+        hostname: 'localhost',  
+        port: 5000,
+        path: '/api/node/shutdown',
+        method: 'POST'
       };
 
-    const req = http.request(options, (res) => {});  
-    req.write('');
-    req.end();    
-  });
+      const req = http.request(options, (res) => {});  
+      req.write('');
+      req.end();    
+      }
+    });
 }
 
 // This method will be called when Electron has finished
@@ -133,7 +135,7 @@ function createTray() {
   let appIcon = null;
 
 var iconPath
-if (os.platform == 'win32') {
+if (os.platform() === 'win32') {
   iconPath = __dirname + '/assets/images/breeze-logo-tray.ico';
 } else {
   iconPath = __dirname + '/assets/images/breeze-logo-tray.png';
