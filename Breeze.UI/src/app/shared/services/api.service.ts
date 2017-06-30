@@ -132,4 +132,10 @@ export class ApiService {
         .post(this.webApiUrl + '/wallet/send-transaction/', JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
+
+    shutdownNode(): Observable<any> {
+      return this.http
+        .post(this.webApiUrl + '/node/shutdown', '')
+        .map((response: Response) => response);
+    }   
 }
