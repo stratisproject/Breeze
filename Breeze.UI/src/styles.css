@@ -133,27 +133,35 @@ code {
   color: #2ECCA9; }
 
 .status {
-  background: #fff;
-  width: 80px;
-  height: 40px;
-  border: 1px solid #DBDBDB;
-  box-shadow: 0 1px 11px 0 rgba(80, 96, 120, 0.2);
-  border-radius: 80px;
   position: fixed;
   bottom: 2%;
-  right: 2%;
-  text-align: center; }
+  right: 4%;
+  text-align: center;
+}
   .status ul {
-    transform: translateY(50%) translateX(15%); }
+    transform: translateY(50%) translateX(15%);
+    display: block;
+    background: #fff;
+    width: auto;
+    height: 40px;
+    border: 1px solid #DBDBDB;
+    box-shadow: 0 1px 11px 0 rgba(80, 96, 120, 0.2);
+    border-radius: 80px;
+    padding: .75em;
+}
   .status li {
     font-size: .9em;
     position: relative;
-    padding: 0 8px; }
+    margin: 0 4px;
+    float: left;
+    width: auto;
+}
     .status li.pending i {
       font-size: 1.3em;
-      position: absolute;
+      /* position: relative; */
       color: #D1C312;
-      animation: spin 4s linear infinite; }
+      animation: spin 4s linear infinite;
+}
     .status li.statusOK i {
       color: #2ECCA9;
       font-size: 1.3em;
@@ -162,6 +170,7 @@ code {
 @keyframes spin {
   100% {
     transform: rotate(360deg); } }
+
 .modal-header .bubble {
   width: 50px;
   height: 50px;
@@ -7344,10 +7353,15 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   src: url("./assets/fonts/Lato-Black.ttf") format("truetype"); }
 @font-face {
   font-family: 'icon';
-  src: url("./assets/fonts/icon.eot?uu062v");
-  src: url("./assets/fonts/icon.eot?uu062v#iefix") format("embedded-opentype"), url("./assets/fonts/icon.ttf?uu062v") format("truetype"), url("./assets/fonts/icon.woff?uu062v") format("woff"), url("./assets/fonts/icon.svg?uu062v#icomoon") format("svg");
+  src:  url("./assets/fonts/icon.eot?qz0v16");
+  src:  url("./assets/fonts/icon.eot?qz0v16#iefix") format('embedded-opentype'),
+    url("./assets/fonts/icon.ttf?qz0v16") format('truetype'),
+    url("./assets/fonts/icon.woff?qz0v16") format('woff'),
+    url("./assets/fonts/icon.svg?qz0v16#icomoon") format('svg');
   font-weight: normal;
-  font-style: normal; }
+  font-style: normal;
+}
+
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icon' !important;
@@ -7357,60 +7371,120 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   font-variant: normal;
   text-transform: none;
   line-height: 1;
+
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; }
-
-.icon-stratis:before {
-  content: "\e900"; }
-
-.icon-syncr:before {
-  content: "\e902"; }
-
-.icon-bitcoin:before {
-  content: "\e904"; }
-
-.icon-block:before {
-  content: "\e92e"; }
+  -moz-osx-font-smoothing: grayscale;
+}
 
 .icon-coin-dollar:before {
-  content: "\e93b"; }
-
+  content: "\e93b";
+}
 .icon-coin-euro:before {
-  content: "\e93c"; }
-
+  content: "\e93c";
+}
 .icon-coin-pound:before {
-  content: "\e93d"; }
-
-.icon-database:before {
-  content: "\e964"; }
-
-.icon-settings:before {
-  content: "\e994"; }
-
+  content: "\e93d";
+}
+.icon-coin-yen:before {
+  content: "\e93e";
+}
+.icon-bell:before {
+  content: "\e951";
+}
 .icon-download:before {
-  content: "\e9c2"; }
-
+  content: "\e960";
+}
 .icon-upload:before {
-  content: "\e9c3"; }
-
-.icon-cancel-circle:before {
-  content: "\ea0d"; }
-
-.icon-checkmark2:before {
-  content: "\ea11"; }
-
+  content: "\e961";
+}
+.icon-coin:before {
+  content: "\e964";
+}
+.icon-lock:before {
+  content: "\e98f";
+}
+.icon-unlocked:before {
+  content: "\e990";
+}
+.icon-cog:before {
+  content: "\e994";
+}
+.icon-bin:before {
+  content: "\e9ac";
+}
+.icon-switch:before {
+  content: "\e9b6";
+}
+.icon-cloud:before {
+  content: "\e9c1";
+}
+.icon-cloud-download:before {
+  content: "\e9c2";
+}
+.icon-cloud-upload:before {
+  content: "\e9c3";
+}
+.icon-cloud-check:before {
+  content: "\e9c4";
+}
+.icon-download2:before {
+  content: "\e9c5";
+}
+.icon-upload2:before {
+  content: "\e9c6";
+}
+.icon-download3:before {
+  content: "\e9c7";
+}
+.icon-upload3:before {
+  content: "\e9c8";
+}
+.icon-sphere:before {
+  content: "\e9c9";
+}
+.icon-earth:before {
+  content: "\e9ca";
+}
+.icon-link:before {
+  content: "\e9cb";
+}
+.icon-circle-up:before {
+  content: "\ea41";
+}
+.icon-circle-right:before {
+  content: "\ea42";
+}
+.icon-circle-down:before {
+  content: "\ea43";
+}
+.icon-circle-left:before {
+  content: "\ea44";
+}
 .icon-checkbox-checked:before {
-  content: "\ea52"; }
-
+  content: "\ea52";
+}
 .icon-checkbox-unchecked:before {
-  content: "\ea53"; }
-
+  content: "\ea53";
+}
 .icon-radio-checked:before {
-  content: "\ea54"; }
-
+  content: "\ea54";
+}
 .icon-radio-unchecked:before {
-  content: "\ea56"; }
+  content: "\ea56";
+}
+.icon-block:before {
+  content: "\eae8";
+}
+.icon-stratis:before {
+  content: "\e900";
+}
+.icon-syncr:before {
+  content: "\e1";
+}
+.icon-bitcoin:before {
+  content: "\e2";
+}
 
 .btn-primary {
   color: #fff !important;
