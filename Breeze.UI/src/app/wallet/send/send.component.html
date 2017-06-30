@@ -1,6 +1,6 @@
 <div id="modalSend" tabindex="-1" role="dialog" aria-labelledby="modal_send" aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
+    <div>
       <div class="modal-header">
         <div class="bubble"><i class="icon-upload"></i></div>
       </div>
@@ -50,9 +50,11 @@
         </form>
         <!-- /form-->
       </div>
+      <div class="row d-flex justify-content-center">
+        <a><button type="button" class="btn btn-link col-12" (click)="activeModal.close('Close click')">Cancel</button></a>
+      </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-lg btn-primary" [disabled]="!sendForm.valid" (click)="send()">Send</button>
-        <button type="button" class="btn btn-lg btn-primary" (click)="activeModal.close('Close click')">Close</button>
       </div>
     </div>
   </div>

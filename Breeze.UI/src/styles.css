@@ -132,6 +132,10 @@ code {
 .badge.badge-success {
   color: #2ECCA9; }
 
+i.icon-earth {
+  font-size: 1.3em;
+}
+
 .status {
   position: fixed;
   bottom: 2%;
@@ -7505,6 +7509,8 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
     background-color: #eb850a;
     background-image: none;
     border-color: #e17f0a; }
+
+#content .bitcoin a.btn-link {color: #D0BF90 !important;}
 
 #content.bitcoin .navbar .nav-item .nav-link {
   color: #878685; }
