@@ -18,6 +18,7 @@ import { GlobalService } from './shared/services/global.service';
 
 import { SendComponent } from './wallet/send/send.component';
 import { ReceiveComponent } from './wallet/receive/receive.component';
+import { TransactionDetailsComponent } from './wallet/transaction-details/transaction-details.component';
 
 
 @NgModule({
@@ -36,11 +37,13 @@ import { ReceiveComponent } from './wallet/receive/receive.component';
     AppComponent,
     LoginComponent,
     SendComponent,
-    ReceiveComponent
+    ReceiveComponent,
+    TransactionDetailsComponent
   ],
   entryComponents: [
     SendComponent,
-    ReceiveComponent
+    ReceiveComponent,
+    TransactionDetailsComponent
   ],
   providers: [ ApiService, GlobalService ],
   bootstrap: [ AppComponent ]

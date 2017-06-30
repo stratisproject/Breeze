@@ -28,7 +28,14 @@ let mainWindow = null;
 function createWindow() {
 
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1200, height: 700, frame: true, minWidth: 1200, minHeight: 700, icon: "./assets/images/stratis-tray.png"});
+  mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 700,
+    frame: true,
+    minWidth: 1200,
+    minHeight: 700,
+    icon: __dirname + "/assets/images/stratis128x128.png"
+  });
 
    // and load the index.html of the app.
   mainWindow.loadURL(url.format({

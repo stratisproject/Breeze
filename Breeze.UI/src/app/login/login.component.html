@@ -1,48 +1,43 @@
-<div class="container col-md-8 offset-md-2">
-  <div class="row">
-    <div class="col">
-      <h1>Welcome to Breeze</h1>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col">
-      <form *ngIf="hasWallet" [formGroup]="openWalletForm" (ngSubmit)="onDecryptClicked()">
-        <div class="form-group">
-          <label>Select wallet name to open</label>
-          <select class="form-control" formControlName="selectWallet">
-            <option *ngFor="let wallet of wallets" [value]="wallet">{{wallet}}</option>
-          </select>
+<section id="breeze">
+  <div class="login d-flex align-items-center text-center">
+    <div class="container">
+      <h3 class="display-5">Welcome to Breeze</h3>
+      <div *ngIf="hasWallet">
+        <p class="lead">Please choose the wallet you would like to open</p>
+        <div class="row d-flex justify-content-center">
+          <form class="col-md-8 col-xs-12 text-left" [formGroup]="openWalletForm">
+            <div class="form-group">
+              <label class="col-12 row" for="Select">Wallet</label>
+              <select class="form-control custom-select col-12" formControlName="selectWallet">
+                <option *ngFor="let wallet of wallets" [value]="wallet">{{ wallet }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="text-left" for="Password">Password</label>
+              <input type="password" class="form-control" id="Password" formControlName="password" placeholder="Enter your password.">
+              <div *ngIf="formErrors.password" class="form-control-feedback">{{ formErrors.password }}</div>
+            </div>
+          </form>
         </div>
-        <div class="form-group">
-          <label>Please enter your password to decrypt your wallet</label>
-          <input class="form-control" type="password" formControlName="password" placeholder="Enter password here">
-          <div *ngIf="formErrors.password" class="alert alert-danger">{{formErrors.password}}</div>
+        <!-- /row-->
+        <div class="row d-flex justify-content-center">
+          <button type="submit" class="btn btn-darkgray btn-lg" [disabled]="!openWalletForm.valid" (click)="onDecryptClicked()">Decrypt</button>
         </div>
-        <div class="form-group">
-          <button type="submit" [disabled]="!openWalletForm.valid" class="btn">Decrypt</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col" *ngIf="hasWallet;else no_wallet">
-      If you like to create or restore a wallet please click the button below.
-    </div>
-  </div>
-  <div class="row">
-    <div class="col">
+      </div>
+      <!-- /row-->
+      <div class="row d-flex justify-content-center" *ngIf="hasWallet;else no_wallet">
+        <p class="lead">If you would like to create or restore a wallet please click the button below.</p>
+      </div>
       <ng-template #no_wallet>
-        <p> Looks like you're new here. Please create or restore a wallet.</p>
+        <p class="lead">Looks like you're new here. <br />Please create or restore a wallet.</p>
       </ng-template>
+      <div class="row d-flex justify-content-center">
+        <button type="button" class="btn btn-darkgray btn-lg" (click)="onCreateClicked()">Create or restore a wallet</button>
+      </div>
     </div>
+    <!-- /container-->
   </div>
-  <div class="row">
-    <div class="col">
-      <button type="button" (click)="onCreateClicked()" class="btn">Create or restore wallet</button>
-    </div>
-  </div>
-</div>
-
-
-
+  <!-- /login-->
+</section>
+<!-- /breeze-->
 

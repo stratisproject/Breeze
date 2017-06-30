@@ -5,7 +5,7 @@ import { GlobalService } from '../../shared/services/global.service';
 
 import { WalletInfo } from '../../shared/classes/wallet-info';
 
-import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'receive-component',
@@ -17,10 +17,15 @@ export class ReceiveComponent {
   constructor(private apiService: ApiService, private globalService: GlobalService, public activeModal: NgbActiveModal) {}
 
   private address: any = "";
+  private copied: boolean = false;
   private errorMessage: string;
 
   ngOnInit() {
     this.getUnusedReceiveAddresses();
+  }
+
+  private onCopiedClick() {
+    this.copied = true;
   }
 
   private getUnusedReceiveAddresses() {
@@ -33,6 +38,7 @@ export class ReceiveComponent {
           }
         },
         error => {
+          console.log(error);
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {
@@ -40,7 +46,7 @@ export class ReceiveComponent {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].message);
+              alert(error.json().errors[0].description);
             }
           }
         }

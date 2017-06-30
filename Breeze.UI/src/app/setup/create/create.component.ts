@@ -93,11 +93,12 @@ export class CreateComponent {
         response => {
           if (response.status >= 200 && response.status < 400){
             this.mnemonic = response.json();
-            alert("Your wallet has been created. Please write down your 12 word passphrase: \n" + this.mnemonic + "\nYou will be redirected to the decryption page.");
+            alert("Your wallet has been created.\n\nPlease write down your 12 word passphrase: \n" + this.mnemonic + "\n\nYou will be redirected to the decryption page.");
             this.router.navigate(['']);
           }
         },
         error => {
+          console.log(error);
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {
