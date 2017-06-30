@@ -116,8 +116,13 @@ function createTray() {
 
   let appIcon = null;
 
-  const iconName = process.platform === 'win32' ? './assets/images/breeze-logo.png' : './assets/images/breeze-logo.png';
-  const iconPath = path.join(__dirname, iconName);
+var iconPath
+if (os.platform == 'win32') {
+  iconPath = __dirname + '/assets/images/breeze-logo-tray.ico';
+} else {
+  iconPath = __dirname + '/assets/images/breeze-logo-tray.png';
+}
+
   appIcon = new Tray(iconPath);
   const contextMenu = Menu.buildFromTemplate([{
     label: 'Hide/Show',
