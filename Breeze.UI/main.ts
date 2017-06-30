@@ -34,7 +34,7 @@ function createWindow() {
     frame: true,
     minWidth: 1200,
     minHeight: 700,
-    icon: __dirname + "/assets/images/stratis128x128.png"
+    icon: __dirname + "/assets/images/breeze-logo.png"
   });
 
    // and load the index.html of the app.
@@ -116,7 +116,7 @@ function createTray() {
 
   let appIcon = null;
 
-  const iconName = process.platform === 'win32' ? './assets/images/stratis-tray.png' : './assets/images/stratis-tray.png';
+  const iconName = process.platform === 'win32' ? './assets/images/breeze-logo.png' : './assets/images/breeze-logo.png';
   const iconPath = path.join(__dirname, iconName);
   appIcon = new Tray(iconPath);
   const contextMenu = Menu.buildFromTemplate([{
