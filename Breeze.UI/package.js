@@ -10,6 +10,7 @@ const shouldUseAsar = argv.asar || false;
 const shouldBuildAll = argv.all || false;
 const arch = argv.arch || 'all';
 const platform = argv.platform || 'darwin';
+const path = argv.path || `app-builds`;
 
 const DEFAULT_OPTS = {
     dir: './dist',
@@ -19,7 +20,7 @@ const DEFAULT_OPTS = {
 };
 
 
-pack(platform, arch, function done(err, appPath) {
+pack(platform, arch, path, function done(err, appPath) {
     if (err) {
         console.log(err);
     } else {
@@ -28,7 +29,8 @@ pack(platform, arch, function done(err, appPath) {
 
 });
 
-function pack(plat, arch, cb) {
+function pack(plat, arch, path, cb) {
+   
     // there is no darwin ia32 electron
     if (plat === 'darwin' && arch === 'ia32') return;
 
@@ -52,7 +54,7 @@ function pack(plat, arch, cb) {
         prune: true,
         overwrite: true,
         all: shouldBuildAll,
-        out: `app-builds`
+        out: path
     });
 
     console.log(opts)
