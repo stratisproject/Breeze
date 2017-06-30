@@ -617,10 +617,10 @@ input.cmn-toggle-round-flat:checked + label:after {
       color: #366a96; }
   .login .container form {
     margin-bottom: 4em; }
-  .login .container .textback a {
-    color: #C0BECC;
+  .login .container .textback .text-back {
+    color: #C0BECC !important;
     text-decoration: underline; }
-    .login .container .textback a:hover {
+    .login .container .textback:hover {
       text-decoration: none; }
   .login .container .badge {
     margin: .5em auto; }
