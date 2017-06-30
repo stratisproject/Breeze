@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 var packager = require('electron-packager');
 const pkg = require('./package.json');
@@ -10,7 +10,7 @@ const shouldUseAsar = argv.asar || false;
 const shouldBuildAll = argv.all || false;
 const arch = argv.arch || 'all';
 const platform = argv.platform || 'darwin';
-const path = argv.path || `app-builds`;
+const path = argv.path || 'app-builds';
 
 const DEFAULT_OPTS = {
     dir: './dist',
