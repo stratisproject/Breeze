@@ -12,8 +12,10 @@ const os = require('os');
 var apiProcess;
 
 let serve;
+let debug;
 const args = process.argv.slice(1);
 serve = args.some(val => val === "--serve");
+debug = args.some(val => val === "--debug");
 
 if (serve) {
   require('electron-reload')(__dirname, {
@@ -44,7 +46,7 @@ function createWindow() {
     slashes: true
   }));
 
-  if (serve) {
+  if (serve || debug) {
     mainWindow.webContents.openDevTools();
   }
 
@@ -115,14 +117,19 @@ function startApi() {
       apipath = path.join(__dirname, '.\\assets\\daemon\\Breeze.Daemon.exe');
   }
 
+  //Handle spaces in paths
+  apipath = apipath.replace(/ /g, '\\ ');
+
   apiProcess = exec(apipath + ' light -testnet', {
       detached: true
-  });
-
-  apiProcess.stdout.on('data', (data) => {
-      writeLog(`stdout: ${data}`);
-      if (mainWindow == null) {
-          createWindow();
+  }, (error, stdout, stderr) => {
+      if (error) {
+          writeLogError(`exec error: ${error}`);
+          return;
+      }
+      if (debug) {
+        writeLog(`stdout: ${stdout}`);
+        writeLog(`stderr: ${stderr}`);
       }
   });
 }
@@ -157,5 +164,9 @@ if (os.platform() === 'win32') {
 };
 
 function writeLog(msg) {
-    console.log(msg);
+  console.log(msg);
+};
+
+function writeLogError(msg) {
+  console.error(msg);
 };
