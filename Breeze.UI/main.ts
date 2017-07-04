@@ -85,7 +85,7 @@ app.on('ready', function () {
   }
   createTray();
   createWindow();
-  if (os.plaform() === 'darwin'){
+  if (os.platform() === 'darwin'){
     createMenu();
   }
 });
@@ -173,10 +173,10 @@ function writeLogError(msg) {
 };
 
 function createMenu() {
-  var Menu = require("menu");
+  const Menu = electron.Menu;
 
   // Create the Application's main menu
-  var template = [{
+  var menuTemplate = [{
     label: "Application",
     submenu: [
         { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
@@ -195,5 +195,5 @@ function createMenu() {
     ]}
   ];
 
-  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 };
