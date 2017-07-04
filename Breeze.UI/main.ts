@@ -9,8 +9,6 @@ const path = require('path');
 const url = require('url');
 const os = require('os');
 
-var apiProcess;
-
 let serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === "--serve");
@@ -71,7 +69,8 @@ function createWindow() {
       req.write('');
       req.end();
       }
-    });
+    }
+  );
 }
 
 // This method will be called when Electron has finished
@@ -86,7 +85,10 @@ app.on('ready', function () {
   }
   createTray();
   createWindow();
-})
+  if (os.platform() === 'darwin'){
+    createMenu();
+  }
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -107,18 +109,19 @@ app.on('activate', function () {
 });
 
 function startApi() {
+  var apiProcess;
   const exec = require('child_process').exec;
 
   //Start Breeze Daemon
-  let apipath = path.join(__dirname, './/assets//daemon//Breeze.Daemon');
+  let apiPath = path.join(__dirname, './/assets//daemon//Breeze.Daemon');
+  apiPath = apiPath.replace(/ /g, '// ');
   if (os.platform() === 'win32') {
-      apipath = path.join(__dirname, '.\\assets\\daemon\\Breeze.Daemon.exe');
+      apiPath = path.join(__dirname, '.\\assets\\daemon\\Breeze.Daemon.exe');
+      //Handle spaces in paths
+    apiPath = apiPath.replace(/ /g, '\\ ');
   }
 
-  //Handle spaces in paths
-  apipath = apipath.replace(/ /g, '\\ ');
-
-  apiProcess = exec(apipath + ' light -testnet', {
+  apiProcess = exec(apiPath + ' light -testnet', {
       detached: true
   }, (error, stdout, stderr) => {
       if (error) {
@@ -167,4 +170,30 @@ function writeLog(msg) {
 
 function writeLogError(msg) {
   console.error(msg);
+};
+
+function createMenu() {
+  const Menu = electron.Menu;
+
+  // Create the Application's main menu
+  var menuTemplate = [{
+    label: "Application",
+    submenu: [
+        { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
+        { type: "separator" },
+        { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
+    ]}, {
+    label: "Edit",
+    submenu: [
+        { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+        { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+        { type: "separator" },
+        { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+        { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+        { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+        { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+    ]}
+  ];
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 };
