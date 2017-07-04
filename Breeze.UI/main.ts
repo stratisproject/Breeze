@@ -61,15 +61,15 @@ function createWindow() {
     if (process.platform !== 'darwin') {
       var http = require('http');
       const options = {
-        hostname: 'localhost',  
+        hostname: 'localhost',
         port: 5000,
         path: '/api/node/shutdown',
         method: 'POST'
       };
 
-      const req = http.request(options, (res) => {});  
+      const req = http.request(options, (res) => {});
       req.write('');
-      req.end();    
+      req.end();
       }
     });
 }
