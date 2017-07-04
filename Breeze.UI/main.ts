@@ -115,14 +115,19 @@ function startApi() {
       apipath = path.join(__dirname, '.\\assets\\daemon\\Breeze.Daemon.exe');
   }
 
+  //Handle spaces in paths
+  apipath = apipath.replace(/ /g, '\\ ');
+
   apiProcess = exec(apipath + ' light -testnet', {
       detached: true
-  });
-
-  apiProcess.stdout.on('data', (data) => {
-      writeLog(`stdout: ${data}`);
-      if (mainWindow == null) {
-          createWindow();
+  }, (error, stdout, stderr) => {
+      if (error) {
+          writeLogError(`exec error: ${error}`);
+          return;
+      }
+      if (serve) {
+        writeLog(`stdout: ${stdout}`);
+        writeLog(`stderr: ${stderr}`);
       }
   });
 }
@@ -157,5 +162,9 @@ if (os.platform() === 'win32') {
 };
 
 function writeLog(msg) {
-    console.log(msg);
+  console.log(msg);
+};
+
+function writeLogError(msg) {
+  console.error(msg);
 };
