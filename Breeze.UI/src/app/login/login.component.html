@@ -14,7 +14,7 @@
             </div>
             <div class="form-group">
               <label class="text-left" for="Password">Password</label>
-              <input type="password" class="form-control" id="Password" formControlName="password" placeholder="Enter your password.">
+              <input type="password" class="form-control" id="Password" formControlName="password" placeholder="Enter your password." (keyup.enter)="onEnter()">
               <div *ngIf="formErrors.password" class="form-control-feedback">{{ formErrors.password }}</div>
             </div>
           </form>

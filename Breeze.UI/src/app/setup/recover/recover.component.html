@@ -5,6 +5,12 @@
       <h3 class="display-5">Welcome</h3>
       <div class="row d-flex justify-content-center">
         <form class="col-md-8 col-xs-12 text-left" [formGroup]="recoverWalletForm">
+          <!--<div class="form-group has-success">-->
+          <div class="form-group">
+            <label class="col-12 row" for="walletName">Name</label>
+            <input type="text" class="form-control form-control-success" formControlName="walletName" id="walletName" placeholder="Enter a wallet name.">
+            <div *ngIf="formErrors.walletName" class="form-control-feedback">{{ formErrors.walletName }}</div>
+          </div>
           <div class="form-group">
             <label class="col-12 row" for="creationDate">Creation Date (optional)</label>
             <material-datepicker class="form-control" [(date)]="creationDate"></material-datepicker>
@@ -18,12 +24,6 @@
             <label class="text-left" for="walletPassword">Password</label>
             <input type="password" class="form-control form-control-success" formControlName="walletPassword" id="walletPassword" placeholder="Enter a password.">
             <div *ngIf="formErrors.walletPassword" class="form-control-feedback">{{ formErrors.walletPassword }}</div>
-          </div>
-          <!--<div class="form-group has-success">-->
-          <div class="form-group">
-            <label class="col-12 row" for="walletName">Name</label>
-            <input type="text" class="form-control form-control-success" formControlName="walletName" id="walletName" placeholder="Enter a wallet name.">
-            <div *ngIf="formErrors.walletName" class="form-control-feedback">{{ formErrors.walletName }}</div>
           </div>
           <div class="form-group">
             <label class="text-left" for="walletNetwork">Network</label>
