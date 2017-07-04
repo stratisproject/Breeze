@@ -80,6 +80,12 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['/setup']);
   }
 
+  private onEnter() {
+    if (this.openWalletForm.valid) {
+      this.onDecryptClicked();
+    }
+  }
+
   private setGlobalWalletName(walletName: string) {
     this.globalService.setWalletName(walletName);
   }
