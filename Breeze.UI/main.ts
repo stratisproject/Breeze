@@ -12,10 +12,8 @@ const os = require('os');
 var apiProcess;
 
 let serve;
-let debug;
 const args = process.argv.slice(1);
 serve = args.some(val => val === "--serve");
-debug = args.some(val => val === "--debug");
 
 if (serve) {
   require('electron-reload')(__dirname, {
@@ -46,7 +44,7 @@ function createWindow() {
     slashes: true
   }));
 
-  if (serve || debug) {
+  if (serve) {
     mainWindow.webContents.openDevTools();
   }
 
@@ -127,7 +125,7 @@ function startApi() {
           writeLogError(`exec error: ${error}`);
           return;
       }
-      if (debug) {
+      if (serve) {
         writeLog(`stdout: ${stdout}`);
         writeLog(`stderr: ${stderr}`);
       }
