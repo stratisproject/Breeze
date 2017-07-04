@@ -1,0 +1,122 @@
+// Add Lato google font
+@font-face {
+	font-family: "Lato";
+	src: url("./assets/fonts/Lato-Regular.ttf") format("truetype")
+}
+@font-face {
+	font-family: "Lato-LightItalic";
+	src: url("./assets/fonts/Lato-LightItalic.ttf") format("truetype")
+}
+@font-face {
+	font-family: "Lato-Light";
+	src: url("./assets/fonts/Lato-Light.ttf") format("truetype")
+}
+@font-face {
+	font-family: "Lato-Italic";
+	src: url("./assets/fonts/Lato-Italic.ttf") format("truetype")
+}
+@font-face {
+	font-family: "Lato-HairlineItalic";
+	src: url("./assets/fonts/Lato-HairlineItalic.ttf") format("truetype")
+}
+@font-face {
+	font-family: "Lato-Hairline";
+	src: url("./assets/fonts/Lato-Hairline.ttf") format("truetype")
+}
+@font-face {
+	font-family: "Lato-BoldItalic";
+	src: url("./assets/fonts/Lato-BoldItalic.ttf") format("truetype")
+}
+@font-face {
+	font-family: "Lato-Bold";
+	src: url("./assets/fonts/Lato-Bold.ttf") format("truetype")
+}
+@font-face {
+	font-family: "Lato-BlackItalic";
+	src: url("./assets/fonts/Lato-BlackItalic.ttf") format("truetype")
+}
+@font-face {
+	font-family: "Lato-Black";
+	src: url("./assets/fonts/Lato-Black.ttf") format("truetype")
+}
+
+// icons
+@font-face {
+  font-family: 'icon';
+  src:  url('./assets/fonts/icon.eot?uu062v');
+  src:  url('./assets/fonts/icon.eot?uu062v#iefix') format('embedded-opentype'),
+    url('./assets/fonts/icon.ttf?uu062v') format('truetype'),
+    url('./assets/fonts/icon.woff?uu062v') format('woff'),
+    url('./assets/fonts/icon.svg?uu062v#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.icon-stratis:before {
+  content: "\e900";
+}
+.icon-syncr:before {
+  content: "\e902";
+}
+.icon-bitcoin:before {
+  content: "\e904";
+}
+.icon-block:before {
+  content: "\e92e";
+}
+.icon-coin-dollar:before {
+  content: "\e93b";
+}
+.icon-coin-euro:before {
+  content: "\e93c";
+}
+.icon-coin-pound:before {
+  content: "\e93d";
+}
+.icon-database:before {
+  content: "\e964";
+}
+.icon-settings:before {
+  content: "\e994";
+}
+.icon-download:before {
+  content: "\e9c2";
+}
+.icon-upload:before {
+  content: "\e9c3";
+}
+.icon-cancel-circle:before {
+  content: "\ea0d";
+}
+.icon-checkmark2:before {
+  content: "\ea11";
+}
+.icon-checkbox-checked:before {
+  content: "\ea52";
+}
+.icon-checkbox-unchecked:before {
+  content: "\ea53";
+}
+.icon-radio-checked:before {
+  content: "\ea54";
+}
+.icon-radio-unchecked:before {
+  content: "\ea56";
+}

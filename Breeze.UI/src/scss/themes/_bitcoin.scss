@@ -1,0 +1,105 @@
+// custom variables (it will overwrite the basic variables)
+
+
+/////////////////////////////
+//
+//    VARIABLES
+//
+/////////////////////////////
+
+// links
+$link-color : #D0BF90;
+
+// buttons
+$btn-primary-color:              $white !important;
+$btn-primary-bg:                 $brand-primary !default;
+$btn-primary-border:             $btn-primary-bg !default;
+
+$btn-secondary-color:            $gray-dark !default;
+$btn-secondary-bg:               $white !default;
+$btn-secondary-border:           $gray-light !default;
+
+.btn-primary {
+  @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
+}
+
+
+/////////////////////////////
+//
+//    CUSTOM
+//
+/////////////////////////////
+
+#content {
+  &.bitcoin {
+
+    // NAVBAR
+    .navbar {
+      .nav-item {
+        .nav-link {
+          color: $gray-dark;
+          &:hover {color: lighten($brand-primary,20%);}
+        }
+        &.active {
+          border-bottom: 2px solid $brand-primary;
+          .nav-link {color: $brand-primary;}
+        }
+      }
+    }
+
+    // JUMBOTRON
+    .jumbotron {
+      i {
+        color: $brand-primary;
+        font-size: 1.75em;
+        margin-right: .3em;
+      }
+    }
+
+    // TRANSACTIONS
+    #transaction {
+      a {color: $link-color;}
+      // Cards
+      .card {
+        border: $card-border-width solid $teal;
+        color: #BFBFBF !important;
+        font-size: .85em;
+        .amount {
+          color: $black;
+          font-weight: 600;
+          small {
+            font-size: 70%;
+            margin-right: 1rem;
+          }
+        }
+        &:hover {
+          border-color: #FCDCB5 !important;
+          background-color: #FEFDFA !important;
+        }
+      }
+    }
+
+  }
+}
+
+// MODAL
+.modal-header {
+  .bubble {
+    i {color: $brand-primary;}
+  }
+}
+#modalDetail {
+  a {
+    color: $link-color;
+    text-decoration: underline;
+    &:hover {color: lighten($link-color ,10%); text-decoration: none;}
+  }
+}
+#modalSend, #modalReceive {
+  .float-right {a {color: $link-color !important; text-decoration: underline; &:hover {text-decoration: none;}}}
+}
+#modalCheck {
+  .btn-link, .card {
+    a {color: $link-color !important;}
+  }
+}
