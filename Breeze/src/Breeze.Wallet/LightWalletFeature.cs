@@ -13,6 +13,7 @@ using Stratis.Bitcoin.Consensus.Deployments;
 using Stratis.Bitcoin.Utilities;
 using Stratis.Bitcoin.Wallet;
 using Stratis.Bitcoin.Wallet.Controllers;
+using Stratis.Bitcoin.Common.Hosting;
 
 namespace Breeze.Wallet
 {
@@ -24,10 +25,10 @@ namespace Breeze.Wallet
         private readonly ConcurrentChain chain;
         private readonly NodeDeployments nodeDeployments;
         private readonly IAsyncLoopFactory asyncLoopFactory;
-        private readonly FullNode.CancellationProvider cancellationProvider;
+		private readonly INodeLifetime nodeLifetime;
 
-        public LightWalletFeature(IWalletSyncManager walletSyncManager, IWalletManager walletManager, IConnectionManager connectionManager, 
-            ConcurrentChain chain, NodeDeployments nodeDeployments, IAsyncLoopFactory asyncLoopFactory, FullNode.CancellationProvider cancellationProvider)
+		public LightWalletFeature(IWalletSyncManager walletSyncManager, IWalletManager walletManager, IConnectionManager connectionManager, 
+            ConcurrentChain chain, NodeDeployments nodeDeployments, IAsyncLoopFactory asyncLoopFactory, INodeLifetime nodeLifetime)
         {
             this.walletSyncManager = walletSyncManager;
             this.walletManager = walletManager;
@@ -35,7 +36,7 @@ namespace Breeze.Wallet
             this.chain = chain;
             this.nodeDeployments = nodeDeployments;
             this.asyncLoopFactory = asyncLoopFactory;
-            this.cancellationProvider = cancellationProvider;
+			this.nodeLifetime = nodeLifetime;
         }
 
         public override void Start()
@@ -50,7 +51,7 @@ namespace Breeze.Wallet
 
         public void StartDeploymentsChecksLoop()
         {
-            var loopToken = CancellationTokenSource.CreateLinkedTokenSource(this.cancellationProvider.Cancellation.Token);
+            var loopToken = CancellationTokenSource.CreateLinkedTokenSource(this.nodeLifetime.ApplicationStopping);
             this.asyncLoopFactory.Run("LightWalletFeature.CheckDeployments", token =>
                 {
                     if(!this.chain.IsDownloaded())

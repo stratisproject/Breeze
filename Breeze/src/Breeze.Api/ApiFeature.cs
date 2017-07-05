@@ -57,7 +57,7 @@ namespace Breeze.Api
 
 	                    return Task.CompletedTask;
 	                },
-	                this.fullNode.GlobalCancellation.Cancellation.Token,
+	                this.fullNode.NodeLifetime.ApplicationStopping,
 	                repeatEvery: this.apiFeatureOptions.KeepaliveMonitor?.KeepaliveInterval,
 	                startAfter: TimeSpans.Minute);
 	        }
