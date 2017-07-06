@@ -141,10 +141,18 @@ function createTray() {
 
 var iconPath
 if (os.platform() === 'win32') {
-  iconPath = '.\src\assets\images\breeze-logo-tray.ico';
+  if (serve) {
+    iconPath = '.\src\assets\images\breeze-logo-tray.ico';
+  } else {
+    iconPath = path.join(__dirname + '\\assets\\images\\breeze-logo-tray.png');
+  }
+
 } else {
-  // iconPath = path.join(__dirname + '//assets//images//breeze-logo-tray.png');
-  iconPath = './src/assets/images/breeze-logo-tray.png';
+  if (serve) {
+    iconPath = './src/assets/images/breeze-logo-tray.png';
+  } else {
+    iconPath = path.join(__dirname + '//assets//images//breeze-logo-tray.png');
+  }
 }
 
   appIcon = new Tray(iconPath);
