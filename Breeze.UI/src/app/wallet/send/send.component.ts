@@ -97,12 +97,19 @@ export class SendComponent {
           }
         },
         error => {
-          if (error.status >= 400) {
-            this.errorMessage = error;
-            console.log(this.errorMessage);
+          console.log(error);
+          if (error.status === 0) {
+            alert("Something went wrong while connecting to the API. Please restart the application.");
+          } else if (error.status >= 400) {
+            if (!error.json().errors[0]) {
+              console.log(error);
+            }
+            else {
+              alert(error.json().errors[0].message);
+            }
           }
         },
-        () => this.sendTransaction(this.responseMessage.hex)
+        () => this.sendTransaction("123")
       )
     ;
   };
@@ -127,7 +134,6 @@ export class SendComponent {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400){
-            console.log(response.status);
             this.activeModal.close("Close clicked");
           }
         },
@@ -140,7 +146,7 @@ export class SendComponent {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].description);
+              alert(error.json().errors[0].message);
             }
           }
         }
