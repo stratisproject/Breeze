@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs/Subscription';
 @Component({
   selector: 'status-bar',
   templateUrl: './status-bar.component.html',
-  styleUrls: ['./status-bar.component.scss']
+  styleUrls: ['./status-bar.component.css']
 })
 export class StatusBarComponent implements OnInit {
 
@@ -46,15 +46,15 @@ export class StatusBarComponent implements OnInit {
 
             if(!this.isChainSynced) {
               this.percentSynced = "syncing...";
-            } 
+            }
             else {
               this.percentSyncedNumber = ((this.lastBlockSyncedHeight / this.chainTip) * 100);
               if (this.percentSyncedNumber.toFixed(0) === "100" && this.lastBlockSyncedHeight != this.chainTip) {
                 this.percentSyncedNumber = 99;
               }
 
-              this.percentSynced = this.percentSyncedNumber.toFixed(0) + "%";  
-            } 
+              this.percentSynced = this.percentSyncedNumber.toFixed(0) + "%";
+            }
           }
         },
         error => {
