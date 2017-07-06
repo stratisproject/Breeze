@@ -10,12 +10,15 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class TransactionDetailsComponent implements OnInit {
 
   @Input() transaction;
+  constructor(public activeModal: NgbActiveModal) {}
 
-  constructor(public activeModal: NgbActiveModal) {
-
-  }
+  private copied: boolean = false;
 
   ngOnInit() {
+  }
+
+  private onCopiedClick() {
+    this.copied = true;
   }
 
 }

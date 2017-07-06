@@ -29,6 +29,8 @@
         <ul class="list-inline row">
           <li class="list-inline-item col blockLabel">Transaction ID</li>
           <li class="list-inline-item col-9 blockText blockID"><code>{{ transaction.id }}</code></li>
+          <span class="float-right"><a ngxClipboard [cbContent]="transaction.id" (click)="onCopiedClick()">copy</a></span>
+          <span class="badge badge-success list-inline-item col blockLabel" *ngIf="copied">The transaction ID has been copied to your clipboard.</span>
         </ul>
       </div>
       <div class="modal-footer">

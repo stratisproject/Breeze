@@ -56,7 +56,7 @@ function createWindow() {
 
   // Emitted when the window is going to close.
   mainWindow.on('close', function () {
-    if (process.platform !== 'darwin') {
+    if (process.platform !== 'darwin' && !serve) {
       var http = require('http');
       const options = {
         hostname: 'localhost',
@@ -141,9 +141,18 @@ function createTray() {
 
 var iconPath
 if (os.platform() === 'win32') {
-  iconPath = __dirname + '/assets/images/breeze-logo-tray.ico';
+  if (serve) {
+    iconPath = '.\src\assets\images\breeze-logo-tray.ico';
+  } else {
+    iconPath = path.join(__dirname + '\\assets\\images\\breeze-logo-tray.png');
+  }
+
 } else {
-  iconPath = __dirname + '/assets/images/breeze-logo-tray.png';
+  if (serve) {
+    iconPath = './src/assets/images/breeze-logo-tray.png';
+  } else {
+    iconPath = path.join(__dirname + '//assets//images//breeze-logo-tray.png');
+  }
 }
 
   appIcon = new Tray(iconPath);
