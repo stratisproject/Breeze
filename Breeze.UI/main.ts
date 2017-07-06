@@ -113,15 +113,12 @@ function startApi() {
   const exec = require('child_process').exec;
 
   //Start Breeze Daemon
-  let apiPath = path.join(__dirname, './/assets//daemon//Breeze.Daemon');
-  apiPath = apiPath.replace(/ /g, '// ');
+  let apiPath = path.join(__dirname, '".//assets//daemon//Breeze.Daemon"');
   if (os.platform() === 'win32') {
-      apiPath = path.join(__dirname, '.\\assets\\daemon\\Breeze.Daemon.exe');
-      //Handle spaces in paths
-    apiPath = apiPath.replace(/ /g, '\\ ');
+      apiPath = path.join(__dirname, '".\\assets\\daemon\\Breeze.Daemon.exe"');
   }
 
-  apiProcess = exec(apiPath + ' light -testnet', {
+  apiProcess = exec('"' + apiPath + '" light -testnet', {
       detached: true
   }, (error, stdout, stderr) => {
       if (error) {
