@@ -24,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StratisBitcoinFullNode\Stratis.Bitcoin.Common\Stratis.Bitcoin.Common.csproj" />
-    <ProjectReference Include="..\..\..\..\StratisBitcoinFullNode\Stratis.Bitcoin\Stratis.Bitcoin.csproj" />
+    <ProjectReference Include="..\..\..\StratisBitcoinFullNode\Stratis.Bitcoin.Common\Stratis.Bitcoin.Common.csproj" />
+    <ProjectReference Include="..\..\..\StratisBitcoinFullNode\Stratis.Bitcoin\Stratis.Bitcoin.csproj" />
     <ProjectReference Include="..\NTumbleBit\NTumbleBit.csproj" />
   </ItemGroup>
 
