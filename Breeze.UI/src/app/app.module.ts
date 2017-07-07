@@ -19,6 +19,7 @@ import { GlobalService } from './shared/services/global.service';
 import { SendComponent } from './wallet/send/send.component';
 import { ReceiveComponent } from './wallet/receive/receive.component';
 import { TransactionDetailsComponent } from './wallet/transaction-details/transaction-details.component';
+import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout-confirmation.component';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { TransactionDetailsComponent } from './wallet/transaction-details/transa
   declarations: [
     AppComponent,
     LoginComponent,
+    LogoutConfirmationComponent,
     SendComponent,
     ReceiveComponent,
     TransactionDetailsComponent
@@ -43,7 +45,8 @@ import { TransactionDetailsComponent } from './wallet/transaction-details/transa
   entryComponents: [
     SendComponent,
     ReceiveComponent,
-    TransactionDetailsComponent
+    TransactionDetailsComponent,
+    LogoutConfirmationComponent
   ],
   providers: [ ApiService, GlobalService ],
   bootstrap: [ AppComponent ]
