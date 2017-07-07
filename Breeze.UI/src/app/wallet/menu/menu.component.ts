@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+
+import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confirmation.component';
 
 @Component({
   selector: 'app-menu',
@@ -7,9 +10,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./menu.component.css'],
 })
 export class MenuComponent {
-  constructor(private router: Router) {}
+  constructor(private modalService: NgbModal) {}
 
   private logOut() {
-    this.router.navigate(['/login']);
+    const modalRef = this.modalService.open(LogoutConfirmationComponent);
   }
 }

@@ -5,7 +5,7 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'transaction-details',
   templateUrl: './transaction-details.component.html',
-  styleUrls: ['./transaction-details.component.scss']
+  styleUrls: ['./transaction-details.component.css']
 })
 export class TransactionDetailsComponent implements OnInit {
 
