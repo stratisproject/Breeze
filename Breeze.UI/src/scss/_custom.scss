@@ -34,12 +34,12 @@ code {color: $spacegray !important;}
 #content {
     width: 100%;
     position: relative;
-    padding-left: 70px;
+    padding: 63px 0 70px 70px;
 }
 
 // sidebar
 #sidebar {
-  z-index: 1000;
+  z-index: 1035;
   position: fixed;
   width: 70px;
   height: 100%;
@@ -65,6 +65,7 @@ code {color: $spacegray !important;}
       }
       &:hover {
         opacity: .8;
+        cursor: pointer !important;
         .bar {opacity: 0;}
       }
       img {width: 42px;}
@@ -90,6 +91,9 @@ code {color: $spacegray !important;}
     }
   }
 }
+
+// NAVBAR
+#navbarBreeze {}
 
 // jumbotron
 .jumbotron {
@@ -439,8 +443,9 @@ $curve: cubic-bezier(0.650, 0.000, 0.450, 1.000);
       text-transform: uppercase;
     }
     .lead {
-      font-size: 1.25em;
+      font-size: 1.15em;
       color: $blue;
+      font-weight: 400;
       line-height: 1.25em;
       margin: 2em 0;
     }
@@ -453,7 +458,7 @@ $curve: cubic-bezier(0.650, 0.000, 0.450, 1.000);
       text-decoration: underline;
       &:hover {
         text-decoration: none;
-        color: lighten($darkgray,20%);
+        color: lighten($darkgray,10%);
       }
     }
     form {margin-bottom: 4em;}
