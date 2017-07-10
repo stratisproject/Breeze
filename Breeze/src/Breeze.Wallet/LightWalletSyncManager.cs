@@ -24,11 +24,19 @@ namespace Breeze.Wallet
         private readonly Signals signals;
         private ChainedBlock walletTip;
 		private readonly INodeLifetime nodeLifetime;
+	    private readonly IAsyncLoopFactory asyncLoopFactory;
 
-		public ChainedBlock WalletTip => this.walletTip;
+	    public ChainedBlock WalletTip => this.walletTip;
 
-        public LightWalletSyncManager(ILoggerFactory loggerFactory, IWalletManager walletManager, ConcurrentChain chain, Network network,
-            BlockNotification blockNotification, Signals signals, INodeLifetime nodeLifetime)
+        public LightWalletSyncManager(
+			ILoggerFactory loggerFactory, 
+			IWalletManager walletManager, 
+			ConcurrentChain chain, 
+			Network network,
+            BlockNotification blockNotification, 
+			Signals signals, 
+			INodeLifetime nodeLifetime,
+			IAsyncLoopFactory asyncLoopFactory)
         {
             this.walletManager = walletManager as WalletManager;
             this.chain = chain;
@@ -37,6 +45,7 @@ namespace Breeze.Wallet
             this.coinType = (CoinType)network.Consensus.CoinType;
             this.logger = loggerFactory.CreateLogger(this.GetType().FullName);
             this.nodeLifetime = nodeLifetime;
+	        this.asyncLoopFactory = asyncLoopFactory;
         }
 
         /// <inheritdoc />
@@ -148,7 +157,7 @@ namespace Breeze.Wallet
             // if the chain is already past the date we want to sync from, we don't wait, even though the chain might not be fully downloaded.
             if (this.chain.Tip.Header.BlockTime.LocalDateTime < date)
             {
-                AsyncLoop.RunUntil("WalletFeature.DownloadChain", this.nodeLifetime.ApplicationStopping,
+                this.asyncLoopFactory.RunUntil("WalletFeature.DownloadChain", this.nodeLifetime.ApplicationStopping,
                     () => this.chain.Tip.Header.BlockTime.LocalDateTime >= date,
                     () => this.StartSync(this.chain.GetHeightAtTime(date)),
                         (ex) =>
@@ -174,7 +183,7 @@ namespace Breeze.Wallet
             // if the chain is already past the height we want to sync from, we don't wait, even though the chain might  not be fully downloaded.
             if (this.chain.Tip.Height < height)
             {
-                AsyncLoop.RunUntil("WalletFeature.DownloadChain", this.nodeLifetime.ApplicationStopping,
+	            this.asyncLoopFactory.RunUntil("WalletFeature.DownloadChain", this.nodeLifetime.ApplicationStopping,
                     () => this.chain.Tip.Height >= height,
                     () => this.StartSync(height),
                     (ex) =>
