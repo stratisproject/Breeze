@@ -50,7 +50,7 @@
       <h5 class="text-uppercase">Latest Transactions</h5>
       <div *ngIf="transactions; else noTransactions">
         <div *ngFor="let transaction of transactions; let i=index">
-          <div class="card" *ngIf="i<3">
+          <div class="card" *ngIf="i<3" (click)="openTransactionDetailDialog(transaction)">
             <div class="card-block text-nowrap">
               <ul class="list-inline row">
                 <li class="list-inline-item hidden-xs-down col text-uppercase align-bottom">{{ transaction.type }}</li>

@@ -26,7 +26,7 @@ export class SendComponent {
   private buildSendForm(): void {
     this.sendForm = this.fb.group({
       "address": ["", Validators.required],
-      "amount": ["", Validators.required],
+      "amount": ["", Validators.compose([Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]{0,8})?$/)])],
       "fee": [2, Validators.required],
       "password": ["", Validators.required]
     });
@@ -64,7 +64,8 @@ export class SendComponent {
       'required': 'An address is required.'
     },
     'amount': {
-      'required': 'An amount is required.'
+      'required': 'An amount is required.',
+      'pattern': 'Enter a valid amount. Only positive numbers are allowed.'
     },
     'fee': {
       'required': 'A fee is required.'
