@@ -1,5 +1,5 @@
 | Windows | 
-| :---- | :------ | :---- |
+| :---- |
 [![Windows build status][1]][2] |
 
 [1]: https://ci.appveyor.com/api/projects/status/j1evinfefeetctvk?svg=true
