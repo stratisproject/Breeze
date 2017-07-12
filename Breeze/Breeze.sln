@@ -8,7 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "global", "global", "{2FF3130A-E8F3-4E0B-8733-B34C4A19910C}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		..\.travis.yml = ..\.travis.yml
 		..\appveyor.yml = ..\appveyor.yml
+		..\build.sh = ..\build.sh
 		global.json = global.json
 	EndProjectSection
 EndProject
