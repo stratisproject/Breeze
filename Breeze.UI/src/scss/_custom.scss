@@ -34,7 +34,7 @@ code {color: $spacegray !important;}
 #content {
     width: 100%;
     position: relative;
-    padding: 63px 0 70px 70px;
+    padding: 0 0 70px 70px;
 }
 
 // sidebar
@@ -120,6 +120,7 @@ code {color: $spacegray !important;}
 
 // transactions
 #transaction {
+  padding-top: 2em;
   h5 {
     font-size: .85em;
     color: $gray-dark;

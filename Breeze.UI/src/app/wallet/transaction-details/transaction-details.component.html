@@ -8,11 +8,11 @@
         <h5 class="modal-title text-uppercase" id="modalDetail">Transaction Details</h5>
         <ul class="list-inline row">
           <li class="list-inline-item col blockLabel">Type</li>
-          <li class="list-inline-item col-9 blockText">{{ transaction.type }}</li>
+          <li class="list-inline-item col-9 blockText text-capitalize">{{ transaction.type }}</li>
         </ul>
         <ul class="list-inline row">
           <li class="list-inline-item col blockLabel">Amount</li>
-          <li class="list-inline-item col-9 blockText"><strong class="text-success">{{transaction.amount | coinNotation }}</strong></li>
+          <li class="list-inline-item col-9 blockText text-success">{{transaction.amount | coinNotation }}</li>
         </ul>
         <!--<ul class="list-inline row">
           <li class="list-inline-item col blockLabel">From</li>
@@ -20,17 +20,17 @@
         </ul>-->
         <ul class="list-inline row">
           <li class="list-inline-item col blockLabel">Date</li>
-          <li class="list-inline-item col-9 blockText"><small>{{ transaction.timestamp * 1000 | date:'medium' }}</small></li>
+          <li class="list-inline-item col-9 blockText">{{ transaction.timestamp * 1000 | date:'medium' }}</li>
         </ul>
         <ul class="list-inline row">
           <li class="list-inline-item col blockLabel">Block</li>
           <li class="list-inline-item col-9 blockText">#{{ transaction.confirmedInBlock }}</li>
         </ul>
         <ul class="list-inline row">
-          <li class="list-inline-item col blockLabel">Transaction ID</li>
-          <li class="list-inline-item col-9 blockText blockID"><code>{{ transaction.id }}</code></li>
+          <li class="list-inline-item col blockLabel my-3">Transaction ID</li>
+          <li class="list-inline-item col-10 blockID"><code>{{ transaction.id }}</code></li>
           <span class="float-right"><a ngxClipboard [cbContent]="transaction.id" (click)="onCopiedClick()">copy</a></span>
-          <span class="badge badge-success list-inline-item col blockLabel" *ngIf="copied">The transaction ID has been copied to your clipboard.</span>
+          <span class="badge badge-success list-inline-item col" *ngIf="copied">The transaction ID has been copied to your clipboard.</span>
         </ul>
       </div>
       <div class="modal-footer">

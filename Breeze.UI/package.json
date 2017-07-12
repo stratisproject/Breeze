@@ -69,7 +69,7 @@
     "cross-env": "5.0.1",
     "css-loader": "^0.28.4",
     "cssnano": "^3.10.0",
-    "electron": "^1.6.11",
+    "electron": "^1.7.4",
     "electron-packager": "^8.7.2",
     "electron-reload": "1.2.1",
     "exports-loader": "^0.6.4",
@@ -102,12 +102,12 @@
     "source-map-loader": "^0.2.1",
     "style-loader": "^0.18.2",
     "stylus-loader": "^3.0.1",
-    "ts-node": "~3.1.0",
-    "tslint": "~5.4.3",
+    "ts-node": "~3.2.0",
+    "tslint": "~5.5.0",
     "typescript": "2.3.4",
     "url-loader": "^0.5.9",
     "webdriver-manager": "12.0.6",
-    "webpack": "^3.0.0",
-    "webpack-dev-server": "~2.5.0"
+    "webpack": "^3.1.0",
+    "webpack-dev-server": "~2.5.1"
   }
 }

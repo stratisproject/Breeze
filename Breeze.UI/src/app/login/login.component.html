@@ -5,7 +5,7 @@
       <div *ngIf="hasWallet">
         <p class="lead">Please choose the wallet you would like to open</p>
         <div class="row d-flex justify-content-center">
-          <form class="col-md-8 col-xs-12 text-left" [formGroup]="openWalletForm">
+          <form class="col-md-6 col-xs-12 text-left" [formGroup]="openWalletForm">
             <div class="form-group">
               <label class="col-12 row" for="Select">Wallet</label>
               <select class="form-control custom-select col-12" formControlName="selectWallet">
@@ -32,7 +32,7 @@
         <p class="lead">Looks like you're new here. <br />Please create or restore a wallet.</p>
       </ng-template>
       <div class="row d-flex justify-content-center">
-        <button type="button" class="btn btn-darkgray btn-lg" (click)="onCreateClicked()">Create or restore a wallet</button>
+        <button type="button" class="btn btn-linkgray btn-lg" (click)="onCreateClicked()">Create or restore a wallet</button>
       </div>
     </div>
     <!-- /container-->
@@ -40,4 +40,3 @@
   <!-- /login-->
 </section>
 <!-- /breeze-->
-
