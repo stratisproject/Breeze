@@ -5685,13 +5685,16 @@ button.close {
   margin: 30px;
 }
 
+.modalBg {
+  background-color: #fff;
+  border: 1px solid rgba(152, 163, 179, 0.5);
+}
+
 .modal-content {
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid rgba(152, 163, 179, 0.5);
   border-radius: 0.3rem;
   outline: 0;
 }
