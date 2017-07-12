@@ -26,21 +26,11 @@ code {
 }
 
 /* Mozilla Firefox 4 to 18 */
-.form-control::-moz-placeholder {
-  color: #d4d8df;
-}
-
-/* Mozilla Firefox 19+ */
 .form-control:-ms-input-placeholder {
   color: #d4d8df;
 }
 
 /* Internet Explorer 10-11 */
-.form-control::-ms-input-placeholder {
-  color: #d4d8df;
-}
-
-/* Microsoft Edge */
 .twitter {
   border-color: #2FBAFF !important;
   color: #2FBAFF !important;
@@ -59,6 +49,29 @@ code {
 .facebook:hover {
   background-color: #2D1DE7 !important;
   color: #fff !important;
+}
+
+#loading {
+  width: 150px;
+  height: 150px;
+  display: inline-block;
+  fill: #1B354B !important;
+}
+
+@-webkit-keyframes blink-caret {
+  50% {
+    border-color: transparent;
+  }
+}
+
+em.display-4 {
+  font-size: 1.6em;
+  color: #1B354B;
+  font-weight: 400;
+  padding-right: 5px;
+  border-right: 0.1em solid #7385A0;
+  white-space: nowrap;
+  -webkit-animation: blink-caret .5s step-end infinite alternate;
 }
 
 .datepicker__input {
