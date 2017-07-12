@@ -105,5 +105,4 @@ artifacts:
 - path: breeze_out\*.zip
   name: Breeze app
 - path: dotnet_out\*.zip
-  name: api libraries
-    
+  name: dotnet libraries

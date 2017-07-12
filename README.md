@@ -1,9 +1,13 @@
-| Windows | 
-| :---- |
-[![Windows build status][1]][2] |
+| Windows | Linux | OS X |
+| :---- | :------ | :---- |
+[![Windows build status][1]][2] | [![Linux build status][3]][4] | [![OS X build status][5]][6] | 
 
 [1]: https://ci.appveyor.com/api/projects/status/j1evinfefeetctvk?svg=true
 [2]: https://ci.appveyor.com/project/stratis/breeze
+[3]: https://travis-ci.org/stratisproject/Breeze.svg?branch=master
+[4]: https://travis-ci.org/stratisproject/Breeze
+[5]: https://travis-ci.org/stratisproject/Breeze.svg?branch=master
+[6]: https://travis-ci.org/stratisproject/Breeze
 
 
 # Breeze
@@ -47,8 +51,11 @@ If you want the :sparkles: latest :sparkles: (unstable :bomb:) version of the Br
 
 |    | x86 Release | x64 Release |
 |:---|----------------:|------------------:|
-|**Windows 7**| [build][7] | [build][8] | 
-|**Windows 10**| [build][9] | [build][10] | 
+|**Windows 7**| [download][7] | [download][8] | 
+|**Windows 10**| [download][9] | [download][10] | 
+|**Ubuntu 14.04**| - | coming soon | 
+|**OS X 10.11**| - | coming soon | 
+|**OS X 10.12**| - | coming soon | 
 
 
 [7]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win7-x86-Release.zip?job=Environment%3A%20win_runtime%3Dwin7-x86%3B%20Configuration%3A%20Release
