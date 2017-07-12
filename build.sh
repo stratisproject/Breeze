@@ -51,7 +51,7 @@ node package.js --platform=$os_platform --arch=$arch --path=$TRAVIS_BUILD_DIR/br
 # copy api libs into app
 echo $log_prefix copying the Breeze api into the app
 mkdir -p $TRAVIS_BUILD_DIR/breeze_out/breeze-ui-$os_platform-$arch/resources/app/assets/daemon/
-cp $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME/* $TRAVIS_BUILD_DIR/breeze_out/breeze-ui-$os_platform-$arch/resources/app/assets/daemon/
+cp -r $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME/* $TRAVIS_BUILD_DIR/breeze_out/breeze-ui-$os_platform-$arch/resources/app/assets/daemon/
 
 # zip result
 echo $log_prefix zipping the app into $TRAVIS_BUILD_DIR/breeze_out/$app_output_name.zip
