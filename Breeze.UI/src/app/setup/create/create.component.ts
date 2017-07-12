@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { GlobalService } from '../../shared/services/global.service';
 import { ApiService } from '../../shared/services/api.service';
 
+import { PasswordValidationDirective } from '../../shared/directives/password-validation.directive';
+
 import { WalletCreation } from '../../shared/classes/wallet-creation';
 import { Mnemonic } from '../../shared/classes/mnemonic';
 
@@ -25,14 +27,23 @@ export class CreateComponent {
 
   private buildCreateForm(): void {
     this.createWalletForm = this.fb.group({
-      "walletName": ["", [
+      "walletName": ["",
+        Validators.compose([
           Validators.required,
           Validators.minLength(3),
-          Validators.maxLength(24)
-        ]
+          Validators.maxLength(24),
+          Validators.pattern(/^[a-zA-Z0-9]*$/)
+        ])
       ],
-      "walletPassword": ["", Validators.required],
+      "walletPassword": ["", 
+        Validators.compose([
+          Validators.required,
+          Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{10,})/)])
+        ],
+      "walletPasswordConfirmation": ["", Validators.required],
       "selectNetwork": ["test", Validators.required]
+    }, {
+      validator: PasswordValidationDirective.MatchPassword
     });
 
     this.createWalletForm.valueChanges
@@ -58,17 +69,24 @@ export class CreateComponent {
 
   formErrors = {
     'walletName': '',
-    'walletPassword': ''
+    'walletPassword': '',
+    'walletPasswordConfirmation': ''
   };
 
   validationMessages = {
     'walletName': {
-      'required':      'Name is required.',
-      'minlength':     'Name must be at least 3 characters long.',
-      'maxlength':     'Name cannot be more than 24 characters long.'
+      'required': 'Name is required.',
+      'minlength': 'Name must be at least 3 characters long.',
+      'maxlength': 'Name cannot be more than 24 characters long.',
+      'pattern': 'Enter a valid wallet name. [a-Z] and [0-9] are the only characters allowed.'
     },
     'walletPassword': {
-      'required': 'A password is required.'
+      'required': 'A password is required.',
+      'pattern': 'A password must be at least 10 characters long and contain one lowercase and uppercase alphabetical character and a number.'
+    },
+    'walletPasswordConfirmation': {
+      'required': 'Confirm your password.',
+      'walletPasswordConfirmation': 'Passwords do not match.'
     }
   };
 
