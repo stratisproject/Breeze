@@ -8,9 +8,7 @@ a, button {&:hover {cursor: pointer !important;}}
 code {color: $spacegray !important;}
 .form-control::-webkit-input-placeholder { color: $input-color-placeholder; }  /* WebKit, Blink, Edge */
 .form-control:-moz-placeholder { color: $input-color-placeholder; }  /* Mozilla Firefox 4 to 18 */
-.form-control::-moz-placeholder { color: $input-color-placeholder; }  /* Mozilla Firefox 19+ */
 .form-control:-ms-input-placeholder { color: $input-color-placeholder; }  /* Internet Explorer 10-11 */
-.form-control::-ms-input-placeholder { color: $input-color-placeholder; }  /* Microsoft Edge */
 
 // button
 .twitter {
@@ -28,6 +26,17 @@ code {color: $spacegray !important;}
     background-color: #2D1DE7 !important;
     color: $white !important;
   }
+}
+
+// datepicker
+.datepicker__input {
+  border-color: transparent !important;
+  padding: 0 !important;
+  text-align: left;
+  color: $input-color !important;
+  width: 100%;
+  text-align: center;
+  &::-webkit-input-placeholder { color: $input-color-placeholder; }  /* WebKit, Blink, Edge */
 }
 
 // container

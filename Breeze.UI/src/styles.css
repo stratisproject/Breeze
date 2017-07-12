@@ -61,6 +61,20 @@ code {
   color: #fff !important;
 }
 
+.datepicker__input {
+  border-color: transparent !important;
+  padding: 0 !important;
+  text-align: left;
+  color: #99A4B4 !important;
+  width: 100%;
+  text-align: center;
+  /* WebKit, Blink, Edge */
+}
+
+.datepicker__input::-webkit-input-placeholder {
+  color: #d4d8df;
+}
+
 #content {
   width: 100%;
   position: relative;

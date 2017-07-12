@@ -1,29 +1,29 @@
 <section id="breeze">
   <div class="login d-flex align-items-center text-center">
     <div class="container">
-      <p class="textback text-left mb-5 col-6 row"><a (click)="onBackClicked()">Back</a></p>
+      <p class="textback text-left mb-5 offset-3 row"><a (click)="onBackClicked()">Back</a></p>
       <h3 class="display-5">Welcome</h3>
       <div class="row d-flex justify-content-center">
-        <form class="col-md-8 col-xs-12 text-left" [formGroup]="recoverWalletForm">
+        <form class="col-md-6 col-xs-12 text-left" [formGroup]="recoverWalletForm">
           <!--<div class="form-group has-success">-->
           <div class="form-group">
             <label class="col-12 row" for="walletName">Name</label>
             <input type="text" class="form-control form-control-success" formControlName="walletName" id="walletName" placeholder="Enter a wallet name.">
-            <div *ngIf="formErrors.walletName" class="form-control-feedback">{{ formErrors.walletName }}</div>
+            <div *ngIf="formErrors.walletName" class="text-danger mt-2">{{ formErrors.walletName }}</div>
           </div>
           <div class="form-group">
             <label class="col-12 row" for="creationDate">Creation Date (optional)</label>
-            <material-datepicker class="form-control" [(date)]="creationDate"></material-datepicker>
+            <material-datepicker class="form-control col-4" [(date)]="creationDate"></material-datepicker>
           </div>
           <div class="form-group">
             <label class="col-12 row" for="walletMnemonic">12 Secret Words</label>
             <input type="text" class="form-control form-control-success" formControlName="walletMnemonic" id="walletName" placeholder="Enter your 12 secret words.">
-            <div *ngIf="formErrors.walletMnemonic" class="form-control-feedback">{{ formErrors.walletMnemonic }}</div>
+            <div *ngIf="formErrors.walletMnemonic" class="text-danger mt-2">{{ formErrors.walletMnemonic }}</div>
           </div>
           <div class="form-group">
             <label class="text-left" for="walletPassword">Password</label>
             <input type="password" class="form-control form-control-success" formControlName="walletPassword" id="walletPassword" placeholder="Enter a password.">
-            <div *ngIf="formErrors.walletPassword" class="form-control-feedback">{{ formErrors.walletPassword }}</div>
+            <div *ngIf="formErrors.walletPassword" class="text-danger mt-2">{{ formErrors.walletPassword }}</div>
           </div>
           <div class="form-group">
             <label class="text-left" for="walletNetwork">Network</label>
