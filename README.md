@@ -26,8 +26,7 @@ git clone https://github.com/stratisproject/Breeze
 cd Breeze
 
 # Initialize dependencies
-git submodule init
-git submodule update
+git submodule update --init --recursive
 
 # Go in Breeze's solution folder
 cd Breeze

@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="nStratis" Version="3.0.2.23" />
+    <ProjectReference Include="..\..\..\StratisBitcoinFullNode\NStratis\NBitcoin\NBitcoin.csproj" />
   </ItemGroup>
 
 </Project>
