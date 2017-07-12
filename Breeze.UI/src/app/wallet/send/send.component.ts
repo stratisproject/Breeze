@@ -3,10 +3,12 @@ import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
-import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { TransactionBuilding } from '../../shared/classes/transaction-building';
 import { TransactionSending } from '../../shared/classes/transaction-sending';
+
+import { SendConfirmationComponent } from './send-confirmation/send-confirmation.component';
 
 @Component({
   selector: 'send-component',
@@ -15,13 +17,14 @@ import { TransactionSending } from '../../shared/classes/transaction-sending';
 })
 
 export class SendComponent {
-  constructor(private apiService: ApiService, private globalService: GlobalService, public activeModal: NgbActiveModal, private fb: FormBuilder) {
+  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, public activeModal: NgbActiveModal, private fb: FormBuilder) {
     this.buildSendForm();
   }
 
   private sendForm: FormGroup;
   private responseMessage: any;
   private errorMessage: string;
+  private transaction: TransactionBuilding;
 
   private buildSendForm(): void {
     this.sendForm = this.fb.group({
@@ -76,8 +79,7 @@ export class SendComponent {
   };
 
   private send() {
-
-    let transaction = new TransactionBuilding(
+    this.transaction = new TransactionBuilding(
       this.globalService.getWalletName(),
       this.globalService.getCoinType(),
       "account 0",
@@ -89,7 +91,7 @@ export class SendComponent {
     );
 
     this.apiService
-      .buildTransaction(transaction)
+      .buildTransaction(this.transaction)
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400){
@@ -110,7 +112,7 @@ export class SendComponent {
             }
           }
         },
-        () => this.sendTransaction("123")
+        () => this.sendTransaction(this.responseMessage.hex)
       )
     ;
   };
@@ -150,8 +152,14 @@ export class SendComponent {
               alert(error.json().errors[0].message);
             }
           }
-        }
+        },
+        ()=>this.openConfirmationModal()
       )
     ;
+  }
+
+  private openConfirmationModal() {
+    const modalRef = this.modalService.open(SendConfirmationComponent);
+    modalRef.componentInstance.transaction = this.transaction;
   }
 }

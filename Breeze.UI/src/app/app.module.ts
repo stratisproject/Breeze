@@ -17,6 +17,7 @@ import { ApiService } from './shared/services/api.service';
 import { GlobalService } from './shared/services/global.service';
 
 import { SendComponent } from './wallet/send/send.component';
+import { SendConfirmationComponent } from './wallet/send/send-confirmation/send-confirmation.component';
 import { ReceiveComponent } from './wallet/receive/receive.component';
 import { TransactionDetailsComponent } from './wallet/transaction-details/transaction-details.component';
 import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout-confirmation.component';
@@ -39,11 +40,13 @@ import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout
     LoginComponent,
     LogoutConfirmationComponent,
     SendComponent,
+    SendConfirmationComponent,
     ReceiveComponent,
     TransactionDetailsComponent
   ],
   entryComponents: [
     SendComponent,
+    SendConfirmationComponent,
     ReceiveComponent,
     TransactionDetailsComponent,
     LogoutConfirmationComponent
