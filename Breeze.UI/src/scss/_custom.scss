@@ -178,7 +178,7 @@ em {
 // status box
 .status {
   background: $white;
-  width: 80px;
+  width: auto;
   height: 40px;
   border: 1px solid #DBDBDB;
   box-shadow: 0 1px 11px 0 rgba(80,96,120,.2);
@@ -187,29 +187,33 @@ em {
   bottom: 2%;
   right: 2%;
   text-align: center;
-  ul {transform: translateY(50%) translateX(15%);}
+  ul {
+    transform: translateY(50%) translateX(0);
+    display: inline-block;
+    position: relative;
+    padding: 0 2em;
+  }
   li {
     font-size: .9em;
     position: relative;
-    padding: 0 8px;
+    float: left;
+    margin-right: 4px;
+    .text-info {color: $gray-dark !important;}
     &.pending {
       i {
-        font-size: 1.3em;
-        position: absolute;
+        font-size: .9em;
         color: $brand-warning;
-        animation: spin 4s linear infinite;
       }
     }
     &.statusOK {
       i {
         color: $brand-success;
-        font-size: 1.3em;
+        font-size: .9em;
         position: absolute;
       }
     }
   }
 }
-@keyframes spin {100%{transform:rotate(360deg);}}
 
 // modal
 .modal-header {

@@ -26,11 +26,21 @@ code {
 }
 
 /* Mozilla Firefox 4 to 18 */
+.form-control::-moz-placeholder {
+  color: #d4d8df;
+}
+
+/* Mozilla Firefox 19+ */
 .form-control:-ms-input-placeholder {
   color: #d4d8df;
 }
 
 /* Internet Explorer 10-11 */
+.form-control::-ms-input-placeholder {
+  color: #d4d8df;
+}
+
+/* Microsoft Edge */
 .twitter {
   border-color: #2FBAFF !important;
   color: #2FBAFF !important;
@@ -49,43 +59,6 @@ code {
 .facebook:hover {
   background-color: #2D1DE7 !important;
   color: #fff !important;
-}
-
-#loading {
-  width: 150px;
-  height: 150px;
-  display: inline-block;
-  fill: #1B354B !important;
-}
-
-@-webkit-keyframes blink-caret {
-  50% {
-    border-color: transparent;
-  }
-}
-
-em.display-4 {
-  font-size: 1.6em;
-  color: #1B354B;
-  font-weight: 400;
-  padding-right: 5px;
-  border-right: 0.1em solid #7385A0;
-  white-space: nowrap;
-  -webkit-animation: blink-caret .5s step-end infinite alternate;
-}
-
-.datepicker__input {
-  border-color: transparent !important;
-  padding: 0 !important;
-  text-align: left;
-  color: #99A4B4 !important;
-  width: 100%;
-  text-align: center;
-  /* WebKit, Blink, Edge */
-}
-
-.datepicker__input::-webkit-input-placeholder {
-  color: #d4d8df;
 }
 
 #content {
@@ -186,10 +159,6 @@ em.display-4 {
   font-weight: 400;
 }
 
-#transaction {
-  padding-top: 2em;
-}
-
 #transaction h5 {
   font-size: .85em;
   color: #878685;
@@ -219,7 +188,7 @@ em.display-4 {
 
 .status {
   background: #fff;
-  width: auto;
+  width: 80px;
   height: 40px;
   border: 1px solid #DBDBDB;
   box-shadow: 0 1px 11px 0 rgba(80, 96, 120, 0.2);
@@ -231,32 +200,32 @@ em.display-4 {
 }
 
 .status ul {
-  transform: translateY(50%) translateX(0);
-  display: inline-block;
-  position: relative;
-  padding: 0 2em;
+  transform: translateY(50%) translateX(15%);
 }
 
 .status li {
   font-size: .9em;
   position: relative;
-  float: left;
-  margin-right: 4px;
-}
-
-.status li .text-info {
-  color: #878685 !important;
+  padding: 0 8px;
 }
 
 .status li.pending i {
-  font-size: .9em;
+  font-size: 1.3em;
+  position: absolute;
   color: #D1C312;
+  animation: spin 4s linear infinite;
 }
 
 .status li.statusOK i {
   color: #2ECCA9;
-  font-size: .9em;
+  font-size: 1.3em;
   position: absolute;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .modal-header .bubble {
@@ -1643,7 +1612,7 @@ pre code {
 
 @media (min-width: 1200px) {
   .container {
-    width: 1080px;
+    width: 1140px;
     max-width: 100%;
   }
 }
@@ -5712,16 +5681,13 @@ button.close {
   margin: 30px;
 }
 
-.modalBg {
-  background-color: #fff;
-  border: 1px solid rgba(152, 163, 179, 0.5);
-}
-
 .modal-content {
   position: relative;
   display: flex;
   flex-direction: column;
+  background-color: #fff;
   background-clip: padding-box;
+  border: 1px solid rgba(152, 163, 179, 0.5);
   border-radius: 0.3rem;
   outline: 0;
 }
@@ -9103,8 +9069,8 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 
 @font-face {
   font-family: 'icon';
-  src: url("./assets/fonts/icon.eot?qz0v16");
-  src: url("./assets/fonts/icon.eot?qz0v16#iefix") format("embedded-opentype"), url("./assets/fonts/icon.ttf?qz0v16") format("truetype"), url("./assets/fonts/icon.woff?qz0v16") format("woff"), url("./assets/fonts/icon.svg?qz0v16#icomoon") format("svg");
+  src: url("./assets/fonts/icon.eot?uu062v");
+  src: url("./assets/fonts/icon.eot?uu062v#iefix") format("embedded-opentype"), url("./assets/fonts/icon.ttf?uu062v") format("truetype"), url("./assets/fonts/icon.woff?uu062v") format("woff"), url("./assets/fonts/icon.svg?uu062v#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -9123,6 +9089,22 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-stratis:before {
+  content: "\e900";
+}
+
+.icon-syncr:before {
+  content: "\e902";
+}
+
+.icon-bitcoin:before {
+  content: "\e904";
+}
+
+.icon-block:before {
+  content: "\e92e";
+}
+
 .icon-coin-dollar:before {
   content: "\e93b";
 }
@@ -9135,104 +9117,28 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   content: "\e93d";
 }
 
-.icon-coin-yen:before {
-  content: "\e93e";
-}
-
-.icon-bell:before {
-  content: "\e951";
-}
-
-.icon-download:before {
-  content: "\e960";
-}
-
-.icon-upload:before {
-  content: "\e961";
-}
-
-.icon-coin:before {
+.icon-database:before {
   content: "\e964";
 }
 
-.icon-lock:before {
-  content: "\e98f";
-}
-
-.icon-unlocked:before {
-  content: "\e990";
-}
-
-.icon-cog:before {
+.icon-settings:before {
   content: "\e994";
 }
 
-.icon-bin:before {
-  content: "\e9ac";
-}
-
-.icon-switch:before {
-  content: "\e9b6";
-}
-
-.icon-cloud:before {
-  content: "\e9c1";
-}
-
-.icon-cloud-download:before {
+.icon-download:before {
   content: "\e9c2";
 }
 
-.icon-cloud-upload:before {
+.icon-upload:before {
   content: "\e9c3";
 }
 
-.icon-cloud-check:before {
-  content: "\e9c4";
+.icon-cancel-circle:before {
+  content: "\ea0d";
 }
 
-.icon-download2:before {
-  content: "\e9c5";
-}
-
-.icon-upload2:before {
-  content: "\e9c6";
-}
-
-.icon-download3:before {
-  content: "\e9c7";
-}
-
-.icon-upload3:before {
-  content: "\e9c8";
-}
-
-.icon-sphere:before {
-  content: "\e9c9";
-}
-
-.icon-earth:before {
-  content: "\e9ca";
-}
-
-.icon-link:before {
-  content: "\e9cb";
-}
-
-.icon-circle-up:before {
-  content: "\ea41";
-}
-
-.icon-circle-right:before {
-  content: "\ea42";
-}
-
-.icon-circle-down:before {
-  content: "\ea43";
-}
-
-.icon-circle-left:before {
-  content: "\ea44";
+.icon-checkmark2:before {
+  content: "\ea11";
 }
 
 .icon-checkbox-checked:before {
@@ -9249,22 +9155,6 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 
 .icon-radio-unchecked:before {
   content: "\ea56";
-}
-
-.icon-block:before {
-  content: "\eae8";
-}
-
-.icon-stratis:before {
-  content: "\e900";
-}
-
-.icon-syncr:before {
-  content: "\e1";
-}
-
-.icon-bitcoin:before {
-  content: "\e2";
 }
 
 .btn-primary {
