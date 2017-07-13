@@ -3,9 +3,8 @@ using System.ComponentModel.DataAnnotations;
 using Breeze.Api.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using NBitcoin;
+using Stratis.Bitcoin;
 using Stratis.Bitcoin.Builder;
-using Stratis.Bitcoin.Notifications;
 
 namespace Breeze.Api.Controllers
 {	

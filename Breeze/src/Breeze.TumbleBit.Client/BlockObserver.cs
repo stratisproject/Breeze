@@ -1,6 +1,7 @@
 ﻿using Breeze.TumbleBit.Client;
 using NBitcoin;
 using Stratis.Bitcoin;
+using Stratis.Bitcoin.Signals;
 
 namespace Breeze.TumbleBit
 {

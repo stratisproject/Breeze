@@ -8,12 +8,11 @@ using NBitcoin.Protocol;
 using Stratis.Bitcoin;
 using Stratis.Bitcoin.Builder;
 using Stratis.Bitcoin.Connection;
-using Stratis.Bitcoin.Consensus;
-using Stratis.Bitcoin.Consensus.Deployments;
 using Stratis.Bitcoin.Utilities;
-using Stratis.Bitcoin.Wallet;
-using Stratis.Bitcoin.Wallet.Controllers;
 using Stratis.Bitcoin.Common.Hosting;
+using Stratis.Bitcoin.Features.Consensus.Deployments;
+using Stratis.Bitcoin.Features.Wallet;
+using Stratis.Bitcoin.Features.Wallet.Controllers;
 
 namespace Breeze.Wallet
 {

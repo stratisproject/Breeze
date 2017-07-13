@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Stratis.Bitcoin.Builder;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Stratis.Bitcoin.Wallet.JsonConverters;
+using Stratis.Bitcoin.Features.Wallet.JsonConverters;
 
 namespace Breeze.TumbleBit
 {

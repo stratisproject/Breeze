@@ -4,13 +4,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NBitcoin;
-using NBitcoin.JsonConverters;
-using Stratis.Bitcoin;
-using Stratis.Bitcoin.Notifications;
 using Stratis.Bitcoin.Utilities;
-using Stratis.Bitcoin.Wallet;
-using Stratis.Bitcoin.Wallet.Notifications;
 using Stratis.Bitcoin.Common.Hosting;
+using Stratis.Bitcoin.Features.Notifications;
+using Stratis.Bitcoin.Features.Wallet;
+using Stratis.Bitcoin.Features.Wallet.Notifications;
+using Stratis.Bitcoin.Signals;
 
 namespace Breeze.Wallet
 {
