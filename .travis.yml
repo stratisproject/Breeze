@@ -17,20 +17,20 @@ branches:
   - master
 
 env:
-    global: 
-    - log_prefix="[$TRAVIS_OS_NAME]"
-    - arch=x64
-    - configuration="Release"
-    - app_output_name="breeze-$arch-$TRAVIS_OS_NAME-Release"
-    - api_output_name="api-$arch-$TRAVIS_OS_NAME-Release"
-    - os_platform=linux
-    - TRAVIS_TAG=cd-unstable
+  global: 
+  - log_prefix="[$TRAVIS_OS_NAME]"
+  - arch=x64
+  - configuration="Release"
+  - app_output_name="breeze-$arch-$TRAVIS_OS_NAME-Release"
+  - api_output_name="api-$arch-$TRAVIS_OS_NAME-Release"
+  - os_platform=linux
+  - TRAVIS_TAG=cd-unstable
 
 # Work around NuGet issue #2163
 # https://github.com/NuGet/Home/issues/2163
 # https://github.com/travis-ci/travis-ci/issues/7728
 before_install:    
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then ulimit -n 1024; $os_platform=darwin; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then ulimit -n 1024 ; os_platform=darwin ; fi
 
 install:
   - nvm install 6
@@ -41,7 +41,7 @@ script:
 deploy:
   provider: releases
   api_key: 
-  - secure: fRWMdtlr1+V4NsC2C2lOsUM553XtWjC+ohJ+SF9uq7Vqi68x1ugGUh4m3Re/Pd8OiFpBGEv0EWyDRCtsj12BpZLB2XYmggRkYgcfK6AxWMB+yqhzYExfjhmenVPVC0thI+XDcr9/GELr2jpETPjkZEL+w2KmQFA23Mg0f0FIeBYpSibBLJ12kQt7BBDDPS1g17tFd3YYK4LTJ/XFFu4jyFjaXYh2WumpZ6YsVQb4rxsYEkQgL5e0xiWl94KiT8TOGx0OodQNC9k274MZuj97IiP5ghFWiEpls0QsvPkPw1MzNbf20O92aTdk9x38qrvEFBN7O6Es5oTnYtNQToTAT9o3Pdq5bsnEJKad7evzoUp2FSHHQZOcYd/f4oLwMeCSjv3XV3exoegDpTgil8i2SUVZ+ov6y4qQZV+n9kVIZ71ep8+KEVNBdMRspsr6/wIJXjmJmRSF5SN+gsf0Jwx+525T3YszuVREfsnRRdBVDcZEWVGsaVVlqWCHDm5/9vNf/wC78F7oiYiTP/1GTaNCEZjgkYccCotQGn2SzGSkx19aaJHmp4Vp/27VCJsD4eSFjiYoVotS1D4Z+dHAkDu5f0KeAIRoFq2JsG6suvdx3cbSE7kN0gQPAVbLg0nXBxq7iDEHf4a5gjK6VIJQWIr2iJ4JB+6Idih7/T5InTrSZv4=
+  - secure: f99l6mM8zgYWszfRnUFWtRMoxU+eF22J71UVsJ7IIy9v16atpM7s8GiE6mZX3ycKf8kz+cqNNtF2WKLxUJzW6maquK3sJf9i0zL0gmibjP1A8sBnfxPSHvrcSdEcJAX37htYL34IHaHikmY2BUVOROjinB5HIVwV0Itp4wUlAJLbjH9m4kSJ6jFp7QbzL/lI8KjtyZFoXyQhVK37PLZT0G3fzvY2iibr9hLBniiteVcIHUDnuuezhiea5ReYc4BGj3bEmKC3Cdteg/3KnyEfaXYuTOkPWKolXwEGMvUaTyJv7qkckT4UoLIMlmpNVxWMaADWLZw+JINGht0aZx0AGYLpy1sbI8DuAB5cddT+vI6+3BNlBOT6AFohOlehZgVXgPd8iWdA4t6WkxHUyD+/DhGA15fZMgM5vBS7rTqAsVEHuzyJjQx4N34Zp7+yeSQ027Ko3q1DQxU6glusCsgToKSAAZNlziwbReGYhTC6xWZy8+vmxA7Mn8ShR1zSYgjlZSl+nn9GJZQ/3Njs0dZMjhl94aw3ZKh954p10Kwuleb3iokIj8vzgr9vXWmWIZ62zzaLMF/0FIGhQ3LofR32ruXchRD831pGBAVIymkTtk83DICwuJD1kwCeBtEL9JclRTtWIAEE5FxfVmYD3I70SYxYP1uSoSWRdeiQw3uLV20=
   file_glob: true
   file: $TRAVIS_BUILD_DIR/deploy/*.zip
   skip_cleanup: true
