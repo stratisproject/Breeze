@@ -190,6 +190,10 @@ em.display-4 {
   padding-top: 2em;
 }
 
+#transaction .muted {
+  opacity: .5;
+}
+
 #transaction h5 {
   font-size: .85em;
   color: #878685;

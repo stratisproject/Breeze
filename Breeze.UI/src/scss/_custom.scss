@@ -150,6 +150,7 @@ em {
 // transactions
 #transaction {
   padding-top: 2em;
+  .muted {opacity: .5;}
   h5 {
     font-size: .85em;
     color: $gray-dark;
