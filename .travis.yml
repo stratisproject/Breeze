@@ -15,9 +15,8 @@ matrix:
 branches:
   only:
   - master
-
 env:
-  global: 
+  global:
   - log_prefix="[$TRAVIS_OS_NAME]"
   - arch=x64
   - configuration="Release"
@@ -29,21 +28,20 @@ env:
 # Work around NuGet issue #2163
 # https://github.com/NuGet/Home/issues/2163
 # https://github.com/travis-ci/travis-ci/issues/7728
-before_install:    
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then ulimit -n 1024 ; os_platform=darwin ; fi
+before_install:
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then ulimit -n 1024 ; os_platform=darwin ; fi
 
 install:
-  - nvm install 6
+- nvm install 6
 script:
-  - chmod +x build.sh
-  - ./build.sh
-
+- chmod +x build.sh
+- "./build.sh"
 deploy:
   provider: releases
-  api_key: 
-  - secure: f99l6mM8zgYWszfRnUFWtRMoxU+eF22J71UVsJ7IIy9v16atpM7s8GiE6mZX3ycKf8kz+cqNNtF2WKLxUJzW6maquK3sJf9i0zL0gmibjP1A8sBnfxPSHvrcSdEcJAX37htYL34IHaHikmY2BUVOROjinB5HIVwV0Itp4wUlAJLbjH9m4kSJ6jFp7QbzL/lI8KjtyZFoXyQhVK37PLZT0G3fzvY2iibr9hLBniiteVcIHUDnuuezhiea5ReYc4BGj3bEmKC3Cdteg/3KnyEfaXYuTOkPWKolXwEGMvUaTyJv7qkckT4UoLIMlmpNVxWMaADWLZw+JINGht0aZx0AGYLpy1sbI8DuAB5cddT+vI6+3BNlBOT6AFohOlehZgVXgPd8iWdA4t6WkxHUyD+/DhGA15fZMgM5vBS7rTqAsVEHuzyJjQx4N34Zp7+yeSQ027Ko3q1DQxU6glusCsgToKSAAZNlziwbReGYhTC6xWZy8+vmxA7Mn8ShR1zSYgjlZSl+nn9GJZQ/3Njs0dZMjhl94aw3ZKh954p10Kwuleb3iokIj8vzgr9vXWmWIZ62zzaLMF/0FIGhQ3LofR32ruXchRD831pGBAVIymkTtk83DICwuJD1kwCeBtEL9JclRTtWIAEE5FxfVmYD3I70SYxYP1uSoSWRdeiQw3uLV20=
+  api_key:
+    secure: NOLMkLtCu/WCUHBXroBPJsGT0U0Lw5x0SwZvxvCmQfqzM0R4XQ0ZV3GPRLSHHBOLER8CSucgFJ4XAbNG7yiIA2TrNfmv38su2KuBPQwA5DBpOBzBxQa2cqJV+9lgF48r5J+C0kkyQ8VUwpwXVeTenfxw7pPBIMfpFblOXFGRWHExJHX5o9u972heO1i/s6mM0v8EdJ72JswklLLHqevAIHw4NZ7ZMmvisnbTWuOt4IuOLbw/eobbZF9xX+9ks6uOUmfUEQ51KKRsIOFuOGW/1zxBudv60JypiYgGLcG7jbUR8m06MPDmWv5TLd8rAWNbb/djEJjm1aRjN30rVi1NXIl4Ybg3GfGF/Pqc67j0hLMIQD5Mp8h62yopXIAroTpKhcmeRDlMoG6fbcwOtlP+F5osZT25yJH7+zDesv57pMJZkL+RpG7W3bHQIiT4lq8xD1490NFLpUWLoaIDMwTWFLlp+uVfmMa+snx1A1MDKw3BkJrt3ten3/BMVXIu3sLkI5xJFJJgri756CxDeyuuj7UkMzYNvzqDZnlI1Gv0rjXAfIdMR/jRGRIbBx0b4YQf3Nwx+EymzvrKLYX1qX3DfW6b8qn2gIa6r3jUEwLTY/4tc0U+IXjl0hJnY9Rv871oWnV2k7mqfFxnaKAqWn4gdsliKmPbShMrsNkh/p0RQKg=
   file_glob: true
-  file: $TRAVIS_BUILD_DIR/deploy/*.zip
+  file: "$TRAVIS_BUILD_DIR/deploy/*.zip"
   skip_cleanup: true
   overwrite: true
   prerelease: true
