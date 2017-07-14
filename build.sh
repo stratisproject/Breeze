@@ -3,15 +3,21 @@
 # exit if error
 set -o errexit
 
+# define a few variables
+app_output_name="breeze-$os_identifier-$arch-$configuration"
+api_output_name="api-$os_identifier-$arch-$configuration"
+
 echo "current environment variables:"
 echo "OS name:" $TRAVIS_OS_NAME
+echo "OS identifier:" $os_identifier
 echo "Platform:" $os_platform
 echo "Build directory:" $TRAVIS_BUILD_DIR
 echo "Node version:" $TRAVIS_NODE_VERSION
 echo "Architecture:" $arch
 echo "Configuration:" $configuration
-echo "App output name" $app_output_name
-echo "Api output name" $api_output_name
+echo "App output name:" $app_output_name
+echo "Api output name:" $api_output_name
+
 
 dotnet --info
 
