@@ -21,7 +21,7 @@ branches:
 image: Visual Studio 2017
 clone_folder: c:\projects\breeze
 configuration:
-  - Debug
+ # - Debug
   - Release
 environment:
   matrix:
