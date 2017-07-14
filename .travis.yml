@@ -6,13 +6,13 @@ matrix:
   - os: linux # Ubuntu 14.04
     dist: trusty
     sudo: required
-    env: os_version=ubuntu14.04
+    env: os_identifier=ubuntu.14.04
   - os: osx # OSX 10.11
     osx_image: xcode7.3
-    env: os_version=10.11
+    env: os_identifier=osx.10.11
   - os: osx # OSX 10.12
     osx_image: xcode8.1
-    env: os_version=10.12
+    env: os_identifier=osx.10.12
 
 # branches to build 
 branches:

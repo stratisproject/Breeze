@@ -4,12 +4,12 @@
 set -o errexit
 
 # define a few variables
-app_output_name="breeze-$TRAVIS_OS_NAME.$os_version-$arch-$configuration"
-api_output_name="api-$TRAVIS_OS_NAME.$os_version-$arch-$configuration"
+app_output_name="breeze-$os_identifier-$arch-$configuration"
+api_output_name="api-$os_identifier-$arch-$configuration"
 
 echo "current environment variables:"
 echo "OS name:" $TRAVIS_OS_NAME
-echo "OS version:" $os_version
+echo "OS identifier:" $os_identifier
 echo "Platform:" $os_platform
 echo "Build directory:" $TRAVIS_BUILD_DIR
 echo "Node version:" $TRAVIS_NODE_VERSION
