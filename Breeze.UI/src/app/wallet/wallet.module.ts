@@ -7,7 +7,7 @@ import { MenuComponent } from './menu/menu.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HistoryComponent } from './history/history.component';
 
-import {SharedModule} from '../shared/shared.module';
+import { SharedModule } from '../shared/shared.module';
 import { WalletRoutingModule } from './wallet-routing.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { StatusBarComponent } from './status-bar/status-bar.component';

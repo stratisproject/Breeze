@@ -20,18 +20,25 @@ namespace Breeze.Api
 		private readonly FullNode fullNode;
 	    private readonly ApiFeatureOptions apiFeatureOptions;
 	    private readonly IAsyncLoopFactory asyncLoopFactory;
+		private readonly ILogger logger;
 
-	    public ApiFeature(IFullNodeBuilder fullNodeBuilder, FullNode fullNode, ApiFeatureOptions apiFeatureOptions, IAsyncLoopFactory asyncLoopFactory)
+		public ApiFeature(
+			IFullNodeBuilder fullNodeBuilder, 
+			FullNode fullNode, 
+			ApiFeatureOptions apiFeatureOptions, 
+			IAsyncLoopFactory asyncLoopFactory,
+			ILoggerFactory loggerFactory)
 		{
 			this.fullNodeBuilder = fullNodeBuilder;
 			this.fullNode = fullNode;
 		    this.apiFeatureOptions = apiFeatureOptions;
 		    this.asyncLoopFactory = asyncLoopFactory;
+			this.logger = loggerFactory.CreateLogger(this.GetType().FullName);
 		}
 
 		public override void Start()
 		{
-		    Logs.FullNode.LogInformation($"Api starting on url {this.fullNode.Settings.ApiUri}");
+		    this.logger.LogInformation($"Api starting on url {this.fullNode.Settings.ApiUri}");
             Program.Initialize(this.fullNodeBuilder.Services, this.fullNode);
 
 		    this.TryStartKeepaliveMonitor();

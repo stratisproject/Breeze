@@ -1,0 +1,108 @@
+#  from https://www.appveyor.com/docs/appveyor-yml/
+
+# you can use {branch} name in version format too
+# version: 1.0.{build}-{branch}
+
+version: 0.1.0.{build}
+pull_requests:
+  do_not_increment_build_number: true
+skip_tags: true
+
+# branches to build
+branches:
+  # whitelist
+  only:
+    - master
+
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+
+image: Visual Studio 2017
+clone_folder: c:\projects\breeze
+configuration:
+  - Debug
+  - Release
+environment:
+  matrix:
+  - win_runtime: win7-x64
+  - win_runtime: win7-x86
+  - win_runtime: win10-x64
+  - win_runtime: win10-x86
+
+init:
+- ps: |
+      $env:log_prefix = "[$env:win_runtime][$env:configuration]"
+      if($env:win_runtime -ilike "*x86")
+      {
+        $env:arch = "ia32"
+      }
+      else
+      {
+        $env:arch = "x64"
+      }
+      $env:app_output_name = "breeze-$env:win_runtime-$env:configuration"
+      $env:api_output_name = "api-$env:win_runtime-$env:configuration"
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+before_build:
+- ps: |
+      Write-Host "$env:log_prefix STARTED restoring dotnet and npm packages" -foregroundcolor "magenta"
+      cd Breeze
+
+      # Initialize dependencies
+      git submodule init
+      git submodule update
+
+      dotnet restore -v m
+      cd ../Breeze.UI
+
+      Install-Product node 6
+      npm install
+      Write-Host "$env:log_prefix FINISHED restoring dotnet and npm packages" -foregroundcolor "magenta"
+      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
+    
+build_script:
+- ps: |
+      Write-Host "$env:log_prefix running 'dotnet build'" -foregroundcolor "magenta"
+      cd ../Breeze/src/Breeze.Daemon
+      dotnet build -c $env:configuration -r $env:win_runtime -v m 
+
+      Write-Host "$env:log_prefix running 'dotnet publish'" -foregroundcolor "magenta"
+      dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\dotnet_out\$env:win_runtime
+
+      Write-Host "$env:log_prefix zipping results of 'dotnet publish'" -foregroundcolor "magenta"
+      7z a $env:APPVEYOR_BUILD_FOLDER\dotnet_out\$env:api_output_name.zip $env:APPVEYOR_BUILD_FOLDER\dotnet_out\$env:win_runtime\*
+      cd ../../../Breeze.UI
+      
+      Write-Host "$env:log_prefix running 'npm run'" -foregroundcolor "magenta"
+      npm run build:prod
+      Write-Host "$env:log_prefix packaging breeze" -foregroundcolor "magenta"
+      node package.js --platform=win32 --arch=$env:arch --path=$env:APPVEYOR_BUILD_FOLDER\breeze_out
+      Write-Host "$env:log_prefix copying the Breeze api into the app" -foregroundcolor "magenta"
+      xcopy /s $env:APPVEYOR_BUILD_FOLDER\dotnet_out\$env:win_runtime\* $env:APPVEYOR_BUILD_FOLDER\breeze_out\breeze-ui-win32-$env:arch\resources\app\assets\daemon\
+      Write-Host "$env:log_prefix zipping the result" -foregroundcolor "magenta"
+      7z a  $env:APPVEYOR_BUILD_FOLDER\breeze_out\$env:app_output_name.zip $env:APPVEYOR_BUILD_FOLDER\breeze_out\breeze-ui-win32-$env:arch\*
+            
+      Write-Host "[$env:configuration][$env:win_runtime] FINISHED dotnet build" -foregroundcolor "magenta"
+      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+    
+test_script:
+- ps: |
+      Write-Host "$env:log_prefix running the api tests" -foregroundcolor "magenta"
+      dotnet test -c $env:configuration $env:APPVEYOR_BUILD_FOLDER/Breeze/src/Breeze.Api.Tests/Breeze.Api.Tests.csproj
+      Write-Host "$env:log_prefix done running the tests" -foregroundcolor "magenta"
+      #if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+
+#---------------------------------#
+#      artifacts configuration    #
+#---------------------------------#
+
+# pushing all files in build directory recursively
+artifacts:
+- path: breeze_out\*.zip
+  name: Breeze app
+- path: dotnet_out\*.zip
+  name: dotnet libraries

@@ -17,6 +17,12 @@
             <div *ngIf="formErrors.walletPassword" class="text-danger mt-2">{{ formErrors.walletPassword }}</div>
           </div>
           <div class="form-group">
+            <label class="text-left" for="walletPasswordConfirmation">Confirm Password</label>
+            <input type="password" class="form-control form-control-success" formControlName="walletPasswordConfirmation" id="walletPasswordConfirmation" placeholder="Enter a password.">
+            <div *ngIf="formErrors.walletPasswordConfirmation" class="form-control-feedback">{{ formErrors.walletPasswordConfirmation }}</div>
+            <div class="form-control-feedback">Your password will be required to recover your wallet in the future. Keep it safe.</div>
+          </div>
+          <div class="form-group">
             <label class="text-left" for="walletNetwork">Network</label>
             <select class="form-control custom-select" name="network" formControlName="selectNetwork">
               <!--<option value="main">Main</option>-->
