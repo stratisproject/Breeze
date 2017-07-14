@@ -43,7 +43,7 @@ dotnet publish -c $configuration -v m -o $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS
 
 echo $log_prefix zipping results of 'dotnet publish' into $TRAVIS_BUILD_DIR/dotnet_out/$api_output_name.zip
 mkdir -p $TRAVIS_BUILD_DIR/deploy/
-zip -r $TRAVIS_BUILD_DIR/deploy/$api_output_name.zip $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME/*
+zip -r $TRAVIS_BUILD_DIR/deploy/$api_output_name.zip $TRAVIS_OS_NAME/*
 
 # node Build
 cd ../../../Breeze.UI
@@ -61,7 +61,7 @@ cp -r $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME/* $TRAVIS_BUILD_DIR/breeze_ou
 
 # zip result
 echo $log_prefix zipping the app into $TRAVIS_BUILD_DIR/breeze_out/$app_output_name.zip
-zip -r $TRAVIS_BUILD_DIR/deploy/$app_output_name.zip $TRAVIS_BUILD_DIR/breeze_out/breeze-ui-$os_platform-$arch/*
+zip -r $TRAVIS_BUILD_DIR/deploy/$app_output_name.zip breeze-ui-$os_platform-$arch/*
 
 #tests
 echo $log_prefix running tests
