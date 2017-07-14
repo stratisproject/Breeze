@@ -30,22 +30,25 @@ $btn-secondary-border:           $gray-light !default;
 //
 /////////////////////////////
 
+// NAVBAR
+#navbarBreeze {
+  .navbar-nav {
+    .nav-item {
+      .nav-link {
+        color: $gray-dark;
+        &:hover {color: lighten($brand-primary,20%);}
+        &.is-active {
+          border-bottom: 2px solid $brand-primary !important;
+          color: $brand-primary !important;
+        }
+      }    
+    }
+  }
+}
+
+
 #content {
   &.bitcoin {
-
-    // NAVBAR
-    .navbar {
-      .nav-item {
-        .nav-link {
-          color: $gray-dark;
-          &:hover {color: lighten($brand-primary,20%);}
-        }
-        &.active {
-          border-bottom: 2px solid $brand-primary;
-          .nav-link {color: $brand-primary;}
-        }
-      }
-    }
 
     // JUMBOTRON
     .jumbotron {
@@ -87,6 +90,9 @@ $btn-secondary-border:           $gray-light !default;
   .bubble {
     i {color: $brand-primary;}
   }
+}
+.modal-dialog {
+  .badge {margin: 1em 0;}
 }
 #modalDetail {
   a {
