@@ -30,22 +30,25 @@ $btn-secondary-border:           $gray-light !default;
 //
 /////////////////////////////
 
-#content {
-  &.bitcoin {
-
-    // NAVBAR
-    .navbar {
-      .nav-item {
-        .nav-link {
-          color: $gray-dark;
-          &:hover {color: lighten($brand-primary,20%);}
-        }
-        &.active {
-          border-bottom: 2px solid $brand-primary;
-          .nav-link {color: $brand-primary;}
+// NAVBAR
+#navbarBreeze {
+  .navbar-nav {
+    .nav-item {
+      .nav-link {
+        color: $gray-dark;
+        &:hover {color: lighten($brand-primary,20%);}
+        &.is-active {
+          border-bottom: 2px solid $brand-primary !important;
+          color: $brand-primary !important;
         }
       }
     }
+  }
+}
+
+
+#content {
+  &.bitcoin {
 
     // JUMBOTRON
     .jumbotron {
@@ -88,6 +91,9 @@ $btn-secondary-border:           $gray-light !default;
     i {color: $brand-primary;}
   }
 }
+.modal-dialog {
+  .badge {margin: 1em 0;}
+}
 #modalDetail {
   a {
     color: $link-color;
@@ -97,6 +103,12 @@ $btn-secondary-border:           $gray-light !default;
 }
 #modalSend, #modalReceive {
   .float-right {a {color: $link-color !important; text-decoration: underline; &:hover {text-decoration: none;}}}
+  .btn-primary {
+    &:disabled {
+      background-color: lighten($brand-primary,20%); opacity: 1 !important;
+      &:hover {cursor: not-allowed !important;}
+    }
+  }
 }
 #modalCheck {
   .btn-link, .card {

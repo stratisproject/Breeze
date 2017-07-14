@@ -45,14 +45,18 @@
   margin: $modal-dialog-margin;
 }
 
+// Custom
+.modalBg {
+  background-color: $modal-content-bg;
+  border: $modal-content-border-width solid $modal-content-border-color;
+}
+
 // Actual modal
 .modal-content {
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: $modal-content-bg;
   background-clip: padding-box;
-  border: $modal-content-border-width solid $modal-content-border-color;
   @include border-radius($border-radius-lg);
   @include box-shadow($modal-content-xs-box-shadow);
   // Remove focus outline from opened modal
