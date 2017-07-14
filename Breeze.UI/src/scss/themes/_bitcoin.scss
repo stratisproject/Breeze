@@ -41,7 +41,7 @@ $btn-secondary-border:           $gray-light !default;
           border-bottom: 2px solid $brand-primary !important;
           color: $brand-primary !important;
         }
-      }    
+      }
     }
   }
 }
@@ -103,6 +103,12 @@ $btn-secondary-border:           $gray-light !default;
 }
 #modalSend, #modalReceive {
   .float-right {a {color: $link-color !important; text-decoration: underline; &:hover {text-decoration: none;}}}
+  .btn-primary {
+    &:disabled {
+      background-color: lighten($brand-primary,20%); opacity: 1 !important;
+      &:hover {cursor: not-allowed !important;}
+    }
+  }
 }
 #modalCheck {
   .btn-link, .card {

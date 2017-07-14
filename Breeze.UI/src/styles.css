@@ -9372,6 +9372,15 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   text-decoration: none;
 }
 
+#modalSend .btn-primary:disabled, #modalReceive .btn-primary:disabled {
+  background-color: #facc94;
+  opacity: 1 !important;
+}
+
+#modalSend .btn-primary:disabled:hover, #modalReceive .btn-primary:disabled:hover {
+  cursor: not-allowed !important;
+}
+
 #modalCheck .btn-link a, #modalCheck .card a {
   color: #D0BF90 !important;
 }
