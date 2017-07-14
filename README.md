@@ -52,14 +52,17 @@ If you want the :sparkles: latest :sparkles: (unstable :bomb:) version of the Br
 |:---|----------------:|------------------:|
 |**Windows 7**| [download][7] | [download][8] | 
 |**Windows 10**| [download][9] | [download][10] | 
-|**Ubuntu 14.04**| - | coming soon | 
-|**OS X 10.11**| - | coming soon | 
-|**OS X 10.12**| - | coming soon | 
+|**Ubuntu 14.04**| - | [download][11] | 
+|**OS X 10.11**| - | [download][12] | 
+|**OS X 10.12**| - | [download][13] | 
 
 
 [7]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win7-x86-Release.zip?job=Environment%3A%20win_runtime%3Dwin7-x86%3B%20Configuration%3A%20Release
 [8]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win7-x64-Release.zip?job=Environment%3A%20win_runtime%3Dwin7-x64%3B%20Configuration%3A%20Release
 [9]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win10-x86-Release.zip?job=Environment%3A%20win_runtime%3Dwin10-x86%3B%20Configuration%3A%20Release
 [10]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win10-x64-Release.zip?job=Environment%3A%20win_runtime%3Dwin10-x64%3B%20Configuration%3A%20Release
+[11]: https://github.com/bokobza/Breeze/releases/download/cd-unstable/breeze-ubuntu.14.04-x64-Release.zip
+[12]: https://github.com/bokobza/Breeze/releases/download/cd-unstable/breeze-osx.10.11-x64-Release.zip
+[13]: https://github.com/bokobza/Breeze/releases/download/cd-unstable/breeze-osx.10.12-x64-Release.zip
 
 
