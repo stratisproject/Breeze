@@ -49,7 +49,7 @@ To skip a build, for example if you've made very minor changes, include the text
 If you want the :sparkles: latest :sparkles: (unstable :bomb:) version of the Breeze app, you can get it here: 
 
 |    | x86 Release | x64 Release | Notes |
-|:---|----------------:|------------------:|
+|:---|----------------:|------------------:|------------------:|
 |**Windows 7**| [download][7] | [download][8] | continuous build - up to date with commits |
 |**Windows 10**| [download][9] | [download][10] | continuous build - up to date with commits | 
 |**Ubuntu 14.04**| - | coming soon | manual build |
