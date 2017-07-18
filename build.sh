@@ -3,6 +3,13 @@
 # exit if error
 set -o errexit
 
+if [ "$TRAVIS_OS_NAME" = "osx" ]
+then
+  dotnet_resources_path_in_app=$TRAVIS_BUILD_DIR/breeze_out/breeze-ui-$os_platform-$arch/breeze-ui.app/contents/resources/app/assets/daemon
+else
+  dotnet_resources_path_in_app=$TRAVIS_BUILD_DIR/breeze_out/breeze-ui-$os_platform-$arch/resources/app/assets/daemon
+fi
+
 # define a few variables
 app_output_name="breeze-$os_identifier-$arch-$configuration"
 api_output_name="api-$os_identifier-$arch-$configuration"
@@ -17,6 +24,7 @@ echo "Architecture:" $arch
 echo "Configuration:" $configuration
 echo "App output name:" $app_output_name
 echo "Api output name:" $api_output_name
+echo "dotnet resources path in app:" $dotnet_resources_path_in_app
 
 
 dotnet --info
@@ -59,8 +67,8 @@ node package.js --platform=$os_platform --arch=$arch --path=$TRAVIS_BUILD_DIR/br
 
 # copy api libs into app
 echo $log_prefix copying the Breeze api into the app
-mkdir -p $TRAVIS_BUILD_DIR/breeze_out/breeze-ui-$os_platform-$arch/resources/app/assets/daemon/
-cp -r $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME/* $TRAVIS_BUILD_DIR/breeze_out/breeze-ui-$os_platform-$arch/resources/app/assets/daemon/
+mkdir -p $dotnet_resources_path_in_app
+cp -r $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME/* $dotnet_resources_path_in_app
 
 # zip result
 echo $log_prefix zipping the app into $TRAVIS_BUILD_DIR/breeze_out/$app_output_name.zip
