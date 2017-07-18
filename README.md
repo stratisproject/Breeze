@@ -52,8 +52,8 @@ If you want the :sparkles: latest :sparkles: (unstable :bomb:) version of the Br
 |:---|----------------:|------------------:|
 |**Windows 7**| [download][7] | [download][8] | continuous build - up to date with commits |
 |**Windows 10**| [download][9] | [download][10] | continuous build - up to date with commits | 
-|**Ubuntu 14.04**| - | coming soon | manual build 
-|**Ubuntu 16.04**| - | coming soon | manual build
+|**Ubuntu 14.04**| - | coming soon | manual build |
+|**Ubuntu 16.04**| - | coming soon | manual build |
 |**OS X 10.11**| - | [download][13] |  continuous build - up to date with commits |
 |**OS X 10.12**| - | [download][14] |  continuous build - up to date with commits |
 
