@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 import { ApiService } from './shared/services/api.service';
+
+import { remote } from 'electron';
 
 import 'rxjs/add/operator/retryWhen';
 import 'rxjs/add/operator/delay';
@@ -13,17 +16,27 @@ import 'rxjs/add/operator/delay';
 })
 
 export class AppComponent implements OnInit {
-  constructor(private router: Router, private apiService: ApiService) {}
+  constructor(private router: Router, private apiService: ApiService, private titleService: Title) {}
   private errorMessage: any;
   private responseMessage: any;
   private loading: boolean = true;
 
   ngOnInit() {
+    this.setTitle();
     this.apiService.getWalletFiles().retryWhen(errors => errors.delay(2000)).subscribe(() => this.startApp());
   }
 
-  startApp() {
+  private startApp() {
     this.loading = false;
     this.router.navigate(['/login']);
+  }
+
+  private setTitle() {
+    let newTitle;
+    let applicationName = "Breeze Wallet";
+    let applicationVersion = remote.app.getVersion();
+    let releaseCycle = "alpha";
+    newTitle = applicationName + " v" + applicationVersion + " " + releaseCycle;
+    this.titleService.setTitle(newTitle);
   }
 }

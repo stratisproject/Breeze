@@ -36,7 +36,8 @@ function createWindow() {
     frame: true,
     minWidth: 1200,
     minHeight: 700,
-    icon: __dirname + "/assets/images/breeze-logo.png"
+    icon: __dirname + "/assets/images/breeze-logo.png",
+    title: "Breeze Wallet"
   });
 
    // and load the index.html of the app.
