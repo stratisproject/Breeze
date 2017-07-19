@@ -32,11 +32,10 @@ export class AppComponent implements OnInit {
   }
 
   private setTitle() {
-    let newTitle;
     let applicationName = "Breeze Wallet";
     let applicationVersion = remote.app.getVersion();
     let releaseCycle = "alpha";
-    newTitle = applicationName + " v" + applicationVersion + " " + releaseCycle;
+    let newTitle = applicationName + " v" + applicationVersion + " " + releaseCycle;
     this.titleService.setTitle(newTitle);
   }
 }
