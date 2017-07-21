@@ -42,9 +42,6 @@ environment:
     arch: ia32
     plat: win32
 
-hosts:
-  api.nuget.org: 93.184.221.200
-
 init:
 - ps: |
       $env:log_prefix = "[$env:win_runtime][$env:configuration]"
