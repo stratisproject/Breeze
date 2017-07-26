@@ -10,8 +10,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NBitcoin.SPV;
 using NTumbleBit;
-using Stratis.Bitcoin.Wallet;
-using Wallet = Stratis.Bitcoin.Wallet.Wallet;
+using Stratis.Bitcoin.Features.Wallet;
+using Wallet = Stratis.Bitcoin.Features.Wallet.Wallet;
 
 namespace Breeze.TumbleBit.Client
 {

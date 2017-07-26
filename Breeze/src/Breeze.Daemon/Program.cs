@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Linq;
 using Breeze.Api;
+using Stratis.Bitcoin;
 using Stratis.Bitcoin.Builder;
 using Stratis.Bitcoin.Configuration;
 using Breeze.Wallet;
 using NBitcoin;
 using NBitcoin.Protocol;
-using Stratis.Bitcoin.BlockStore;
-using Stratis.Bitcoin.Consensus;
-using Stratis.Bitcoin.MemoryPool;
-using Stratis.Bitcoin.Miner;
-using Stratis.Bitcoin.Notifications;
+using Stratis.Bitcoin.Features.BlockStore;
+using Stratis.Bitcoin.Features.Consensus;
+using Stratis.Bitcoin.Features.MemoryPool;
+using Stratis.Bitcoin.Features.Miner;
+using Stratis.Bitcoin.Features.Notifications;
+using Stratis.Bitcoin.Features.Wallet;
 using Stratis.Bitcoin.Utilities;
-using Stratis.Bitcoin.Wallet;
 
 namespace Breeze.Daemon
 {

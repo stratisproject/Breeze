@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NBitcoin;
 using NTumbleBit;
-using Stratis.Bitcoin.MemoryPool;
+using Stratis.Bitcoin.Features.MemoryPool;
 
 namespace Breeze.TumbleBit.Client
 {

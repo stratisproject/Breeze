@@ -1,8 +1,7 @@
 ﻿using System;
 using NBitcoin;
-using Stratis.Bitcoin.MemoryPool;
-using Stratis.Bitcoin.MemoryPool.Fee;
-using Stratis.Bitcoin.Wallet;
+using Stratis.Bitcoin.Features.MemoryPool;
+using Stratis.Bitcoin.Features.Wallet;
 
 namespace Breeze.Wallet
 {

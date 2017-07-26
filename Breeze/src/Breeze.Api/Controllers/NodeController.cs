@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using Stratis.Bitcoin;
 using Stratis.Bitcoin.Builder;
 
 namespace Breeze.Api.Controllers
