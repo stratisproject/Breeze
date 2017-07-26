@@ -19,8 +19,11 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: $navbar-padding-y $navbar-padding-x 0 $navbar-padding-x;
+  padding: 0 $navbar-padding-x 0 70px;
   box-shadow: inset 0 1px 4px 0 rgba(0,0,0,0.08);
+  background: $white;
+  border-bottom: 1px solid $gray-light;
+  height: auto;
 }
 
 
@@ -60,7 +63,7 @@
     font-size: .96rem;
     letter-spacing: 0.53px;
     font-weight: 500;
-    padding-bottom: 1.25rem;
+    padding: 1.5rem 0 1.25rem;
   }
 }
 

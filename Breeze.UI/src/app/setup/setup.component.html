@@ -4,15 +4,15 @@
       <!--<p class="text-back text-left mb-5 col-6 row">
         <button type="button" class="btn btn-link text-back" (click)="onBackClicked()">Back</button>
       </p>-->
-      <p class="text-back text-left mb-5 col-6 row"><a (click)="onBackClicked()">Back</a></p>
+      <p class="text-back text-left mb-5 offset-3 row"><a (click)="onBackClicked()">Back</a></p>
       <h3 class="display-5">Welcome</h3>
-      <p class="lead">
+      <p class="lead mb-6">
         If you would like to create a new wallet, please click Create. <br/>
         When you have used Breeze before, you can click Restore to recover your wallet.
       </p>
       <div class="row d-flex justify-content-center">
-        <button type="button" class="btn btn-darkgray btn-lg" (click)="onCreateClicked()">Create</button>
         <button type="button" class="btn btn-linkgray btn-lg" (click)="onRecoverClicked()">Restore</button>
+        <button type="button" class="btn btn-darkgray btn-lg" (click)="onCreateClicked()">Create</button>
       </div>
     </div>
     <!-- /container-->

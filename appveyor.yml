@@ -21,26 +21,30 @@ branches:
 image: Visual Studio 2017
 clone_folder: c:\projects\breeze
 configuration:
-  - Debug
+ # - Debug
   - Release
+
+build:
+  parallel: true
+
 environment:
   matrix:
   - win_runtime: win7-x64
+    arch: x64
+    plat: win32
   - win_runtime: win7-x86
+    arch: ia32
+    plat: win32
   - win_runtime: win10-x64
+    arch: x64
+    plat: win32
   - win_runtime: win10-x86
+    arch: ia32
+    plat: win32
 
 init:
 - ps: |
       $env:log_prefix = "[$env:win_runtime][$env:configuration]"
-      if($env:win_runtime -ilike "*x86")
-      {
-        $env:arch = "ia32"
-      }
-      else
-      {
-        $env:arch = "x64"
-      }
       $env:app_output_name = "breeze-$env:win_runtime-$env:configuration"
       $env:api_output_name = "api-$env:win_runtime-$env:configuration"
 
@@ -53,8 +57,7 @@ before_build:
       cd Breeze
 
       # Initialize dependencies
-      git submodule init
-      git submodule update
+      git submodule update --init --recursive
 
       dotnet restore -v m
       cd ../Breeze.UI
@@ -72,7 +75,7 @@ build_script:
 
       Write-Host "$env:log_prefix running 'dotnet publish'" -foregroundcolor "magenta"
       dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\dotnet_out\$env:win_runtime
-
+      
       Write-Host "$env:log_prefix zipping results of 'dotnet publish'" -foregroundcolor "magenta"
       7z a $env:APPVEYOR_BUILD_FOLDER\dotnet_out\$env:api_output_name.zip $env:APPVEYOR_BUILD_FOLDER\dotnet_out\$env:win_runtime\*
       cd ../../../Breeze.UI
@@ -80,11 +83,13 @@ build_script:
       Write-Host "$env:log_prefix running 'npm run'" -foregroundcolor "magenta"
       npm run build:prod
       Write-Host "$env:log_prefix packaging breeze" -foregroundcolor "magenta"
-      node package.js --platform=win32 --arch=$env:arch --path=$env:APPVEYOR_BUILD_FOLDER\breeze_out
+      node package.js --platform=$env:plat --arch=$env:arch --path=$env:APPVEYOR_BUILD_FOLDER\breeze_out
+      
       Write-Host "$env:log_prefix copying the Breeze api into the app" -foregroundcolor "magenta"
-      xcopy /s $env:APPVEYOR_BUILD_FOLDER\dotnet_out\$env:win_runtime\* $env:APPVEYOR_BUILD_FOLDER\breeze_out\breeze-ui-win32-$env:arch\resources\app\assets\daemon\
+      New-Item -Path $env:APPVEYOR_BUILD_FOLDER\breeze_out\breeze-ui-$env:plat-$env:arch\resources\app\assets\daemon -ItemType directory 
+      xcopy /s $env:APPVEYOR_BUILD_FOLDER\dotnet_out\$env:win_runtime\* $env:APPVEYOR_BUILD_FOLDER\breeze_out\breeze-ui-$env:plat-$env:arch\resources\app\assets\daemon\
       Write-Host "$env:log_prefix zipping the result" -foregroundcolor "magenta"
-      7z a  $env:APPVEYOR_BUILD_FOLDER\breeze_out\$env:app_output_name.zip $env:APPVEYOR_BUILD_FOLDER\breeze_out\breeze-ui-win32-$env:arch\*
+      7z a  $env:APPVEYOR_BUILD_FOLDER\breeze_out\$env:app_output_name.zip $env:APPVEYOR_BUILD_FOLDER\breeze_out\breeze-ui-$env:plat-$env:arch
             
       Write-Host "[$env:configuration][$env:win_runtime] FINISHED dotnet build" -foregroundcolor "magenta"
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }

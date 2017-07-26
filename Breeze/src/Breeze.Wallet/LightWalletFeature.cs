@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Stratis.Bitcoin.Builder.Feature;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,9 +23,9 @@ namespace Breeze.Wallet
         private readonly ConcurrentChain chain;
         private readonly NodeDeployments nodeDeployments;
         private readonly IAsyncLoopFactory asyncLoopFactory;
-		private readonly INodeLifetime nodeLifetime;
+        private readonly INodeLifetime nodeLifetime;
 
-		public LightWalletFeature(IWalletSyncManager walletSyncManager, IWalletManager walletManager, IConnectionManager connectionManager, 
+        public LightWalletFeature(IWalletSyncManager walletSyncManager, IWalletManager walletManager, IConnectionManager connectionManager, 
             ConcurrentChain chain, NodeDeployments nodeDeployments, IAsyncLoopFactory asyncLoopFactory, INodeLifetime nodeLifetime)
         {
             this.walletSyncManager = walletSyncManager;
@@ -35,7 +34,7 @@ namespace Breeze.Wallet
             this.chain = chain;
             this.nodeDeployments = nodeDeployments;
             this.asyncLoopFactory = asyncLoopFactory;
-			this.nodeLifetime = nodeLifetime;
+            this.nodeLifetime = nodeLifetime;
         }
 
         public override void Start()

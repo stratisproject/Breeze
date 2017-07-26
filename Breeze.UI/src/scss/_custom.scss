@@ -8,9 +8,7 @@ a, button {&:hover {cursor: pointer !important;}}
 code {color: $spacegray !important;}
 .form-control::-webkit-input-placeholder { color: $input-color-placeholder; }  /* WebKit, Blink, Edge */
 .form-control:-moz-placeholder { color: $input-color-placeholder; }  /* Mozilla Firefox 4 to 18 */
-.form-control::-moz-placeholder { color: $input-color-placeholder; }  /* Mozilla Firefox 19+ */
 .form-control:-ms-input-placeholder { color: $input-color-placeholder; }  /* Internet Explorer 10-11 */
-.form-control::-ms-input-placeholder { color: $input-color-placeholder; }  /* Microsoft Edge */
 
 // button
 .twitter {
@@ -30,16 +28,47 @@ code {color: $spacegray !important;}
   }
 }
 
+// loading
+#loading {
+  width: 150px;
+  height: 150px;
+  display:inline-block;
+  fill: $darkgray !important;
+}
+@-webkit-keyframes blink-caret { 50% { border-color: transparent; } }
+em {
+  &.display-4 {
+    font-size: 1.6em;
+    color: $darkgray;
+    font-weight: 400;
+    padding-right: 5px;
+  	border-right: .1em solid $blue;
+  	white-space: nowrap;
+  	-webkit-animation: blink-caret .5s step-end infinite alternate;
+  }
+}
+
+// datepicker
+.datepicker__input {
+  border-color: transparent !important;
+  padding: 0 !important;
+  text-align: left;
+  color: $input-color !important;
+  width: 100%;
+  text-align: center;
+  &::-webkit-input-placeholder { color: $input-color-placeholder; }  /* WebKit, Blink, Edge */
+}
+
 // container
 #content {
     width: 100%;
     position: relative;
-    padding-left: 70px;
+    padding: 0 0 70px 70px;
 }
 
 // sidebar
 #sidebar {
-  z-index: 1000;
+  z-index: 1035;
   position: fixed;
   width: 70px;
   height: 100%;
@@ -65,6 +94,7 @@ code {color: $spacegray !important;}
       }
       &:hover {
         opacity: .8;
+        cursor: pointer !important;
         .bar {opacity: 0;}
       }
       img {width: 42px;}
@@ -91,6 +121,9 @@ code {color: $spacegray !important;}
   }
 }
 
+// NAVBAR
+#navbarBreeze {}
+
 // jumbotron
 .jumbotron {
   h5 {
@@ -116,6 +149,8 @@ code {color: $spacegray !important;}
 
 // transactions
 #transaction {
+  padding-top: 2em;
+  .muted {opacity: .5;}
   h5 {
     font-size: .85em;
     color: $gray-dark;
@@ -144,7 +179,7 @@ code {color: $spacegray !important;}
 // status box
 .status {
   background: $white;
-  width: 80px;
+  width: auto;
   height: 40px;
   border: 1px solid #DBDBDB;
   box-shadow: 0 1px 11px 0 rgba(80,96,120,.2);
@@ -153,29 +188,33 @@ code {color: $spacegray !important;}
   bottom: 2%;
   right: 2%;
   text-align: center;
-  ul {transform: translateY(50%) translateX(15%);}
+  ul {
+    transform: translateY(50%) translateX(0);
+    display: inline-block;
+    position: relative;
+    padding: 0 2em;
+  }
   li {
     font-size: .9em;
     position: relative;
-    padding: 0 8px;
+    float: left;
+    margin-right: 4px;
+    .text-info {color: $gray-dark !important;}
     &.pending {
       i {
-        font-size: 1.3em;
-        position: absolute;
+        font-size: .9em;
         color: $brand-warning;
-        animation: spin 4s linear infinite;
       }
     }
     &.statusOK {
       i {
         color: $brand-success;
-        font-size: 1.3em;
+        font-size: .9em;
         position: absolute;
       }
     }
   }
 }
-@keyframes spin {100%{transform:rotate(360deg);}}
 
 // modal
 .modal-header {
@@ -439,8 +478,9 @@ $curve: cubic-bezier(0.650, 0.000, 0.450, 1.000);
       text-transform: uppercase;
     }
     .lead {
-      font-size: 1.25em;
+      font-size: 1.15em;
       color: $blue;
+      font-weight: 400;
       line-height: 1.25em;
       margin: 2em 0;
     }
@@ -453,7 +493,7 @@ $curve: cubic-bezier(0.650, 0.000, 0.450, 1.000);
       text-decoration: underline;
       &:hover {
         text-decoration: none;
-        color: lighten($darkgray,20%);
+        color: lighten($darkgray,10%);
       }
     }
     form {margin-bottom: 4em;}
