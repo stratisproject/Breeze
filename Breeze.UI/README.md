@@ -27,7 +27,7 @@ If you want to generate Angular components with Angular-cli , you **MUST** insta
 Please follow [Angular-cli documentation](https://github.com/angular/angular-cli) if you had installed a previous version of `angular-cli`.
 
 ``` bash
-npm install -g @angular/cli
+sudo npm install -g @angular/cli
 ```
 
 ## To build for development
