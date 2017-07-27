@@ -15,7 +15,13 @@ Navigate to the Breeze UI in a terminal:
 cd ./Breeze/Breeze.UI
 ```
 
-Install dependencies with npm:
+## Install NodeJS:
+
+Download and install the latest Long Term Support (LTS) version of NodeJS at: https://nodejs.org/. 
+
+## Install dependencies with npm:
+
+From within Breeze.UI directory run:
 
 ``` bash
 npm install
