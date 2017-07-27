@@ -37,8 +37,8 @@ This will compile the Angular code and spawn the Electron process in parallel.
 After compilation has completed the Electron UI will refresh.
 
 If you want to seperate the build process from the Electron process you can use:
-- **in a terminal window** -> npm start:webpack
-- **in another terminal window** -> npm run electron:serve
+- **in a terminal window** -> `npm run start:webpack`
+- **in another terminal window** -> `npm run electron:serve`
 
 ## To build for production
 
