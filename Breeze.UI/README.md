@@ -15,7 +15,21 @@ Navigate to the Breeze UI in a terminal:
 cd ./Breeze/Breeze.UI
 ```
 
-Install dependencies with npm:
+## Install Nodejs (ver 8.x) and npm:
+
+Using Ubuntu
+`curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -`
+`sudo apt-get install -y nodejs`
+
+Using Debian, as root
+`curl -sL https://deb.nodesource.com/setup_8.x | bash -`
+`apt-get install -y nodejs`
+
+## Update npm to newest version:
+
+`sudo npm install npm@latest -g`
+
+## Install dependencies with npm:
 
 ``` bash
 npm install
