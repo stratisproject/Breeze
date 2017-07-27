@@ -15,7 +15,7 @@ Navigate to the Breeze UI in a terminal:
 cd ./Breeze/Breeze.UI
 ```
 
-## Install Nodejs (ver 8.x) and npm:
+## Install Nodejs (v8.x) and npm:
 
 Using Ubuntu
 ```bash
@@ -27,9 +27,16 @@ Using Debian, as root
 curl -sL https://deb.nodesource.com/setup_8.x | bash -
 apt-get install -y nodejs
 ```
+*To use and alternate version such as 7, change "8" to "7", further instructions available for various distributions: https://github.com/nodesource/distributions
+
 ## Install/Update Nodejs/npm to stable/latest release version:
 
+Node comes with npm pre-installed, but the manager is updated more frequently than Node. Run npm -v to see which version you have, then npm install npm@latest -g to install the newest npm update. Run npm -v again if you want to make sure npm updated correctly.
+
+To update Node, you’ll need npm’s handy n module. Run this code to clear npm’s cache, install n, and install the latest stable version of Node:
+
 ```bash
+sudo npm cache clean -f
 sudo npm install npm@latest -g
 sudo npm install n -g
 sudo n stable
