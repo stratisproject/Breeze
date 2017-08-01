@@ -58,10 +58,10 @@ If you want the :sparkles: latest :sparkles: (unstable :bomb:) version of the Br
 |**OS X 10.12**| - | [download][14] |  continuous build - up to date with commits |
 
 
-[7]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win7-x86-Release.zip?job=Environment%3A%20win_runtime%3Dwin7-x86
-[8]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win7-x64-Release.zip?job=Environment%3A%20win_runtime%3Dwin7-x64
-[9]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win10-x86-Release.zip?job=Environment%3A%20win_runtime%3Dwin10-x86
-[10]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win10-x64-Release.zip?job=Environment%3A%20win_runtime%3Dwin10-x64
+[7]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win7-x86-Release.zip?job=Environment%3A%20win_runtime%3Dwin7-x86%2C%20arch%3Dia32%2C%20plat%3Dwin32
+[8]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win7-x64-Release.zip?job=Environment%3A%20win_runtime%3Dwin7-x64%2C%20arch%3Dx64%2C%20plat%3Dwin32
+[9]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win10-x86-Release.zip?job=Environment%3A%20win_runtime%3Dwin10-x86%2C%20arch%3Dia32%2C%20plat%3Dwin32
+[10]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win10-x64-Release.zip?job=Environment%3A%20win_runtime%3Dwin10-x64%2C%20arch%3Dx64%2C%20plat%3Dwin32
 [11]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-ubuntu.14.04-x64-Release.zip
 [12]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-ubuntu.14.04-x64-Release.zip
 [13]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-osx.10.11-x64-Release.zip
