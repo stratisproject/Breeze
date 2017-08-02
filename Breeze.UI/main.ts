@@ -1,4 +1,4 @@
-const electron = require('electron');
+﻿const electron = require('electron');
 
 // Module to control application life.
 const app = electron.app;
@@ -146,7 +146,7 @@ function createTray() {
 var iconPath
 if (os.platform() === 'win32') {
   if (serve) {
-    iconPath = '.\src\assets\images\breeze-logo-tray.ico';
+    iconPath = '.\\src\\assets\\images\\breeze-logo-tray.ico';
   } else {
     iconPath = path.join(__dirname + '\\assets\\images\\breeze-logo-tray.png');
   }
