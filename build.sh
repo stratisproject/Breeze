@@ -76,9 +76,7 @@ cd $TRAVIS_BUILD_DIR/breeze_out
 zip -r $TRAVIS_BUILD_DIR/deploy/$app_output_name.zip breeze-ui-$os_platform-$arch/*
 
 #tests
-echo $log_prefix running tests
-dotnet test -c $configuration $TRAVIS_BUILD_DIR/Breeze/src/Breeze.Api.Tests/Breeze.Api.Tests.csproj -v m
+echo $log_prefix no tests to run
 
-            
 echo $log_prefix FINISHED build
 
