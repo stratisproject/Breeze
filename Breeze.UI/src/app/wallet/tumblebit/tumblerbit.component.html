@@ -1,0 +1,51 @@
+ <section id="breeze">
+  <!-- CONTENT -->
+  <section id="content" class="bitcoin">
+    <!-- JUMBOTRON-->
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <div class="row d-flex align-items-center">
+          <div class="col-xs-12 col-md-4 text-left">
+            <h5 class="text-uppercase">Active balance</h5>
+            <p class="lead">
+              <i class="icon-bitcoin"></i>
+              <!--<strong><span class="h2">29</span>.76500293</strong>-->
+              <strong>{{confirmedBalance | coinNotation }}</strong>
+              <!--<small class="text-uppercase">btc</small>-->
+            </p>
+          </div>
+          <!-- /col-->
+          <!--<div class="col-xs-12 col-md-4 text-left">
+            <h5 class="text-uppercase">Current value</h5>
+            <p class="lead">
+              <i class="icon-coin-dollar"></i>
+              <strong><span class="h2">51,390</span></strong>
+              <small class="text-uppercase">usd</small>
+            </p>
+          </div>-->
+          <div class="col-xs-12 col-md-4 text-left">
+            <h5 class="text-uppercase">Unconfirmed balance</h5>
+            <p class="lead">
+              <i class="icon-bitcoin"></i>
+              <strong>{{unconfirmedBalance | coinNotation }}</strong>
+            </p>
+          </div>
+          <!-- /col-->
+          <div class="col-xs-12 col-md-4 text-right">
+            <p>
+              <a class="btn btn-secondary" data-toggle="modal" data-target="#modalReceive" role="button" (click)="openReceiveDialog()">Receive</a>
+              <a class="btn btn-primary ml-2" data-toggle="modal" data-target="#modalSend" role="button" (click)="openSendDialog()">Send</a>
+            </p>
+          </div>
+          <!-- /col-->
+        </div>
+        <!-- /row-->
+      </div>
+      <!-- /container-->
+    </div>
+    <!-- /JUMBOTRON-->
+
+  </section>
+  <!-- /CONTENT-->
+</section>
+<!-- /breeze-->
