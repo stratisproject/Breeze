@@ -20,7 +20,6 @@ export class TumblebitComponent implements OnInit {
   private confirmedBalance: number;
   private unconfirmedBalance: number;
   private walletBalanceSubscription: Subscription;
-  private walletHistorySubscription: Subscription;
 
   ngOnInit() {
     this.getWalletBalance();
@@ -28,7 +27,6 @@ export class TumblebitComponent implements OnInit {
 
   ngOnDestroy() {
     this.walletBalanceSubscription.unsubscribe();
-    this.walletHistorySubscription.unsubscribe();
   };
 
   private getWalletBalance() {
