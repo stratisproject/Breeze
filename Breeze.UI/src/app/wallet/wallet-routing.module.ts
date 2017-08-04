@@ -14,7 +14,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo:'dashboard', pathMatch:'full' },
       { path: 'dashboard', component: DashboardComponent},
-    { path: 'tumblebit', component: TumblebitComponent},
+      { path: 'tumblebit', component: TumblebitComponent},
       { path: 'history', component: HistoryComponent}
     ]
   },
