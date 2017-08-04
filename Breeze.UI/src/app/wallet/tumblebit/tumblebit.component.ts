@@ -25,6 +25,8 @@ export class TumblebitComponent implements OnInit {
 
   private confirmedBalance: number;
   private walletBalanceSubscription: Subscription;
+  private tumblerParameters: any;
+  private tumbleStatus: any;
 
   private tumblebitForm: FormGroup;
 
@@ -75,6 +77,30 @@ export class TumblebitComponent implements OnInit {
       tumblerAddress,
       this.globalService.getNetwork()
     );
+
+    this.tumblebitService
+      .connect(connection)
+      .subscribe(
+        // TODO abstract into shared utility method
+        response => {
+          if (response.status >= 200 && response.status < 400) {
+            this.tumblerParameters = response.json();
+          }
+        },
+        error => {
+          console.error(error);
+          if (error.status === 0) {
+            alert("Something went wrong while connecting to the TumbleBit Client. Please restart the application.");
+          } else if (error.status >=400) {
+            if (!error.json().errors[0]) {
+              console.error(error);
+            }
+            else {
+              alert(error.json().errors[0].message);
+            }
+          }
+        },
+      )
   }
 
   private tumble() {
