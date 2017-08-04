@@ -21,8 +21,17 @@
                 <input type="text" class="form-control form-control-danger" formControlName="destination" id="destination">
                 <div *ngIf="formErrors.destination" class="form-control-feedback">{{ formErrors.destination }}</div>
               </div>
-              <button type="submit" class="btn btn-lg btn-primary" [disabled]="!tumblebitForm.valid" (click)="tumble()">Tumble</button>
+              <div class="form-group clearfix">
+                <label class="float-left">Tumbler Address</label>
+                <!--<span class="float-right"><a href="#">max</a></span>-->
+                <input type="text" class="form-control form-control-danger" formControlName="tumbler" id="destination">
+                <div *ngIf="formErrors.destination" class="form-control-feedback">{{ formErrors.destination }}</div>
+              </div>
             </form>
+            <div class="btn-group" role="group">
+              <button type="submit" class="btn btn-lg btn-primary" [disabled]="!tumblebitForm.valid" (click)="tumble()">Tumble</button>
+              <button type="button" class="btn btn-lg btn-danger">Stop</button>
+            </div>
           </div>
         </div>
         <!-- /row-->

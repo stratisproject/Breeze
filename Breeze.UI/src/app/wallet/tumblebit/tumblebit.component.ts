@@ -28,6 +28,7 @@ export class TumblebitComponent implements OnInit {
   private buildTumbleBitForm(): void {
     this.tumblebitForm = this.fb.group({
       'destination': ['', Validators.required],
+      'tumbler': ['', Validators.required],
     })
 
     this.tumblebitForm.valueChanges
@@ -38,14 +39,12 @@ export class TumblebitComponent implements OnInit {
 
   // TODO: abstract to a shared utility lib
   onValueChanged(data?: any) {
-    console.log('changed')
     if (!this.tumblebitForm) { return; }
     const form = this.tumblebitForm;
     for (const field in this.formErrors) {
       this.formErrors[field] = '';
       const control = form.get(field);
       if (control && control.dirty && !control.valid) {
-        console.log(control)
         const messages = this.validationMessages[field];
         for (const key in control.errors) {
           this.formErrors[field] += messages[key] + ' ';
@@ -56,11 +55,15 @@ export class TumblebitComponent implements OnInit {
 
   formErrors = {
     'destination': '',
+    'tumbler': '',
   };
 
   validationMessages = {
     'destination': {
-      'required': 'A destination is required.'
+      'required': 'A destination is required.',
+    },
+    'tumbler': {
+      'required': 'A tumbler address is required.',
     }
   }
 
@@ -76,6 +79,7 @@ export class TumblebitComponent implements OnInit {
     this.walletBalanceSubscription.unsubscribe();
   };
 
+  // TODO: move into a shared service
   private getWalletBalance() {
     let walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getCoinType())
     this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
