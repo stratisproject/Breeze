@@ -18,7 +18,6 @@ export class TumblebitComponent implements OnInit {
   constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal) {}
 
   private confirmedBalance: number;
-  private unconfirmedBalance: number;
   private walletBalanceSubscription: Subscription;
 
   ngOnInit() {
