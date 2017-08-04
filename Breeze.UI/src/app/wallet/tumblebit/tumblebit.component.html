@@ -9,12 +9,21 @@
             <h5 class="text-uppercase">Active balance</h5>
             <p class="lead">
               <i class="icon-bitcoin"></i>
-              <!--<strong><span class="h2">29</span>.76500293</strong>-->
               <strong>{{confirmedBalance | coinNotation }}</strong>
-              <!--<small class="text-uppercase">btc</small>-->
             </p>
           </div>
           <!-- /col-->
+          <div class="col-xs-12 col-md-4 text-left">
+            <form [formGroup]="tumblebitForm" (ngSubmit)="tumble()">
+              <div class="form-group clearfix">
+                <label class="float-left">Destination Address</label>
+                <!--<span class="float-right"><a href="#">max</a></span>-->
+                <input type="text" class="form-control form-control-danger" formControlName="destination" id="destination">
+                <div *ngIf="formErrors.destination" class="form-control-feedback">{{ formErrors.destination }}</div>
+              </div>
+              <button type="submit" class="btn btn-lg btn-primary" [disabled]="!tumblebitForm.valid" (click)="tumble()">Tumble</button>
+            </form>
+          </div>
         </div>
         <!-- /row-->
       </div>
@@ -22,6 +31,15 @@
     </div>
     <!-- /JUMBOTRON-->
 
+    <!-- container-->
+    
+
+      <!-- tumbler address -->
+      <!-- destination -->
+      <!-- denomination -->
+      <!-- fee -->
+
+  
   </section>
   <!-- /CONTENT-->
 </section>
