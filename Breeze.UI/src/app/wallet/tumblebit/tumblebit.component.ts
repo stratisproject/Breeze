@@ -3,9 +3,11 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 import { ApiService } from '../../shared/services/api.service';
-import { TumblebitService } from './tumblebit.service';
 import { GlobalService } from '../../shared/services/global.service';
 import { WalletInfo } from '../../shared/classes/wallet-info';
+import { TumblebitService } from './tumblebit.service';
+import { TumblerConnectionRequest } from './classes/tumbler-connection-request';
+import { TumbleRequest } from './classes/tumble-request';
 
 import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
@@ -66,6 +68,13 @@ export class TumblebitComponent implements OnInit {
     'tumbler': {
       'required': 'A tumbler address is required.',
     }
+  }
+
+  private connect(tumblerAddress: string) {
+    let connection = new TumblerConnectionRequest(
+      tumblerAddress,
+      this.globalService.getNetwork()
+    );
   }
 
   private tumble() {

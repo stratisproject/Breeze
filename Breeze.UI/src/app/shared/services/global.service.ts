@@ -12,6 +12,10 @@ export class GlobalService {
     return this.walletPath;
   }
 
+  getNetwork() {
+    return "testnet";
+  }
+
   setWalletPath(walletPath: string) {
     this.walletPath = walletPath;
   }
