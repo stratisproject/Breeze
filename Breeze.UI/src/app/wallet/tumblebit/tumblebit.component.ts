@@ -3,6 +3,7 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 import { ApiService } from '../../shared/services/api.service';
+import { TumblebitService } from './tumblebit.service';
 import { GlobalService } from '../../shared/services/global.service';
 import { WalletInfo } from '../../shared/classes/wallet-info';
 
@@ -16,7 +17,7 @@ import { Subscription } from 'rxjs/Subscription';
 })
 
 export class TumblebitComponent implements OnInit {
-  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private fb: FormBuilder) {
+  constructor(private apiService: ApiService, private tumblebitService: TumblebitService, private globalService: GlobalService, private modalService: NgbModal, private fb: FormBuilder) {
     this.buildTumbleBitForm();
   }
 
@@ -69,6 +70,10 @@ export class TumblebitComponent implements OnInit {
 
   private tumble() {
     console.log(this.tumblebitForm);
+  }
+
+  private stopTumble() {
+    console.log("stopping tumble...");
   }
 
   ngOnInit() {
