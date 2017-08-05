@@ -14,8 +14,9 @@ import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'tumblebit-component',
+  providers: [TumblebitService]
   templateUrl: './tumblebit.component.html',
-  styleUrls: ['./tumblebit.component.css']
+  styleUrls: ['./tumblebit.component.css'],
 })
 
 export class TumblebitComponent implements OnInit {
