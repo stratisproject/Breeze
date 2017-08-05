@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -51,7 +51,7 @@ import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout
     TransactionDetailsComponent,
     LogoutConfirmationComponent
   ],
-  providers: [ ApiService, GlobalService ],
+  providers: [ ApiService, GlobalService, Title ],
   bootstrap: [ AppComponent ]
 })
 
