@@ -24,12 +24,10 @@ export class TumblebitComponent implements OnInit {
     this.buildTumbleForm();
     this.buildConnectForm();
   }
-
   private confirmedBalance: number;
   private walletBalanceSubscription: Subscription;
   private tumblerParameters: any;
   private tumbleStatus: any;
-
   private tumbleForm: FormGroup;
   private connectForm: FormGroup;
 
@@ -112,7 +110,7 @@ export class TumblebitComponent implements OnInit {
         error => {
           console.error(error);
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the TumbleBit Client. Please restart the application.");
+            alert('Something went wrong while connecting to the TumbleBit Client. Please restart the application.');
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.error(error);
@@ -144,7 +142,7 @@ export class TumblebitComponent implements OnInit {
         error => {
           console.error(error);
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the TumbleBit Client. Please restart the application.");
+            alert('Something went wrong while connecting to the TumbleBit Client. Please restart the application.');
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.error(error);
@@ -160,7 +158,7 @@ export class TumblebitComponent implements OnInit {
   }
 
   private stopTumble() {
-    console.log("stopping tumble...");
+    console.log('stopping tumble...');
   }
 
   ngOnInit() {
@@ -185,7 +183,7 @@ export class TumblebitComponent implements OnInit {
         error => {
           console.log(error);
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the API. Make sure your address is correct and try again.");
+            alert('Something went wrong while connecting to the API. Make sure your address is correct and try again.');
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
