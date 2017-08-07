@@ -21,7 +21,8 @@ import { Subscription } from 'rxjs/Subscription';
 
 export class TumblebitComponent implements OnInit {
   constructor(private apiService: ApiService, private tumblebitService: TumblebitService, private globalService: GlobalService, private modalService: NgbModal, private fb: FormBuilder) {
-    this.buildTumbleBitForm();
+    this.buildTumbleForm();
+    this.buildConnectForm();
   }
 
   private confirmedBalance: number;
@@ -29,42 +30,56 @@ export class TumblebitComponent implements OnInit {
   private tumblerParameters: any;
   private tumbleStatus: any;
 
-  private tumblebitForm: FormGroup;
+  private tumbleForm: FormGroup;
+  private connectForm: FormGroup;
 
-  private buildTumbleBitForm(): void {
-    this.tumblebitForm = this.fb.group({
+  private buildTumbleForm(): void {
+    this.tumbleForm = this.fb.group({
       'source': ['', Validators.required],
       'destination': ['', Validators.required],
-      'tumbler': ['', Validators.required],
     })
 
-    this.tumblebitForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
+    this.tumbleForm.valueChanges
+      .subscribe(data => this.onValueChanged(this.tumbleForm, this.tumbleFormErrors, data));
     
-    this.onValueChanged();
+    this.onValueChanged(this.tumbleForm, this.tumbleFormErrors);
   }
 
+  private buildConnectForm(): void {
+    this.connectForm = this.fb.group({
+      'tumblerAddress': ['', Validators.required],
+    })
+
+    this.connectForm.valueChanges
+      .subscribe(data => this.onValueChanged(this.connectForm, this.connectFormErrors, data));
+
+    this.onValueChanged(this.connectForm, this.connectFormErrors);
+  }
+
+
   // TODO: abstract to a shared utility lib
-  onValueChanged(data?: any) {
-    if (!this.tumblebitForm) { return; }
-    const form = this.tumblebitForm;
-    for (const field in this.formErrors) {
-      this.formErrors[field] = '';
+  onValueChanged(form: FormGroup, formErrors: object, data?: any) {
+    if (!form) { return; }
+    for (const field in formErrors) {
+      formErrors[field] = '';
       const control = form.get(field);
       if (control && control.dirty && !control.valid) {
         const messages = this.validationMessages[field];
         for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
+          formErrors[field] += messages[key] + ' ';
         }
       }
     }
   }
 
-  formErrors = {
+  connectFormErrors = {
     'source': '',
     'destination': '',
-    'tumbler': '',
   };
+
+  tumbleFormErrors = {
+    'tumblerAddress': '',
+  }
 
   validationMessages = {
     'source': {
@@ -73,7 +88,7 @@ export class TumblebitComponent implements OnInit {
     'destination': {
       'required': 'A destination address is required.',
     },
-    'tumbler': {
+    'tumblerAddress': {
       'required': 'A tumbler address is required.',
     }
   }
@@ -113,8 +128,8 @@ export class TumblebitComponent implements OnInit {
 
   private tumble() {
     let tumbleRequest = new TumbleRequest(
-      this.tumblebitForm['source'],
-      this.tumblebitForm['destination']
+      this.connectForm['source'],
+      this.connectForm['destination']
     )
 
     this.tumblebitService
