@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'tumblebit-component',
-  providers: [TumblebitService]
+  providers: [TumblebitService],
   templateUrl: './tumblebit.component.html',
   styleUrls: ['./tumblebit.component.css'],
 })
