@@ -13,7 +13,7 @@ export class GlobalService {
   }
 
   getNetwork() {
-    return "testnet";
+    return "TestNet";
   }
 
   setWalletPath(walletPath: string) {
