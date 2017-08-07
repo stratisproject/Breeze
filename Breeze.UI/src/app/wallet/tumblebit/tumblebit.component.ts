@@ -139,6 +139,8 @@ export class TumblebitComponent implements OnInit {
           }
         },
       )
+    
+      console.log(this.tumbleStatus);
   }
 
   private stopTumble() {
