@@ -97,7 +97,7 @@ export class TumblebitComponent implements OnInit {
           console.error(error);
           if (error.status === 0) {
             alert("Something went wrong while connecting to the TumbleBit Client. Please restart the application.");
-          } else if (error.status >=400) {
+          } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.error(error);
             }
