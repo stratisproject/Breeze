@@ -58,8 +58,9 @@ export class TumblebitComponent implements OnInit {
 
 
   // TODO: abstract to a shared utility lib
-  onValueChanged(form: FormGroup, formErrors: object, data?: any) {
-    if (!form) { return; }
+  onValueChanged(originalForm: FormGroup, formErrors: object, data?: any) {
+    if (!originalForm) { return; }
+    const form = originalForm;
     for (const field in formErrors) {
       formErrors[field] = '';
       const control = form.get(field);
@@ -93,9 +94,9 @@ export class TumblebitComponent implements OnInit {
     }
   }
 
-  private connect(tumblerAddress: string) {
+  private connect() {
     let connection = new TumblerConnectionRequest(
-      tumblerAddress,
+      this.connectForm.get('tumblerAddress').value,
       this.globalService.getNetwork()
     );
 
@@ -128,8 +129,8 @@ export class TumblebitComponent implements OnInit {
 
   private tumble() {
     let tumbleRequest = new TumbleRequest(
-      this.connectForm['source'],
-      this.connectForm['destination']
+      this.tumbleForm.get('source').value,
+      this.tumbleForm.get('destination').value
     )
 
     this.tumblebitService
