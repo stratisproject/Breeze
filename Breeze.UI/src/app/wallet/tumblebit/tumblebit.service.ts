@@ -12,21 +12,21 @@ export class TumblebitService {
   // TumbleBit.Client.CLI tool
   constructor(private http: Http) { };
 
-  private tumblerClientUrl = 'http://localhost/api/TumbleBit/';
+  private tumblerClientUrl = 'http://localhost:5000/api/TumbleBit/';
   private headers = new Headers({ 'Content-Type': 'application/json' });
 
   // Might make sense to populate tumblerParams here because services are singletons
 
   connect(body: TumblerConnectionRequest): Observable<any> {
     return this.http
-      .post(this.tumblerClientUrl + '/connect/', JSON.stringify(body), {headers: this.headers})
+      .post(this.tumblerClientUrl + 'connect/', JSON.stringify(body), {headers: this.headers})
       .map((response: Response) => response);
 
   };
 
   tumble(body: TumbleRequest): Observable<any> {
     return this.http
-      .post(this.tumblerClientUrl + '/tumble/', JSON.stringify(body), {headers: this.headers})
+      .post(this.tumblerClientUrl + 'tumble/', JSON.stringify(body), {headers: this.headers})
       .map((response: Response) => response);
   };
 }
