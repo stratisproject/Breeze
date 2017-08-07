@@ -1,10 +1,10 @@
 export class TumblerConnectionRequest {
 
   constructor(serverAddress: string, network:string) {
-    this.serverAddress = serverAddress;
-    this.network = network;
+    this.ServerAddress = serverAddress;
+    this.Network = network;
   }
 
-  serverAddress: string;
-  network: string;
+  ServerAddress: string;
+  Network: string;
 }
