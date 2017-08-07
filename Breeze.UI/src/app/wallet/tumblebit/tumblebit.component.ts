@@ -116,6 +116,29 @@ export class TumblebitComponent implements OnInit {
       this.tumblebitForm['source'],
       this.tumblebitForm['destination']
     )
+
+    this.tumblebitService
+      .tumble(tumbleRequest)
+      .subscribe(
+        response => {
+          if (response.status >= 200 && response.status < 400) {
+            this.tumbleStatus = response.json();
+          }
+        },
+        error => {
+          console.error(error);
+          if (error.status === 0) {
+            alert("Something went wrong while connecting to the TumbleBit Client. Please restart the application.");
+          } else if (error.status >= 400) {
+            if (!error.json().errors[0]) {
+              console.error(error);
+            }
+            else {
+              alert(error.json().errors[0].message);
+            }
+          }
+        },
+      )
   }
 
   private stopTumble() {
