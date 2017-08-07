@@ -33,6 +33,7 @@ export class TumblebitComponent implements OnInit {
 
   private buildTumbleBitForm(): void {
     this.tumblebitForm = this.fb.group({
+      'source': ['', Validators.required],
       'destination': ['', Validators.required],
       'tumbler': ['', Validators.required],
     })
@@ -60,13 +61,17 @@ export class TumblebitComponent implements OnInit {
   }
 
   formErrors = {
+    'source': '',
     'destination': '',
     'tumbler': '',
   };
 
   validationMessages = {
+    'source': {
+      'required': 'A source address is required',
+    },
     'destination': {
-      'required': 'A destination is required.',
+      'required': 'A destination address is required.',
     },
     'tumbler': {
       'required': 'A tumbler address is required.',
@@ -102,10 +107,15 @@ export class TumblebitComponent implements OnInit {
           }
         },
       )
+    
+    console.log(this.tumblerParameters);
   }
 
   private tumble() {
-    console.log(this.tumblebitForm);
+    let tumbleRequest = new TumbleRequest(
+      this.tumblebitForm['source'],
+      this.tumblebitForm['destination']
+    )
   }
 
   private stopTumble() {
@@ -134,7 +144,7 @@ export class TumblebitComponent implements OnInit {
         error => {
           console.log(error);
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the API. Please restart the application.");
+            alert("Something went wrong while connecting to the API. Make sure your address is correct and try again.");
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
