@@ -27,24 +27,23 @@ From within Breeze.UI directory run:
 npm install
 ```
 
-There is an issue with `yarn` and `node_modules` that are only used in electron on the backend when the application is built by the packager. Please use `npm` as dependencies manager.
+There is an issue with `yarn` and `node_modules` that are only used in electron on the backend when the application is built by the packager. Please use `npm` as dependency manager.
 
-If you want to generate Angular components with Angular-cli , you **MUST** install `@angular/cli` in npm global context.  
-Please follow [Angular-cli documentation](https://github.com/angular/angular-cli) if you had installed a previous version of `angular-cli`.
-
-``` bash
-sudo npm install -g @angular/cli
-```
+If you want to generate Angular components with Angular-cli, you **MUST** install `@angular/cli` in npm global context.  
+If you have already installed a previous version of `angular-cli`, follow [Angular-cli documentation](https://github.com/angular/angular-cli), otherwise execute `sudo npm install -g @angular/cli` command.
 
 ## To build for development
 
-- **in a terminal window** -> npm start
+#### Terminal Window 1
+[Run the daemon](https://github.com/stratisproject/Breeze/blob/master/README.md#daemon-build)  
+
+#### Terminal Window 2
+`npm start`  
 This will compile the Angular code and spawn the Electron process in parallel.
 After compilation has completed the Electron UI will refresh.
 
-If you want to seperate the build process from the Electron process you can use:
-- **in a terminal window** -> `npm run start:webpack`
-- **in another terminal window** -> `npm run electron:serve`
+#### Terminal Window 3, 4
+If you want to seperate the build process from the Electron process you can use `npm run start:webpack` and `npm run electron:serve`.
 
 ## To build for production
 
