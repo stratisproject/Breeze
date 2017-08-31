@@ -16,7 +16,7 @@ This is the repository of the Breeze Wallet, the first full-block SPV bitcoin wa
 
 At the moment, only bitcoin on testnet is supported but more is coming soon. 
 
-## How to build the Breeze Daemon
+## Daemon Build
 
 Breeze daemon is the backend REST service, hosting a Bitcoin node upon which Breeze UI depends:
 
@@ -38,7 +38,11 @@ cd src/Breeze.Daemon
 dotnet run light -testnet
 ```
 
-CI build
+## UI Build
+
+[Read more...](https://github.com/stratisproject/Breeze/blob/master/Breeze.UI/README.md)
+
+## CI Build
 -----------
 
 We use [AppVeyor](https://www.appveyor.com/) for Windows CI builds and [Travis CI](https://travis-ci.org/) (coming soon) for our Linux and MacOS ones.
