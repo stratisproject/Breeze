@@ -111,7 +111,7 @@ export class CreateComponent {
         response => {
           if (response.status >= 200 && response.status < 400){
             this.mnemonic = response.json();
-            alert("Your wallet has been created.\n\nPlease write down your 12 word passphrase: \n" + this.mnemonic + "\n\nYou will be redirected to the decryption page.");
+            alert("Your wallet has been created.\n\nPlease write down your 12 word passphrase: \n" + this.mnemonic + "\n\nYou can recover your wallet on any computer with:\n- your passphrase AND\n- your password AND\n- the wallet creation time\n\nUnlike most other wallets if an attacker acquires your passphrase, it will not be able to hack your wallet without knowing your password. On the contrary, unlike other wallets, you will not be able to recover your wallet only with your passphrase if you lose your password.");
             this.router.navigate(['']);
           }
         },
