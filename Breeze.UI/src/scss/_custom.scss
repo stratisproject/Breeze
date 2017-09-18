@@ -4,28 +4,37 @@
 // without modifying source files.
 
 body {overflow-x: hidden;}
-a, button {&:hover {cursor: pointer !important;}}
+a, button {
+  &:hover {
+    cursor: pointer;
+    -webkit-transform-origin: center bottom;
+    transform-origin: center bottom;
+    -webkit-animation-duration: 2s;
+    animation-duration: 2s;
+  }
+}
+button {
+  &:disabled  {
+    background: #EFEFEF !important;
+    border-color: #EFEFEF !important;
+    &:hover {cursor: not-allowed !important;}
+  }
+}
 code {color: $spacegray !important;}
 .form-control::-webkit-input-placeholder { color: $input-color-placeholder; }  /* WebKit, Blink, Edge */
 .form-control:-moz-placeholder { color: $input-color-placeholder; }  /* Mozilla Firefox 4 to 18 */
 .form-control:-ms-input-placeholder { color: $input-color-placeholder; }  /* Internet Explorer 10-11 */
 
-// button
-.twitter {
-  border-color: #2FBAFF !important;
-  color: #2FBAFF !important;
-  &:hover {
-    background-color: #2FBAFF !important;
-    color: $white !important;
-  }
+// badge default
+.badge {
+  &.badge-default {color: $gray;}
 }
-.facebook {
-  border-color: #2D1DE7 !important;
-  color: #2D1DE7 !important;
-  &:hover {
-    background-color: #2D1DE7 !important;
-    color: $white !important;
-  }
+
+// feedbacks
+.form-control-feedback {
+  color: $pink;
+  font-style: italic;
+  font-size: .85em;
 }
 
 // loading
@@ -63,7 +72,7 @@ em {
 #content {
     width: 100%;
     position: relative;
-    padding: 0 0 70px 70px;
+    padding: 0 0 65px 70px;
 }
 
 // sidebar
@@ -129,11 +138,10 @@ em {
   h5 {
     font-size: .85em;
     color: $gray-dark;
-    letter-spacing: 0.43px;
   }
   .lead {
     color: $black;
-    font-size: 1.25em;
+    font-size: 1.85em;
     font-weight: 500;
     .h2 {
       font-size: 2em;
@@ -154,18 +162,13 @@ em {
   h5 {
     font-size: .85em;
     color: $gray-dark;
-    letter-spacing: 0.43px;
   }
   .card {
-    li {
-      line-height: 2.5em;
-      a {
-        &:hover {
-          cursor: pointer;
-          text-decoration: underline;
-        }
-      }
+    &:hover {
+      cursor: pointer;
+      text-decoration: none !important;
     }
+    li {line-height: 2.5em;}
   }
 }
 
@@ -253,7 +256,6 @@ em {
   .float-right {a {text-decoration: underline; &:hover {text-decoration: none;}}}
 }
 #modalReceive {
-  .myAddress {margin-bottom: 2em;}
   .modal-body {padding: 0 3em;}
   label {
     color: $blue;
@@ -272,7 +274,7 @@ em {
   }
 }
 #modalCheck {
-  .lead {animation: 2s ease 0s normal forwards 1 fadein;}
+  .lead, .d-block {animation: 2s ease 0s normal forwards 1 fadein;}
   @keyframes fadein {
     0% {opacity:0;}
     66% {opacity:0;}
@@ -474,7 +476,6 @@ $curve: cubic-bezier(0.650, 0.000, 0.450, 1.000);
       font-family: "Lato-Bold";
       font-size: 1.25em;
       color: $darkgray;
-      letter-spacing: 0.64px;
       text-transform: uppercase;
     }
     .lead {
@@ -482,12 +483,9 @@ $curve: cubic-bezier(0.650, 0.000, 0.450, 1.000);
       color: $blue;
       font-weight: 400;
       line-height: 1.25em;
-      margin: 2em 0;
+      margin: 0 0 2em 0;
     }
-    .btn-darkgray {
-      letter-spacing: 1px;
-      font-size: 1em;
-    }
+    .btn-darkgray {font-size: 1em;}
     .btn-linkgray {
       background-color: transparent !important;
       text-decoration: underline;
@@ -496,7 +494,7 @@ $curve: cubic-bezier(0.650, 0.000, 0.450, 1.000);
         color: lighten($darkgray,10%);
       }
     }
-    form {margin-bottom: 4em;}
+    form {margin: 2em 0;}
     .textback {
       a {
         color: #C0BECC;
@@ -510,6 +508,43 @@ $curve: cubic-bezier(0.650, 0.000, 0.450, 1.000);
         background-color: #B6CDDE;
         color: $darkgray;
       }
+    }
+  }
+}
+
+// Tumblebit
+#Tumblebit {
+  padding-top: 4em;
+  label {
+    font-size: .85em;
+    color: $gray-dark;
+  }
+  .btn-danger {
+    color: $btn-danger-bg !important;
+    background: rgba($btn-danger-bg, .4);
+  }
+  .table {
+    a {
+      color: $brand-primary;
+      &:hover {text-decoration: underline;}
+    }
+    .badge {
+      &.badge-default {font-size: 1em !important;}
+    }
+    font-size: 0.75rem;
+    background: white;
+    border: 1px solid $teal;
+    box-shadow: 0 2px 10px 0 rgba(80,96,120,0.10);
+    margin-bottom: 2em;
+
+    .total {
+      td {font-weight: bold;}
+    }
+    td {color: $gray;}
+    strong, th {
+      margin-right: 1.2em;
+      font-weight: 400;
+      color: #878685;
     }
   }
 }

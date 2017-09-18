@@ -9,7 +9,20 @@ body {
 }
 
 a:hover, button:hover {
-  cursor: pointer !important;
+  cursor: pointer;
+  -webkit-transform-origin: center bottom;
+  transform-origin: center bottom;
+  -webkit-animation-duration: 2s;
+  animation-duration: 2s;
+}
+
+button:disabled {
+  background: #EFEFEF !important;
+  border-color: #EFEFEF !important;
+}
+
+button:disabled:hover {
+  cursor: not-allowed !important;
 }
 
 code {
@@ -31,24 +44,14 @@ code {
 }
 
 /* Internet Explorer 10-11 */
-.twitter {
-  border-color: #2FBAFF !important;
-  color: #2FBAFF !important;
+.badge.badge-default {
+  color: #98A3B3;
 }
 
-.twitter:hover {
-  background-color: #2FBAFF !important;
-  color: #fff !important;
-}
-
-.facebook {
-  border-color: #2D1DE7 !important;
-  color: #2D1DE7 !important;
-}
-
-.facebook:hover {
-  background-color: #2D1DE7 !important;
-  color: #fff !important;
+.form-control-feedback {
+  color: #FF5B8A;
+  font-style: italic;
+  font-size: .85em;
 }
 
 #loading {
@@ -91,7 +94,7 @@ em.display-4 {
 #content {
   width: 100%;
   position: relative;
-  padding: 0 0 70px 70px;
+  padding: 0 0 65px 70px;
 }
 
 #sidebar {
@@ -118,7 +121,7 @@ em.display-4 {
   opacity: 1;
   width: 2px;
   height: 20px;
-  background-color: #F69D32;
+  background-color: #f69d32;
   float: right;
   position: absolute;
   margin: 11px 6px 0 8px;
@@ -166,12 +169,11 @@ em.display-4 {
 .jumbotron h5 {
   font-size: .85em;
   color: #878685;
-  letter-spacing: 0.43px;
 }
 
 .jumbotron .lead {
   color: #444;
-  font-size: 1.25em;
+  font-size: 1.85em;
   font-weight: 500;
 }
 
@@ -197,16 +199,15 @@ em.display-4 {
 #transaction h5 {
   font-size: .85em;
   color: #878685;
-  letter-spacing: 0.43px;
+}
+
+#transaction .card:hover {
+  cursor: pointer;
+  text-decoration: none !important;
 }
 
 #transaction .card li {
   line-height: 2.5em;
-}
-
-#transaction .card li a:hover {
-  cursor: pointer;
-  text-decoration: underline;
 }
 
 .badge.badge-danger {
@@ -307,10 +308,6 @@ em.display-4 {
   text-decoration: none;
 }
 
-#modalReceive .myAddress {
-  margin-bottom: 2em;
-}
-
 #modalReceive .modal-body {
   padding: 0 3em;
 }
@@ -331,7 +328,7 @@ em.display-4 {
   color: #1B354B;
 }
 
-#modalCheck .lead {
+#modalCheck .lead, #modalCheck .d-block {
   animation: 2s ease 0s normal forwards 1 fadein;
 }
 
@@ -703,7 +700,7 @@ input.cmn-toggle-round-flat:checked + label:after {
   top: 0;
   width: 14px;
   height: 14px;
-  background-color: #F69D32 !important;
+  background-color: #f69d32 !important;
 }
 
 .slider-handle:nth-child(3) {
@@ -760,8 +757,8 @@ input.cmn-toggle-round-flat:checked + label:after {
 }
 
 .slider-tick.in-selection:nth-child(2) {
-  border-color: #F69D32;
-  background-color: #F69D32;
+  border-color: #f69d32;
+  background-color: #f69d32;
   opacity: 1;
 }
 
@@ -791,7 +788,6 @@ input.cmn-toggle-round-flat:checked + label:after {
   font-family: "Lato-Bold";
   font-size: 1.25em;
   color: #1B354B;
-  letter-spacing: 0.64px;
   text-transform: uppercase;
 }
 
@@ -800,11 +796,10 @@ input.cmn-toggle-round-flat:checked + label:after {
   color: #7385A0;
   font-weight: 400;
   line-height: 1.25em;
-  margin: 2em 0;
+  margin: 0 0 2em 0;
 }
 
 .login .container .btn-darkgray {
-  letter-spacing: 1px;
   font-size: 1em;
 }
 
@@ -819,7 +814,7 @@ input.cmn-toggle-round-flat:checked + label:after {
 }
 
 .login .container form {
-  margin-bottom: 4em;
+  margin: 2em 0;
 }
 
 .login .container .textback a {
@@ -838,6 +833,54 @@ input.cmn-toggle-round-flat:checked + label:after {
 .login .container .badge.badge-default {
   background-color: #B6CDDE;
   color: #1B354B;
+}
+
+#Tumblebit {
+  padding-top: 4em;
+}
+
+#Tumblebit label {
+  font-size: .85em;
+  color: #878685;
+}
+
+#Tumblebit .btn-danger {
+  color: #FF5B8A !important;
+  background: rgba(255, 91, 138, 0.4);
+}
+
+#Tumblebit .table {
+  font-size: 0.75rem;
+  background: white;
+  border: 1px solid #DBDBDB;
+  box-shadow: 0 2px 10px 0 rgba(80, 96, 120, 0.1);
+  margin-bottom: 2em;
+}
+
+#Tumblebit .table a {
+  color: #f69d32;
+}
+
+#Tumblebit .table a:hover {
+  text-decoration: underline;
+}
+
+#Tumblebit .table .badge.badge-default {
+  font-size: 1em !important;
+}
+
+#Tumblebit .table .total td {
+  font-weight: bold;
+}
+
+#Tumblebit .table td {
+  color: #98A3B3;
+}
+
+#Tumblebit .table strong, #Tumblebit .table th {
+  margin-right: 1.2em;
+  font-weight: 400;
+  color: #878685;
 }
 
 @media screen and (max-width: 768px) {
@@ -1235,7 +1278,7 @@ blockquote {
 }
 
 a {
-  color: #F69D32;
+  color: #f69d32;
   text-decoration: none;
 }
 
@@ -1294,8 +1337,8 @@ table {
 }
 
 caption {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+  padding-top: 0.5rem 0.75rem;
+  padding-bottom: 0.5rem 0.75rem;
   color: #98A3B3;
   text-align: left;
   caption-side: bottom;
@@ -1541,10 +1584,11 @@ samp {
 
 code {
   padding: 0.2rem 0.4rem;
-  font-size: 90%;
+  font-size: 91%;
   color: #bd4147;
   background-color: #f7f7f9;
   border-radius: 0.25rem;
+  overflow-wrap: break-word;
 }
 
 a > code {
@@ -1555,7 +1599,7 @@ a > code {
 
 kbd {
   padding: 0.2rem 0.4rem;
-  font-size: 90%;
+  font-size: 91%;
   color: #fff;
   background-color: #878685;
   border-radius: 0.2rem;
@@ -1571,7 +1615,7 @@ pre {
   display: block;
   margin-top: 0;
   margin-bottom: 1rem;
-  font-size: 90%;
+  font-size: 91%;
   color: #878685;
 }
 
@@ -2693,14 +2737,12 @@ pre code {
 
 .table th,
 .table td {
-  padding: 0.75rem;
+  padding: 0.5rem 0.75rem;
   vertical-align: top;
-  border-top: 1px solid #F3F3F3;
 }
 
 .table thead th {
   vertical-align: bottom;
-  border-bottom: 2px solid #F3F3F3;
 }
 
 .table tbody + tbody {
@@ -3212,7 +3254,7 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 
 .btn.disabled, .btn:disabled {
   cursor: not-allowed;
-  opacity: .65;
+  opacity: 1;
 }
 
 .btn:active, .btn.active {
@@ -3226,8 +3268,8 @@ fieldset[disabled] a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #F69D32;
-  border-color: #F69D32;
+  background-color: #f69d32;
+  border-color: #f69d32;
   border-radius: 5rem;
 }
 
@@ -3242,8 +3284,8 @@ fieldset[disabled] a.btn {
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
-  background-color: #F69D32;
-  border-color: #F69D32;
+  background-color: #f69d32;
+  border-color: #f69d32;
 }
 
 .btn-primary:active, .btn-primary.active,
@@ -3435,16 +3477,16 @@ fieldset[disabled] a.btn {
 }
 
 .btn-outline-primary {
-  color: #F69D32;
+  color: #f69d32;
   background-image: none;
   background-color: transparent;
-  border-color: #F69D32;
+  border-color: #f69d32;
 }
 
 .btn-outline-primary:hover {
   color: #fff;
-  background-color: #F69D32;
-  border-color: #F69D32;
+  background-color: #f69d32;
+  border-color: #f69d32;
 }
 
 .btn-outline-primary:focus, .btn-outline-primary.focus {
@@ -3452,15 +3494,15 @@ fieldset[disabled] a.btn {
 }
 
 .btn-outline-primary.disabled, .btn-outline-primary:disabled {
-  color: #F69D32;
+  color: #f69d32;
   background-color: transparent;
 }
 
 .btn-outline-primary:active, .btn-outline-primary.active,
 .show > .btn-outline-primary.dropdown-toggle {
   color: #fff;
-  background-color: #F69D32;
-  border-color: #F69D32;
+  background-color: #f69d32;
+  border-color: #f69d32;
 }
 
 .btn-outline-secondary {
@@ -3610,7 +3652,7 @@ fieldset[disabled] a.btn {
 
 .btn-link {
   font-weight: normal;
-  color: #F69D32;
+  color: #f69d32;
   border-radius: 0;
 }
 
@@ -3772,7 +3814,7 @@ tbody.collapse.show {
 .dropdown-item.active, .dropdown-item:active {
   color: #fff;
   text-decoration: none;
-  background-color: #F69D32;
+  background-color: #f69d32;
 }
 
 .dropdown-item.disabled, .dropdown-item:disabled {
@@ -4144,11 +4186,11 @@ tbody.collapse.show {
 
 .custom-control-input:checked ~ .custom-control-indicator {
   color: #fff;
-  background-color: #F69D32;
+  background-color: #f69d32;
 }
 
 .custom-control-input:focus ~ .custom-control-indicator {
-  box-shadow: 0 0 0 1px #fff, 0 0 0 3px #F69D32;
+  box-shadow: 0 0 0 1px #fff, 0 0 0 3px #f69d32;
 }
 
 .custom-control-input:active ~ .custom-control-indicator {
@@ -4190,7 +4232,7 @@ tbody.collapse.show {
 }
 
 .custom-checkbox .custom-control-input:indeterminate ~ .custom-control-indicator {
-  background-color: #F69D32;
+  background-color: #f69d32;
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 4'%3E%3Cpath stroke='%23fff' d='M0 2h4'/%3E%3C/svg%3E");
 }
 
@@ -4382,7 +4424,7 @@ tbody.collapse.show {
 .nav-pills .nav-item.show .nav-link {
   color: #fff;
   cursor: default;
-  background-color: #F69D32;
+  background-color: #f69d32;
 }
 
 .nav-fill .nav-item {
@@ -4721,13 +4763,13 @@ tbody.collapse.show {
 
 .navbar-inverse .navbar-brand,
 .navbar-inverse .navbar-toggler {
-  color: #F69D32;
+  color: #f69d32;
 }
 
 .navbar-inverse .navbar-brand:focus, .navbar-inverse .navbar-brand:hover,
 .navbar-inverse .navbar-toggler:focus,
 .navbar-inverse .navbar-toggler:hover {
-  color: #F69D32;
+  color: #f69d32;
 }
 
 .navbar-inverse .navbar-nav .nav-link {
@@ -4746,7 +4788,7 @@ tbody.collapse.show {
 .navbar-inverse .navbar-nav .active > .nav-link,
 .navbar-inverse .navbar-nav .nav-link.open,
 .navbar-inverse .navbar-nav .nav-link.active {
-  color: #F69D32;
+  color: #f69d32;
 }
 
 .navbar-inverse .navbar-toggler {
@@ -4844,8 +4886,8 @@ tbody.collapse.show {
 }
 
 .card-primary {
-  background-color: #F69D32;
-  border-color: #F69D32;
+  background-color: #f69d32;
+  border-color: #f69d32;
 }
 
 .card-primary .card-header,
@@ -4895,7 +4937,7 @@ tbody.collapse.show {
 
 .card-outline-primary {
   background-color: transparent;
-  border-color: #F69D32;
+  border-color: #f69d32;
 }
 
 .card-outline-secondary {
@@ -5110,8 +5152,8 @@ tbody.collapse.show {
 .page-item.active .page-link {
   z-index: 2;
   color: #fff;
-  background-color: #F69D32;
-  border-color: #F69D32;
+  background-color: #f69d32;
+  border-color: #f69d32;
 }
 
 .page-item.disabled .page-link {
@@ -5128,7 +5170,7 @@ tbody.collapse.show {
   padding: 0.5rem 0.75rem;
   margin-left: -1px;
   line-height: 1.25;
-  color: #F69D32;
+  color: #f69d32;
   background-color: #fff;
   border: 1px solid #ddd;
 }
@@ -5172,7 +5214,7 @@ tbody.collapse.show {
 
 .badge {
   display: inline-block;
-  padding: 0.6em 0.6em;
+  padding: 0.6em 1.2em;
   font-size: 0.85em;
   font-weight: normal;
   line-height: 1;
@@ -5205,15 +5247,15 @@ a.badge:focus, a.badge:hover {
 }
 
 .badge-default {
-  background-color: #DDDCDC;
+  background-color: rgba(152, 163, 179, 0.15);
 }
 
 .badge-default[href]:focus, .badge-default[href]:hover {
-  background-color: #c4c2c2;
+  background-color: rgba(123, 137, 157, 0.15);
 }
 
 .badge-primary {
-  background-color: #F69D32;
+  background-color: #f69d32;
 }
 
 .badge-primary[href]:focus, .badge-primary[href]:hover {
@@ -5376,7 +5418,7 @@ a.badge:focus, a.badge:hover {
 .progress-bar {
   height: 1rem;
   color: #fff;
-  background-color: #F69D32;
+  background-color: #f69d32;
 }
 
 .progress-bar-striped {
@@ -5468,8 +5510,8 @@ a.badge:focus, a.badge:hover {
 .list-group-item.active {
   z-index: 2;
   color: #fff;
-  background-color: #F69D32;
-  border-color: #F69D32;
+  background-color: #f69d32;
+  border-color: #f69d32;
 }
 
 .list-group-item.active .list-group-item-heading,
@@ -6284,7 +6326,7 @@ button.close {
 }
 
 .bg-primary {
-  background-color: #F69D32 !important;
+  background-color: #f69d32 !important;
 }
 
 a.bg-primary:focus, a.bg-primary:hover {
@@ -8904,7 +8946,7 @@ a.text-muted:focus, a.text-muted:hover {
 }
 
 .text-primary {
-  color: #F69D32 !important;
+  color: #f69d32 !important;
 }
 
 a.text-primary:focus, a.text-primary:hover {
@@ -9107,8 +9149,8 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 
 @font-face {
   font-family: 'icon';
-  src: url("./assets/fonts/icon.eot?qz0v16");
-  src: url("./assets/fonts/icon.eot?qz0v16#iefix") format("embedded-opentype"), url("./assets/fonts/icon.ttf?qz0v16") format("truetype"), url("./assets/fonts/icon.woff?qz0v16") format("woff"), url("./assets/fonts/icon.svg?qz0v16#icomoon") format("svg");
+  src: url("./assets/fonts/icon.eot?ste27o");
+  src: url("./assets/fonts/icon.eot?ste27o#iefix") format("embedded-opentype"), url("./assets/fonts/icon.ttf?ste27o") format("truetype"), url("./assets/fonts/icon.woff?ste27o") format("woff"), url("./assets/fonts/icon.svg?ste27o#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -9259,6 +9301,11 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   content: "\eae8";
 }
 
+.icon-tumblebit:before {
+  content: "\e901";
+  color: #dce8f1;
+}
+
 .icon-stratis:before {
   content: "\e900";
 }
@@ -9273,8 +9320,8 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 
 .btn-primary {
   color: #fff !important;
-  background-color: #F69D32;
-  border-color: #F69D32;
+  background-color: #f69d32;
+  border-color: #f69d32;
   border-radius: 5rem;
 }
 
@@ -9289,8 +9336,8 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
-  background-color: #F69D32;
-  border-color: #F69D32;
+  background-color: #f69d32;
+  border-color: #f69d32;
 }
 
 .btn-primary:active, .btn-primary.active,
@@ -9303,6 +9350,7 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 
 #navbarBreeze .navbar-nav .nav-item .nav-link {
   color: #878685;
+  font-size: .86rem;
 }
 
 #navbarBreeze .navbar-nav .nav-item .nav-link:hover {
@@ -9310,12 +9358,12 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 }
 
 #navbarBreeze .navbar-nav .nav-item .nav-link.is-active {
-  border-bottom: 2px solid #F69D32 !important;
-  color: #F69D32 !important;
+  border-bottom: 2px solid #f69d32 !important;
+  color: #f69d32 !important;
 }
 
 #content.bitcoin .jumbotron i {
-  color: #F69D32;
+  color: #f69d32;
   font-size: 1.75em;
   margin-right: .3em;
 }
@@ -9343,10 +9391,41 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 #content.bitcoin #transaction .card:hover {
   border-color: #FCDCB5 !important;
   background-color: #FEFDFA !important;
+  box-shadow: 0 2px 10px 0 rgba(80, 96, 120, 0.1);
+}
+
+#content.bitcoin #Tumblebit i {
+  font-size: 6.5rem;
+}
+
+#content.bitcoin #Tumblebit i.OFF {
+  -webkit-text-fill-color: #DCE8F1 !important;
+  fill: #DCE8F1 !important;
+}
+
+#content.bitcoin #Tumblebit i.ON {
+  -webkit-text-fill-color: #f69d32 !important;
+  fill: #f69d32 !important;
+}
+
+#content.bitcoin #Tumblebit .help {
+  color: #98A3B3;
+  font-size: .9em;
+  font-style: italic;
+  line-height: 1.3em;
+  font-weight: 200;
+}
+
+#content.bitcoin #Tumblebit button .icon-circle-down {
+  color: rgba(152, 163, 179, 0.5);
+}
+
+#content.bitcoin #Tumblebit .dropdown-toggle::after {
+  content: none !important;
 }
 
 .modal-header .bubble i {
-  color: #F69D32;
+  color: #f69d32;
 }
 
 .modal-dialog .badge {

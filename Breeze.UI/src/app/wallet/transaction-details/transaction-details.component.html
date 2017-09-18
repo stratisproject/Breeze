@@ -27,10 +27,12 @@
           <li class="list-inline-item col-9 blockText">#{{ transaction.confirmedInBlock }}</li>
         </ul>
         <ul class="list-inline row">
-          <li class="list-inline-item col blockLabel my-3">Transaction ID</li>
+          <li class="list-inline-item col blockLabel mb-3">Transaction ID</li>
           <li class="list-inline-item col-10 blockID"><code>{{ transaction.id }}</code></li>
           <span class="float-right"><a ngxClipboard [cbContent]="transaction.id" (click)="onCopiedClick()">copy</a></span>
-          <span class="badge badge-success list-inline-item col" *ngIf="copied">The transaction ID has been copied to your clipboard.</span>
+          <div class="col-12">
+            <span class="badge badge-success list-inline-item col" *ngIf="copied">The transaction ID has been copied to your clipboard.</span>
+          </div>
         </ul>
       </div>
       <div class="modal-footer">

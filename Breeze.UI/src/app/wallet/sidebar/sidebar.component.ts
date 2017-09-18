@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confirmation.component';
 
 @Component({
   selector: 'sidebar',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SidebarComponent implements OnInit {
 
-  constructor() { }
+  constructor(private modalService: NgbModal) { }
 
   ngOnInit() {
+  }
+
+  private logOut() {
+    const modalRef = this.modalService.open(LogoutConfirmationComponent);
   }
 
 }
