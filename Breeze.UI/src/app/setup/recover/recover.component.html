@@ -9,7 +9,7 @@
           <div class="form-group">
             <label class="col-12 row" for="walletName">Name</label>
             <input type="text" class="form-control form-control-success" formControlName="walletName" id="walletName" placeholder="Enter a wallet name.">
-            <div *ngIf="formErrors.walletName" class="text-danger mt-2">{{ formErrors.walletName }}</div>
+            <div *ngIf="formErrors.walletName" class="form-control-feedback mt-2">{{ formErrors.walletName }}</div>
           </div>
           <div class="form-group">
             <label class="col-12 row" for="creationDate">Creation Date (optional)</label>
@@ -18,12 +18,12 @@
           <div class="form-group">
             <label class="col-12 row" for="walletMnemonic">12 Secret Words</label>
             <input type="text" class="form-control form-control-success" formControlName="walletMnemonic" id="walletName" placeholder="Enter your 12 secret words.">
-            <div *ngIf="formErrors.walletMnemonic" class="text-danger mt-2">{{ formErrors.walletMnemonic }}</div>
+            <div *ngIf="formErrors.walletMnemonic" class="form-control-feedback mt-2">{{ formErrors.walletMnemonic }}</div>
           </div>
           <div class="form-group">
             <label class="text-left" for="walletPassword">Password</label>
             <input type="password" class="form-control form-control-success" formControlName="walletPassword" id="walletPassword" placeholder="Enter a password.">
-            <div *ngIf="formErrors.walletPassword" class="text-danger mt-2">{{ formErrors.walletPassword }}</div>
+            <div *ngIf="formErrors.walletPassword" class="form-control-feedback mt-2">{{ formErrors.walletPassword }}</div>
           </div>
           <div class="form-group">
             <label class="text-left" for="walletNetwork">Network</label>

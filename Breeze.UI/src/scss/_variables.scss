@@ -95,7 +95,7 @@
 $white:  #fff !default;
 $black:  #444 !default;
 $red:    #d9534f !default;
-$orange: #F69D32 !default;
+$orange: #f69d32 !default;
 $yellow: #D1C312 !default;
 $green:  #2ECCA9 !default;
 $blue:   #7385A0 !default;
@@ -339,7 +339,7 @@ $transition-collapse:    height .35s ease !default;
 //
 // Customizes the `.table` component with basic values, each used across all table variations.
 
-$table-cell-padding:            .75rem !default;
+$table-cell-padding:            .5rem .75rem !default;
 $table-sm-cell-padding:         .3rem !default;
 
 $table-bg:                      transparent !default;
@@ -773,7 +773,7 @@ $popover-arrow-outer-color:           fade-in($popover-border-color, .05) !defau
 
 // Badges
 
-$badge-default-bg:            $gray-light !default;
+$badge-default-bg:            rgba(152,163,179,.15) !default;
 $badge-primary-bg:            $brand-primary !default;
 $badge-success-bg:            rgba(46,204,169,.2) !default;
 $badge-info-bg:               $brand-info !default;
@@ -784,7 +784,7 @@ $badge-color:                 $white !default;
 $badge-link-hover-color:      $white !default;
 $badge-font-size:             .85em !default;
 $badge-font-weight:           $font-weight-base !default;
-$badge-padding-x:             .6em !default;
+$badge-padding-x:             1.2em !default;
 $badge-padding-y:             .6em !default;
 
 $badge-pill-padding-x:        .6em !default;
@@ -953,7 +953,7 @@ $close-text-shadow:           0 1px 0 $white !default;
 
 // Code
 
-$code-font-size:              90% !default;
+$code-font-size:              91% !default;
 $code-padding-x:              .4rem !default;
 $code-padding-y:              .2rem !default;
 $code-color:                  #bd4147 !default;

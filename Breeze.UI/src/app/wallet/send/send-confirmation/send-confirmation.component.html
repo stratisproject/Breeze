@@ -1,15 +1,15 @@
 
 <div id="modalCheck" tabindex="-1" role="dialog" aria-labelledby="modal_check" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modalBg" role="document">
     <div>
       <div class="modal-body">
         <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
         <p class="lead text-success text-center">
           <strong>Your transaction has been sent with success !</strong>
-           <small class="text-center">
-            <a class="btn btn-link" (click)="toggleDetails()">Show details</a>
-          </small> 
         </p>
+        <small class="text-center d-block">
+         <a class="btn btn-link" (click)="toggleDetails()">Show details</a>
+       </small>
          <div *ngIf="showDetails" id="collapseExample">
           <div class="card card-block">
             <ul class="list-inline row">
@@ -22,7 +22,7 @@
             </ul>
             <ul class="list-inline row">
               <li class="list-inline-item col blockLabel">Destination</li>
-              <li class="list-inline-item col-9 blockText"><code>{{ transaction.destinationAddress }}</code></li>
+              <li class="list-inline-item col blockText mt-2"><code>{{ transaction.destinationAddress }}</code></li>
             </ul>
             <!-- <ul class="list-inline row">
               <li class="list-inline-item col blockLabel">Date</li>
@@ -34,7 +34,7 @@
             </ul> -->
           </div>
         </div>
-      </div> 
+      </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-lg btn-primary" data-dismiss="modal" aria-label="Close" (click)="activeModal.close('Close click')">OK</button>
       </div>

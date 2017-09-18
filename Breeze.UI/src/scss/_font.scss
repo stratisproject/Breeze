@@ -42,11 +42,11 @@
 
 @font-face {
   font-family: 'icon';
-  src:  url('./assets/fonts/icon.eot?qz0v16');
-  src:  url('./assets/fonts/icon.eot?qz0v16#iefix') format('embedded-opentype'),
-    url('./assets/fonts/icon.ttf?qz0v16') format('truetype'),
-    url('./assets/fonts/icon.woff?qz0v16') format('woff'),
-    url('./assets/fonts/icon.svg?qz0v16#icomoon') format('svg');
+  src:  url('./assets/fonts/icon.eot?ste27o');
+  src:  url('./assets/fonts/icon.eot?ste27o#iefix') format('embedded-opentype'),
+    url('./assets/fonts/icon.ttf?ste27o') format('truetype'),
+    url('./assets/fonts/icon.woff?ste27o') format('woff'),
+    url('./assets/fonts/icon.svg?ste27o#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -164,6 +164,10 @@
 }
 .icon-block:before {
   content: "\eae8";
+}
+.icon-tumblebit:before {
+  content: "\e901";
+  color: #dce8f1;
 }
 .icon-stratis:before {
   content: "\e900";

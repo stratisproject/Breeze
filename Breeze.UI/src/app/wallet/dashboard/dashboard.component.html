@@ -6,9 +6,8 @@
       <div class="container">
         <div class="row d-flex align-items-center">
           <div class="col-xs-12 col-md-4 text-left">
-            <h5 class="text-uppercase">Active balance</h5>
+            <h5>Active balance</h5>
             <p class="lead">
-              <i class="icon-bitcoin"></i>
               <!--<strong><span class="h2">29</span>.76500293</strong>-->
               <strong>{{confirmedBalance | coinNotation }}</strong>
               <!--<small class="text-uppercase">btc</small>-->
@@ -16,7 +15,7 @@
           </div>
           <!-- /col-->
           <!--<div class="col-xs-12 col-md-4 text-left">
-            <h5 class="text-uppercase">Current value</h5>
+            <h5>Current value</h5>
             <p class="lead">
               <i class="icon-coin-dollar"></i>
               <strong><span class="h2">51,390</span></strong>
@@ -24,9 +23,8 @@
             </p>
           </div>-->
           <div class="col-xs-12 col-md-4 text-left">
-            <h5 class="text-uppercase">Unconfirmed balance</h5>
+            <h5>Unconfirmed balance</h5>
             <p class="lead">
-              <i class="icon-bitcoin"></i>
               <strong>{{unconfirmedBalance | coinNotation }}</strong>
             </p>
           </div>
@@ -47,16 +45,15 @@
 
     <!-- TRANSACTIONS -->
     <section id="transaction" class="container">
-      <h5 class="text-uppercase">Latest Transactions</h5>
+      <h5>Latest Transactions</h5>
       <div *ngIf="transactions; else noTransactions">
         <div *ngFor="let transaction of transactions; let i=index">
           <div class="card" *ngIf="i<3" (click)="openTransactionDetailDialog(transaction)">
             <div class="card-block text-nowrap">
               <ul class="list-inline row">
-                <li class="list-inline-item hidden-xs-down col text-uppercase align-bottom">{{ transaction.type }}</li>
+                <li class="list-inline-item hidden-xs-down col-3 text-uppercase align-bottom">{{ transaction.type }}</li>
                 <li class="list-inline-item col-4 amount text-left align-baseline"><!--<span class="text-success">+</span>--> {{ transaction.amount | coinNotation }} <!--<small class="text-uppercase">btc</small> <span class="badge badge-danger text-capitalize">unconfirmed</span>--></li>
-                <li class="list-inline-item hidden-sm-down col text-center align-baseline">{{ transaction.timestamp * 1000 | date:'medium' }}</li>
-                <li class="list-inline-item col text-right align-baseline"><a data-toggle="modal" data-target="#modalDetail" (click)="openTransactionDetailDialog(transaction)">details</a></li>
+                <li class="list-inline-item col text-right align-baseline transactionDate">{{ transaction.timestamp * 1000 | date:'medium' }}</li>
               </ul>
             </div>
           </div>

@@ -36,12 +36,13 @@ $btn-secondary-border:           $gray-light !default;
     .nav-item {
       .nav-link {
         color: $gray-dark;
+        font-size: .86rem;
         &:hover {color: lighten($brand-primary,20%);}
         &.is-active {
           border-bottom: 2px solid $brand-primary !important;
           color: $brand-primary !important;
         }
-      }    
+      }
     }
   }
 }
@@ -78,6 +79,36 @@ $btn-secondary-border:           $gray-light !default;
         &:hover {
           border-color: #FCDCB5 !important;
           background-color: #FEFDFA !important;
+          box-shadow: 0 2px 10px 0 rgba(80,96,120,0.10);
+        }
+      }
+    }
+
+    // Tumblebit
+    #Tumblebit {
+      i {
+        font-size: 6.5rem;
+        &.OFF {
+          -webkit-text-fill-color: #DCE8F1 !important;
+          fill: #DCE8F1 !important;
+        }
+        &.ON {
+          -webkit-text-fill-color:: $brand-primary !important;
+          fill: $brand-primary !important;
+        }
+      }
+      .help {
+        color: $gray;
+        font-size: .9em;
+        font-style: italic;
+        line-height: 1.3em;
+        font-weight: 200;
+      }
+      button {.icon-circle-down {color: rgba($gray,.5);}}
+      .dropdown-toggle {
+        // Generate the caret automatically
+        &::after {
+          content: none !important;
         }
       }
     }

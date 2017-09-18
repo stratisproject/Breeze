@@ -32,10 +32,10 @@ function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1200,
-    height: 700,
+    height: 650,
     frame: true,
     minWidth: 1200,
-    minHeight: 700,
+    minHeight: 650,
     icon: __dirname + "/assets/images/breeze-logo.png",
     title: "Breeze Wallet"
   });
