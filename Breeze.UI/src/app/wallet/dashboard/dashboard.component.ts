@@ -28,13 +28,11 @@ export class DashboardComponent implements OnInit {
   private walletHistorySubscription: Subscription;
 
   ngOnInit() {
-    this.getWalletBalance();
-    this.getHistory();
+    this.startSubscriptions();
   };
 
   ngOnDestroy() {
-    this.walletBalanceSubscription.unsubscribe();
-    this.walletHistorySubscription.unsubscribe();
+    this.cancelSubscriptions();
   };
 
   private openSendDialog() {
@@ -70,7 +68,12 @@ export class DashboardComponent implements OnInit {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].description);
+              if (error.json().errors[0].description) {
+                alert(error.json().errors[0].description);
+              } else {
+                this.cancelSubscriptions();
+                this.startSubscriptions();
+              }
             }
           }
         }
@@ -98,11 +101,31 @@ export class DashboardComponent implements OnInit {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].description);
+              if (error.json().errors[0].description) {
+                alert(error.json().errors[0].description);
+              } else {
+                this.cancelSubscriptions();
+                this.startSubscriptions();
+              }
             }
           }
         }
       )
     ;
   };
+
+  private cancelSubscriptions() {
+    if (this.walletBalanceSubscription) {
+      this.walletBalanceSubscription.unsubscribe();
+    }
+
+    if(this.walletHistorySubscription) {
+      this.walletHistorySubscription.unsubscribe();
+    }
+  };
+
+  private startSubscriptions() {
+    this.getWalletBalance();
+    this.getHistory();
+  }
 }

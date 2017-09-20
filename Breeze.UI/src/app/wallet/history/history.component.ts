@@ -25,11 +25,11 @@ export class HistoryComponent {
   private walletHistorySubscription: Subscription;
 
   ngOnInit() {
-    this.getHistory();
+    this.startSubscriptions();
   }
 
   ngOnDestroy() {
-    this.walletHistorySubscription.unsubscribe();
+    this.cancelSubscriptions();
   }
 
   private openTransactionDetailDialog(transaction: any) {
@@ -57,11 +57,26 @@ export class HistoryComponent {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].description);
+              if (error.json().errors[0].description) {
+                alert(error.json().errors[0].description);
+              } else {
+                this.cancelSubscriptions();
+                this.startSubscriptions();
+              }
             }
           }
         }
       )
     ;
+  };
+
+  private cancelSubscriptions() {
+    if(this.walletHistorySubscription) {
+      this.walletHistorySubscription.unsubscribe();
+    }
+  };
+
+  private startSubscriptions() {
+    this.getHistory();
   }
 }
