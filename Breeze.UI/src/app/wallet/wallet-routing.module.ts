@@ -5,6 +5,7 @@ import { WalletComponent }   from './wallet.component';
 import { SendComponent } from './send/send.component';
 import { ReceiveComponent } from './receive/receive.component';
 import { HistoryComponent } from './history/history.component';
+import { TumblebitComponent } from './tumblebit/tumblebit.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
@@ -13,6 +14,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo:'dashboard', pathMatch:'full' },
       { path: 'dashboard', component: DashboardComponent},
+      { path: 'tumblebit', component: TumblebitComponent},
       { path: 'history', component: HistoryComponent}
     ]
   },

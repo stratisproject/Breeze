@@ -1,0 +1,62 @@
+ <section id="breeze">
+  <!-- CONTENT -->
+  <section id="content" class="bitcoin">
+    <!-- JUMBOTRON-->
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <div class="row d-flex align-items-center">
+          <div class="col-xs-12 col-md-4 text-left">
+            <h5 class="text-uppercase">Active balance</h5>
+            <p class="lead">
+              <i class="icon-bitcoin"></i>
+              <strong>{{confirmedBalance | coinNotation }}</strong>
+            </p>
+          </div>
+          <!-- /col-->
+          <div class="col-xs-12 col-md-4 text-left">
+            <form [formGroup]="connectForm" (ngSubmit)="connect()">
+              <div class="form-group clearfix">
+                <label class="float-left">Tumbler Address</label>
+                <input type="text" class="form-control form-control-danger" formControlName="tumblerAddress" id="tumblerAddress">
+                <div *ngIf="connectFormErrors.tumbler" class="form-control-feedback">{{ connectFormErrors.tumblerAddress }}</div>
+              </div>
+            </form>
+            <button type="button" class="btn btn-lg" (click)="connect()">Connect</button>
+
+            <form [formGroup]="tumbleForm" (ngSubmit)="tumble()">
+              <div class="form-group clearfix">
+                <label class="float-left">Source Address</label>
+                <input type="text" class="form-control form-control-danger" formControlName="source" id="source">
+                <div *ngIf="tumbleFormErrors.source" class="form-control-feedback">{{ tumbleFormErrors.source }}</div>
+              </div>
+              <div class="form-group clearfix">
+                <label class="float-left">Destination Address</label>
+                <input type="text" class="form-control form-control-danger" formControlName="destination" id="destination">
+                <div *ngIf="tumbleFormErrors.destination" class="form-control-feedback">{{ tumbleFormErrors.destination }}</div>
+              </div>
+            </form>
+            <div class="btn-group" role="group">
+              <button type="submit" class="btn btn-lg btn-primary" [disabled]="!tumbleForm.valid" (click)="tumble()">Tumble</button>
+              <button type="button" class="btn btn-lg btn-danger" (click)="stopTumble()">Stop</button>
+            </div>
+          </div>
+        </div>
+        <!-- /row-->
+      </div>
+      <!-- /container-->
+    </div>
+    <!-- /JUMBOTRON-->
+
+    <!-- container-->
+    
+
+      <!-- tumbler address -->
+      <!-- destination -->
+      <!-- denomination -->
+      <!-- fee -->
+
+  
+  </section>
+  <!-- /CONTENT-->
+</section>
+<!-- /breeze-->
