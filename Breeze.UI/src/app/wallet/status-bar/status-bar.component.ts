@@ -25,11 +25,11 @@ export class StatusBarComponent implements OnInit {
   constructor(private apiService: ApiService, private globalService: GlobalService) { }
 
   ngOnInit() {
-    this.getGeneralWalletInfo()
+    this.startSubscriptions();
   }
 
   ngOnDestroy() {
-    this.generalWalletInfoSubscription.unsubscribe();
+    this.cancelSubscriptions();
   }
 
   getGeneralWalletInfo() {
@@ -66,12 +66,26 @@ export class StatusBarComponent implements OnInit {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].description);
+              if (error.json().errors[0].description) {
+                alert(error.json().errors[0].description);
+              } else {
+                this.cancelSubscriptions();
+                this.startSubscriptions();
+              }
             }
           }
         }
       )
     ;
-  }
+  };
 
+  private cancelSubscriptions() {
+    if(this.generalWalletInfoSubscription) {
+      this.generalWalletInfoSubscription.unsubscribe();
+    }
+  };
+
+  private startSubscriptions() {
+    this.getGeneralWalletInfo();
+  }
 }
