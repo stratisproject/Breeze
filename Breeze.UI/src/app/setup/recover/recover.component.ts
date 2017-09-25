@@ -35,8 +35,9 @@ export class RecoverComponent implements OnInit {
       "walletPassword": ["", Validators.required],
       "walletName": ["", [
           Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(24)
+          Validators.minLength(1),
+          Validators.maxLength(24),
+          Validators.pattern(/^[a-zA-Z0-9]*$/)
         ]
       ],
       "selectNetwork": ["test", Validators.required]
@@ -77,10 +78,11 @@ export class RecoverComponent implements OnInit {
       'required': 'A password is required.'
     },
     'walletName': {
-      'required':      'Name is required.',
-      'minlength':     'Name must be at least 3 characters long.',
-      'maxlength':     'Name cannot be more than 24 characters long.'
-    }
+      'required': 'A wallet name is required.',
+      'minlength': 'A wallet name must be at least one character long.',
+      'maxlength': 'A wallet name cannot be more than 24 characters long.',
+      'pattern': 'Please enter a valid wallet name. [a-Z] and [0-9] are the only characters allowed.'
+    },
   };
 
   private onBackClicked() {

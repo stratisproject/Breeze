@@ -30,12 +30,12 @@ export class CreateComponent {
       "walletName": ["",
         Validators.compose([
           Validators.required,
-          Validators.minLength(3),
+          Validators.minLength(1),
           Validators.maxLength(24),
           Validators.pattern(/^[a-zA-Z0-9]*$/)
         ])
       ],
-      "walletPassword": ["", 
+      "walletPassword": ["",
         Validators.compose([
           Validators.required,
           Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{10,})/)])
@@ -75,10 +75,10 @@ export class CreateComponent {
 
   validationMessages = {
     'walletName': {
-      'required': 'Name is required.',
-      'minlength': 'Name must be at least 3 characters long.',
-      'maxlength': 'Name cannot be more than 24 characters long.',
-      'pattern': 'Enter a valid wallet name. [a-Z] and [0-9] are the only characters allowed.'
+      'required': 'A wallet name is required.',
+      'minlength': 'A wallet name must be at least one character long.',
+      'maxlength': 'A wallet name cannot be more than 24 characters long.',
+      'pattern': 'Please enter a valid wallet name. [a-Z] and [0-9] are the only characters allowed.'
     },
     'walletPassword': {
       'required': 'A password is required.',
