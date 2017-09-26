@@ -12,12 +12,12 @@ export class TransactionDetailsComponent implements OnInit {
   @Input() transaction;
   constructor(public activeModal: NgbActiveModal) {}
 
-  private copied: boolean = false;
+  public copied: boolean = false;
 
   ngOnInit() {
   }
 
-  private onCopiedClick() {
+  public onCopiedClick() {
     this.copied = true;
   }
 

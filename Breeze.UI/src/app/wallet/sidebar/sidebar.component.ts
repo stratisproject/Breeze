@@ -13,8 +13,8 @@ import { GlobalService } from '../../shared/services/global.service';
 export class SidebarComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private router: Router, private modalService: NgbModal) { }
-  private bitcoinActive: Boolean;
-  private stratisActive: Boolean;
+  public bitcoinActive: boolean;
+  public stratisActive: boolean;
 
   ngOnInit() {
     if (this.globalService.getCoinName() === "Bitcoin" || this.globalService.getCoinName() === "TestBitcoin") {
@@ -26,7 +26,7 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  private loadBitcoinWallet() {
+  public loadBitcoinWallet() {
     this.bitcoinActive = true;
     this.stratisActive = false;
     this.globalService.setCoinName("TestBitcoin");
@@ -34,7 +34,7 @@ export class SidebarComponent implements OnInit {
     this.router.navigate(['/wallet']);
   }
 
-  private loadStratisWallet() {
+  public loadStratisWallet() {
     this.bitcoinActive = false;
     this.stratisActive = true;
     this.globalService.setCoinName("TestStratis");
@@ -42,7 +42,7 @@ export class SidebarComponent implements OnInit {
     this.router.navigate(['/wallet/stratis-wallet']);
   }
 
-  private logOut() {
+  public logOut() {
     const modalRef = this.modalService.open(LogoutConfirmationComponent);
   }
 }

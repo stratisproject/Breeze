@@ -21,10 +21,10 @@ export class CreateComponent implements OnInit {
     this.buildCreateForm();
   }
 
-  private createWalletForm: FormGroup;
+  public createWalletForm: FormGroup;
   private newWallet: WalletCreation;
   private mnemonic: string;
-  private isCreating: Boolean = false;
+  public isCreating: boolean = false;
 
   ngOnInit() {
     this.getNewMnemonic();
@@ -95,11 +95,11 @@ export class CreateComponent implements OnInit {
     }
   };
 
-  private onBackClicked() {
+  public onBackClicked() {
     this.router.navigate(["/setup"]);
   }
 
-  private onCreateClicked() {
+  public onCreateClicked() {
     this.isCreating = true;
     if (this.mnemonic) {
       this.newWallet = new WalletCreation(

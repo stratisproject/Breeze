@@ -9,15 +9,15 @@ import { Router } from '@angular/router';
 })
 export class SetupComponent {
   constructor(private router: Router, private location: Location) {}
-  private onCreateClicked() {
+  public onCreateClicked() {
     this.router.navigate(['/setup/create']);
   }
 
-  private onRecoverClicked() {
+  public onRecoverClicked() {
     this.router.navigate(['/setup/recover']);
   }
 
-  private onBackClicked() {
+  public onBackClicked() {
     this.router.navigate(['']);
   }
 }
