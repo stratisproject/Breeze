@@ -12,7 +12,7 @@
             <span class="float-right"><a ngxClipboard [cbContent]="address" (click)="onCopiedClick()">copy</a></span>
           </div>
           <div class="myAddress"><code>{{ address }}</code></div>
-          <div class="text-center row" *ngIf="copied">
+          <div class="text-center" *ngIf="copied">
             <span class="badge badge-success col">Your address has been copied to your clipboard.</span>
           </div>
         </form>
