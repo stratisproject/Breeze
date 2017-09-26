@@ -6,7 +6,8 @@ export class GlobalService {
 
   private walletPath: string;
   private currentWalletName: string;
-  private coinType: number;
+  private coinType: number = 0;
+  private coinName: string = "Bitcoin";
 
   getWalletPath() {
     return this.walletPath;
@@ -34,5 +35,13 @@ export class GlobalService {
 
   setCoinType (coinType: number) {
     this.coinType = coinType;
+  }
+
+  getCoinName () {
+    return this.coinName;
+  }
+
+  setCoinName(coinName: string) {
+    this.coinName = coinName;
   }
 }
