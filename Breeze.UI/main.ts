@@ -61,22 +61,10 @@ function createWindow() {
 
   // Emitted when the window is going to close.
   mainWindow.on('close', function () {
-    if (process.platform !== 'darwin' && !serve) {
-      var http = require('http');
-      const options = {
-        hostname: 'localhost',
-        port: 5000,
-        path: '/api/node/shutdown',
-        method: 'POST'
-      };
-
-      const req = http.request(options, (res) => {});
-      req.write('');
-      req.end();
-      }
-    }
-  );
-}
+    closeBitcoinApi(),
+    closeStratisApi();
+  })
+};
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -86,7 +74,8 @@ app.on('ready', function () {
     console.log("Breeze UI was started in development mode. This requires the user to be running the Breeze Daemon himself.")
   }
   else {
-    startApi();
+    startBitcoinApi();
+    startStratisApi();
   }
   createTray();
   createWindow();
@@ -113,17 +102,73 @@ app.on('activate', function () {
   }
 });
 
-function startApi() {
-  var apiProcess;
-  const exec = require('child_process').exec;
+function closeBitcoinApi() {
+  if (process.platform !== 'darwin' && !serve) {
+    var http1 = require('http');
+    const options1 = {
+      hostname: 'localhost',
+      port: 5000,
+      path: '/api/node/shutdown',
+      method: 'POST'
+  };
 
-  //Start Breeze Daemon
+  const req = http1.request(options1, (res) => {});
+  req.write('');
+  req.end();
+  }
+};
+
+function closeStratisApi() {
+  if (process.platform !== 'darwin' && !serve) {
+    var http2 = require('http');
+    const options2 = {
+      hostname: 'localhost',
+      port: 5105,
+      path: '/api/node/shutdown',
+      method: 'POST'
+    };
+
+  const req = http2.request(options2, (res) => {});
+  req.write('');
+  req.end();
+  }
+};
+
+function startBitcoinApi() {
+  var bitcoinProcess;
+  const execBitcoin = require('child_process').exec;
+
+  //Start Breeze Bitcoin Daemon
   let apiPath = path.join(__dirname, '".//assets//daemon//Breeze.Daemon"');
   if (os.platform() === 'win32') {
       apiPath = path.join(__dirname, '".\\assets\\daemon\\Breeze.Daemon.exe"');
   }
 
-  apiProcess = exec('"' + apiPath + '" light -testnet', {
+  bitcoinProcess = execBitcoin('"' + apiPath + '" light -testnet', {
+      detached: true
+  }, (error, stdout, stderr) => {
+      if (error) {
+          writeLogError(`exec error: ${error}`);
+          return;
+      }
+      if (serve) {
+        writeLog(`stdout: ${stdout}`);
+        writeLog(`stderr: ${stderr}`);
+      }
+  });
+}
+
+function startStratisApi() {
+  var stratisProcess;
+  const execStratis = require('child_process').exec;
+
+  //Start Breeze Stratis Daemon
+  let apiPath = path.join(__dirname, '".//assets//daemon//Breeze.Daemon"');
+  if (os.platform() === 'win32') {
+      apiPath = path.join(__dirname, '".\\assets\\daemon\\Breeze.Daemon.exe"');
+  }
+
+  stratisProcess = execStratis('"' + apiPath + '" stratis light -testnet', {
       detached: true
   }, (error, stdout, stderr) => {
       if (error) {
