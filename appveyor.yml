@@ -6,7 +6,6 @@
 version: 0.1.0.{build}
 pull_requests:
   do_not_increment_build_number: true
-skip_tags: true
 
 # branches to build
 branches:
@@ -47,12 +46,26 @@ init:
       $env:log_prefix = "[$env:win_runtime][$env:configuration]"
       $env:app_output_name = "breeze-$env:win_runtime-$env:configuration"
       $env:api_output_name = "api-$env:win_runtime-$env:configuration"
+      if ($env:APPVEYOR_REPO_TAG -eq "false") { $env:APPVEYOR_REPO_TAG_NAME = "cd-unstable" }
 
 #---------------------------------#
 #       build configuration       #
 #---------------------------------#
 before_build:
 - ps: |
+      Write-Host "*--------------------------------*" -foregroundcolor "magenta"
+      Write-Host "current environment variables:" -foregroundcolor "magenta"
+      Write-Host "Windows runtime: $env:win_runtime" -foregroundcolor "magenta"
+      Write-Host "Build directory: $env:APPVEYOR_BUILD_FOLDER" -foregroundcolor "magenta"
+      Write-Host "Configuration: $env:configuration" -foregroundcolor "magenta"
+      Write-Host "App output name: $env:app_output_name" -foregroundcolor "magenta"
+      Write-Host "Branch: $env:APPVEYOR_REPO_BRANCH" -foregroundcolor "magenta"
+      Write-Host "Tag is set: $env:APPVEYOR_REPO_TAG" -foregroundcolor "magenta"
+      Write-Host "Tag: $env:APPVEYOR_REPO_TAG_NAME" -foregroundcolor "magenta"
+      Write-Host "Commit: $env:APPVEYOR_REPO_COMMIT" -foregroundcolor "magenta"
+      Write-Host "Commit message: $env:APPVEYOR_REPO_COMMIT_MESSAGE" -foregroundcolor "magenta"
+      Write-Host "*--------------------------------*" -foregroundcolor "magenta"
+
       Write-Host "$env:log_prefix STARTED restoring dotnet and npm packages" -foregroundcolor "magenta"
       cd Breeze
 
