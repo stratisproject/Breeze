@@ -11,7 +11,7 @@
             <div class="form-group clearfix">
             <label class="float-left" for="yourAddress">Amount</label>
             <!--<span class="float-right"><a href="#">max</a></span>-->
-            <input type="text" class="form-control form-control-danger" formControlName="amount" id="Amount" placeholder="0.00 BTC">
+            <input type="text" class="form-control form-control-danger" formControlName="amount" id="Amount" placeholder="0.00 {{ coinUnit }}">
             <div *ngIf="formErrors.amount" class="form-control-feedback">{{ formErrors.amount }}</div>
           </div>
           <!--<div class="form-group has-success">-->
@@ -54,7 +54,7 @@
         <a><button type="button" class="btn btn-link col-12" (click)="activeModal.close('Close click')">Cancel</button></a>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-lg btn-primary" [disabled]="!sendForm.valid" (click)="send()">Send</button>
+        <button type="submit" class="btn btn-lg btn-primary" [disabled]="!sendForm.valid || isSending" (click)="send()">Send</button>
       </div>
     </div>
   </div>

@@ -22,6 +22,7 @@ export class RecoverComponent implements OnInit {
   private recoverWalletForm: FormGroup;
   private creationDate: Date;
   private walletRecovery: WalletRecovery;
+  private isRecovering: Boolean = false;
 
   private responseMessage: string;
   private errorMessage: string;
@@ -35,8 +36,9 @@ export class RecoverComponent implements OnInit {
       "walletPassword": ["", Validators.required],
       "walletName": ["", [
           Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(24)
+          Validators.minLength(1),
+          Validators.maxLength(24),
+          Validators.pattern(/^[a-zA-Z0-9]*$/)
         ]
       ],
       "selectNetwork": ["test", Validators.required]
@@ -77,10 +79,11 @@ export class RecoverComponent implements OnInit {
       'required': 'A password is required.'
     },
     'walletName': {
-      'required':      'Name is required.',
-      'minlength':     'Name must be at least 3 characters long.',
-      'maxlength':     'Name cannot be more than 24 characters long.'
-    }
+      'required': 'A wallet name is required.',
+      'minlength': 'A wallet name must be at least one character long.',
+      'maxlength': 'A wallet name cannot be more than 24 characters long.',
+      'pattern': 'Please enter a valid wallet name. [a-Z] and [0-9] are the only characters allowed.'
+    },
   };
 
   private onBackClicked() {
@@ -88,21 +91,48 @@ export class RecoverComponent implements OnInit {
   }
 
   private onRecoverClicked(){
+    this.isRecovering = true;
     this.walletRecovery = new WalletRecovery(
+      this.recoverWalletForm.get("walletName").value,
       this.recoverWalletForm.get("walletMnemonic").value,
       this.recoverWalletForm.get("walletPassword").value,
       this.recoverWalletForm.get("selectNetwork").value,
-      this.globalService.getWalletPath(),
-      this.recoverWalletForm.get("walletName").value,
       this.creationDate
-      );
-    this.recoverWallet(this.walletRecovery);
+    );
+    this.recoverWallets(this.walletRecovery);
   }
 
-  private recoverWallet(recoverWallet: WalletRecovery) {
-
+  private recoverWallets(recoverWallet: WalletRecovery) {
     this.apiService
-      .recoverWallet(recoverWallet)
+      .recoverBitcoinWallet(recoverWallet)
+      .subscribe(
+        response => {
+          if (response.status >= 200 && response.status < 400) {
+            //Bitcoin Wallet Recovered
+          }
+        },
+        error => {
+          this.isRecovering = false;
+          console.log(error);
+          if (error.status === 0) {
+            alert("Something went wrong while connecting to the API. Please restart the application.");
+          } else if (error.status >= 400) {
+            if (!error.json().errors[0]) {
+              console.log(error);
+            }
+            else {
+              alert(error.json().errors[0].message);
+            }
+          }
+        },
+        () => this.recoverStratisWallet(recoverWallet)
+      )
+    ;
+  }
+
+  private recoverStratisWallet(recoverWallet: WalletRecovery){
+    this.apiService
+      .recoverStratisWallet(recoverWallet)
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
@@ -112,6 +142,7 @@ export class RecoverComponent implements OnInit {
           }
         },
         error => {
+          this.isRecovering = false;
           console.log(error);
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
@@ -124,6 +155,7 @@ export class RecoverComponent implements OnInit {
             }
           }
         }
-      );
+      )
+    ;
   }
 }

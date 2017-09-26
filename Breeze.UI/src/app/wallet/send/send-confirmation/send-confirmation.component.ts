@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { GlobalService } from '../../../shared/services/global.service';
+
 @Component({
   selector: 'app-send-confirmation',
   templateUrl: './send-confirmation.component.html',
@@ -10,12 +12,13 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class SendConfirmationComponent implements OnInit {
 
   @Input() transaction: any;
-  constructor(public activeModal: NgbActiveModal) { }
+  constructor(private globalService: GlobalService, public activeModal: NgbActiveModal) { }
 
   private showDetails: boolean = false;
+  private coinUnit: string;
 
   ngOnInit() {
-    console.log(this.transaction);
+    this.coinUnit = this.globalService.getCoinUnit();
   }
 
   toggleDetails() {

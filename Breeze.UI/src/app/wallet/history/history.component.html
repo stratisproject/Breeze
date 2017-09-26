@@ -19,8 +19,8 @@
     <!-- /JUMBOTRON-->
 
     <!-- TRANSACTIONS -->
-    <section id="transaction" class="container mt-4">
-      <h5 class="pt-4">Transactions</h5>
+    <section id="transaction" class="container">
+      <h5>Transactions</h5>
       <div *ngIf="transactions; else noTransactions">
         <div *ngFor="let transaction of transactions">
           <div class="card" (click)="openTransactionDetailDialog(transaction)">

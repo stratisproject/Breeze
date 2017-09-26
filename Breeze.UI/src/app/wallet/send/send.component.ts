@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
@@ -16,7 +16,7 @@ import { SendConfirmationComponent } from './send-confirmation/send-confirmation
   styleUrls: ['./send.component.css'],
 })
 
-export class SendComponent {
+export class SendComponent implements OnInit {
   constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, public activeModal: NgbActiveModal, private fb: FormBuilder) {
     this.buildSendForm();
   }
@@ -24,7 +24,13 @@ export class SendComponent {
   private sendForm: FormGroup;
   private responseMessage: any;
   private errorMessage: string;
+  private coinUnit: string;
   private transaction: TransactionBuilding;
+  private isSending: Boolean = false;
+
+  ngOnInit() {
+    this.coinUnit = this.globalService.getCoinUnit();
+  }
 
   private buildSendForm(): void {
     this.sendForm = this.fb.group({
@@ -79,6 +85,8 @@ export class SendComponent {
   };
 
   private send() {
+    this.isSending = true;
+
     this.transaction = new TransactionBuilding(
       this.globalService.getWalletName(),
       this.globalService.getCoinType(),
@@ -96,11 +104,11 @@ export class SendComponent {
         response => {
           if (response.status >= 200 && response.status < 400){
             this.responseMessage = response.json();
-            console.log(this.responseMessage);
           }
         },
         error => {
           console.log(error);
+          this.isSending = false;
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {
@@ -142,6 +150,7 @@ export class SendComponent {
         },
         error => {
           console.log(error);
+          this.isSending = false;
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {

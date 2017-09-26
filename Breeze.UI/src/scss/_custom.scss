@@ -139,10 +139,12 @@ em {
     font-size: .85em;
     color: $gray-dark;
   }
+  p {margin-bottom: 0 !important;}
   .lead {
     color: $black;
     font-size: 1.85em;
     font-weight: 500;
+    margin-bottom: 0;
     .h2 {
       font-size: 2em;
       font-weight: 600;

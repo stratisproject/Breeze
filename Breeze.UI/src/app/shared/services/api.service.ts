@@ -7,6 +7,8 @@ import 'rxjs/add/operator/catch';
 import "rxjs/add/observable/interval";
 import 'rxjs/add/operator/startWith';
 
+import { GlobalService } from './global.service';
+
 import { WalletCreation } from '../classes/wallet-creation';
 import { WalletRecovery } from '../classes/wallet-recovery';
 import { WalletLoad } from '../classes/wallet-load';
@@ -20,46 +22,96 @@ import { TransactionSending } from '../classes/transaction-sending';
  */
 @Injectable()
 export class ApiService {
-    constructor(private http: Http) {};
+    constructor(private http: Http, private globalService: GlobalService) {};
 
-    private mockApiUrl = 'http://localhost:3000/api';
-    private webApiUrl = 'http://localhost:5000/api';
     private headers = new Headers({'Content-Type': 'application/json'});
     private pollingInterval = 3000;
+    private bitcoinApiUrl = 'http://localhost:5000/api';
+    private stratisApiUrl = 'http://localhost:5105/api';
+    private currentApiUrl = 'http://localhost:5000/api';
+
+    private getCurrentCoin() {
+      let currentCoin = this.globalService.getCoinName();
+      if (currentCoin === "Bitcoin" || currentCoin === "TestBitcoin") {
+        this.currentApiUrl = this.bitcoinApiUrl;
+      } else if (currentCoin === "Stratis" || currentCoin === "TestStratis") {
+        this.currentApiUrl = this.stratisApiUrl;
+      }
+    }
 
     /**
      * Gets available wallets at the default path
      */
      getWalletFiles(): Observable<any> {
-        return this.http
-          .get(this.webApiUrl + '/wallet/files')
-          .map((response: Response) => response);
+      return this.http
+        .get(this.bitcoinApiUrl + '/wallet/files')
+        .map((response: Response) => response);
      }
 
-    /**
-     * Create a new wallet.
-     */
-    createWallet(data: WalletCreation): Observable<any> {
+     /**
+      * Get a new mnemonic
+      */
+    getNewMnemonic(): Observable<any> {
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('language', 'English');
+      params.set('wordCount', '12');
+
       return this.http
-        .post(this.webApiUrl + '/wallet/create/', JSON.stringify(data), {headers: this.headers})
+        .get(this.bitcoinApiUrl + '/wallet/mnemonic', new RequestOptions({headers: this.headers, search: params}))
         .map((response: Response) => response);
     }
 
     /**
-     * Recover a wallet.
+     * Create a new Bitcoin wallet.
      */
-    recoverWallet(data: WalletRecovery): Observable<any> {
+    createBitcoinWallet(data: WalletCreation): Observable<any> {
       return this.http
-        .post(this.webApiUrl + '/wallet/recover/', JSON.stringify(data), {headers: this.headers})
+        .post(this.bitcoinApiUrl + '/wallet/create/', JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
 
     /**
-     * Load a wallet
+     * Create a new Stratis wallet.
      */
-    loadWallet(data: WalletLoad): Observable<any> {
+    createStratisWallet(data: WalletCreation): Observable<any> {
       return this.http
-        .post(this.webApiUrl + '/wallet/load/', JSON.stringify(data), {headers: this.headers})
+        .post(this.stratisApiUrl + '/wallet/create/', JSON.stringify(data), {headers: this.headers})
+        .map((response: Response) => response);
+    }
+
+    /**
+     * Recover a Bitcoin wallet.
+     */
+    recoverBitcoinWallet(data: WalletRecovery): Observable<any> {
+      return this.http
+        .post(this.bitcoinApiUrl + '/wallet/recover/', JSON.stringify(data), {headers: this.headers})
+        .map((response: Response) => response);
+    }
+
+    /**
+     * Recover a Stratis wallet.
+     */
+    recoverStratisWallet(data: WalletRecovery): Observable<any> {
+      return this.http
+        .post(this.stratisApiUrl + '/wallet/recover/', JSON.stringify(data), {headers: this.headers})
+        .map((response: Response) => response);
+    }
+
+    /**
+     * Load a Bitcoin wallet
+     */
+    loadBitcoinWallet(data: WalletLoad): Observable<any> {
+      return this.http
+        .post(this.bitcoinApiUrl + '/wallet/load/', JSON.stringify(data), {headers: this.headers})
+        .map((response: Response) => response);
+    }
+
+    /**
+     * Load a Stratis wallet
+     */
+    loadStratisWallet(data: WalletLoad): Observable<any> {
+      return this.http
+        .post(this.stratisApiUrl + '/wallet/load/', JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
 
@@ -67,8 +119,10 @@ export class ApiService {
      * Get wallet status info from the API.
      */
     getWalletStatus(): Observable<any> {
+      this.getCurrentCoin();
+
       return this.http
-        .get(this.webApiUrl + '/wallet/status')
+        .get(this.currentApiUrl + '/wallet/status')
         .map((response: Response) => response);
     }
 
@@ -76,13 +130,15 @@ export class ApiService {
      * Get general wallet info from the API.
      */
     getGeneralInfo(data: WalletInfo): Observable<any> {
+      this.getCurrentCoin();
+
       let params: URLSearchParams = new URLSearchParams();
       params.set('Name', data.walletName);
 
       return Observable
         .interval(this.pollingInterval)
         .startWith(0)
-        .switchMap(() => this.http.get(this.webApiUrl + '/wallet/general-info', new RequestOptions({headers: this.headers, search: params})))
+        .switchMap(() => this.http.get(this.currentApiUrl + '/wallet/general-info', new RequestOptions({headers: this.headers, search: params})))
         .map((response: Response) => response);
     }
 
@@ -90,66 +146,79 @@ export class ApiService {
      * Get wallet balance info from the API.
      */
     getWalletBalance(data: WalletInfo): Observable<any> {
+      this.getCurrentCoin();
+
       let params: URLSearchParams = new URLSearchParams();
       params.set('walletName', data.walletName);
 
       return Observable
         .interval(this.pollingInterval)
         .startWith(0)
-        .switchMap(() => this.http.get(this.webApiUrl + '/wallet/balance', new RequestOptions({headers: this.headers, search: params})))
+        .switchMap(() => this.http.get(this.currentApiUrl + '/wallet/balance', new RequestOptions({headers: this.headers, search: params})))
         .map((response: Response) => response);
-
-      // return this.http
-      //   .get(this.webApiUrl + '/wallet/balance', new RequestOptions({headers: this.headers, search: params}))
-      //   .map((response: Response) => response);
     }
 
     /**
      * Get a wallets transaction history info from the API.
      */
     getWalletHistory(data: WalletInfo): Observable<any> {
+      this.getCurrentCoin();
+
       let params: URLSearchParams = new URLSearchParams();
       params.set('walletName', data.walletName);
 
       return Observable
         .interval(this.pollingInterval)
         .startWith(0)
-        .switchMap(() => this.http.get(this.webApiUrl + '/wallet/history', new RequestOptions({headers: this.headers, search: params})))
+        .switchMap(() => this.http.get(this.currentApiUrl + '/wallet/history', new RequestOptions({headers: this.headers, search: params})))
         .map((response: Response) => response);
-
-      // return this.http
-      //   .get(this.webApiUrl + '/wallet/history', new RequestOptions({headers: this.headers, search: params}))
-      //   .map((response: Response) => response);
     }
 
     /**
      * Get unused receive addresses for a certain wallet from the API.
      */
     getUnusedReceiveAddress(data: WalletInfo): Observable<any> {
+      this.getCurrentCoin();
+
       let params: URLSearchParams = new URLSearchParams();
       params.set('walletName', data.walletName);
       params.set('accountName', "account 0"); //temporary
 
       return this.http
-        .get(this.webApiUrl + '/wallet/address', new RequestOptions({headers: this.headers, search: params}))
+        .get(this.currentApiUrl + '/wallet/address', new RequestOptions({headers: this.headers, search: params}))
         .map((response: Response) => response);
     }
 
+    /**
+     * Build a transaction
+     */
     buildTransaction(data: TransactionBuilding): Observable<any> {
+      this.getCurrentCoin();
+
       return this.http
-        .post(this.webApiUrl + '/wallet/build-transaction/', JSON.stringify(data), {headers: this.headers})
+        .post(this.currentApiUrl + '/wallet/build-transaction/', JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
 
+    /**
+     * Send transaction
+     */
     sendTransaction(data: TransactionSending): Observable<any> {
+      this.getCurrentCoin();
+
       return this.http
-        .post(this.webApiUrl + '/wallet/send-transaction/', JSON.stringify(data), {headers: this.headers})
+        .post(this.currentApiUrl + '/wallet/send-transaction/', JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
 
+    /**
+     * Send shutdown signal to the daemon
+     */
     shutdownNode(): Observable<any> {
+      this.getCurrentCoin();
+
       return this.http
-        .post(this.webApiUrl + '/node/shutdown', '')
+        .post(this.currentApiUrl + '/node/shutdown', '')
         .map((response: Response) => response);
-    }   
+    }
 }

@@ -6,18 +6,25 @@ export class GlobalService {
 
   private walletPath: string;
   private currentWalletName: string;
-  private coinType: number;
+  private coinType: number = 0;
+  private coinName: string = "TestBitcoin";
+  private coinUnit: string = "TBTC";
+  private network: string = "TestNet";
 
   getWalletPath() {
     return this.walletPath;
   }
 
-  getNetwork() {
-    return "TestNet";
-  }
-
   setWalletPath(walletPath: string) {
     this.walletPath = walletPath;
+  }
+
+  getNetwork() {
+    return this.network;
+  }
+
+  setNetwork(network: string) {
+    this.network = network;
   }
 
   getWalletName() {
@@ -28,11 +35,27 @@ export class GlobalService {
     this.currentWalletName = currentWalletName;
   }
 
-  getCoinType () {
+  getCoinType() {
     return this.coinType;
   }
 
   setCoinType (coinType: number) {
     this.coinType = coinType;
+  }
+
+  getCoinName() {
+    return this.coinName;
+  }
+
+  setCoinName(coinName: string) {
+    this.coinName = coinName;
+  }
+
+  getCoinUnit() {
+    return this.coinUnit;
+  }
+
+  setCoinUnit(coinUnit: string) {
+    this.coinUnit = coinUnit;
   }
 }

@@ -18,7 +18,7 @@
             </ul>
             <ul class="list-inline row">
               <li class="list-inline-item col blockLabel">Amount</li>
-              <li class="list-inline-item col-9 blockText"><strong class="text-danger">-{{ transaction.amount }}</strong> <small class="text-uppercase ml-2">BTC</small></li>
+              <li class="list-inline-item col-9 blockText text-danger">-{{ transaction.amount | number:'1.8-8' }} {{ coinUnit }}</li>
             </ul>
             <ul class="list-inline row">
               <li class="list-inline-item col blockLabel">Destination</li>

@@ -1,4 +1,4 @@
-import { Component, Injectable } from '@angular/core';
+import { Component, Injectable, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -16,7 +16,7 @@ import { Mnemonic } from '../../shared/classes/mnemonic';
   styleUrls: ['./create.component.css'],
 })
 
-export class CreateComponent {
+export class CreateComponent implements OnInit {
   constructor(private globalService: GlobalService, private apiService: ApiService, private router: Router, private fb: FormBuilder) {
     this.buildCreateForm();
   }
@@ -24,18 +24,23 @@ export class CreateComponent {
   private createWalletForm: FormGroup;
   private newWallet: WalletCreation;
   private mnemonic: string;
+  private isCreating: Boolean = false;
+
+  ngOnInit() {
+    this.getNewMnemonic();
+  }
 
   private buildCreateForm(): void {
     this.createWalletForm = this.fb.group({
       "walletName": ["",
         Validators.compose([
           Validators.required,
-          Validators.minLength(3),
+          Validators.minLength(1),
           Validators.maxLength(24),
           Validators.pattern(/^[a-zA-Z0-9]*$/)
         ])
       ],
-      "walletPassword": ["", 
+      "walletPassword": ["",
         Validators.compose([
           Validators.required,
           Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{10,})/)])
@@ -75,10 +80,10 @@ export class CreateComponent {
 
   validationMessages = {
     'walletName': {
-      'required': 'Name is required.',
-      'minlength': 'Name must be at least 3 characters long.',
-      'maxlength': 'Name cannot be more than 24 characters long.',
-      'pattern': 'Enter a valid wallet name. [a-Z] and [0-9] are the only characters allowed.'
+      'required': 'A wallet name is required.',
+      'minlength': 'A wallet name must be at least one character long.',
+      'maxlength': 'A wallet name cannot be more than 24 characters long.',
+      'pattern': 'Please enter a valid wallet name. [a-Z] and [0-9] are the only characters allowed.'
     },
     'walletPassword': {
       'required': 'A password is required.',
@@ -95,27 +100,84 @@ export class CreateComponent {
   }
 
   private onCreateClicked() {
-    this.newWallet = new WalletCreation(
-      this.createWalletForm.get("walletPassword").value,
-      this.createWalletForm.get("selectNetwork").value,
-      this.globalService.getWalletPath(),
-      this.createWalletForm.get("walletName").value
+    this.isCreating = true;
+    if (this.mnemonic) {
+      this.newWallet = new WalletCreation(
+        this.createWalletForm.get("walletName").value,
+        this.mnemonic,
+        this.createWalletForm.get("walletPassword").value,
+        this.createWalletForm.get("selectNetwork").value
       );
-    this.createWallet(this.newWallet);
+      this.createWallets(this.newWallet);
+    }
   }
 
-  private createWallet(wallet: WalletCreation) {
+  private getNewMnemonic() {
     this.apiService
-      .createWallet(wallet)
+      .getNewMnemonic()
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400){
             this.mnemonic = response.json();
+          }
+        },
+        error => {
+          console.log(error);
+          if (error.status === 0) {
+            alert("Something went wrong while connecting to the API. Please restart the application.");
+          } else if (error.status >= 400) {
+            if (!error.json().errors[0]) {
+              console.log(error);
+            }
+            else {
+              alert(error.json().errors[0].message);
+            }
+          }
+        }
+      )
+    ;
+  }
+
+  private createWallets(wallet: WalletCreation) {
+    this.apiService
+      .createBitcoinWallet(wallet)
+      .subscribe(
+        response => {
+          if (response.status >= 200 && response.status < 400){
+            // Bitcoin wallet created
+          }
+        },
+        error => {
+          console.log(error);
+          this.isCreating = false;
+          if (error.status === 0) {
+            alert("Something went wrong while connecting to the API. Please restart the application.");
+          } else if (error.status >= 400) {
+            if (!error.json().errors[0]) {
+              console.log(error);
+            }
+            else {
+              alert(error.json().errors[0].message);
+            }
+          }
+        },
+        () => this.createStratisWallet(wallet)
+      )
+    ;
+  }
+
+  private createStratisWallet(wallet: WalletCreation) {
+    this.apiService
+      .createStratisWallet(wallet)
+      .subscribe(
+        response => {
+          if (response.status >= 200 && response.status < 400){
             alert("Your wallet has been created.\n\nPlease write down your 12 word passphrase: \n" + this.mnemonic + "\n\nYou can recover your wallet on any computer with:\n- your passphrase AND\n- your password AND\n- the wallet creation time\n\nUnlike most other wallets if an attacker acquires your passphrase, it will not be able to hack your wallet without knowing your password. On the contrary, unlike other wallets, you will not be able to recover your wallet only with your passphrase if you lose your password.");
             this.router.navigate(['']);
           }
         },
         error => {
+          this.isCreating = false;
           console.log(error);
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
