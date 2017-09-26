@@ -125,7 +125,10 @@ export class LoginComponent implements OnInit {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            //Bitcoin wallet loaded
+            // Set Bitcoin as the default wallet
+            this.globalService.setCoinName("Bitcoin");
+            this.globalService.setWalletName(walletLoad.name);
+            this.globalService.setCoinType(1);
           }
         },
         error => {
@@ -139,17 +142,18 @@ export class LoginComponent implements OnInit {
               alert(error.json().errors[0].message);
             }
           }
-        }
+        },
+        () => this.loadStratisWallet(walletLoad)
       )
     ;
+  }
 
+  private loadStratisWallet(walletLoad: WalletLoad) {
     this.apiService.loadStratisWallet(walletLoad)
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            this.globalService.setCoinName("Bitcoin");
-            this.globalService.setWalletName(walletLoad.name);
-            this.globalService.setCoinType(1);
+            // Navigate to the wallet section
             this.router.navigate(['/wallet']);
           }
         },
