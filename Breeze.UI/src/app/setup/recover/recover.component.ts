@@ -91,20 +91,45 @@ export class RecoverComponent implements OnInit {
 
   private onRecoverClicked(){
     this.walletRecovery = new WalletRecovery(
+      this.recoverWalletForm.get("walletName").value,
       this.recoverWalletForm.get("walletMnemonic").value,
       this.recoverWalletForm.get("walletPassword").value,
       this.recoverWalletForm.get("selectNetwork").value,
-      this.globalService.getWalletPath(),
-      this.recoverWalletForm.get("walletName").value,
       this.creationDate
-      );
-    this.recoverWallet(this.walletRecovery);
+    );
+    this.recoverWallets(this.walletRecovery);
   }
 
-  private recoverWallet(recoverWallet: WalletRecovery) {
-
+  private recoverWallets(recoverWallet: WalletRecovery) {
     this.apiService
-      .recoverWallet(recoverWallet)
+      .recoverBitcoinWallet(recoverWallet)
+      .subscribe(
+        response => {
+          if (response.status >= 200 && response.status < 400) {
+            //Bitcoin Wallet Recovered
+          }
+        },
+        error => {
+          console.log(error);
+          if (error.status === 0) {
+            alert("Something went wrong while connecting to the API. Please restart the application.");
+          } else if (error.status >= 400) {
+            if (!error.json().errors[0]) {
+              console.log(error);
+            }
+            else {
+              alert(error.json().errors[0].message);
+            }
+          }
+        },
+        () => this.recoverStratisWallet(recoverWallet)
+      )
+    ;
+  }
+
+  private recoverStratisWallet(recoverWallet: WalletRecovery){
+    this.apiService
+      .recoverStratisWallet(recoverWallet)
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
@@ -126,6 +151,7 @@ export class RecoverComponent implements OnInit {
             }
           }
         }
-      );
+      )
+    ;
   }
 }

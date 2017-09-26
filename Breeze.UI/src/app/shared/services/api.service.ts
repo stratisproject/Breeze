@@ -60,13 +60,20 @@ export class ApiService {
     }
 
     /**
-     * Recover a wallet.
+     * Recover a Bitcoin wallet.
      */
-    recoverWallet(data: WalletRecovery): Observable<any> {
-      this.getCurrentCoin();
-
+    recoverBitcoinWallet(data: WalletRecovery): Observable<any> {
       return this.http
-        .post(this.currentApiUrl + '/wallet/recover/', JSON.stringify(data), {headers: this.headers})
+        .post(this.bitcoinApiUrl + '/wallet/recover/', JSON.stringify(data), {headers: this.headers})
+        .map((response: Response) => response);
+    }
+
+    /**
+     * Recover a Stratis wallet.
+     */
+    recoverStratisWallet(data: WalletRecovery): Observable<any> {
+      return this.http
+        .post(this.stratisApiUrl + '/wallet/recover/', JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
 
