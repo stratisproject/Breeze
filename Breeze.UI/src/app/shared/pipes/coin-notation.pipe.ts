@@ -9,7 +9,6 @@ export class CoinNotationPipe implements PipeTransform {
     this.setCoinUnit();
   }
 
-  private coinName = this.globalService.getCoinName();
   private coinUnit: string;
   private coinNotation: number;
   private decimalLimit = 8;
@@ -20,37 +19,51 @@ export class CoinNotationPipe implements PipeTransform {
       switch (this.getCoinUnit()) {
         case "BTC":
           temp = value / 100000000;
-          return temp.toFixed(this.decimalLimit) + " TBTC";
+          return temp.toFixed(this.decimalLimit) + " BTC";
         case "mBTC":
           temp = value / 100000;
-          return temp.toFixed(this.decimalLimit) + " TmBTC";
+          return temp.toFixed(this.decimalLimit) + " mBTC";
         case "uBTC":
+          temp = value / 100;
+          return temp.toFixed(this.decimalLimit) + " uBTC";
+        case "TBTC":
+          temp = value / 100000000;
+          return temp.toFixed(this.decimalLimit) + " TBTC";
+        case "TmBTC":
+          temp = value / 100000;
+          return temp.toFixed(this.decimalLimit) + " TmBTC";
+        case "TuBTC":
           temp = value / 100;
           return temp.toFixed(this.decimalLimit) + " TuBTC";
         case "STRAT":
           temp = value / 100000000;
-          return temp.toFixed(this.decimalLimit) + " TSTRAT";
+          return temp.toFixed(this.decimalLimit) + " STRAT";
         case "mSTRAT":
           temp = value / 100000;
-          return temp.toFixed(this.decimalLimit) + " TmSTRAT";
+          return temp.toFixed(this.decimalLimit) + " mSTRAT";
         case "uSTRAT":
+          temp = value / 100;
+          return temp.toFixed(this.decimalLimit) + " uSTRAT";
+        case "TSTRAT":
+          temp = value / 100000000;
+          return temp.toFixed(this.decimalLimit) + " TSTRAT";
+        case "TmSTRAT":
+          temp = value / 100000;
+          return temp.toFixed(this.decimalLimit) + " TmSTRAT";
+        case "TuSTRAT":
           temp = value / 100;
           return temp.toFixed(this.decimalLimit) + " TuSTRAT";
       }
     }
   }
 
-  setCoinUnit() {
-    if (this.coinName === "Bitcoin") {
-      this.coinUnit = "BTC";
-    } else if (this.coinName === "Stratis") {
-      this.coinUnit = "STRAT"
-    }
-  };
-
   getCoinUnit() {
     return this.coinUnit;
   }
+
+  setCoinUnit() {
+    this.coinUnit = this.globalService.getCoinUnit();
+  };
 }
 
 

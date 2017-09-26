@@ -16,22 +16,24 @@ export class SidebarComponent implements OnInit {
   private bitcoinActive: Boolean;
 
   ngOnInit() {
-    if (this.globalService.getCoinName() === "Bitcoin") {
+    if (this.globalService.getCoinName() === "Bitcoin" || this.globalService.getCoinName() === "TestBitcoin") {
       this.bitcoinActive = true;
-    } else if (this.globalService.getCoinName() === "Stratis") {
+    } else if (this.globalService.getCoinName() === "Stratis" || this.globalService.getCoinName() === "TestStratis") {
       this.bitcoinActive = false;
     }
   }
 
   private loadBitcoinWallet() {
     this.toggleClass();
-    this.globalService.setCoinName("Bitcoin");
+    this.globalService.setCoinName("TestBitcoin");
+    this.globalService.setCoinUnit("TBTC");
     this.router.navigate(['/wallet']);
   }
 
   private loadStratisWallet() {
     this.toggleClass();
-    this.globalService.setCoinName("Stratis");
+    this.globalService.setCoinName("TestStratis");
+    this.globalService.setCoinUnit("TSTRAT");
     this.router.navigate(['/wallet/stratis-wallet']);
   }
 

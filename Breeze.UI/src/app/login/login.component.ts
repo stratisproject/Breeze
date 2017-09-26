@@ -126,7 +126,8 @@ export class LoginComponent implements OnInit {
         response => {
           if (response.status >= 200 && response.status < 400) {
             // Set Bitcoin as the default wallet
-            this.globalService.setCoinName("Bitcoin");
+            this.globalService.setCoinName("TestBitcoin");
+            this.globalService.setCoinUnit("TBTC");
             this.globalService.setWalletName(walletLoad.name);
             this.globalService.setCoinType(1);
           }

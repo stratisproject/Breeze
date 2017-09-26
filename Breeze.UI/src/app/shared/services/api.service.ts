@@ -32,9 +32,9 @@ export class ApiService {
 
     private getCurrentCoin() {
       let currentCoin = this.globalService.getCoinName();
-      if (currentCoin === "Bitcoin") {
+      if (currentCoin === "Bitcoin" || currentCoin === "TestBitcoin") {
         this.currentApiUrl = this.bitcoinApiUrl;
-      } else if (currentCoin === "Stratis") {
+      } else if (currentCoin === "Stratis" || currentCoin === "TestStratis") {
         this.currentApiUrl = this.stratisApiUrl;
       }
     }

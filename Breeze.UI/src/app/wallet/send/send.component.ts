@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
@@ -16,7 +16,7 @@ import { SendConfirmationComponent } from './send-confirmation/send-confirmation
   styleUrls: ['./send.component.css'],
 })
 
-export class SendComponent {
+export class SendComponent implements OnInit {
   constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, public activeModal: NgbActiveModal, private fb: FormBuilder) {
     this.buildSendForm();
   }
@@ -24,7 +24,12 @@ export class SendComponent {
   private sendForm: FormGroup;
   private responseMessage: any;
   private errorMessage: string;
+  private coinUnit: string;
   private transaction: TransactionBuilding;
+
+  ngOnInit() {
+    this.coinUnit = this.globalService.getCoinUnit();
+  }
 
   private buildSendForm(): void {
     this.sendForm = this.fb.group({
