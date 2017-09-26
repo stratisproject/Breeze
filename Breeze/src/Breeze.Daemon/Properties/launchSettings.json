@@ -6,7 +6,7 @@
     },
     "Breeze.Daemon TestNet": {
       "commandName": "Project",
-      "commandLineArgs": "light -testnet"
+      "commandLineArgs": "light -testnet -debug=all -loglevel=debug"
     },
     "StratisTest": {
       "commandName": "Project",
