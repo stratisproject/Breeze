@@ -46,7 +46,7 @@ init:
       $env:log_prefix = "[$env:win_runtime][$env:configuration]"
       $env:app_output_name = "breeze-$env:win_runtime-$env:configuration"
       $env:api_output_name = "api-$env:win_runtime-$env:configuration"
-      if ($env:APPVEYOR_REPO_TAG -eq false) { $env:APPVEYOR_REPO_TAG_NAME = "cd-unstable" }
+      if ($env:APPVEYOR_REPO_TAG -eq "false") { $env:APPVEYOR_REPO_TAG_NAME = "cd-unstable" }
 
 #---------------------------------#
 #       build configuration       #
