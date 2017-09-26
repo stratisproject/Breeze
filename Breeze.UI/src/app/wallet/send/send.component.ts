@@ -26,6 +26,7 @@ export class SendComponent implements OnInit {
   private errorMessage: string;
   private coinUnit: string;
   private transaction: TransactionBuilding;
+  private isSending: Boolean = false;
 
   ngOnInit() {
     this.coinUnit = this.globalService.getCoinUnit();
@@ -84,6 +85,8 @@ export class SendComponent implements OnInit {
   };
 
   private send() {
+    this.isSending = true;
+
     this.transaction = new TransactionBuilding(
       this.globalService.getWalletName(),
       this.globalService.getCoinType(),
@@ -101,7 +104,6 @@ export class SendComponent implements OnInit {
         response => {
           if (response.status >= 200 && response.status < 400){
             this.responseMessage = response.json();
-            console.log(this.responseMessage);
           }
         },
         error => {
@@ -109,6 +111,7 @@ export class SendComponent implements OnInit {
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {
+            this.isSending = false;
             if (!error.json().errors[0]) {
               console.log(error);
             }
@@ -150,6 +153,7 @@ export class SendComponent implements OnInit {
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {
+            this.isSending = false;
             if (!error.json().errors[0]) {
               console.log(error);
             }

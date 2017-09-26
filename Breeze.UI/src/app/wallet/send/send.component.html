@@ -54,7 +54,7 @@
         <a><button type="button" class="btn btn-link col-12" (click)="activeModal.close('Close click')">Cancel</button></a>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-lg btn-primary" [disabled]="!sendForm.valid" (click)="send()">Send</button>
+        <button type="submit" class="btn btn-lg btn-primary" [disabled]="!sendForm.valid || isSending" (click)="send()">Send</button>
       </div>
     </div>
   </div>
