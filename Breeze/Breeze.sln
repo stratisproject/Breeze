@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{807563C4-7259-434D-B604-A14C3DCF8E30}"
 EndProject
@@ -35,6 +35,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratis.Bitcoin.Features.Consensus", "..\StratisBitcoinFullNode\Stratis.Bitcoin.Features.Consensus\Stratis.Bitcoin.Features.Consensus.csproj", "{2D31A6F0-FB87-4887-978B-3D200DA12FBF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratis.Bitcoin.Features.Wallet", "..\StratisBitcoinFullNode\Stratis.Bitcoin.Features.Wallet\Stratis.Bitcoin.Features.Wallet.csproj", "{14A999E3-B35E-42EE-9C45-5ECBF0B75E50}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratis.Bitcoin.Features.RPC", "..\StratisBitcoinFullNode\Stratis.Bitcoin.Features.RPC\Stratis.Bitcoin.Features.RPC.csproj", "{4EC9E180-1F68-4574-89D8-97495FE387D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,6 +88,10 @@ Global
 		{14A999E3-B35E-42EE-9C45-5ECBF0B75E50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14A999E3-B35E-42EE-9C45-5ECBF0B75E50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14A999E3-B35E-42EE-9C45-5ECBF0B75E50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EC9E180-1F68-4574-89D8-97495FE387D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EC9E180-1F68-4574-89D8-97495FE387D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EC9E180-1F68-4574-89D8-97495FE387D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EC9E180-1F68-4574-89D8-97495FE387D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +107,7 @@ Global
 		{B5B03329-07DE-4B23-A6BC-C21C0F9D2A88} = {807563C4-7259-434D-B604-A14C3DCF8E30}
 		{2D31A6F0-FB87-4887-978B-3D200DA12FBF} = {807563C4-7259-434D-B604-A14C3DCF8E30}
 		{14A999E3-B35E-42EE-9C45-5ECBF0B75E50} = {807563C4-7259-434D-B604-A14C3DCF8E30}
+		{4EC9E180-1F68-4574-89D8-97495FE387D9} = {807563C4-7259-434D-B604-A14C3DCF8E30}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {45E7631F-9783-47C2-AB68-4E3B77E250B0}
