@@ -57,7 +57,7 @@ before_build:
       Write-Host "current environment variables:" -foregroundcolor "magenta"
       Write-Host "Windows runtime: $env:win_runtime" -foregroundcolor "magenta"
       Write-Host "Build directory: $env:APPVEYOR_BUILD_FOLDER" -foregroundcolor "magenta"
-      Write-Host "Configuration:" -foregroundcolor "magenta"
+      Write-Host "Configuration: $env:configuration" -foregroundcolor "magenta"
       Write-Host "App output name: $env:app_output_name" -foregroundcolor "magenta"
       Write-Host "Branch: $env:APPVEYOR_REPO_BRANCH" -foregroundcolor "magenta"
       Write-Host "Tag is set: $env:APPVEYOR_REPO_TAG" -foregroundcolor "magenta"
