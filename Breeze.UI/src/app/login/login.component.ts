@@ -62,34 +62,6 @@ export class LoginComponent implements OnInit {
     }
   };
 
-  private updateWalletFileDisplay(walletName: string) {
-    this.openWalletForm.patchValue({selectWallet: walletName})
-  }
-
-  private onDecryptClicked() {
-    this.setGlobalWalletName(this.openWalletForm.get("selectWallet").value);
-    let walletLoad = new WalletLoad(
-      this.openWalletForm.get("password").value,
-      this.globalService.getWalletPath(),
-      this.openWalletForm.get("selectWallet").value
-      );
-    this.loadWallet(walletLoad);
-  }
-
-  private onCreateClicked() {
-    this.router.navigate(['/setup']);
-  }
-
-  private onEnter() {
-    if (this.openWalletForm.valid) {
-      this.onDecryptClicked();
-    }
-  }
-
-  private setGlobalWalletName(walletName: string) {
-    this.globalService.setWalletName(walletName);
-  }
-
   private getWalletFiles() {
     this.apiService.getWalletFiles()
       .subscribe(
@@ -125,12 +97,58 @@ export class LoginComponent implements OnInit {
     ;
   }
 
-  private loadWallet(walletLoad: WalletLoad) {
-    this.apiService.loadWallet(walletLoad)
+  private updateWalletFileDisplay(walletName: string) {
+    this.openWalletForm.patchValue({selectWallet: walletName})
+  }
+
+  private onCreateClicked() {
+    this.router.navigate(['/setup']);
+  }
+
+  private onEnter() {
+    if (this.openWalletForm.valid) {
+      this.onDecryptClicked();
+    }
+  }
+
+  private onDecryptClicked() {
+    this.globalService.setWalletName(this.openWalletForm.get("selectWallet").value);
+    let walletLoad = new WalletLoad(
+      this.openWalletForm.get("selectWallet").value,
+      this.openWalletForm.get("password").value
+    );
+    this.loadWallets(walletLoad);
+  }
+
+  private loadWallets(walletLoad: WalletLoad) {
+    this.apiService.loadBitcoinWallet(walletLoad)
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            this.globalService.setWalletName(walletLoad.name)
+            //Bitcoin wallet loaded
+          }
+        },
+        error => {
+          if (error.status === 0) {
+            alert("Something went wrong while connecting to the API. Please restart the application.");
+          } else if (error.status >= 400) {
+            if (!error.json().errors[0]) {
+              console.log(error);
+            }
+            else {
+              alert(error.json().errors[0].message);
+            }
+          }
+        }
+      )
+    ;
+
+    this.apiService.loadStratisWallet(walletLoad)
+      .subscribe(
+        response => {
+          if (response.status >= 200 && response.status < 400) {
+            this.globalService.setCoinName("Bitcoin");
+            this.globalService.setWalletName(walletLoad.name);
             this.globalService.setCoinType(1);
             this.router.navigate(['/wallet']);
           }
