@@ -25,6 +25,10 @@ echo "Configuration:" $configuration
 echo "App output name:" $app_output_name
 echo "Api output name:" $api_output_name
 echo "dotnet resources path in app:" $dotnet_resources_path_in_app
+echo "Branch:" $TRAVIS_BRANCH
+echo "Tag:" $TRAVIS_TAG
+echo "Commit:" $TRAVIS_COMMIT
+echo "Commit message:" $TRAVIS_COMMIT_MESSAGE
 
 
 dotnet --info

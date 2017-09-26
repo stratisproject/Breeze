@@ -22,7 +22,6 @@ env:
   - arch=x64
   - configuration=Release  
   - os_platform=linux
-  - TRAVIS_TAG=cd-unstable
   
 # Work around NuGet issue #2163
 # https://github.com/NuGet/Home/issues/2163
@@ -33,9 +32,14 @@ before_install:
 
 install:
 - nvm install 6
+
+before_script:
+- if [ -z "$TRAVIS_TAG" ] ; then TRAVIS_TAG=cd-unstable; fi
+
 script:
 - chmod +x build.sh
 - "./build.sh"
+
 deploy:
   provider: releases
   api_key:
