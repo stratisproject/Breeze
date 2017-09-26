@@ -43,19 +43,39 @@ export class ApiService {
      * Gets available wallets at the default path
      */
      getWalletFiles(): Observable<any> {
-        return this.http
-          .get(this.bitcoinApiUrl + '/wallet/files')
-          .map((response: Response) => response);
+      return this.http
+        .get(this.bitcoinApiUrl + '/wallet/files')
+        .map((response: Response) => response);
      }
 
-    /**
-     * Create a new wallet.
-     */
-    createWallet(data: WalletCreation): Observable<any> {
-      this.getCurrentCoin();
+     /**
+      * Get a new mnemonic
+      */
+    getNewMnemonic(): Observable<any> {
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('language', 'English');
+      params.set('wordCount', '12');
 
       return this.http
-        .post(this.currentApiUrl + '/wallet/create/', JSON.stringify(data), {headers: this.headers})
+        .get(this.bitcoinApiUrl + '/wallet/mnemonic', new RequestOptions({headers: this.headers, search: params}))
+        .map((response: Response) => response);
+    }
+
+    /**
+     * Create a new Bitcoin wallet.
+     */
+    createBitcoinWallet(data: WalletCreation): Observable<any> {
+      return this.http
+        .post(this.bitcoinApiUrl + '/wallet/create/', JSON.stringify(data), {headers: this.headers})
+        .map((response: Response) => response);
+    }
+
+    /**
+     * Create a new Stratis wallet.
+     */
+    createStratisWallet(data: WalletCreation): Observable<any> {
+      return this.http
+        .post(this.stratisApiUrl + '/wallet/create/', JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
 
