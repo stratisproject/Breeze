@@ -2,11 +2,11 @@
   <aside id="sidebar">
     <!-- menu-->
     <ul class="list-unstyled menu">
-      <li class="active" (click)="loadBitcoinWallet()">
+      <li (click)="loadBitcoinWallet()" [class.active]="bitcoinActive">
         <img src="../../../assets/images/ico_bitcoin.svg" alt="Bitcoin">
         <span class="bar"></span>
       </li>
-      <li (click)="loadStratisWallet()">
+      <li (click)="loadStratisWallet()" [class.active]="!bitcoinActive">
         <img src="../../../assets/images/ico_stratis.svg" alt="Stratis">
         <span class="bar"></span>
       </li>
