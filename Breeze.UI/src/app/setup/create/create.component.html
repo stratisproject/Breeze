@@ -34,7 +34,7 @@
       </div>
       <!-- /row-->
       <div class="row d-flex justify-content-center">
-        <button type="button" class="btn btn-darkgray btn-lg" [disabled]="!createWalletForm.valid" (click)="onCreateClicked()">Create</button>
+        <button type="button" class="btn btn-darkgray btn-lg" [disabled]="!createWalletForm.valid || isCreating" (click)="onCreateClicked()">Create</button>
       </div>
       <!-- /row-->
     </div>

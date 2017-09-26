@@ -108,10 +108,10 @@ export class SendComponent implements OnInit {
         },
         error => {
           console.log(error);
+          this.isSending = false;
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {
-            this.isSending = false;
             if (!error.json().errors[0]) {
               console.log(error);
             }
@@ -150,10 +150,10 @@ export class SendComponent implements OnInit {
         },
         error => {
           console.log(error);
+          this.isSending = false;
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {
-            this.isSending = false;
             if (!error.json().errors[0]) {
               console.log(error);
             }

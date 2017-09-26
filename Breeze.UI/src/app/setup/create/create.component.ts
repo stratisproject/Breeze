@@ -24,6 +24,7 @@ export class CreateComponent implements OnInit {
   private createWalletForm: FormGroup;
   private newWallet: WalletCreation;
   private mnemonic: string;
+  private isCreating: Boolean = false;
 
   ngOnInit() {
     this.getNewMnemonic();
@@ -99,6 +100,7 @@ export class CreateComponent implements OnInit {
   }
 
   private onCreateClicked() {
+    this.isCreating = true;
     if (this.mnemonic) {
       this.newWallet = new WalletCreation(
         this.createWalletForm.get("walletName").value,
@@ -147,6 +149,7 @@ export class CreateComponent implements OnInit {
         },
         error => {
           console.log(error);
+          this.isCreating = false;
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {
@@ -174,6 +177,7 @@ export class CreateComponent implements OnInit {
           }
         },
         error => {
+          this.isCreating = false;
           console.log(error);
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");

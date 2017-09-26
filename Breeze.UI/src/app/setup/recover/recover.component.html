@@ -37,7 +37,7 @@
       </div>
       <!-- /row-->
       <div class="row d-flex justify-content-center">
-        <button type="button" class="btn btn-darkgray btn-lg" [disabled]="!recoverWalletForm.valid" (click)="onRecoverClicked()">Recover</button>
+        <button type="button" class="btn btn-darkgray btn-lg" [disabled]="!recoverWalletForm.valid || isRecovering" (click)="onRecoverClicked()">Recover</button>
       </div>
       <!-- /row-->
     </div>

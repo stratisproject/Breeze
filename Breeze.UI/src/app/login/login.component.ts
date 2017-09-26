@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
   private openWalletForm: FormGroup;
   private hasWallet: boolean = false;
   private wallets: [string];
+  private isDecrypting = false;
 
   ngOnInit() {
     this.getWalletFiles();
@@ -112,6 +113,7 @@ export class LoginComponent implements OnInit {
   }
 
   private onDecryptClicked() {
+    this.isDecrypting = true;
     this.globalService.setWalletName(this.openWalletForm.get("selectWallet").value);
     let walletLoad = new WalletLoad(
       this.openWalletForm.get("selectWallet").value,
@@ -133,6 +135,7 @@ export class LoginComponent implements OnInit {
           }
         },
         error => {
+          this.isDecrypting = false;
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {
@@ -159,6 +162,7 @@ export class LoginComponent implements OnInit {
           }
         },
         error => {
+          this.isDecrypting = false;
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {

@@ -22,6 +22,7 @@ export class RecoverComponent implements OnInit {
   private recoverWalletForm: FormGroup;
   private creationDate: Date;
   private walletRecovery: WalletRecovery;
+  private isRecovering: Boolean = false;
 
   private responseMessage: string;
   private errorMessage: string;
@@ -90,6 +91,7 @@ export class RecoverComponent implements OnInit {
   }
 
   private onRecoverClicked(){
+    this.isRecovering = true;
     this.walletRecovery = new WalletRecovery(
       this.recoverWalletForm.get("walletName").value,
       this.recoverWalletForm.get("walletMnemonic").value,
@@ -110,6 +112,7 @@ export class RecoverComponent implements OnInit {
           }
         },
         error => {
+          this.isRecovering = false;
           console.log(error);
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
@@ -139,6 +142,7 @@ export class RecoverComponent implements OnInit {
           }
         },
         error => {
+          this.isRecovering = false;
           console.log(error);
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
