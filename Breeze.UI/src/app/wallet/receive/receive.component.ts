@@ -16,15 +16,15 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class ReceiveComponent {
   constructor(private apiService: ApiService, private globalService: GlobalService, public activeModal: NgbActiveModal) {}
 
-  private address: any = "";
-  private copied: boolean = false;
+  public address: any = "";
+  public copied: boolean = false;
   private errorMessage: string;
 
   ngOnInit() {
     this.getUnusedReceiveAddresses();
   }
 
-  private onCopiedClick() {
+  public onCopiedClick() {
     this.copied = true;
   }
 

@@ -21,12 +21,12 @@ export class SendComponent implements OnInit {
     this.buildSendForm();
   }
 
-  private sendForm: FormGroup;
+  public sendForm: FormGroup;
   private responseMessage: any;
   private errorMessage: string;
-  private coinUnit: string;
+  public coinUnit: string;
   private transaction: TransactionBuilding;
-  private isSending: Boolean = false;
+  public isSending: boolean = false;
 
   ngOnInit() {
     this.coinUnit = this.globalService.getCoinUnit();
@@ -84,7 +84,7 @@ export class SendComponent implements OnInit {
     }
   };
 
-  private send() {
+  public send() {
     this.isSending = true;
 
     this.transaction = new TransactionBuilding(

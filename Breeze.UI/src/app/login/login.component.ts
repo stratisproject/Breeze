@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   }
 
   private openWalletForm: FormGroup;
-  private hasWallet: boolean = false;
+  public hasWallet: boolean = false;
   private wallets: [string];
   private isDecrypting = false;
 

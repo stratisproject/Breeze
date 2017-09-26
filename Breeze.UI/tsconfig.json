@@ -27,4 +27,8 @@
       "dom"
     ]
   }
+  ,
+  "exclude": [
+    "node_modules"
+  ]
 }

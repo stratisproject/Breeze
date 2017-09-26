@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   constructor(private router: Router, private apiService: ApiService, private titleService: Title) {}
   private errorMessage: any;
   private responseMessage: any;
-  private loading: boolean = true;
+  public loading: boolean = true;
 
   ngOnInit() {
     this.setTitle();

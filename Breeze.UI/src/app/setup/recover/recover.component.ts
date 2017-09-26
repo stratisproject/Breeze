@@ -19,10 +19,10 @@ export class RecoverComponent implements OnInit {
 
   }
 
-  private recoverWalletForm: FormGroup;
-  private creationDate: Date;
+  public recoverWalletForm: FormGroup;
+  public creationDate: Date;
   private walletRecovery: WalletRecovery;
-  private isRecovering: Boolean = false;
+  public isRecovering: boolean = false;
 
   private responseMessage: string;
   private errorMessage: string;
@@ -86,11 +86,11 @@ export class RecoverComponent implements OnInit {
     },
   };
 
-  private onBackClicked() {
+  public onBackClicked() {
     this.router.navigate(["/setup"]);
   }
 
-  private onRecoverClicked(){
+  public onRecoverClicked(){
     this.isRecovering = true;
     this.walletRecovery = new WalletRecovery(
       this.recoverWalletForm.get("walletName").value,

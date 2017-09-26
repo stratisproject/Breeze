@@ -21,9 +21,9 @@ import { Subscription } from 'rxjs/Subscription';
 export class DashboardComponent implements OnInit {
   constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal) {}
 
-  private confirmedBalance: number;
-  private unconfirmedBalance: number;
-  private transactions: any;
+  public confirmedBalance: number;
+  public unconfirmedBalance: number;
+  public transactions: any;
   private walletBalanceSubscription: Subscription;
   private walletHistorySubscription: Subscription;
 
@@ -35,15 +35,15 @@ export class DashboardComponent implements OnInit {
     this.cancelSubscriptions();
   };
 
-  private openSendDialog() {
+  public openSendDialog() {
     const modalRef = this.modalService.open(SendComponent);
   };
 
-  private openReceiveDialog() {
+  public openReceiveDialog() {
     const modalRef = this.modalService.open(ReceiveComponent);
   };
 
-  private openTransactionDetailDialog(transaction: any) {
+  public openTransactionDetailDialog(transaction: any) {
     const modalRef = this.modalService.open(TransactionDetailsComponent);
     modalRef.componentInstance.transaction = transaction;
   }

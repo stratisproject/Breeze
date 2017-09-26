@@ -10,12 +10,12 @@ import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 })
 export class LogoutConfirmationComponent implements OnInit {
 
-  constructor(private activeModal: NgbActiveModal, private router: Router) { }
+  constructor(public activeModal: NgbActiveModal, private router: Router) { }
 
   ngOnInit() {
   }
 
-  private onLogout() {
+  public onLogout() {
     this.activeModal.close();
     this.router.navigate(['/login']);
   }

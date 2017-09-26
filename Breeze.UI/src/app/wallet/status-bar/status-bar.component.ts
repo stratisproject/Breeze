@@ -15,12 +15,12 @@ import { Subscription } from 'rxjs/Subscription';
 export class StatusBarComponent implements OnInit {
 
   private generalWalletInfoSubscription: Subscription;
-  private lastBlockSyncedHeight: number;
-  private chainTip: number;
+  public lastBlockSyncedHeight: number;
+  public chainTip: number;
   private isChainSynced: boolean;
-  private connectedNodes: number = 0;
+  public connectedNodes: number = 0;
   private percentSyncedNumber: number = 0;
-  private percentSynced: string;
+  public percentSynced: string;
 
   constructor(private apiService: ApiService, private globalService: GlobalService) { }
 

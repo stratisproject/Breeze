@@ -20,7 +20,7 @@ import { TransactionDetailsComponent } from '../transaction-details/transaction-
 export class HistoryComponent {
   constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal) {}
 
-  private transactions: any;
+  public transactions: any;
   private errorMessage: string;
   private walletHistorySubscription: Subscription;
 
