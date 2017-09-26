@@ -55,11 +55,6 @@ dotnet publish -c $configuration -r $os_identifier-$arch -v m -o $TRAVIS_BUILD_D
 echo $log_prefix chmoding the Breeze.Daemon file
 chmod +x $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME/Breeze.Daemon
 
-echo $log_prefix zipping results of 'dotnet publish' into $TRAVIS_BUILD_DIR/dotnet_out/$api_output_name.zip
-mkdir -p $TRAVIS_BUILD_DIR/deploy/
-cd $TRAVIS_BUILD_DIR/dotnet_out
-zip -r $TRAVIS_BUILD_DIR/deploy/$api_output_name.zip $TRAVIS_OS_NAME/*
-
 # node Build
 cd $TRAVIS_BUILD_DIR/Breeze.UI
 echo $log_prefix running 'npm run'
@@ -76,6 +71,7 @@ cp -r $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME/* $dotnet_resources_path_in_a
 
 # zip result
 echo $log_prefix zipping the app into $TRAVIS_BUILD_DIR/breeze_out/$app_output_name.zip
+mkdir -p $TRAVIS_BUILD_DIR/deploy/
 cd $TRAVIS_BUILD_DIR/breeze_out
 zip -r $TRAVIS_BUILD_DIR/deploy/$app_output_name.zip breeze-ui-$os_platform-$arch/*
 

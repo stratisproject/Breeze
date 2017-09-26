@@ -89,11 +89,8 @@ build_script:
       Write-Host "$env:log_prefix running 'dotnet publish'" -foregroundcolor "magenta"
       dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\dotnet_out\$env:win_runtime
       
-      Write-Host "$env:log_prefix zipping results of 'dotnet publish'" -foregroundcolor "magenta"
-      7z a $env:APPVEYOR_BUILD_FOLDER\dotnet_out\$env:api_output_name.zip $env:APPVEYOR_BUILD_FOLDER\dotnet_out\$env:win_runtime\*
-      cd ../../../Breeze.UI
-      
       Write-Host "$env:log_prefix running 'npm run'" -foregroundcolor "magenta"
+      cd ../../../Breeze.UI      
       npm run build:prod
       Write-Host "$env:log_prefix packaging breeze" -foregroundcolor "magenta"
       node package.js --platform=$env:plat --arch=$env:arch --path=$env:APPVEYOR_BUILD_FOLDER\breeze_out
@@ -120,5 +117,3 @@ test_script:
 artifacts:
 - path: breeze_out\*.zip
   name: Breeze app
-- path: dotnet_out\*.zip
-  name: dotnet libraries
