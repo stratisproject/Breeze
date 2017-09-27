@@ -32,8 +32,8 @@ export class StatusBarComponent implements OnInit {
     this.cancelSubscriptions();
   }
 
-  getGeneralWalletInfo() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getCoinType())
+  private getGeneralWalletInfo() {
+    let walletInfo = new WalletInfo(this.globalService.getWalletName())
     this.generalWalletInfoSubscription = this.apiService.getGeneralInfo(walletInfo)
       .subscribe(
         response =>  {

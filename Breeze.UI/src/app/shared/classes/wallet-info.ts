@@ -1,10 +1,8 @@
 export class WalletInfo {
 
-  constructor(walletName: string, coinType: number) {
+  constructor(walletName: string) {
     this.walletName = walletName;
-    this.coinType = coinType;
   }
 
   public walletName: string;
-  public coinType: number;
 }

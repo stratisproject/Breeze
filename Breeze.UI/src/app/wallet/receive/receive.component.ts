@@ -29,7 +29,7 @@ export class ReceiveComponent {
   }
 
   private getUnusedReceiveAddresses() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getCoinType())
+    let walletInfo = new WalletInfo(this.globalService.getWalletName())
     this.apiService.getUnusedReceiveAddress(walletInfo)
       .subscribe(
         response => {
