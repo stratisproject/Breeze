@@ -71,8 +71,7 @@ before_build:
 
       # Initialize dependencies
       git submodule update --init --recursive
-
-      dotnet restore -v m
+     
       cd ../Breeze.UI
 
       Install-Product node 6
@@ -84,6 +83,7 @@ build_script:
 - ps: |
       Write-Host "$env:log_prefix running 'dotnet build'" -foregroundcolor "magenta"
       cd ../StratisBitcoinFullNode/Stratis.BreezeD
+      dotnet restore -v m
       dotnet build -c $env:configuration -r $env:win_runtime -v m 
 
       Write-Host "$env:log_prefix running 'dotnet publish'" -foregroundcolor "magenta"
