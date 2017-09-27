@@ -139,9 +139,9 @@ function startBitcoinApi() {
   const execBitcoin = require('child_process').exec;
 
   //Start Breeze Bitcoin Daemon
-  let apiPath = path.join(__dirname, '".//assets//daemon//Breeze.Daemon"');
+  let apiPath = path.join(__dirname, '".//assets//daemon//Stratis.BreezeD"');
   if (os.platform() === 'win32') {
-      apiPath = path.join(__dirname, '".\\assets\\daemon\\Breeze.Daemon.exe"');
+      apiPath = path.join(__dirname, '".\\assets\\daemon\\Stratis.BreezeD.exe"');
   }
 
   bitcoinProcess = execBitcoin('"' + apiPath + '" light -testnet', {
@@ -163,9 +163,9 @@ function startStratisApi() {
   const execStratis = require('child_process').exec;
 
   //Start Breeze Stratis Daemon
-  let apiPath = path.join(__dirname, '".//assets//daemon//Breeze.Daemon"');
+  let apiPath = path.join(__dirname, '".//assets//daemon//Stratis.BreezeD"');
   if (os.platform() === 'win32') {
-      apiPath = path.join(__dirname, '".\\assets\\daemon\\Breeze.Daemon.exe"');
+      apiPath = path.join(__dirname, '".\\assets\\daemon\\Stratis.BreezeD.exe"');
   }
 
   stratisProcess = execStratis('"' + apiPath + '" stratis light -testnet', {

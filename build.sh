@@ -52,7 +52,7 @@ dotnet build -c $configuration -r $os_identifier-$arch -v m
 echo $log_prefix running 'dotnet publish'
 dotnet publish -c $configuration -r $os_identifier-$arch -v m -o $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME
 
-echo $log_prefix chmoding the Breeze.Daemon file
+echo $log_prefix chmoding the Stratis.BreezeD file
 chmod +x $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME/Stratis.BreezeD
 
 # node Build
