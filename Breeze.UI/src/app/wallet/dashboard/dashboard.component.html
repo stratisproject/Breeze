@@ -10,7 +10,7 @@
             <p class="lead">
               <!--<strong><span class="h2">29</span>.76500293</strong>-->
               <strong>{{ confirmedBalance | coinNotation }}</strong>
-              <!--<small class="text-uppercase">btc</small>-->
+              <small class="text-uppercase"> {{ coinUnit }}</small>
             </p>
           </div>
           <!-- /col-->
@@ -26,6 +26,7 @@
             <h5>Unconfirmed balance</h5>
             <p class="lead">
               <strong>{{ unconfirmedBalance | coinNotation }}</strong>
+              <small class="text-uppercase"> {{ coinUnit }}</small>
             </p>
           </div>
           <!-- /col-->
@@ -56,7 +57,7 @@
                   <span *ngIf="transaction.transactionType == 'received'" class="text-success">+</span>
                   <span *ngIf="transaction.transactionType == 'sent'" class="text-danger">-</span>
                   {{ transaction.transactionAmount | coinNotation }}
-                  <!--<small class="text-uppercase">btc</small>-->
+                  <small class="text-uppercase">{{ coinUnit }}</small>
                   <span *ngIf="transaction.transactionConfirmedInBlock" class="badge badge-success text-capitalize">Confirmed</span>
                   <span *ngIf="!transaction.transactionConfirmedInBlock" class="badge badge-warning text-capitalize">Pending</span>
                 </li>

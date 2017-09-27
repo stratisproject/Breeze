@@ -22,11 +22,13 @@ export class HistoryComponent {
   constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal) {}
 
   public transactions: TransactionInfo[];
+  public coinUnit: string;
   private errorMessage: string;
   private walletHistorySubscription: Subscription;
 
   ngOnInit() {
     this.startSubscriptions();
+    this.coinUnit = this.globalService.getCoinUnit();
   }
 
   ngOnDestroy() {

@@ -12,8 +12,8 @@
         </ul>
         <ul class="list-inline row">
           <li class="list-inline-item col blockLabel">Amount</li>
-          <li *ngIf="transaction.transactionType == 'received'" class="list-inline-item col-9 blockText text-success">{{ transaction.transactionAmount | coinNotation }}</li>
-          <li *ngIf="transaction.transactionType == 'sent'" class="list-inline-item col-9 blockText text-danger">-{{ transaction.transactionAmount | coinNotation }}</li>
+          <li *ngIf="transaction.transactionType == 'received'" class="list-inline-item col-9 blockText text-success">{{ transaction.transactionAmount | coinNotation }} {{ coinUnit }}</li>
+          <li *ngIf="transaction.transactionType == 'sent'" class="list-inline-item col-9 blockText text-danger">-{{ transaction.transactionAmount | coinNotation }}  {{ coinUnit }}</li>
         </ul>
         <ul class="list-inline row">
           <li *ngIf="transaction.transactionType == 'received'" class="list-inline-item col blockLabel">From</li>

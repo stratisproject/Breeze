@@ -18,12 +18,14 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
   constructor(private apiService: ApiService, private globalService: GlobalService, public activeModal: NgbActiveModal) {}
 
   public copied: boolean = false;
+  public coinUnit: string;
   private generalWalletInfoSubscription: Subscription;
   private lastBlockSyncedHeight: number;
   private confirmations: number;
 
   ngOnInit() {
     this.startSubscriptions();
+    this.coinUnit = this.globalService.getCoinUnit();
   }
 
   ngOnDestroy() {

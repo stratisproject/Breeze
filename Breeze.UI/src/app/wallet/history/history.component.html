@@ -31,7 +31,7 @@
                     <span *ngIf="transaction.transactionType == 'received'" class="text-success">+</span>
                     <span *ngIf="transaction.transactionType == 'sent'" class="text-danger">-</span>
                     {{ transaction.transactionAmount | coinNotation }}
-                    <!--<small class="text-uppercase">btc</small>-->
+                    <small class="text-uppercase"> {{ coinUnit }} </small>
                     <span *ngIf="transaction.transactionConfirmedInBlock" class="badge badge-success text-capitalize">Confirmed</span>
                     <span *ngIf="!transaction.transactionConfirmedInBlock" class="badge badge-warning text-capitalize">Pending</span>
                   </li>
