@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
 import { GlobalService } from '../../shared/services/global.service';
 import { ApiService } from '../../shared/services/api.service';
@@ -16,24 +17,22 @@ export class RecoverComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private apiService: ApiService, private router: Router, private fb: FormBuilder) {
     this.buildRecoverForm();
-
   }
 
   public recoverWalletForm: FormGroup;
   public creationDate: Date;
-  private walletRecovery: WalletRecovery;
   public isRecovering: boolean = false;
-
-  private responseMessage: string;
-  private errorMessage: string;
+  public maxDate = new Date();
+  private walletRecovery: WalletRecovery;
+  private bsConfig: Partial<BsDatepickerConfig>;
 
   ngOnInit() {
+    this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-blue'});
+    console.log(new Date());
   }
 
   private buildRecoverForm(): void {
     this.recoverWalletForm = this.fb.group({
-      "walletMnemonic": ["", Validators.required],
-      "walletPassword": ["", Validators.required],
       "walletName": ["", [
           Validators.required,
           Validators.minLength(1),
@@ -41,6 +40,9 @@ export class RecoverComponent implements OnInit {
           Validators.pattern(/^[a-zA-Z0-9]*$/)
         ]
       ],
+      "walletMnemonic": ["", Validators.required],
+      "walletDate": ["", Validators.required],
+      "walletPassword": ["", Validators.required],
       "selectNetwork": ["test", Validators.required]
     });
 
@@ -66,24 +68,30 @@ export class RecoverComponent implements OnInit {
   }
 
   formErrors = {
+    'walletName': '',
     'walletMnemonic': '',
+    'walletDate': '',
     'walletPassword': '',
-    'walletName': ''
+
   };
 
   validationMessages = {
-    'walletMnemonic': {
-      'required': 'Please enter your 12 word phrase.'
-    },
-    'walletPassword': {
-      'required': 'A password is required.'
-    },
     'walletName': {
       'required': 'A wallet name is required.',
       'minlength': 'A wallet name must be at least one character long.',
       'maxlength': 'A wallet name cannot be more than 24 characters long.',
       'pattern': 'Please enter a valid wallet name. [a-Z] and [0-9] are the only characters allowed.'
     },
+    'walletMnemonic': {
+      'required': 'Please enter your 12 word phrase.'
+    },
+    'walletDate': {
+      'required': 'Please choose the date the wallet should sync from.'
+    },
+    'walletPassword': {
+      'required': 'A password is required.'
+    },
+
   };
 
   public onBackClicked() {
@@ -92,12 +100,16 @@ export class RecoverComponent implements OnInit {
 
   public onRecoverClicked(){
     this.isRecovering = true;
+
+    let recoveryDate = new Date(this.recoverWalletForm.get("walletDate").value);
+    recoveryDate.setDate(recoveryDate.getDate() - 1);
+
     this.walletRecovery = new WalletRecovery(
       this.recoverWalletForm.get("walletName").value,
       this.recoverWalletForm.get("walletMnemonic").value,
       this.recoverWalletForm.get("walletPassword").value,
       this.recoverWalletForm.get("selectNetwork").value,
-      this.creationDate
+      recoveryDate
     );
     this.recoverWallets(this.walletRecovery);
   }
@@ -136,7 +148,6 @@ export class RecoverComponent implements OnInit {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            this.responseMessage = response;
             alert("Your wallet has been recovered. \nYou will be redirected to the decryption page.");
             this.router.navigate([''])
           }
