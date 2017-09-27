@@ -83,14 +83,14 @@ before_build:
 build_script:
 - ps: |
       Write-Host "$env:log_prefix running 'dotnet build'" -foregroundcolor "magenta"
-      cd ../Breeze/src/Breeze.Daemon
+      cd ../StratisBitcoinFullNode/Stratis.BreezeD
       dotnet build -c $env:configuration -r $env:win_runtime -v m 
 
       Write-Host "$env:log_prefix running 'dotnet publish'" -foregroundcolor "magenta"
       dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\dotnet_out\$env:win_runtime
       
       Write-Host "$env:log_prefix running 'npm run'" -foregroundcolor "magenta"
-      cd ../../../Breeze.UI      
+      cd ../../Breeze.UI      
       npm run build:prod
       Write-Host "$env:log_prefix packaging breeze" -foregroundcolor "magenta"
       node package.js --platform=$env:plat --arch=$env:arch --path=$env:APPVEYOR_BUILD_FOLDER\breeze_out
