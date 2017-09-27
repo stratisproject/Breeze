@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DatepickerModule } from 'angular2-material-datepicker'
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 import { SetupComponent } from './setup.component';
@@ -16,7 +15,6 @@ import { RecoverComponent } from './recover/recover.component';
   imports: [
     BsDatepickerModule.forRoot(),
     CommonModule,
-    DatepickerModule,
     ReactiveFormsModule,
     SetupRoutingModule,
     SharedModule.forRoot()
