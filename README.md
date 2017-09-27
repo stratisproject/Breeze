@@ -32,9 +32,10 @@ cd Breeze
 dotnet restore
 dotnet build
 
-# Run a daemon Bitcoin SPV node on testnet
+# Run the Bitcoin and Stratis full-SPV daemons on testnet in separate terminals
 cd src/Breeze.Daemon
 dotnet run light -testnet
+dotnet run stratis light -testnet
 ```
 
 ## UI Build
