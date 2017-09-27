@@ -67,12 +67,11 @@ before_build:
       Write-Host "*--------------------------------*" -foregroundcolor "magenta"
 
       Write-Host "$env:log_prefix STARTED restoring dotnet and npm packages" -foregroundcolor "magenta"
-      cd Breeze
-
+      
       # Initialize dependencies
       git submodule update --init --recursive
      
-      cd ../Breeze.UI
+      cd $env:APPVEYOR_BUILD_FOLDER/Breeze.UI
 
       Install-Product node 6
       npm install
@@ -82,7 +81,7 @@ before_build:
 build_script:
 - ps: |
       Write-Host "$env:log_prefix running 'dotnet build'" -foregroundcolor "magenta"
-      cd ../StratisBitcoinFullNode/Stratis.BreezeD
+      cd $env:APPVEYOR_BUILD_FOLDER/StratisBitcoinFullNode/Stratis.BreezeD
       dotnet restore -v m
       dotnet build -c $env:configuration -r $env:win_runtime -v m 
 
@@ -90,7 +89,7 @@ build_script:
       dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\dotnet_out\$env:win_runtime
       
       Write-Host "$env:log_prefix running 'npm run'" -foregroundcolor "magenta"
-      cd ../../Breeze.UI      
+      cd $env:APPVEYOR_BUILD_FOLDER/Breeze.UI
       npm run build:prod
       Write-Host "$env:log_prefix packaging breeze" -foregroundcolor "magenta"
       node package.js --platform=$env:plat --arch=$env:arch --path=$env:APPVEYOR_BUILD_FOLDER\breeze_out
