@@ -8,28 +8,34 @@
         <h5 class="modal-title text-uppercase" id="modalDetail">Transaction Details</h5>
         <ul class="list-inline row">
           <li class="list-inline-item col blockLabel">Type</li>
-          <li class="list-inline-item col-9 blockText text-capitalize">{{ transaction.type }}</li>
+          <li class="list-inline-item col-9 blockText text-capitalize">{{ transaction.transactionType }}</li>
         </ul>
         <ul class="list-inline row">
           <li class="list-inline-item col blockLabel">Amount</li>
-          <li class="list-inline-item col-9 blockText text-success">{{transaction.amount | coinNotation }}</li>
+          <li *ngIf="transaction.transactionType == 'received'" class="list-inline-item col-9 blockText text-success">{{ transaction.transactionAmount | coinNotation }} {{ coinUnit }}</li>
+          <li *ngIf="transaction.transactionType == 'sent'" class="list-inline-item col-9 blockText text-danger">-{{ transaction.transactionAmount | coinNotation }}  {{ coinUnit }}</li>
         </ul>
-        <!--<ul class="list-inline row">
-          <li class="list-inline-item col blockLabel">From</li>
-          <li class="list-inline-item col-9 blockText"><code>n4kVJQarwwdmsXDdgNnJHgBSpZ8MhSkNBx</code></li>
-        </ul>-->
+        <ul class="list-inline row">
+          <li *ngIf="transaction.transactionType == 'received'" class="list-inline-item col blockLabel">From</li>
+          <li *ngIf="transaction.transactionType == 'sent'" class="list-inline-item col blockLabel">To</li>
+          <li class="list-inline-item col-9 blockText"><code>{{ transaction.transactionAddress }}</code></li>
+        </ul>
         <ul class="list-inline row">
           <li class="list-inline-item col blockLabel">Date</li>
-          <li class="list-inline-item col-9 blockText">{{ transaction.timestamp * 1000 | date:'medium' }}</li>
+          <li class="list-inline-item col-9 blockText">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</li>
+        </ul>
+        <ul *ngIf="transaction.transactionConfirmedInBlock" class="list-inline row">
+          <li class="list-inline-item col blockLabel">Block</li>
+          <li class="list-inline-item col-9 blockText">#{{ transaction.transactionConfirmedInBlock }}</li>
         </ul>
         <ul class="list-inline row">
-          <li class="list-inline-item col blockLabel">Block</li>
-          <li class="list-inline-item col-9 blockText">#{{ transaction.confirmedInBlock }}</li>
+            <li class="list-inline-item col blockLabel">Confirmations</li>
+            <li class="list-inline-item col-9 blockText">{{ confirmations }}</li>
         </ul>
         <ul class="list-inline row">
           <li class="list-inline-item col blockLabel mb-3">Transaction ID</li>
-          <li class="list-inline-item col-10 blockID"><code>{{ transaction.id }}</code></li>
-          <span class="float-right"><a ngxClipboard [cbContent]="transaction.id" (click)="onCopiedClick()">copy</a></span>
+          <li class="list-inline-item col-10 blockID"><code>{{ transaction.transactionId }}</code></li>
+          <span class="float-right"><a ngxClipboard [cbContent]="transaction.transactionId" (click)="onCopiedClick()">copy</a></span>
           <div class="col-12">
             <span class="badge badge-success list-inline-item col" *ngIf="copied">The transaction ID has been copied to your clipboard.</span>
           </div>
