@@ -23,8 +23,8 @@ export class RecoverComponent implements OnInit {
   public creationDate: Date;
   public isRecovering: boolean = false;
   public maxDate = new Date();
+  public bsConfig: Partial<BsDatepickerConfig>;
   private walletRecovery: WalletRecovery;
-  private bsConfig: Partial<BsDatepickerConfig>;
 
   ngOnInit() {
     this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-blue'});
