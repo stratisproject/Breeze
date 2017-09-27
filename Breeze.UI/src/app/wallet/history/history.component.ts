@@ -5,6 +5,7 @@ import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
 
 import { WalletInfo } from '../../shared/classes/wallet-info';
+import { TransactionInfo } from '../../shared/classes/transaction-info';
 
 import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
@@ -20,7 +21,7 @@ import { TransactionDetailsComponent } from '../transaction-details/transaction-
 export class HistoryComponent {
   constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal) {}
 
-  public transactions: any;
+  public transactions: TransactionInfo[];
   private errorMessage: string;
   private walletHistorySubscription: Subscription;
 
@@ -37,14 +38,17 @@ export class HistoryComponent {
     modalRef.componentInstance.transaction = transaction;
   }
 
+    // todo: add history in seperate service to make it reusable
   private getHistory() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getCoinType())
+    let walletInfo = new WalletInfo(this.globalService.getWalletName())
+    let historyResponse;
     this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
             if (response.json().transactionsHistory.length > 0) {
-              this.transactions = response.json().transactionsHistory;
+              historyResponse = response.json().transactionsHistory;
+              this.getTransactionInfo(historyResponse);
             }
           }
         },
@@ -69,6 +73,33 @@ export class HistoryComponent {
       )
     ;
   };
+
+  private getTransactionInfo(transactions: any) {
+    this.transactions = [];
+
+    for (let transaction of transactions) {
+      let transactionType;
+      if (transaction.type === "send") {
+        transactionType = "sent";
+      } else if (transaction.type === "received") {
+        transactionType = "received";
+      }
+      let transactionId = transaction.id;
+      let transactionAmount = transaction.amount;
+      let transactionAddress;
+      if (transaction.payments[0]) {
+        transactionAddress = transaction.payments[0].destinationAddress;
+      } else if (transaction.toAddress) {
+        transactionAddress = transaction.toAddress;
+      }
+      let transactionFee = transaction.fee;
+      let transactionConfirmedInBlock = transaction.confirmedInBlock;
+      let transactionTimestamp = transaction.timestamp;
+      let transactionConfirmed;
+
+      this.transactions.push(new TransactionInfo(transactionType, transactionId, transactionAmount, transactionAddress, transactionFee, transactionConfirmedInBlock, transactionTimestamp));
+    }
+  }
 
   private cancelSubscriptions() {
     if(this.walletHistorySubscription) {

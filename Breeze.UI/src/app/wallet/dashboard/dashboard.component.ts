@@ -4,6 +4,7 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
 import { WalletInfo } from '../../shared/classes/wallet-info';
+import { TransactionInfo } from '../../shared/classes/transaction-info';
 
 import { SendComponent } from '../send/send.component';
 import { ReceiveComponent } from '../receive/receive.component';
@@ -23,7 +24,7 @@ export class DashboardComponent implements OnInit {
 
   public confirmedBalance: number;
   public unconfirmedBalance: number;
-  public transactions: any;
+  public transactionArray: TransactionInfo[];
   private walletBalanceSubscription: Subscription;
   private walletHistorySubscription: Subscription;
 
@@ -43,13 +44,13 @@ export class DashboardComponent implements OnInit {
     const modalRef = this.modalService.open(ReceiveComponent);
   };
 
-  public openTransactionDetailDialog(transaction: any) {
+  public openTransactionDetailDialog(transaction: TransactionInfo) {
     const modalRef = this.modalService.open(TransactionDetailsComponent);
     modalRef.componentInstance.transaction = transaction;
   }
 
   private getWalletBalance() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getCoinType())
+    let walletInfo = new WalletInfo(this.globalService.getWalletName());
     this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
       .subscribe(
         response =>  {
@@ -81,14 +82,17 @@ export class DashboardComponent implements OnInit {
     ;
   };
 
+  // todo: add history in seperate service to make it reusable
   private getHistory() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName(), this.globalService.getCoinType())
+    let walletInfo = new WalletInfo(this.globalService.getWalletName());
+    let historyResponse;
     this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
             if (response.json().transactionsHistory.length > 0) {
-              this.transactions = response.json().transactionsHistory;
+              historyResponse = response.json().transactionsHistory;
+              this.getTransactionInfo(historyResponse);
             }
           }
         },
@@ -113,6 +117,33 @@ export class DashboardComponent implements OnInit {
       )
     ;
   };
+
+  private getTransactionInfo(transactions: any) {
+    this.transactionArray = [];
+
+    for (let transaction of transactions) {
+      let transactionType;
+      if (transaction.type === "send") {
+        transactionType = "sent";
+      } else if (transaction.type === "received") {
+        transactionType = "received";
+      }
+      let transactionId = transaction.id;
+      let transactionAmount = transaction.amount;
+      let transactionAddress;
+      if (transaction.payments[0]) {
+        transactionAddress = transaction.payments[0].destinationAddress;
+      } else if (transaction.toAddress) {
+        transactionAddress = transaction.toAddress;
+      }
+      let transactionFee = transaction.fee;
+      let transactionConfirmedInBlock = transaction.confirmedInBlock;
+      let transactionTimestamp = transaction.timestamp;
+      let transactionConfirmed;
+
+      this.transactionArray.push(new TransactionInfo(transactionType, transactionId, transactionAmount, transactionAddress, transactionFee, transactionConfirmedInBlock, transactionTimestamp));
+    }
+  }
 
   private cancelSubscriptions() {
     if (this.walletBalanceSubscription) {

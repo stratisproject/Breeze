@@ -25,12 +25,19 @@
         <div *ngFor="let transaction of transactions">
           <div class="card" (click)="openTransactionDetailDialog(transaction)">
             <div class="card-block text-nowrap">
-              <ul class="list-inline row">
-                <li class="list-inline-item hidden-xs-down col text-uppercase align-bottom">{{ transaction.type }}</li>
-                <li class="list-inline-item col-4 amount text-left align-baseline"><!--<span class="text-success">+</span>--> {{ transaction.amount | coinNotation }} <!--<small class="text-uppercase">btc</small> <span class="badge badge-danger text-capitalize">unconfirmed</span>--></li>
-                <li class="list-inline-item col text-right align-baseline transactionDate">{{ transaction.timestamp * 1000 | date:'medium' }}</li>
-              </ul>
-            </div>
+                <ul class="list-inline row">
+                  <li class="list-inline-item hidden-xs-down col-3 text-uppercase align-bottom">{{ transaction.transactionType }}</li>
+                  <li class="list-inline-item col-4 amount text-left align-baseline">
+                    <span *ngIf="transaction.transactionType == 'received'" class="text-success">+</span>
+                    <span *ngIf="transaction.transactionType == 'sent'" class="text-danger">-</span>
+                    {{ transaction.transactionAmount | coinNotation }}
+                    <!--<small class="text-uppercase">btc</small>-->
+                    <span *ngIf="transaction.transactionConfirmedInBlock" class="badge badge-success text-capitalize">Confirmed</span>
+                    <span *ngIf="!transaction.transactionConfirmedInBlock" class="badge badge-warning text-capitalize">Pending</span>
+                  </li>
+                  <li class="list-inline-item col text-right align-baseline transactionDate">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</li>
+                </ul>
+              </div>
           </div>
         </div>
       </div>
