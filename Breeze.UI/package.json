@@ -58,6 +58,7 @@
     "electron-context-menu": "0.9.1",
     "enhanced-resolve": "3.3.0",
     "ngx-clipboard": "8.1.0",
+    "ngx-bootstrap": "1.9.3",
     "rxjs": "5.4.3",
     "zone.js": "0.8.17"
   },
