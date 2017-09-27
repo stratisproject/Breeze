@@ -35,7 +35,7 @@ dotnet --info
 
 # Initialize dependencies
 echo $log_prefix STARTED restoring dotnet and npm packages
-cd $TRAVIS_BUILD_DIR/Breeze
+cd $TRAVIS_BUILD_DIR
 git submodule update --init --recursive
 
 cd $TRAVIS_BUILD_DIR/Breeze.UI
