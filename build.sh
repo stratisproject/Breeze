@@ -35,10 +35,9 @@ dotnet --info
 
 # Initialize dependencies
 echo $log_prefix STARTED restoring dotnet and npm packages
-cd $TRAVIS_BUILD_DIR/Breeze
+cd $TRAVIS_BUILD_DIR
 git submodule update --init --recursive
 
-dotnet restore -v m
 cd $TRAVIS_BUILD_DIR/Breeze.UI
 
 npm install
@@ -46,14 +45,15 @@ echo $log_prefix FINISHED restoring dotnet and npm packages
 
 # dotnet build
 echo $log_prefix running 'dotnet build'
-cd $TRAVIS_BUILD_DIR/Breeze/src/Breeze.Daemon
+cd $TRAVIS_BUILD_DIR/StratisBitcoinFullNode/Stratis.BreezeD
+dotnet restore -v m
 dotnet build -c $configuration -r $os_identifier-$arch -v m 
 
 echo $log_prefix running 'dotnet publish'
 dotnet publish -c $configuration -r $os_identifier-$arch -v m -o $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME
 
-echo $log_prefix chmoding the Breeze.Daemon file
-chmod +x $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME/Breeze.Daemon
+echo $log_prefix chmoding the Stratis.BreezeD file
+chmod +x $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME/Stratis.BreezeD
 
 # node Build
 cd $TRAVIS_BUILD_DIR/Breeze.UI
