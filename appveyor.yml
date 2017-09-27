@@ -126,7 +126,7 @@ deploy:
   description: ''
   provider: GitHub
   auth_token:
-    secure: $(secure_github_key) # your encrypted token from GitHub
+    secure: iPd9DGfPGxt/rr3cZIB5MTAuAVCAKPBWXATiN79tWuJJZUHdty7BO+QHUfnKoXTz
   artifact: breeze_out\*.zip
   draft: false
   prerelease: true
