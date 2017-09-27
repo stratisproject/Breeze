@@ -19,9 +19,9 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
 
   public copied: boolean = false;
   public coinUnit: string;
+  public confirmations: number;
   private generalWalletInfoSubscription: Subscription;
   private lastBlockSyncedHeight: number;
-  private confirmations: number;
 
   ngOnInit() {
     this.startSubscriptions();
