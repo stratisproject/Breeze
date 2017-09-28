@@ -122,12 +122,10 @@ artifacts:
 #----------------------------------#
 
 deploy:
+- provider: GitHub
   tag: $(APPVEYOR_REPO_TAG_NAME)
-  description: ''
-  provider: GitHub
   auth_token:
-    secure: iPd9DGfPGxt/rr3cZIB5MTAuAVCAKPBWXATiN79tWuJJZUHdty7BO+QHUfnKoXTz
-  artifact: breeze_out\*.zip
+    secure: faXallYrtShJywqNK+adalNNl50Wjns7dFsCDDx5/eNBegshCLjfshUeMPgIX9Ld
   draft: false
   prerelease: true
   force_update: true
