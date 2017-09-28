@@ -88,18 +88,12 @@ export class HistoryComponent {
       }
       let transactionId = transaction.id;
       let transactionAmount = transaction.amount;
-      let transactionAddress;
-      if (transaction.payments[0]) {
-        transactionAddress = transaction.payments[0].destinationAddress;
-      } else if (transaction.toAddress) {
-        transactionAddress = transaction.toAddress;
-      }
       let transactionFee = transaction.fee;
       let transactionConfirmedInBlock = transaction.confirmedInBlock;
       let transactionTimestamp = transaction.timestamp;
       let transactionConfirmed;
 
-      this.transactions.push(new TransactionInfo(transactionType, transactionId, transactionAmount, transactionAddress, transactionFee, transactionConfirmedInBlock, transactionTimestamp));
+      this.transactions.push(new TransactionInfo(transactionType, transactionId, transactionAmount, transactionFee, transactionConfirmedInBlock, transactionTimestamp));
     }
   }
 
