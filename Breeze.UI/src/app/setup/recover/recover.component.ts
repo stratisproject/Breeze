@@ -115,6 +115,7 @@ export class RecoverComponent implements OnInit {
   }
 
   private recoverWallets(recoverWallet: WalletRecovery) {
+    let bitcoinErrorMessage = "";
     this.apiService
       .recoverBitcoinWallet(recoverWallet)
       .subscribe(
@@ -122,6 +123,7 @@ export class RecoverComponent implements OnInit {
           if (response.status >= 200 && response.status < 400) {
             //Bitcoin Wallet Recovered
           }
+          this.recoverStratisWallet(recoverWallet, bitcoinErrorMessage);
         },
         error => {
           this.isRecovering = false;
@@ -133,16 +135,17 @@ export class RecoverComponent implements OnInit {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].message);
+              bitcoinErrorMessage = error.json().errors[0].message;
             }
           }
-        },
-        () => this.recoverStratisWallet(recoverWallet)
+          this.recoverStratisWallet(recoverWallet, bitcoinErrorMessage);
+        }
       )
     ;
   }
 
-  private recoverStratisWallet(recoverWallet: WalletRecovery){
+  private recoverStratisWallet(recoverWallet: WalletRecovery, bitcoinErrorMessage: string){
+    let stratisErrorMessage = "";
     this.apiService
       .recoverStratisWallet(recoverWallet)
       .subscribe(
@@ -151,6 +154,7 @@ export class RecoverComponent implements OnInit {
             alert("Your wallet has been recovered. \nYou will be redirected to the decryption page.");
             this.router.navigate([''])
           }
+            this.AlertIfNeeded(bitcoinErrorMessage, stratisErrorMessage);
         },
         error => {
           this.isRecovering = false;
@@ -162,11 +166,19 @@ export class RecoverComponent implements OnInit {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].message);
+              stratisErrorMessage = error.json().errors[0].message;
             }
           }
-        }
+          this.AlertIfNeeded(bitcoinErrorMessage, stratisErrorMessage);
+        }     
       )
     ;
+  }
+
+  private AlertIfNeeded(bitcoinErrorMessage: string, stratisErrorMessage: string) {
+        if(bitcoinErrorMessage !== "" || stratisErrorMessage !== "") {
+          let errorMessage = "Bitcoin wallet recovery:\n" + bitcoinErrorMessage + "\n\nStratis wallet recovery:\n" + stratisErrorMessage;
+          alert(errorMessage);
+    }
   }
 }
