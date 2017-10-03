@@ -54,7 +54,7 @@
         </div>
         <!-- /row-->
         <div class="row d-flex justify-content-center mb-4">
-          <button type="submit" class="btn btn-darkgray btn-lg" [disabled]="!openWalletForm.valid" (click)="onDecryptClicked()">Decrypt</button>
+          <button type="submit" class="btn btn-darkgray btn-lg" [disabled]="!openWalletForm.valid || isDecrypting" (click)="onDecryptClicked()">Decrypt</button>
         </div>
       </div>
       <!-- /row-->
