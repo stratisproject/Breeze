@@ -27,15 +27,13 @@ cd Breeze
 # Initialize dependencies
 git submodule update --init --recursive
 
-# Go in Breeze's solution folder
-cd Breeze
-dotnet restore
+# Go in the Breeze deamon folder
+cd StratisBitcoinFullNode/Stratis.BreezeD
 dotnet build
 
 # Run the Bitcoin and Stratis full-SPV daemons on testnet in separate terminals
-cd src/Breeze.Daemon
-dotnet run light -testnet
-dotnet run stratis light -testnet
+dotnet run -testnet
+dotnet run stratis -testnet
 ```
 
 ## UI Build
@@ -56,19 +54,15 @@ If you want the :sparkles: latest :sparkles: (unstable :bomb:) version of the Br
 |:---|----------------:|------------------:|------------------:|
 |**Windows 7**| [download][7] | [download][8] | continuous build - up to date with commits |
 |**Windows 10**| [download][9] | [download][10] | continuous build - up to date with commits | 
-|**Ubuntu 14.04**| - | coming soon | manual build |
-|**Ubuntu 16.04**| - | coming soon | manual build |
-|**OS X 10.11**| - | [download][13] |  continuous build - up to date with commits |
-|**OS X 10.12**| - | [download][14] |  continuous build - up to date with commits |
+|**Ubuntu 14.04**| - | [download][11] | continuous build - up to date with commits |
+|**OS X 10.12**| - | [download][12] |  continuous build - up to date with commits |
 
 
-[7]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win7-x86-Release.zip?job=Environment%3A%20win_runtime%3Dwin7-x86%2C%20arch%3Dia32%2C%20plat%3Dwin32
-[8]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win7-x64-Release.zip?job=Environment%3A%20win_runtime%3Dwin7-x64%2C%20arch%3Dx64%2C%20plat%3Dwin32
-[9]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win10-x86-Release.zip?job=Environment%3A%20win_runtime%3Dwin10-x86%2C%20arch%3Dia32%2C%20plat%3Dwin32
-[10]: https://ci.appveyor.com/api/projects/stratis/breeze/artifacts/breeze_out/breeze-win10-x64-Release.zip?job=Environment%3A%20win_runtime%3Dwin10-x64%2C%20arch%3Dx64%2C%20plat%3Dwin32
+[7]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-win7-x86-Release.zip
+[8]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-win7-x64-Release.zip
+[9]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-win10-x86-Release.zip
+[10]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-win10-x64-Release.zip
 [11]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-ubuntu.14.04-x64-Release.zip
-[12]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-ubuntu.14.04-x64-Release.zip
-[13]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-osx.10.11-x64-Release.zip
-[14]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-osx.10.12-x64-Release.zip
+[12]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-osx.10.12-x64-Release.zip
 
 
