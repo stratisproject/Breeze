@@ -22,15 +22,17 @@ import { Subscription } from 'rxjs/Subscription';
 export class DashboardComponent implements OnInit {
   constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal) {}
 
+  public walletName: string;
+  public coinUnit: string;
   public confirmedBalance: number;
   public unconfirmedBalance: number;
   public transactionArray: TransactionInfo[];
-  public coinUnit: string;
   private walletBalanceSubscription: Subscription;
   private walletHistorySubscription: Subscription;
 
   ngOnInit() {
     this.startSubscriptions();
+    this.walletName = this.globalService.getWalletName();
     this.coinUnit = this.globalService.getCoinUnit();
   };
 
