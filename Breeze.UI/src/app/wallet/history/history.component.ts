@@ -89,7 +89,12 @@ export class HistoryComponent {
       }
       let transactionId = transaction.id;
       let transactionAmount = transaction.amount;
-      let transactionFee = transaction.fee;
+      let transactionFee;
+      if (transaction.fee) {
+        transactionFee = transaction.fee;
+      } else {
+        transactionFee = 0;
+      }
       let transactionConfirmedInBlock = transaction.confirmedInBlock;
       let transactionTimestamp = transaction.timestamp;
       let transactionConfirmed;

@@ -56,7 +56,7 @@
                 <li class="list-inline-item col-4 amount text-left align-baseline">
                   <span *ngIf="transaction.transactionType == 'received'" class="text-success">+</span>
                   <span *ngIf="transaction.transactionType == 'sent'" class="text-danger">-</span>
-                  {{ transaction.transactionAmount | coinNotation }}
+                  {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }}
                   <small class="text-uppercase">{{ coinUnit }}</small>
                   <span *ngIf="transaction.transactionConfirmedInBlock" class="badge badge-success text-capitalize">Confirmed</span>
                   <span *ngIf="!transaction.transactionConfirmedInBlock" class="badge badge-warning text-capitalize">Pending</span>
