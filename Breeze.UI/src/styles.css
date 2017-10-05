@@ -61,20 +61,12 @@ code {
   fill: #1B354B !important;
 }
 
-@-webkit-keyframes blink-caret {
-  50% {
-    border-color: transparent;
-  }
-}
-
 em.display-4 {
   font-size: 1.6em;
   color: #1B354B;
   font-weight: 400;
   padding-right: 5px;
-  border-right: 0.1em solid #7385A0;
   white-space: nowrap;
-  -webkit-animation: blink-caret .5s step-end infinite alternate;
 }
 
 .datepicker__input {
