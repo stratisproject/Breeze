@@ -116,7 +116,7 @@ export class SendComponent implements OnInit {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].message);
+              alert(error.json().errors[0].description);
             }
           }
         },
@@ -158,7 +158,7 @@ export class SendComponent implements OnInit {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].message);
+              alert(error.json().errors[0].description);
             }
           }
         },
