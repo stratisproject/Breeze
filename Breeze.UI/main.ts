@@ -144,7 +144,7 @@ function startBitcoinApi() {
       apiPath = path.join(__dirname, '".\\assets\\daemon\\Stratis.BreezeD.exe"');
   }
 
-  bitcoinProcess = execBitcoin('"' + apiPath + '" light -testnet', {
+  bitcoinProcess = execBitcoin('"' + apiPath + '" -testnet', {
       detached: true
   }, (error, stdout, stderr) => {
       if (error) {
@@ -168,7 +168,7 @@ function startStratisApi() {
       apiPath = path.join(__dirname, '".\\assets\\daemon\\Stratis.BreezeD.exe"');
   }
 
-  stratisProcess = execStratis('"' + apiPath + '" stratis light -testnet', {
+  stratisProcess = execStratis('"' + apiPath + '" stratis -testnet', {
       detached: true
   }, (error, stdout, stderr) => {
       if (error) {
