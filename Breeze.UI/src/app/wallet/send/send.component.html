@@ -20,7 +20,7 @@
             <input type="text" class="form-control form-control-success" formControlName="address" id="destinationAddress" placeholder="Please enter the destination address here.">
             <div *ngIf="formErrors.address" class="form-control-feedback">{{ formErrors.address }}</div>
           </div>
-          <!--<div class="form-group">
+          <!-- <div class="form-group">
             <label for="Fees">Fees</label>
             <div class="col feeSlider text-center">
               <input class="form-control" id="dataSlider" type="text"
@@ -37,16 +37,19 @@
                 <em>A higher fee helps expedite your transaction.
                 <br>You are sending <strong>1 BTC</strong> with an included <strong>Medium</strong> fee of <strong>0.0001</strong>.</em>
               </p>
-          </div>-->
+          </div> -->
           <div class="form-group clearfix">
             <label for="feeSlider">Fee</label>
-            <input class="form-control col text-center" formControlName="fee" id="feeSlider" type="range" min="1" max="3" value="2">
+            <input class="form-control col text-center" formControlName="fee" type="range" min="1" max="3" value="2">
           </div>
             <div class="form-group clearfix">
             <label for="walletPassword">Wallet Password</label>
             <input type="password" class="form-control form-control-success" formControlName="password" id="walletPassword" placeholder="Please enter your wallet password.">
             <div *ngIf="formErrors.password" class="form-control-feedback">{{formErrors.password}}</div>
           </div>
+          <button type="button" class="btn btn-link" (click)="buildTransaction()" [disabled]="!sendForm.valid">Estimate Fee</button>
+          <label *ngIf="estimatedFee">Estimated Fee: </label>
+          <label *ngIf="estimatedFee">{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
         </form>
         <!-- /form-->
       </div>
