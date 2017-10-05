@@ -28,7 +28,6 @@ export class RecoverComponent implements OnInit {
 
   ngOnInit() {
     this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-blue'});
-    console.log(new Date());
   }
 
   private buildRecoverForm(): void {
@@ -170,7 +169,7 @@ export class RecoverComponent implements OnInit {
             }
           }
           this.AlertIfNeeded(bitcoinErrorMessage, stratisErrorMessage);
-        }     
+        }
       )
     ;
   }
