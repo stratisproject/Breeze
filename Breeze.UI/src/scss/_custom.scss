@@ -44,16 +44,14 @@ code {color: $spacegray !important;}
   display:inline-block;
   fill: $darkgray !important;
 }
-@-webkit-keyframes blink-caret { 50% { border-color: transparent; } }
+
 em {
   &.display-4 {
     font-size: 1.6em;
     color: $darkgray;
     font-weight: 400;
     padding-right: 5px;
-  	border-right: .1em solid $blue;
   	white-space: nowrap;
-  	-webkit-animation: blink-caret .5s step-end infinite alternate;
   }
 }
 
@@ -174,7 +172,7 @@ em {
   }
 }
 
-// bagdes
+// badges
 .badge {
   &.badge-danger {color: $pink;}
   &.badge-warning {color: $yellow;}
