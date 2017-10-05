@@ -60,6 +60,7 @@ export class StatusBarComponent implements OnInit {
         error => {
           console.log(error);
           if (error.status === 0) {
+            this.cancelSubscriptions();
             alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
