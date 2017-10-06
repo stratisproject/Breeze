@@ -22,11 +22,13 @@ export class SendComponent implements OnInit {
   }
 
   public sendForm: FormGroup;
+  public coinUnit: string;
+  public isSending: boolean = false;
+  public estimatedFee: number;
+  private transactionHex: string;
   private responseMessage: any;
   private errorMessage: string;
-  public coinUnit: string;
   private transaction: TransactionBuilding;
-  public isSending: boolean = false;
 
   ngOnInit() {
     this.coinUnit = this.globalService.getCoinUnit();
@@ -84,9 +86,7 @@ export class SendComponent implements OnInit {
     }
   };
 
-  public send() {
-    this.isSending = true;
-
+  public buildTransaction() {
     this.transaction = new TransactionBuilding(
       this.globalService.getWalletName(),
       this.globalService.getCoinType(),
@@ -108,7 +108,6 @@ export class SendComponent implements OnInit {
         },
         error => {
           console.log(error);
-          this.isSending = false;
           if (error.status === 0) {
             alert("Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {
@@ -120,23 +119,21 @@ export class SendComponent implements OnInit {
             }
           }
         },
-        () => this.sendTransaction(this.responseMessage.hex)
+        () => {
+          this.estimatedFee = this.responseMessage.fee;
+          this.transactionHex = this.responseMessage.hex;
+          if (this.isSending) {
+            this.sendTransaction(this.transactionHex);
+          }
+        }
       )
     ;
   };
 
-  private getFeeType(){
-    let feeValue = this.sendForm.get("fee").value;
-
-    switch(feeValue){
-      case 1:
-        return "low";
-      case 2:
-        return "medium";
-      case 3:
-        return "high";
-    }
-  }
+  public send() {
+    this.isSending = true;
+    this.buildTransaction();
+  };
 
   private sendTransaction(hex: string) {
     let transaction = new TransactionSending(hex);
@@ -165,6 +162,19 @@ export class SendComponent implements OnInit {
         ()=>this.openConfirmationModal()
       )
     ;
+  }
+
+  private getFeeType(){
+    let feeValue = this.sendForm.get("fee").value;
+
+    switch(feeValue){
+      case 1:
+        return "low";
+      case 2:
+        return "medium";
+      case 3:
+        return "high";
+    }
   }
 
   private openConfirmationModal() {
