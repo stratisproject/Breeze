@@ -51,7 +51,7 @@
   background-color: $dropdown-bg;
   background-clip: padding-box;
   border: $dropdown-border-width solid $dropdown-border-color;
-  @include border-radius($border-radius);
+  border-radius: 50px;
   @include box-shadow($dropdown-box-shadow);
 }
 
