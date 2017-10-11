@@ -253,20 +253,24 @@ em {
   }
 }
 #modalSend {
-  label {
-    color: $blue;
-    text-transform: uppercase;
-    font-size: .825em;
-  }
+  label {font-size: .825em;}
   .float-right {a {text-decoration: underline; &:hover {text-decoration: none;}}}
+  // Fee Buttons
+  .radioButtons {
+    .btn {
+      border-radius: 50px;
+    }
+  }
+  p {
+    color: $blue;
+    font-size: .825em;
+    font-style: italic;
+  }
+  .btn-link {padding: 0 !important;}
 }
 #modalReceive {
   .modal-body {padding: 0 3em;}
-  label {
-    color: $blue;
-    text-transform: uppercase;
-    font-size: .825em;
-  }
+  label {font-size: .825em;}
 }
 #modalDetail, #modalCheck, #modalSettings {
   .blockLabel {

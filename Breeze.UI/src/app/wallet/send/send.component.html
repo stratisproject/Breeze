@@ -40,16 +40,31 @@
           </div> -->
           <div class="form-group clearfix">
             <label for="feeSlider">Fee</label>
-            <input class="form-control col text-center" formControlName="fee" type="range" min="1" max="3" value="2">
+            <!-- fee buttons -->
+              <div class="radioButtons" data-toggle="buttons">
+                <label class="btn btn-outline-danger">
+                  <input type="radio" name="options" id="option1" autocomplete="off"> Slow
+                </label>
+                <label class="btn btn-outline-warning">
+                  <input type="radio" name="options" id="option2" autocomplete="off" checked> Medium
+                </label>
+                <label class="btn btn-outline-success">
+                  <input type="radio" name="options" id="option3" autocomplete="off"> Fast
+                </label>
+              </div>
+              <p>Here is the line to put the fee estimation.</p>
+            <!-- /fee buttons -->
           </div>
             <div class="form-group clearfix">
             <label for="walletPassword">Wallet Password</label>
             <input type="password" class="form-control form-control-success" formControlName="password" id="walletPassword" placeholder="Please enter your wallet password.">
             <div *ngIf="formErrors.password" class="form-control-feedback">{{formErrors.password}}</div>
           </div>
+          <!--
           <button type="button" class="btn btn-link" (click)="buildTransaction()" [disabled]="!sendForm.valid">Estimate Fee</button>
           <label *ngIf="estimatedFee">Estimated Fee: </label>
           <label *ngIf="estimatedFee">{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
+          -->
         </form>
         <!-- /form-->
       </div>
