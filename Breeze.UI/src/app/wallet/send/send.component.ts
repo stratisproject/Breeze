@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+
 import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { ModalService } from '../../shared/services/modal.service';
 
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -17,7 +19,7 @@ import { SendConfirmationComponent } from './send-confirmation/send-confirmation
 })
 
 export class SendComponent implements OnInit {
-  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, public activeModal: NgbActiveModal, private fb: FormBuilder) {
+  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, public activeModal: NgbActiveModal, private fb: FormBuilder) {
     this.buildSendForm();
   }
 
@@ -106,13 +108,13 @@ export class SendComponent implements OnInit {
         error => {
           console.log(error);
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the API. Please restart the application.");
+            this.genericModalService.openModal(null, "Something went wrong while connecting to the API. Please restart the application.");
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].description);
+              this.genericModalService.openModal(null, error.json().errors[0].description);
             }
           }
         },
@@ -145,13 +147,13 @@ export class SendComponent implements OnInit {
         error => {
           console.log(error);
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the API. Please restart the application.");
+            this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].description);
+              this.genericModalService.openModal(null, error.json().errors[0].description);
             }
           }
         },
@@ -185,13 +187,13 @@ export class SendComponent implements OnInit {
           console.log(error);
           this.isSending = false;
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the API. Please restart the application.");
+            this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].description);
+              this.genericModalService.openModal(null, error.json().errors[0].description);
             }
           }
         },
