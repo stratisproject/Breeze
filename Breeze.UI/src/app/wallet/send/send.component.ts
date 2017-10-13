@@ -38,7 +38,7 @@ export class SendComponent implements OnInit {
     this.sendForm = this.fb.group({
       "address": ["", Validators.required],
       "amount": ["", Validators.compose([Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]{0,8})?$/)])],
-      "fee": [2, Validators.required],
+      "fee": ["medium", Validators.required],
       "password": ["", Validators.required]
     });
 
@@ -89,12 +89,11 @@ export class SendComponent implements OnInit {
   public buildTransaction() {
     this.transaction = new TransactionBuilding(
       this.globalService.getWalletName(),
-      this.globalService.getCoinType(),
       "account 0",
       this.sendForm.get("password").value,
       this.sendForm.get("address").value,
       this.sendForm.get("amount").value,
-      this.getFeeType(),
+      this.sendForm.get("fee").value,
       true
     );
 
@@ -162,19 +161,6 @@ export class SendComponent implements OnInit {
         ()=>this.openConfirmationModal()
       )
     ;
-  }
-
-  private getFeeType(){
-    let feeValue = this.sendForm.get("fee").value;
-
-    switch(feeValue){
-      case 1:
-        return "low";
-      case 2:
-        return "medium";
-      case 3:
-        return "high";
-    }
   }
 
   private openConfirmationModal() {

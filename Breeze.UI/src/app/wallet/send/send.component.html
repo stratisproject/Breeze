@@ -20,51 +20,34 @@
             <input type="text" class="form-control form-control-success" formControlName="address" id="destinationAddress" placeholder="Please enter the destination address here.">
             <div *ngIf="formErrors.address" class="form-control-feedback">{{ formErrors.address }}</div>
           </div>
-          <!-- <div class="form-group">
-            <label for="Fees">Fees</label>
-            <div class="col feeSlider text-center">
-              <input class="form-control" id="dataSlider" type="text"
-                data-provide="slider"
-                data-slider-ticks="[1, 2, 3]"
-                data-slider-ticks-labels='["Low", "Medium", "High"]'
-                data-slider-min="1"
-                data-slider-max="3"
-                data-slider-step="1"
-                data-slider-value="2"
-                data-slider-tooltip="hide">
-              </div>
-              <p class="text-muted text-center">
-                <em>A higher fee helps expedite your transaction.
-                <br>You are sending <strong>1 BTC</strong> with an included <strong>Medium</strong> fee of <strong>0.0001</strong>.</em>
-              </p>
-          </div> -->
           <div class="form-group clearfix">
-            <label for="feeSlider">Fee</label>
+            <label>Transaction Fee</label>
             <!-- fee buttons -->
-              <div class="radioButtons" data-toggle="buttons">
-                <label class="btn btn-outline-danger">
-                  <input type="radio" name="options" id="option1" autocomplete="off"> Slow
+              <div class="radioButtons" ngbRadioGroup name="feeButtons" formControlName="fee">
+                <label ngbButtonLabel class="btn btn-outline-danger">
+                  <input ngbButton type="radio" value="low">Low/Slow
                 </label>
-                <label class="btn btn-outline-warning">
-                  <input type="radio" name="options" id="option2" autocomplete="off" checked> Medium
+                <label ngbButtonLabel class="btn btn-outline-warning">
+                  <input ngbButton type="radio" value="medium">Medium
                 </label>
-                <label class="btn btn-outline-success">
-                  <input type="radio" name="options" id="option3" autocomplete="off"> Fast
+                <label ngbButtonLabel class="btn btn-outline-success">
+                  <input ngbButton type="radio" value="high">High/Fast
                 </label>
               </div>
-              <p>Here is the line to put the fee estimation.</p>
             <!-- /fee buttons -->
           </div>
-            <div class="form-group clearfix">
+          <div class="form-group clearfix">
             <label for="walletPassword">Wallet Password</label>
             <input type="password" class="form-control form-control-success" formControlName="password" id="walletPassword" placeholder="Please enter your wallet password.">
             <div *ngIf="formErrors.password" class="form-control-feedback">{{formErrors.password}}</div>
           </div>
-          <!--
-          <button type="button" class="btn btn-link" (click)="buildTransaction()" [disabled]="!sendForm.valid">Estimate Fee</button>
-          <label *ngIf="estimatedFee">Estimated Fee: </label>
-          <label *ngIf="estimatedFee">{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
-          -->
+          <div class="form-group clearfix">
+            <button type="button" class="btn btn-link" (click)="buildTransaction()" [disabled]="!sendForm.valid">Estimate Fee</button>
+            <div *ngIf="estimatedFee">
+              <label>Estimated Fee: </label>
+              <label>{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
+            </div>
+          </div>
         </form>
         <!-- /form-->
       </div>
