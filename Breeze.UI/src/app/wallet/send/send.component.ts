@@ -86,6 +86,43 @@ export class SendComponent implements OnInit {
     }
   };
 
+  public getMaxBalance() {
+    let data = {
+      walletName: this.globalService.getWalletName(),
+      feeType: this.sendForm.get("fee").value
+    }
+
+    let balanceResponse;
+
+    this.apiService
+      .getMaximumBalance(data)
+      .subscribe(
+        response => {
+          if (response.status >= 200 && response.status < 400){
+            balanceResponse = response.json();
+            console.log(balanceResponse);
+          }
+        },
+        error => {
+          console.log(error);
+          if (error.status === 0) {
+            alert("Something went wrong while connecting to the API. Please restart the application.");
+          } else if (error.status >= 400) {
+            if (!error.json().errors[0]) {
+              console.log(error);
+            }
+            else {
+              alert(error.json().errors[0].description);
+            }
+          }
+        },
+        () => {
+          this.sendForm.patchValue({amount: balanceResponse.maxSpendableAmount});
+          this.estimatedFee = balanceResponse.fee;
+        }
+      )
+  };
+
   public buildTransaction() {
     this.transaction = new TransactionBuilding(
       this.globalService.getWalletName(),

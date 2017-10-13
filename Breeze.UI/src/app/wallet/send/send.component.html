@@ -9,8 +9,8 @@
         <form [formGroup]="sendForm" (ngSubmit)="send()">
           <!--<div class="form-group has-danger clearfix">-->
             <div class="form-group clearfix">
-            <label class="float-left" for="yourAddress">Amount</label>
-            <!--<span class="float-right"><a href="#">max</a></span>-->
+            <label class="float-left" for="Amount">Amount</label>
+            <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
             <input type="text" class="form-control form-control-danger" formControlName="amount" id="Amount" placeholder="0.00 {{ coinUnit }}">
             <div *ngIf="formErrors.amount" class="form-control-feedback">{{ formErrors.amount }}</div>
           </div>
