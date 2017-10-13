@@ -15,8 +15,8 @@ a, button {
 }
 button {
   &:disabled  {
-    background: #EFEFEF !important;
-    border-color: #EFEFEF !important;
+    background: lighten($gray,20%) !important;
+    border-color: lighten($gray,20%) !important;
     &:hover {cursor: not-allowed !important;}
   }
 }
@@ -136,6 +136,14 @@ em {
   h5 {
     font-size: .85em;
     color: $gray-dark;
+    margin-bottom: 0;
+
+    &.walletName {
+      color: $black;
+      font-size: 1em;
+      font-weight: bolder;
+      margin-bottom: 1.5em;
+    }
   }
   p {margin-bottom: 0 !important;}
   .lead {
@@ -144,10 +152,6 @@ em {
     font-weight: 500;
     margin-bottom: 0;
 
-    .walletName {
-      font-size: 0.7em;
-      font-weight: normal;
-    }
     .h2 {
       font-size: 2em;
       font-weight: 600;
@@ -267,6 +271,9 @@ em {
     font-style: italic;
   }
   .btn-link {padding: 0 !important;}
+  .btn-primary {
+    &:disabled {opacity: 1 !important;}
+  }
 }
 #modalReceive {
   .modal-body {padding: 0 3em;}
@@ -277,6 +284,7 @@ em {
     color: $blue;
     text-transform: uppercase;
     font-size: .825em;
+    line-height: 2em;
   }
   .blockText {
     color: $darkgray;
