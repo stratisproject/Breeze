@@ -136,6 +136,14 @@ em {
   h5 {
     font-size: .85em;
     color: $gray-dark;
+    margin-bottom: 0;
+
+    &.walletName {
+      color: $black;
+      font-size: 1em;
+      font-weight: bolder;
+      margin-bottom: 1.5em;
+    }
   }
   p {margin-bottom: 0 !important;}
   .lead {
@@ -144,10 +152,6 @@ em {
     font-weight: 500;
     margin-bottom: 0;
 
-    .walletName {
-      font-size: 0.7em;
-      font-weight: normal;
-    }
     .h2 {
       font-size: 2em;
       font-weight: 600;
@@ -277,6 +281,7 @@ em {
     color: $blue;
     text-transform: uppercase;
     font-size: .825em;
+    line-height: 2em;
   }
   .blockText {
     color: $darkgray;

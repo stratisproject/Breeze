@@ -161,6 +161,14 @@ em.display-4 {
 .jumbotron h5 {
   font-size: .85em;
   color: #878685;
+  margin-bottom: 0;
+}
+
+.jumbotron h5.walletName {
+  color: #444;
+  font-size: 1em;
+  font-weight: bolder;
+  margin-bottom: 1.5em;
 }
 
 .jumbotron p {
@@ -172,11 +180,6 @@ em.display-4 {
   font-size: 1.85em;
   font-weight: 500;
   margin-bottom: 0;
-}
-
-.jumbotron .lead .walletName {
-  font-size: 0.7em;
-  font-weight: normal;
 }
 
 .jumbotron .lead .h2 {
@@ -334,6 +337,7 @@ em.display-4 {
   color: #7385A0;
   text-transform: uppercase;
   font-size: .825em;
+  line-height: 2em;
 }
 
 #modalDetail .blockText, #modalCheck .blockText, #modalSettings .blockText {
@@ -3794,7 +3798,7 @@ tbody.collapse.show {
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid rgba(68, 68, 68, 0.15);
-  border-radius: 0.25rem;
+  border-radius: 50px;
 }
 
 .dropdown-divider {
