@@ -17,8 +17,8 @@ a:hover, button:hover {
 }
 
 button:disabled {
-  background: #EFEFEF !important;
-  border-color: #EFEFEF !important;
+  background: #d3d7de !important;
+  border-color: #d3d7de !important;
 }
 
 button:disabled:hover {
@@ -323,6 +323,10 @@ em.display-4 {
 
 #modalSend .btn-link {
   padding: 0 !important;
+}
+
+#modalSend .btn-primary:disabled {
+  opacity: 1 !important;
 }
 
 #modalReceive .modal-body {

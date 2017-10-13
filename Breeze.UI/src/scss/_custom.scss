@@ -15,8 +15,8 @@ a, button {
 }
 button {
   &:disabled  {
-    background: #EFEFEF !important;
-    border-color: #EFEFEF !important;
+    background: lighten($gray,20%) !important;
+    border-color: lighten($gray,20%) !important;
     &:hover {cursor: not-allowed !important;}
   }
 }
@@ -271,6 +271,9 @@ em {
     font-style: italic;
   }
   .btn-link {padding: 0 !important;}
+  .btn-primary {
+    &:disabled {opacity: 1 !important;}
+  }
 }
 #modalReceive {
   .modal-body {padding: 0 3em;}
