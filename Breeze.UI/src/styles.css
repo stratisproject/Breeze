@@ -174,13 +174,18 @@ em.display-4 {
   margin-bottom: 0;
 }
 
+.jumbotron .lead .walletName {
+  font-size: 0.7em;
+  font-weight: normal;
+}
+
 .jumbotron .lead .h2 {
   font-size: 2em;
   font-weight: 600;
 }
 
 .jumbotron .lead small {
-  font-size: .75em;
+  font-size: .5em;
   padding-left: .5em;
   font-weight: 400;
 }
@@ -292,8 +297,6 @@ em.display-4 {
 }
 
 #modalSend label {
-  color: #7385A0;
-  text-transform: uppercase;
   font-size: .825em;
 }
 
@@ -305,13 +308,25 @@ em.display-4 {
   text-decoration: none;
 }
 
+#modalSend .radioButtons .btn {
+  border-radius: 50px;
+}
+
+#modalSend p {
+  color: #7385A0;
+  font-size: .825em;
+  font-style: italic;
+}
+
+#modalSend .btn-link {
+  padding: 0 !important;
+}
+
 #modalReceive .modal-body {
   padding: 0 3em;
 }
 
 #modalReceive label {
-  color: #7385A0;
-  text-transform: uppercase;
   font-size: .825em;
 }
 
@@ -3251,7 +3266,7 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 
 .btn.disabled, .btn:disabled {
   cursor: not-allowed;
-  opacity: 1;
+  opacity: 0;
 }
 
 .btn:active, .btn.active {
@@ -5752,7 +5767,7 @@ button.close {
 .modal-dialog {
   position: relative;
   width: auto;
-  margin: 30px;
+  margin: 20px;
 }
 
 .modalBg {
@@ -5797,7 +5812,7 @@ button.close {
 .modal-title {
   text-align: center;
   line-height: 1.5;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
   color: #7385A0;
   font-size: 1em;
 }
@@ -5834,7 +5849,7 @@ button.close {
 @media (min-width: 576px) {
   .modal-dialog {
     max-width: 500px;
-    margin: 30px auto;
+    margin: 20px auto;
   }
   .modal-sm {
     max-width: 360px;
