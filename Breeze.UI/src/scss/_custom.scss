@@ -15,8 +15,8 @@ a, button {
 }
 button {
   &:disabled  {
-    background: #EFEFEF !important;
-    border-color: #EFEFEF !important;
+    background: lighten($gray,20%) !important;
+    border-color: lighten($gray,20%) !important;
     &:hover {cursor: not-allowed !important;}
   }
 }
@@ -136,6 +136,14 @@ em {
   h5 {
     font-size: .85em;
     color: $gray-dark;
+    margin-bottom: 0;
+
+    &.walletName {
+      color: $black;
+      font-size: 1em;
+      font-weight: bolder;
+      margin-bottom: 1.5em;
+    }
   }
   p {margin-bottom: 0 !important;}
   .lead {
@@ -143,12 +151,13 @@ em {
     font-size: 1.85em;
     font-weight: 500;
     margin-bottom: 0;
+
     .h2 {
       font-size: 2em;
       font-weight: 600;
     }
     small {
-      font-size: .75em;
+      font-size: .5em;
       padding-left: .5em;
       font-weight: 400;
     }
@@ -248,26 +257,34 @@ em {
   }
 }
 #modalSend {
-  label {
-    color: $blue;
-    text-transform: uppercase;
-    font-size: .825em;
-  }
+  label {font-size: .825em;}
   .float-right {a {text-decoration: underline; &:hover {text-decoration: none;}}}
+  // Fee Buttons
+  .radioButtons {
+    .btn {
+      border-radius: 50px;
+    }
+  }
+  p {
+    color: $blue;
+    font-size: .825em;
+    font-style: italic;
+  }
+  .btn-link {padding: 0 !important;}
+  .btn-primary {
+    &:disabled {opacity: 1 !important;}
+  }
 }
 #modalReceive {
   .modal-body {padding: 0 3em;}
-  label {
-    color: $blue;
-    text-transform: uppercase;
-    font-size: .825em;
-  }
+  label {font-size: .825em;}
 }
 #modalDetail, #modalCheck, #modalSettings {
   .blockLabel {
     color: $blue;
     text-transform: uppercase;
     font-size: .825em;
+    line-height: 2em;
   }
   .blockText {
     color: $darkgray;

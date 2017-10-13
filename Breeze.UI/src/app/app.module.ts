@@ -12,9 +12,11 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
+import { GenericModalComponent } from './shared/components/generic-modal/generic-modal.component';
 
 import { ApiService } from './shared/services/api.service';
 import { GlobalService } from './shared/services/global.service';
+import { ModalService } from './shared/services/modal.service';
 
 import { SendComponent } from './wallet/send/send.component';
 import { SendConfirmationComponent } from './wallet/send/send-confirmation/send-confirmation.component';
@@ -37,6 +39,7 @@ import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout
   ],
   declarations: [
     AppComponent,
+    GenericModalComponent,
     LoginComponent,
     LogoutConfirmationComponent,
     SendComponent,
@@ -45,13 +48,14 @@ import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout
     TransactionDetailsComponent
   ],
   entryComponents: [
+    GenericModalComponent,
     SendComponent,
     SendConfirmationComponent,
     ReceiveComponent,
     TransactionDetailsComponent,
     LogoutConfirmationComponent
   ],
-  providers: [ ApiService, GlobalService, Title ],
+  providers: [ ApiService, GlobalService, ModalService, Title ],
   bootstrap: [ AppComponent ]
 })
 

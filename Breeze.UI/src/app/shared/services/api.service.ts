@@ -169,6 +169,23 @@ export class ApiService {
     }
 
     /**
+     * Get the maximum sendable amount for a given fee from the API
+     */
+    getMaximumBalance(data): Observable<any> {
+      this.getCurrentCoin();
+
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', data.walletName);
+      params.set('accountName', "account 0");
+      params.set('feeType', data.feeType);
+      params.set('allowUnconfirmed', "true");
+
+      return this.http
+        .get(this.currentApiUrl + '/wallet/maxbalance', new RequestOptions({headers: this.headers, search: params}))
+        .map((response: Response) => response);
+    }
+
+    /**
      * Get a wallets transaction history info from the API.
      */
     getWalletHistory(data: WalletInfo): Observable<any> {

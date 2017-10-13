@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
 
 import { WalletComponent } from './wallet.component';
@@ -21,7 +21,7 @@ import { TransactionDetailsComponent } from './transaction-details/transaction-d
     ClipboardModule,
     FormsModule,
     SharedModule.forRoot(),
-    NgbDropdownModule,
+    NgbModule,
     ReactiveFormsModule,
     WalletRoutingModule
   ],

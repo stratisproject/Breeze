@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { GlobalService } from '../../shared/services/global.service';
 import { ApiService } from '../../shared/services/api.service';
+import { ModalService } from '../../shared/services/modal.service';
 
 import { PasswordValidationDirective } from '../../shared/directives/password-validation.directive';
 
@@ -17,7 +18,7 @@ import { Mnemonic } from '../../shared/classes/mnemonic';
 })
 
 export class CreateComponent implements OnInit {
-  constructor(private globalService: GlobalService, private apiService: ApiService, private router: Router, private fb: FormBuilder) {
+  constructor(private globalService: GlobalService, private apiService: ApiService, private genericModalService: ModalService, private router: Router, private fb: FormBuilder) {
     this.buildCreateForm();
   }
 
@@ -125,13 +126,13 @@ export class CreateComponent implements OnInit {
         error => {
           console.log(error);
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the API. Please restart the application.");
+            this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].message);
+              this.genericModalService.openModal(null, error.json().errors[0].message);
             }
           }
         }
@@ -152,13 +153,13 @@ export class CreateComponent implements OnInit {
           console.log(error);
           this.isCreating = false;
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the API. Please restart the application.");
+            this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].message);
+              this.genericModalService.openModal(null, error.json().errors[0].message);
             }
           }
         },
@@ -173,7 +174,8 @@ export class CreateComponent implements OnInit {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400){
-            alert("Your wallet has been created.\n\nPlease write down your 12 word passphrase: \n" + this.mnemonic + "\n\nYou can recover your wallet on any computer with:\n- your passphrase AND\n- your password AND\n- the wallet creation time\n\nUnlike most other wallets if an attacker acquires your passphrase, it will not be able to hack your wallet without knowing your password. On the contrary, unlike other wallets, you will not be able to recover your wallet only with your passphrase if you lose your password.");
+            let walletBody = "Your wallet has been created.<br><br>Please write down your 12 word passphrase: <br>" + this.mnemonic + "<br><br>You can recover your wallet on any computer with:<br>- your passphrase AND<br>- your password AND<br>- the wallet creation time<br><br>Unlike most other wallets if an attacker acquires your passphrase, it will not be able to hack your wallet without knowing your password. On the contrary, unlike other wallets, you will not be able to recover your wallet only with your passphrase if you lose your password.";
+            this.genericModalService.openModal("Wallet Info", walletBody);
             this.router.navigate(['']);
           }
         },
@@ -181,13 +183,13 @@ export class CreateComponent implements OnInit {
           this.isCreating = false;
           console.log(error);
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the API. Please restart the application.");
+            this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].message);
+              this.genericModalService.openModal(null, error.json().errors[0].message);
             }
           }
         }
