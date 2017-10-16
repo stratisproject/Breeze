@@ -9338,6 +9338,376 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   content: "\e2";
 }
 
+@font-face {
+  font-family: 'icon2';
+  src: url("./assets/fonts/icon2.eot?4bc3yb");
+  src: url("./assets/fonts/icon2.eot?4bc3yb#iefix") format("embedded-opentype"), url("./assets/fonts/icon2.ttf?4bc3yb") format("truetype"), url("./assets/fonts/icon2.woff?4bc3yb") format("woff"), url("./assets/fonts/icon2.svg?4bc3yb#icomoon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="ico-"], [class*=" ico-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icon2' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ico-home3:before {
+  content: "\e902";
+}
+
+.ico-pencil:before {
+  content: "\e905";
+}
+
+.ico-image:before {
+  content: "\e90d";
+}
+
+.ico-connection:before {
+  content: "\e91b";
+}
+
+.ico-file-empty:before {
+  content: "\e924";
+}
+
+.ico-files-empty:before {
+  content: "\e925";
+}
+
+.ico-file-text2:before {
+  content: "\e926";
+}
+
+.ico-folder-open:before {
+  content: "\e930";
+}
+
+.ico-folder-plus:before {
+  content: "\e931";
+}
+
+.ico-folder-minus:before {
+  content: "\e932";
+}
+
+.ico-folder-download:before {
+  content: "\e933";
+}
+
+.ico-folder-upload:before {
+  content: "\e934";
+}
+
+.ico-price-tag:before {
+  content: "\e935";
+}
+
+.ico-coin-dollar:before {
+  content: "\e93b";
+}
+
+.ico-coin-euro:before {
+  content: "\e93c";
+}
+
+.ico-coin-pound:before {
+  content: "\e93d";
+}
+
+.ico-coin-yen:before {
+  content: "\e93e";
+}
+
+.ico-credit-card:before {
+  content: "\e93f";
+}
+
+.ico-location:before {
+  content: "\e947";
+}
+
+.ico-compass:before {
+  content: "\e949";
+}
+
+.ico-history:before {
+  content: "\e94d";
+}
+
+.ico-clock:before {
+  content: "\e94e";
+}
+
+.ico-clock2:before {
+  content: "\e94f";
+}
+
+.ico-alarm:before {
+  content: "\e950";
+}
+
+.ico-bell:before {
+  content: "\e951";
+}
+
+.ico-printer:before {
+  content: "\e954";
+}
+
+.ico-drawer:before {
+  content: "\e95c";
+}
+
+.ico-drawer2:before {
+  content: "\e95d";
+}
+
+.ico-floppy-disk:before {
+  content: "\e962";
+}
+
+.ico-drive:before {
+  content: "\e963";
+}
+
+.ico-database:before {
+  content: "\e964";
+}
+
+.ico-bubble:before {
+  content: "\e96b";
+}
+
+.ico-user-plus:before {
+  content: "\e973";
+}
+
+.ico-user-minus:before {
+  content: "\e974";
+}
+
+.ico-user-check:before {
+  content: "\e975";
+}
+
+.ico-spinner9:before {
+  content: "\e982";
+}
+
+.ico-spinner10:before {
+  content: "\e983";
+}
+
+.ico-spinner11:before {
+  content: "\e984";
+}
+
+.ico-key:before {
+  content: "\e98d";
+}
+
+.ico-lock:before {
+  content: "\e98f";
+}
+
+.ico-unlocked:before {
+  content: "\e990";
+}
+
+.ico-wrench:before {
+  content: "\e991";
+}
+
+.ico-equalizer2:before {
+  content: "\e993";
+}
+
+.ico-cog:before {
+  content: "\e994";
+}
+
+.ico-cogs:before {
+  content: "\e995";
+}
+
+.ico-bin:before {
+  content: "\e9ac";
+}
+
+.ico-bin2:before {
+  content: "\e9ad";
+}
+
+.ico-switch:before {
+  content: "\e9b6";
+}
+
+.ico-cloud:before {
+  content: "\e9c1";
+}
+
+.ico-cloud-download:before {
+  content: "\e9c2";
+}
+
+.ico-cloud-upload:before {
+  content: "\e9c3";
+}
+
+.ico-cloud-check:before {
+  content: "\e9c4";
+}
+
+.ico-link:before {
+  content: "\e9cb";
+}
+
+.ico-attachment:before {
+  content: "\e9cd";
+}
+
+.ico-eye:before {
+  content: "\e9ce";
+}
+
+.ico-eye-blocked:before {
+  content: "\e9d1";
+}
+
+.ico-bookmark:before {
+  content: "\e9d2";
+}
+
+.ico-warning:before {
+  content: "\ea07";
+}
+
+.ico-notification:before {
+  content: "\ea08";
+}
+
+.ico-info:before {
+  content: "\ea0c";
+}
+
+.ico-cancel-circle:before {
+  content: "\ea0d";
+}
+
+.ico-blocked:before {
+  content: "\ea0e";
+}
+
+.ico-checkmark:before {
+  content: "\ea10";
+}
+
+.ico-loop2:before {
+  content: "\ea2e";
+}
+
+.ico-infinite:before {
+  content: "\ea2f";
+}
+
+.ico-arrow-up-left2:before {
+  content: "\ea39";
+}
+
+.ico-arrow-up2:before {
+  content: "\ea3a";
+}
+
+.ico-arrow-up-right2:before {
+  content: "\ea3b";
+}
+
+.ico-arrow-right2:before {
+  content: "\ea3c";
+}
+
+.ico-arrow-down-right2:before {
+  content: "\ea3d";
+}
+
+.ico-arrow-down2:before {
+  content: "\ea3e";
+}
+
+.ico-arrow-down-left2:before {
+  content: "\ea3f";
+}
+
+.ico-arrow-left2:before {
+  content: "\ea40";
+}
+
+.ico-circle-up:before {
+  content: "\ea41";
+}
+
+.ico-circle-right:before {
+  content: "\ea42";
+}
+
+.ico-circle-down:before {
+  content: "\ea43";
+}
+
+.ico-circle-left:before {
+  content: "\ea44";
+}
+
+.ico-checkbox-checked:before {
+  content: "\ea52";
+}
+
+.ico-checkbox-unchecked:before {
+  content: "\ea53";
+}
+
+.ico-radio-checked:before {
+  content: "\ea54";
+}
+
+.ico-radio-checked2:before {
+  content: "\ea55";
+}
+
+.ico-radio-unchecked:before {
+  content: "\ea56";
+}
+
+.ico-embed:before {
+  content: "\ea7f";
+}
+
+.ico-embed2:before {
+  content: "\ea80";
+}
+
+.ico-terminal:before {
+  content: "\ea81";
+}
+
+.ico-safari:before {
+  content: "\eadd";
+}
+
+.ico-file-pdf:before {
+  content: "\eadf";
+}
+
 .btn-primary {
   color: #fff !important;
   background-color: #f69d32;
