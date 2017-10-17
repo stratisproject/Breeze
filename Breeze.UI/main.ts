@@ -150,15 +150,10 @@ function startBitcoinApi() {
 
   bitcoinProcess = spawnBitcoin(apiPath, ['-testnet'], {
       detached: true
-  }, (error, stdout, stderr) => {
-      if (error) {
-          writeLogError(`exec error: ${error}`);
-          return;
-      }
-      if (serve) {
-        writeLog(`stdout: ${stdout}`);
-        writeLog(`stderr: ${stderr}`);
-      }
+  });
+
+  bitcoinProcess.stdout.on('data', (data) => {
+    writeLog(`Bitcoin: ${data}`);
   });
 }
 
@@ -174,15 +169,10 @@ function startStratisApi() {
 
   stratisProcess = spawnStratis(apiPath, ['stratis', '-testnet'], {
       detached: true
-  }, (error, stdout, stderr) => {
-      if (error) {
-          writeLogError(`exec error: ${error}`);
-          return;
-      }
-      if (serve) {
-        writeLog(`stdout: ${stdout}`);
-        writeLog(`stderr: ${stderr}`);
-      }
+  });
+
+  stratisProcess.stdout.on('data', (data) => {
+    writeLog(`Stratis: ${data}`);
   });
 }
 
@@ -226,10 +216,6 @@ if (os.platform() === 'win32') {
 
 function writeLog(msg) {
   console.log(msg);
-};
-
-function writeLogError(msg) {
-  console.error(msg);
 };
 
 function createMenu() {
