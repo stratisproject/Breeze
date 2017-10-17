@@ -4,7 +4,7 @@
 set -o errexit
 
 # define a few variables
-app_output_name="breeze-ui-$os_identifier-$arch"
+app_output_name="breeze-ui-$os_platform-$arch"
 app_output_zip_name="breeze-$os_identifier-$arch-$configuration.zip"
 
 if [ "$TRAVIS_OS_NAME" = "osx" ]
