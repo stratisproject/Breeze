@@ -3,16 +3,16 @@
 # exit if error
 set -o errexit
 
+# define a few variables
+app_output_name="breeze-$os_identifier-$arch"
+app_output_zip_name="breeze-$os_identifier-$arch-$configuration.zip"
+
 if [ "$TRAVIS_OS_NAME" = "osx" ]
 then
-  dotnet_resources_path_in_app=$TRAVIS_BUILD_DIR/breeze_out/breeze-ui-$os_platform-$arch/breeze-ui.app/contents/resources/app/assets/daemon
+  dotnet_resources_path_in_app=$TRAVIS_BUILD_DIR/breeze_out/$app_output_name/breeze-ui.app/contents/resources/app/assets/daemon
 else
-  dotnet_resources_path_in_app=$TRAVIS_BUILD_DIR/breeze_out/breeze-ui-$os_platform-$arch/resources/app/assets/daemon
+  dotnet_resources_path_in_app=$TRAVIS_BUILD_DIR/breeze_out/$app_output_name/resources/app/assets/daemon
 fi
-
-# define a few variables
-app_output_name="breeze-$os_identifier-$arch-$configuration"
-api_output_name="api-$os_identifier-$arch-$configuration"
 
 echo "current environment variables:"
 echo "OS name:" $TRAVIS_OS_NAME
@@ -23,7 +23,7 @@ echo "Node version:" $TRAVIS_NODE_VERSION
 echo "Architecture:" $arch
 echo "Configuration:" $configuration
 echo "App output name:" $app_output_name
-echo "Api output name:" $api_output_name
+echo "App output zip file name:" $app_output_zip_name
 echo "dotnet resources path in app:" $dotnet_resources_path_in_app
 echo "Branch:" $TRAVIS_BRANCH
 echo "Tag:" $TRAVIS_TAG
@@ -69,10 +69,10 @@ mkdir -p $dotnet_resources_path_in_app
 cp -r $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME/* $dotnet_resources_path_in_app
 
 # zip result
-echo $log_prefix zipping the app into $TRAVIS_BUILD_DIR/breeze_out/$app_output_name.zip
+echo $log_prefix zipping the app into $TRAVIS_BUILD_DIR/breeze_out/$app_output_zip_name
 mkdir -p $TRAVIS_BUILD_DIR/deploy/
 cd $TRAVIS_BUILD_DIR/breeze_out
-zip -r $TRAVIS_BUILD_DIR/deploy/$app_output_name.zip breeze-ui-$os_platform-$arch/*
+zip -r $TRAVIS_BUILD_DIR/deploy/$app_output_zip_name $app_output_name/*
 
 #tests
 echo $log_prefix no tests to run
