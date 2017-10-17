@@ -91,10 +91,9 @@ app.on('will-quit', function () {
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  // if (process.platform !== 'darwin') {
-  //   app.quit();
-  // }
-  app.quit();
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
 });
 
 app.on('activate', function () {
@@ -106,7 +105,8 @@ app.on('activate', function () {
 });
 
 function closeBitcoinApi() {
-  if (process.platform !== 'darwin' && !serve) {
+  // if (process.platform !== 'darwin' && !serve) {
+    if (!serve) {
     var http1 = require('http');
     const options1 = {
       hostname: 'localhost',
@@ -122,7 +122,8 @@ function closeBitcoinApi() {
 };
 
 function closeStratisApi() {
-  if (process.platform !== 'darwin' && !serve) {
+  // if (process.platform !== 'darwin' && !serve) {
+    if (process.platform !== 'darwin' && !serve) {
     var http2 = require('http');
     const options2 = {
       hostname: 'localhost',
