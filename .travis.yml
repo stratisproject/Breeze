@@ -17,6 +17,8 @@ matrix:
     - chmod +x dotnet-install.sh
     - ./dotnet-install.sh --channel 2.0
     - export PATH=$PATH:~/.dotnet/
+    - ulimit -n 1024
+    - os_platform=darwin
 
 # branches to build 
 branches:
@@ -33,9 +35,6 @@ env:
 # Work around NuGet issue #2163
 # https://github.com/NuGet/Home/issues/2163
 # https://github.com/travis-ci/travis-ci/issues/7728
-
-before_install:
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then ulimit -n 1024 ; os_platform=darwin ; fi
 
 install:
 - nvm install 6
