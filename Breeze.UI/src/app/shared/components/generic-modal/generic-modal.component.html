@@ -1,0 +1,18 @@
+<div id="modalGeneric" tabindex="-1">
+    <div class="modal-dialog modalBg">
+      <div>
+        <div class="modal-header">
+          <div class="bubble"><i class="ico-info"></i></div>
+        </div>
+        <div class="modal-body">
+          <h5 class="modal-title text-uppercase" id="modalReceive">{{ title }}</h5>
+          <div [innerHTML]="body">
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-lg btn-primary" (click)="activeModal.close('Close click')">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>

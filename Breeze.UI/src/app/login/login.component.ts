@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 
 import { GlobalService } from '../shared/services/global.service';
 import { ApiService } from '../shared/services/api.service';
+import { ModalService } from '../shared/services/modal.service';
+
 import { WalletLoad } from '../shared/classes/wallet-load';
 
 @Component({
@@ -13,14 +15,14 @@ import { WalletLoad } from '../shared/classes/wallet-load';
 })
 
 export class LoginComponent implements OnInit {
-  constructor(private globalService: GlobalService, private apiService: ApiService, private router: Router, private fb: FormBuilder) {
+  constructor(private globalService: GlobalService, private apiService: ApiService, private genericModalService: ModalService, private router: Router, private fb: FormBuilder) {
     this.buildDecryptForm();
   }
 
-  private openWalletForm: FormGroup;
   public hasWallet: boolean = false;
+  public isDecrypting = false;
+  private openWalletForm: FormGroup;
   private wallets: [string];
-  private isDecrypting = false;
 
   ngOnInit() {
     this.getWalletFiles();
@@ -84,13 +86,13 @@ export class LoginComponent implements OnInit {
         },
         error => {
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the API. Please restart the application.");
+            this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].message);
+              this.genericModalService.openModal(null, error.json().errors[0].message);
             }
           }
         }
@@ -137,13 +139,13 @@ export class LoginComponent implements OnInit {
         error => {
           this.isDecrypting = false;
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the API. Please restart the application.");
+            this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].message);
+              this.genericModalService.openModal(null, error.json().errors[0].message);
             }
           }
         },
@@ -164,13 +166,13 @@ export class LoginComponent implements OnInit {
         error => {
           this.isDecrypting = false;
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the API. Please restart the application.");
+            this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
             }
             else {
-              alert(error.json().errors[0].message);
+              this.genericModalService.openModal(null, error.json().errors[0].message);
             }
           }
         }

@@ -5,6 +5,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
 import { GlobalService } from '../../shared/services/global.service';
 import { ApiService } from '../../shared/services/api.service';
+import { ModalService } from '../../shared/services/modal.service';
 
 import { WalletRecovery } from '../../shared/classes/wallet-recovery';
 
@@ -15,7 +16,7 @@ import { WalletRecovery } from '../../shared/classes/wallet-recovery';
 })
 export class RecoverComponent implements OnInit {
 
-  constructor(private globalService: GlobalService, private apiService: ApiService, private router: Router, private fb: FormBuilder) {
+  constructor(private globalService: GlobalService, private apiService: ApiService, private genericModalService: ModalService, private router: Router, private fb: FormBuilder) {
     this.buildRecoverForm();
   }
 
@@ -28,7 +29,6 @@ export class RecoverComponent implements OnInit {
 
   ngOnInit() {
     this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-blue'});
-    console.log(new Date());
   }
 
   private buildRecoverForm(): void {
@@ -129,7 +129,7 @@ export class RecoverComponent implements OnInit {
           this.isRecovering = false;
           console.log(error);
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the API. Please restart the application.");
+            this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
@@ -151,7 +151,8 @@ export class RecoverComponent implements OnInit {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            alert("Your wallet has been recovered. \nYou will be redirected to the decryption page.");
+            let body = "Your wallet has been recovered. \nYou will be redirected to the decryption page.";
+            this.genericModalService.openModal("Wallet Recovered", body);
             this.router.navigate([''])
           }
             this.AlertIfNeeded(bitcoinErrorMessage, stratisErrorMessage);
@@ -160,7 +161,7 @@ export class RecoverComponent implements OnInit {
           this.isRecovering = false;
           console.log(error);
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the API. Please restart the application.");
+            this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
@@ -170,7 +171,7 @@ export class RecoverComponent implements OnInit {
             }
           }
           this.AlertIfNeeded(bitcoinErrorMessage, stratisErrorMessage);
-        }     
+        }
       )
     ;
   }
@@ -178,7 +179,7 @@ export class RecoverComponent implements OnInit {
   private AlertIfNeeded(bitcoinErrorMessage: string, stratisErrorMessage: string) {
         if(bitcoinErrorMessage !== "" || stratisErrorMessage !== "") {
           let errorMessage = "Bitcoin wallet recovery:\n" + bitcoinErrorMessage + "\n\nStratis wallet recovery:\n" + stratisErrorMessage;
-          alert(errorMessage);
+          this.genericModalService.openModal(null, errorMessage);
     }
   }
 }

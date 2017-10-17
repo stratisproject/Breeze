@@ -61,8 +61,6 @@ function createWindow() {
 
   // Emitted when the window is going to close.
   mainWindow.on('close', function () {
-    closeBitcoinApi(),
-    closeStratisApi();
   })
 };
 
@@ -84,12 +82,16 @@ app.on('ready', function () {
   }
 });
 
+app.on('will-quit', function () {
+  closeBitcoinApi(),
+  closeStratisApi();
+});
+
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
-    //apiProcess.kill();
     app.quit();
   }
 });
@@ -103,7 +105,8 @@ app.on('activate', function () {
 });
 
 function closeBitcoinApi() {
-  if (process.platform !== 'darwin' && !serve) {
+  // if (process.platform !== 'darwin' && !serve) {
+    if (!serve) {
     var http1 = require('http');
     const options1 = {
       hostname: 'localhost',
@@ -119,7 +122,8 @@ function closeBitcoinApi() {
 };
 
 function closeStratisApi() {
-  if (process.platform !== 'darwin' && !serve) {
+  // if (process.platform !== 'darwin' && !serve) {
+    if (process.platform !== 'darwin' && !serve) {
     var http2 = require('http');
     const options2 = {
       hostname: 'localhost',
@@ -136,49 +140,39 @@ function closeStratisApi() {
 
 function startBitcoinApi() {
   var bitcoinProcess;
-  const execBitcoin = require('child_process').exec;
+  const spawnBitcoin = require('child_process').spawn;
 
   //Start Breeze Bitcoin Daemon
-  let apiPath = path.join(__dirname, '".//assets//daemon//Stratis.BreezeD"');
+  let apiPath = path.resolve(__dirname, 'assets//daemon//Stratis.BreezeD');
   if (os.platform() === 'win32') {
-      apiPath = path.join(__dirname, '".\\assets\\daemon\\Stratis.BreezeD.exe"');
+      apiPath = path.resolve(__dirname, 'assets\\daemon\\Stratis.BreezeD.exe');
   }
 
-  bitcoinProcess = execBitcoin('"' + apiPath + '" light -testnet', {
+  bitcoinProcess = spawnBitcoin(apiPath, ['-testnet'], {
       detached: true
-  }, (error, stdout, stderr) => {
-      if (error) {
-          writeLogError(`exec error: ${error}`);
-          return;
-      }
-      if (serve) {
-        writeLog(`stdout: ${stdout}`);
-        writeLog(`stderr: ${stderr}`);
-      }
+  });
+
+  bitcoinProcess.stdout.on('data', (data) => {
+    writeLog(`Bitcoin: ${data}`);
   });
 }
 
 function startStratisApi() {
   var stratisProcess;
-  const execStratis = require('child_process').exec;
+  const spawnStratis = require('child_process').spawn;
 
   //Start Breeze Stratis Daemon
-  let apiPath = path.join(__dirname, '".//assets//daemon//Stratis.BreezeD"');
+  let apiPath = path.resolve(__dirname, 'assets//daemon//Stratis.BreezeD');
   if (os.platform() === 'win32') {
-      apiPath = path.join(__dirname, '".\\assets\\daemon\\Stratis.BreezeD.exe"');
+      apiPath = path.resolve(__dirname, 'assets\\daemon\\Stratis.BreezeD.exe');
   }
 
-  stratisProcess = execStratis('"' + apiPath + '" stratis light -testnet', {
+  stratisProcess = spawnStratis(apiPath, ['stratis', '-testnet'], {
       detached: true
-  }, (error, stdout, stderr) => {
-      if (error) {
-          writeLogError(`exec error: ${error}`);
-          return;
-      }
-      if (serve) {
-        writeLog(`stdout: ${stdout}`);
-        writeLog(`stderr: ${stderr}`);
-      }
+  });
+
+  stratisProcess.stdout.on('data', (data) => {
+    writeLog(`Stratis: ${data}`);
   });
 }
 
@@ -222,10 +216,6 @@ if (os.platform() === 'win32') {
 
 function writeLog(msg) {
   console.log(msg);
-};
-
-function writeLogError(msg) {
-  console.error(msg);
 };
 
 function createMenu() {

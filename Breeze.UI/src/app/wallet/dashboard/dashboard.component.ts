@@ -3,6 +3,7 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
+import { ModalService } from '../../shared/services/modal.service';
 import { WalletInfo } from '../../shared/classes/wallet-info';
 import { TransactionInfo } from '../../shared/classes/transaction-info';
 
@@ -20,17 +21,19 @@ import { Subscription } from 'rxjs/Subscription';
 })
 
 export class DashboardComponent implements OnInit {
-  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal) {}
+  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService) {}
 
+  public walletName: string;
+  public coinUnit: string;
   public confirmedBalance: number;
   public unconfirmedBalance: number;
   public transactionArray: TransactionInfo[];
-  public coinUnit: string;
   private walletBalanceSubscription: Subscription;
   private walletHistorySubscription: Subscription;
 
   ngOnInit() {
     this.startSubscriptions();
+    this.walletName = this.globalService.getWalletName();
     this.coinUnit = this.globalService.getCoinUnit();
   };
 
@@ -65,14 +68,15 @@ export class DashboardComponent implements OnInit {
         error => {
           console.log(error);
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the API. Please restart the application.");
+            this.cancelSubscriptions();
+            this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
             }
             else {
               if (error.json().errors[0].description) {
-                alert(error.json().errors[0].description);
+                this.genericModalService.openModal(null, error.json().errors[0].description);
               } else {
                 this.cancelSubscriptions();
                 this.startSubscriptions();
@@ -101,14 +105,15 @@ export class DashboardComponent implements OnInit {
         error => {
           console.log(error);
           if (error.status === 0) {
-            alert("Something went wrong while connecting to the API. Please restart the application.");
+            this.cancelSubscriptions();
+            this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
             }
             else {
               if (error.json().errors[0].description) {
-                alert(error.json().errors[0].description);
+                this.genericModalService.openModal(null, error.json().errors[0].description);
               } else {
                 this.cancelSubscriptions();
                 this.startSubscriptions();
@@ -132,7 +137,12 @@ export class DashboardComponent implements OnInit {
       }
       let transactionId = transaction.id;
       let transactionAmount = transaction.amount;
-      let transactionFee = transaction.fee;
+      let transactionFee;
+      if (transaction.fee) {
+        transactionFee = transaction.fee;
+      } else {
+        transactionFee = 0;
+      }
       let transactionConfirmedInBlock = transaction.confirmedInBlock;
       let transactionTimestamp = transaction.timestamp;
       let transactionConfirmed;
