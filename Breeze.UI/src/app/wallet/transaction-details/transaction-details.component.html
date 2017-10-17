@@ -15,10 +15,10 @@
           <li *ngIf="transaction.transactionType == 'received'" class="list-inline-item col-8 blockText text-success">{{ transaction.transactionAmount | coinNotation }} {{ coinUnit }}</li>
           <li *ngIf="transaction.transactionType == 'sent'" class="list-inline-item col-8 blockText text-danger">-{{ transaction.transactionAmount + transaction.transactionFee | coinNotation }}  {{ coinUnit }}</li>
         </ul>
-        <!-- <ul class="list-inline row" *ngIf="transaction.transactionType == 'sent'">
+        <ul class="list-inline row" *ngIf="transaction.transactionType == 'sent'">
             <li class="list-inline-item col blockLabel">Fee</li>
             <li *ngIf="transaction.transactionType == 'sent'" class="list-inline-item col-8 blockText text-danger">{{ transaction.transactionFee | coinNotation }}  {{ coinUnit }}</li>
-        </ul> -->
+        </ul>
         <ul class="list-inline row">
           <li class="list-inline-item col blockLabel">Date</li>
           <li class="list-inline-item col-8 blockText">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</li>

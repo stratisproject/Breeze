@@ -105,7 +105,8 @@ app.on('activate', function () {
 });
 
 function closeBitcoinApi() {
-  if (process.platform !== 'darwin' && !serve) {
+  // if (process.platform !== 'darwin' && !serve) {
+    if (!serve) {
     var http1 = require('http');
     const options1 = {
       hostname: 'localhost',
@@ -121,7 +122,8 @@ function closeBitcoinApi() {
 };
 
 function closeStratisApi() {
-  if (process.platform !== 'darwin' && !serve) {
+  // if (process.platform !== 'darwin' && !serve) {
+    if (process.platform !== 'darwin' && !serve) {
     var http2 = require('http');
     const options2 = {
       hostname: 'localhost',
@@ -148,15 +150,10 @@ function startBitcoinApi() {
 
   bitcoinProcess = spawnBitcoin(apiPath, ['-testnet'], {
       detached: true
-  }, (error, stdout, stderr) => {
-      if (error) {
-          writeLogError(`exec error: ${error}`);
-          return;
-      }
-      if (serve) {
-        writeLog(`stdout: ${stdout}`);
-        writeLog(`stderr: ${stderr}`);
-      }
+  });
+
+  bitcoinProcess.stdout.on('data', (data) => {
+    writeLog(`Bitcoin: ${data}`);
   });
 }
 
@@ -172,15 +169,10 @@ function startStratisApi() {
 
   stratisProcess = spawnStratis(apiPath, ['stratis', '-testnet'], {
       detached: true
-  }, (error, stdout, stderr) => {
-      if (error) {
-          writeLogError(`exec error: ${error}`);
-          return;
-      }
-      if (serve) {
-        writeLog(`stdout: ${stdout}`);
-        writeLog(`stderr: ${stderr}`);
-      }
+  });
+
+  stratisProcess.stdout.on('data', (data) => {
+    writeLog(`Stratis: ${data}`);
   });
 }
 
@@ -224,10 +216,6 @@ if (os.platform() === 'win32') {
 
 function writeLog(msg) {
   console.log(msg);
-};
-
-function writeLogError(msg) {
-  console.error(msg);
 };
 
 function createMenu() {
