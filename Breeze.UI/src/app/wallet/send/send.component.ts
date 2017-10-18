@@ -114,7 +114,7 @@ export class SendComponent implements OnInit {
               console.log(error);
             }
             else {
-              this.genericModalService.openModal(null, error.json().errors[0].description);
+              this.genericModalService.openModal(null, error.json().errors[0].message);
             }
           }
         },
@@ -154,7 +154,7 @@ export class SendComponent implements OnInit {
               console.log(error);
             }
             else {
-              this.genericModalService.openModal(null, error.json().errors[0].description);
+              this.genericModalService.openModal(null, error.json().errors[0].message);
             }
           }
         },
@@ -194,7 +194,7 @@ export class SendComponent implements OnInit {
               console.log(error);
             }
             else {
-              this.genericModalService.openModal(null, error.json().errors[0].description);
+              this.genericModalService.openModal(null, error.json().errors[0].message);
             }
           }
         },
