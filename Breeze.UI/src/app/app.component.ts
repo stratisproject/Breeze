@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
   private setTitle() {
     let applicationName = "Breeze Wallet";
     let applicationVersion = remote.app.getVersion();
-    let releaseCycle = "alpha";
+    let releaseCycle = "beta";
     let newTitle = applicationName + " v" + applicationVersion + " " + releaseCycle;
     this.titleService.setTitle(newTitle);
   }
