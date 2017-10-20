@@ -70,7 +70,7 @@ export class StatusBarComponent implements OnInit {
             }
             else {
               if (error.json().errors[0].description) {
-                this.genericModalService.openModal(null, error.json().errors[0].description);
+                this.genericModalService.openModal(null, error.json().errors[0].message);
               } else {
                 this.cancelSubscriptions();
                 this.startSubscriptions();

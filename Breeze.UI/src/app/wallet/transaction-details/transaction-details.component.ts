@@ -59,7 +59,7 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
             }
             else {
               if (error.json().errors[0].description) {
-                this.genericModalService.openModal(null, error.json().errors[0].description);
+                this.genericModalService.openModal(null, error.json().errors[0].message);
               } else {
                 this.cancelSubscriptions();
                 this.startSubscriptions();
