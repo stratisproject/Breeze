@@ -154,7 +154,6 @@
     border-color: $custom-select-focus-border-color;
     outline: none;
     @include box-shadow($custom-select-focus-box-shadow);
-    border-radius: 1.5rem 1.5rem 0 0;
 
     &::-ms-value {
       // For visual consistency with other platforms/browsers,

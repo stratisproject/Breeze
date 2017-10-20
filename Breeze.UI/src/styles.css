@@ -4296,7 +4296,6 @@ tbody.collapse.show {
 .custom-select:focus {
   border-color: #fbd7ac;
   outline: none;
-  border-radius: 1.5rem 1.5rem 0 0;
 }
 
 .custom-select:focus::-ms-value {
