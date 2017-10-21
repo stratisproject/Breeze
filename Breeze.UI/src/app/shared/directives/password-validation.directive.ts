@@ -8,17 +8,14 @@ export class PasswordValidationDirective {
   constructor() { }
 
   static MatchPassword(AC: AbstractControl) {
-    AC.get('walletPassword').valueChanges.subscribe(() => {
-      AC.get('walletPasswordConfirmation').updateValueAndValidity();
-    });
-
     let password = AC.get('walletPassword').value;
     let confirmPassword = AC.get('walletPasswordConfirmation').value;
 
-    if(password != confirmPassword) {
+    if(confirmPassword !== password) {
       AC.get('walletPasswordConfirmation').setErrors({ walletPasswordConfirmation: true });
     } else {
-      return null
+      AC.get('walletPasswordConfirmation').setErrors(null);
+      return null;
     }
   }
 }
