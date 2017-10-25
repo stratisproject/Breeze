@@ -197,10 +197,16 @@ function createTray() {
 
   let systemTray = new Tray(trayIcon);
   const contextMenu = Menu.buildFromTemplate([
-  {
+    {
       label: 'Hide/Show',
-      click: function () {
+      click: function() {
         mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+      }
+    },
+    {
+      label: 'Exit',
+      click: function() {
+        app.quit();
       }
     }
   ]);
