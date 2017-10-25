@@ -174,7 +174,7 @@ export class CreateComponent implements OnInit {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400){
-            let walletBody = "Your wallet has been created.<br><br>Please write down your 12 word passphrase: <br>" + this.mnemonic + "<br><br>You can recover your wallet on any computer with:<br>- your passphrase AND<br>- your password AND<br>- the wallet creation time<br><br>Unlike most other wallets if an attacker acquires your passphrase, it will not be able to hack your wallet without knowing your password. On the contrary, unlike other wallets, you will not be able to recover your wallet only with your passphrase if you lose your password.";
+            let walletBody = "Your wallet has been created.<br><br>Please write down your 12 word passphrase: <br>" + this.mnemonic + "<br><br>You can recover your wallet on any computer with:<br>- your passphrase<br>- your password<br>- In addition, knowing the approximate date at which you created your wallet will speed up recovery.<br><br>Unlike most other wallets if an attacker acquires your passphrase, he will not be able to hack your wallet without knowing your password. On the contrary, unlike other wallets, you will not be able to recover your wallet only with your passphrase if you lose your password.";
             this.genericModalService.openModal("Wallet Info", walletBody);
             this.router.navigate(['']);
           }
