@@ -46,7 +46,9 @@ function createWindow() {
     title: "Breeze Wallet"
   });
 
-  mainWindow.setIcon(applicationIcon);
+  if (os.platform() === "win32"){
+    mainWindow.setIcon(applicationIcon);
+  }
 
    // and load the index.html of the app.
   mainWindow.loadURL(url.format({
@@ -191,9 +193,9 @@ function createTray() {
 
   let trayIcon;
   if (serve) {
-    trayIcon = nativeImage.createFromPath('./src/assets/images/breeze-logo.png');
+    trayIcon = nativeImage.createFromPath('./src/assets/images/breeze-logo-tray.png');
   } else {
-    trayIcon = nativeImage.createFromPath(path.join(__dirname + '/assets/images/breeze-logo.png'));
+    trayIcon = nativeImage.createFromPath(path.join(__dirname + '/assets/images/breeze-logo-tray.png'));
   }
 
   let systemTray = new Tray(trayIcon);
