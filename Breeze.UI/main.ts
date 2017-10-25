@@ -4,6 +4,7 @@
 const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
+const nativeImage = require('electron').nativeImage
 
 const path = require('path');
 const url = require('url');
@@ -181,36 +182,36 @@ function createTray() {
   const Menu = electron.Menu;
   const Tray = electron.Tray;
 
-  let appIcon = null;
-
-var iconPath
-if (os.platform() === 'win32') {
+  let trayIcon;
   if (serve) {
-    iconPath = '.\\src\\assets\\images\\breeze-logo-tray.ico';
+    trayIcon = nativeImage.createFromPath('./src/assets/images/breeze-logo.png');
   } else {
-    iconPath = path.join(__dirname + '\\assets\\images\\breeze-logo-tray.png');
+    trayIcon = nativeImage.createFromPath('./assets/images/breeze-logo.png');
   }
 
-} else {
-  if (serve) {
-    iconPath = './src/assets/images/breeze-logo-tray.png';
-  } else {
-    iconPath = path.join(__dirname + '//assets//images//breeze-logo-tray.png');
-  }
-}
-
-  appIcon = new Tray(iconPath);
-  const contextMenu = Menu.buildFromTemplate([{
-    label: 'Hide/Show',
-    click: function () {
-      mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+  let systemTray = new Tray(trayIcon);
+  const contextMenu = Menu.buildFromTemplate([
+  {
+      label: 'Hide/Show',
+      click: function () {
+        mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+      }
     }
-  }]);
-  appIcon.setToolTip('Breeze Wallet');
-  appIcon.setContextMenu(contextMenu);
+  ]);
+  systemTray.setToolTip('Breeze Wallet');
+  systemTray.setContextMenu(contextMenu);
+  systemTray.on('click', function() {
+    if (!mainWindow.isVisible()) {
+      mainWindow.show();
+    }
+
+    if (!mainWindow.isFocused()) {
+      mainWindow.focus();
+    }
+  });
 
   app.on('window-all-closed', function () {
-    if (appIcon) appIcon.destroy();
+    if (systemTray) systemTray.destroy();
   });
 };
 
