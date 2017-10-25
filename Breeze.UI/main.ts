@@ -29,6 +29,12 @@ require('electron-context-menu')({
 let mainWindow = null;
 
 function createWindow() {
+  let applicationIcon
+  if (serve) {
+    applicationIcon = nativeImage.createFromPath("./src/assets/images/breeze-logo.png")
+  } else {
+    applicationIcon = nativeImage.createFromPath("./assets/images/breeze-logo.png")
+  }
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -37,7 +43,7 @@ function createWindow() {
     frame: true,
     minWidth: 1200,
     minHeight: 650,
-    icon: __dirname + "/assets/images/breeze-logo.png",
+    icon: applicationIcon,
     title: "Breeze Wallet"
   });
 
