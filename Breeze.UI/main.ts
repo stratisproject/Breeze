@@ -4,6 +4,7 @@
 const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
+const nativeImage = require('electron').nativeImage
 
 const path = require('path');
 const url = require('url');
@@ -28,6 +29,12 @@ require('electron-context-menu')({
 let mainWindow = null;
 
 function createWindow() {
+  let applicationIcon
+  if (serve) {
+    applicationIcon = nativeImage.createFromPath("./src/assets/images/breeze-logo.png")
+  } else {
+    applicationIcon = nativeImage.createFromPath(path.join(__dirname + '/assets/images/breeze-logo.png'))
+  }
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -36,9 +43,12 @@ function createWindow() {
     frame: true,
     minWidth: 1200,
     minHeight: 650,
-    icon: __dirname + "/assets/images/breeze-logo.png",
     title: "Breeze Wallet"
   });
+
+  if (os.platform() === "win32"){
+    mainWindow.setIcon(applicationIcon);
+  }
 
    // and load the index.html of the app.
   mainWindow.loadURL(url.format({
@@ -82,7 +92,7 @@ app.on('ready', function () {
   }
 });
 
-app.on('will-quit', function () {
+app.on('before-quit', function () {
   closeBitcoinApi(),
   closeStratisApi();
 });
@@ -181,36 +191,42 @@ function createTray() {
   const Menu = electron.Menu;
   const Tray = electron.Tray;
 
-  let appIcon = null;
-
-var iconPath
-if (os.platform() === 'win32') {
+  let trayIcon;
   if (serve) {
-    iconPath = '.\\src\\assets\\images\\breeze-logo-tray.ico';
+    trayIcon = nativeImage.createFromPath('./src/assets/images/breeze-logo-tray.png');
   } else {
-    iconPath = path.join(__dirname + '\\assets\\images\\breeze-logo-tray.png');
+    trayIcon = nativeImage.createFromPath(path.join(__dirname + '/assets/images/breeze-logo-tray.png'));
   }
 
-} else {
-  if (serve) {
-    iconPath = './src/assets/images/breeze-logo-tray.png';
-  } else {
-    iconPath = path.join(__dirname + '//assets//images//breeze-logo-tray.png');
-  }
-}
-
-  appIcon = new Tray(iconPath);
-  const contextMenu = Menu.buildFromTemplate([{
-    label: 'Hide/Show',
-    click: function () {
-      mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+  let systemTray = new Tray(trayIcon);
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Hide/Show',
+      click: function() {
+        mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+      }
+    },
+    {
+      label: 'Exit',
+      click: function() {
+        app.quit();
+      }
     }
-  }]);
-  appIcon.setToolTip('Breeze Wallet');
-  appIcon.setContextMenu(contextMenu);
+  ]);
+  systemTray.setToolTip('Breeze Wallet');
+  systemTray.setContextMenu(contextMenu);
+  systemTray.on('click', function() {
+    if (!mainWindow.isVisible()) {
+      mainWindow.show();
+    }
+
+    if (!mainWindow.isFocused()) {
+      mainWindow.focus();
+    }
+  });
 
   app.on('window-all-closed', function () {
-    if (appIcon) appIcon.destroy();
+    if (systemTray) systemTray.destroy();
   });
 };
 

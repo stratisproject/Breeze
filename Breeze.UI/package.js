@@ -14,7 +14,7 @@ const path = argv.path || 'app-builds';
 
 const DEFAULT_OPTS = {
     dir: './dist',
-    name: appName,
+    name: "Breeze",
     asar: shouldUseAsar,
     buildVersion: buildVersion
 };
@@ -30,7 +30,7 @@ pack(platform, arch, path, function done(err, appPath) {
 });
 
 function pack(plat, arch, path, cb) {
-   
+
     // there is no darwin ia32 electron
     if (plat === 'darwin' && arch === 'ia32') return;
 

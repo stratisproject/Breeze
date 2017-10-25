@@ -40,6 +40,7 @@ export class SendComponent implements OnInit {
     this.sendForm = this.fb.group({
       "address": ["", Validators.required],
       "amount": ["", Validators.compose([Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]{0,8})?$/)])],
+      //"amount": ["", Validators.compose([Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/)])],
       "fee": ["medium", Validators.required],
       "password": ["", Validators.required]
     });
@@ -206,5 +207,6 @@ export class SendComponent implements OnInit {
   private openConfirmationModal() {
     const modalRef = this.modalService.open(SendConfirmationComponent);
     modalRef.componentInstance.transaction = this.transaction;
+    modalRef.componentInstance.transactionFee = this.estimatedFee;
   }
 }
