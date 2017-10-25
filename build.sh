@@ -4,13 +4,13 @@
 set -o errexit
 
 # define a few variables
-node_output_name="breeze-ui-$os_platform-$arch"
+node_output_name="breeze-$os_platform-$arch"
 app_output_name="breeze-$os_identifier-$arch"
 app_output_zip_name="breeze-$os_identifier-$arch-$configuration.zip"
 
 if [ "$TRAVIS_OS_NAME" = "osx" ]
 then
-  dotnet_resources_path_in_app=$TRAVIS_BUILD_DIR/breeze_out/$app_output_name/breeze-ui.app/contents/resources/app/assets/daemon
+  dotnet_resources_path_in_app=$TRAVIS_BUILD_DIR/breeze_out/$app_output_name/breeze.app/contents/resources/app/assets/daemon
 else
   dotnet_resources_path_in_app=$TRAVIS_BUILD_DIR/breeze_out/$app_output_name/resources/app/assets/daemon
 fi

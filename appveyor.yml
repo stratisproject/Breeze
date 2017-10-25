@@ -44,7 +44,7 @@ environment:
 init:
 - ps: |
       $env:log_prefix = "[$env:win_runtime][$env:configuration]"
-      $env:node_output_name = "breeze-ui-$env:plat-$env:arch"
+      $env:node_output_name = "breeze-$env:plat-$env:arch"
       $env:app_output_name = "breeze-$env:win_runtime"
       $env:app_output_zip_name = "breeze-$env:win_runtime-$env:configuration.zip"
       if ($env:APPVEYOR_REPO_TAG -eq "false") { $env:APPVEYOR_REPO_TAG_NAME = "cd-unstable" }
