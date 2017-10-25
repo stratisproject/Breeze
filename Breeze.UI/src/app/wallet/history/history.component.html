@@ -32,6 +32,8 @@
                     <span *ngIf="transaction.transactionType == 'sent'" class="text-danger">-</span>
                     {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }}
                     <small class="text-uppercase"> {{ coinUnit }} </small>
+                  </li>
+                  <li class="list-inline-item col amount text-left align-baseline">
                     <span *ngIf="transaction.transactionConfirmedInBlock" class="badge badge-success text-capitalize">Confirmed</span>
                     <span *ngIf="!transaction.transactionConfirmedInBlock" class="badge badge-warning text-capitalize">Pending</span>
                   </li>
