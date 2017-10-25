@@ -33,7 +33,7 @@ function createWindow() {
   if (serve) {
     applicationIcon = nativeImage.createFromPath("./src/assets/images/breeze-logo.png")
   } else {
-    applicationIcon = nativeImage.createFromPath("./assets/images/breeze-logo.png")
+    applicationIcon = nativeImage.createFromPath(path.join(__dirname + '/assets/images/breeze-logo.png'))
   }
 
   // Create the browser window.
@@ -43,9 +43,10 @@ function createWindow() {
     frame: true,
     minWidth: 1200,
     minHeight: 650,
-    icon: applicationIcon,
     title: "Breeze Wallet"
   });
+
+  mainWindow.setIcon(applicationIcon);
 
    // and load the index.html of the app.
   mainWindow.loadURL(url.format({
@@ -192,7 +193,7 @@ function createTray() {
   if (serve) {
     trayIcon = nativeImage.createFromPath('./src/assets/images/breeze-logo.png');
   } else {
-    trayIcon = nativeImage.createFromPath('./assets/images/breeze-logo.png');
+    trayIcon = nativeImage.createFromPath(path.join(__dirname + '/assets/images/breeze-logo.png'));
   }
 
   let systemTray = new Tray(trayIcon);
