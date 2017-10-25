@@ -89,7 +89,7 @@ app.on('ready', function () {
   }
 });
 
-app.on('will-quit', function () {
+app.on('before-quit', function () {
   closeBitcoinApi(),
   closeStratisApi();
 });
