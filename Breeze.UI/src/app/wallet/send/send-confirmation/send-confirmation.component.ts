@@ -15,7 +15,7 @@ export class SendConfirmationComponent implements OnInit {
   constructor(private globalService: GlobalService, public activeModal: NgbActiveModal) { }
 
   public showDetails: boolean = false;
-  private coinUnit: string;
+  public coinUnit: string;
 
   ngOnInit() {
     this.coinUnit = this.globalService.getCoinUnit();
