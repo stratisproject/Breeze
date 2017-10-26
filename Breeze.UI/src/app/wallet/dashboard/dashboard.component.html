@@ -3,7 +3,7 @@
   <section id="content" class="bitcoin">
     <!-- JUMBOTRON-->
     <div class="jumbotron jumbotron-fluid">
-      <div class="container">
+      <div class="col-10 mx-auto">
         <div class="col-xs-12 text-left">
           <h5 class="text-capitalize walletName">{{ walletName }}</h5>
         </div>
@@ -48,7 +48,7 @@
     <!-- /JUMBOTRON-->
 
     <!-- TRANSACTIONS -->
-    <section id="transaction" class="container">
+    <section id="transaction" class="col-10 mx-auto">
       <h5>Latest Transactions</h5>
       <div *ngIf="transactionArray; else noTransactions">
         <div *ngFor="let transaction of transactionArray; let i=index">
