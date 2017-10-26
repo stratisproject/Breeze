@@ -29,20 +29,17 @@ code {color: $spacegray !important;}
   height: 150px;
   display:inline-block;
   fill: white !important;
-  .loadingText {color: white;}
+}
+.loadingText {
+  font-size: 1rem;
+  font-weight: 400;
+  padding-right: 5px;
+  border-right: .1em solid $blue;
+  white-space: nowrap;
+  -webkit-animation: blink-caret .5s step-end infinite alternate;
+  color: white;
 }
 @-webkit-keyframes blink-caret { 50% { border-color: transparent; } }
-em {
-  &.display-4 {
-    font-size: 1.6em;
-    color: $darkgray;
-    font-weight: 400;
-    padding-right: 5px;
-  	border-right: .1em solid $blue;
-  	white-space: nowrap;
-  	-webkit-animation: blink-caret .5s step-end infinite alternate;
-  }
-}
 
 // datepicker
 .datepicker__input {
@@ -137,7 +134,7 @@ em {
   p {margin-bottom: 0 !important;}
   .lead {
     color: $black;
-    font-size: 1.85em;
+    font-size: 1.65em;
     font-weight: 500;
     margin-bottom: 0;
 
@@ -149,27 +146,6 @@ em {
       font-size: .5em;
       padding-left: .5em;
       font-weight: 400;
-    }
-  }
-}
-
-// transactions
-#transaction {
-  .muted {opacity: .5;}
-  h5 {
-    font-size: .85em;
-    color: $gray;
-  }
-  .card {
-    &:hover {
-      cursor: pointer;
-      text-decoration: none !important;
-      border-color: #BCE8FE !important;
-      box-shadow: 4px 2px 11px 0 rgba(80,96,120,0.10);
-    }
-    li {
-      line-height: 2.5em;
-      &.transactionDate {color: $gray-light;}
     }
   }
 }
