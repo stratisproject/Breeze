@@ -20,7 +20,7 @@
 
     <!-- TRANSACTIONS -->
     <section id="transaction" class="container">
-      <h5>Transactions</h5>
+      <h5 class="mt-4">Transactions</h5>
       <div *ngIf="transactions; else noTransactions">
         <div *ngFor="let transaction of transactions">
           <div class="card" (click)="openTransactionDetailDialog(transaction)">

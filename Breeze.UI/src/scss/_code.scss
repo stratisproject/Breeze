@@ -13,7 +13,6 @@ code {
   color: $code-color;
   background-color: $code-bg;
   @include border-radius($border-radius);
-  overflow-wrap: break-word;
 
   // Streamline the style when inside anchors to avoid broken underline and more
   a > & {
