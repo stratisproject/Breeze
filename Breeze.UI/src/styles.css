@@ -47,7 +47,11 @@ code {
   width: 150px;
   height: 150px;
   display: inline-block;
-  fill: #1B354B !important;
+  fill: white !important;
+}
+
+#loading .loadingText {
+  color: white;
 }
 
 @-webkit-keyframes blink-caret {
@@ -110,7 +114,7 @@ em.display-4 {
   opacity: 1;
   width: 2px;
   height: 20px;
-  background-color: #0E6682;
+  background-color: white;
   float: right;
   position: absolute;
   margin: 11px 6px 0 6px;
@@ -158,12 +162,25 @@ em.display-4 {
 .jumbotron h5 {
   font-size: .85em;
   color: #98A3B3;
+  margin-bottom: 0;
+}
+
+.jumbotron h5.walletName {
+  color: #2E475C;
+  font-size: 1em;
+  font-weight: bolder;
+  margin-bottom: 1.5em;
+}
+
+.jumbotron p {
+  margin-bottom: 0 !important;
 }
 
 .jumbotron .lead {
   color: #2E475C;
-  font-size: 1.75em;
+  font-size: 1.85em;
   font-weight: 500;
+  margin-bottom: 0;
 }
 
 .jumbotron .lead .h2 {
@@ -172,7 +189,7 @@ em.display-4 {
 }
 
 .jumbotron .lead small {
-  font-size: .75em;
+  font-size: .5em;
   padding-left: .5em;
   font-weight: 400;
 }
@@ -189,6 +206,8 @@ em.display-4 {
 #transaction .card:hover {
   cursor: pointer;
   text-decoration: none !important;
+  border-color: #BCE8FE !important;
+  box-shadow: 4px 2px 11px 0 rgba(80, 96, 120, 0.1);
 }
 
 #transaction .card li {
@@ -294,6 +313,36 @@ em.display-4 {
 
 #modalSend .float-right a:hover {
   text-decoration: none;
+}
+
+#modalSend .radioButtons .btn {
+  border-radius: 50px;
+}
+
+#modalSend .radioButtons .btn-outline-success.active,
+.show > #modalSend .radioButtons .btn-outline-success.dropdown-toggle,
+#modalSend .radioButtons .btn-outline-danger.active,
+.show >
+#modalSend .radioButtons .btn-outline-danger.dropdown-toggle,
+#modalSend .radioButtons .btn-outline-warning.active,
+.show >
+#modalSend .radioButtons .btn-outline-warning.dropdown-toggle {
+  color: white !important;
+  outline: none;
+}
+
+#modalSend p {
+  color: #189BC5;
+  font-size: .825em;
+  font-style: italic;
+}
+
+#modalSend .btn-link {
+  padding: 0 !important;
+}
+
+#modalSend .form-group {
+  margin-bottom: .5rem;
 }
 
 #modalReceive .myAddress {
@@ -3247,7 +3296,7 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 
 .btn.disabled, .btn:disabled {
   cursor: not-allowed;
-  opacity: .65;
+  opacity: 0;
 }
 
 .btn:active, .btn.active {
@@ -5295,7 +5344,7 @@ a.badge:focus, a.badge:hover {
 
 @media (min-width: 576px) {
   .jumbotron {
-    padding: 3.5rem 1.75rem 1.75rem;
+    padding: 2.1875rem 1.75rem 1.75rem;
   }
 }
 
@@ -5792,7 +5841,7 @@ button.close {
 .modal-title {
   text-align: center;
   line-height: 1.5;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
   color: #7385A0;
   font-size: 1em;
 }
@@ -9717,6 +9766,7 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 
 .btn-primary:hover {
   background-image: linear-gradient(-90deg, #20B7C1 0%, #1387C8 100%) !important;
+  border-color: transparent !important;
 }
 
 .btn-secondary {
@@ -9747,6 +9797,15 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   margin-right: .3em;
 }
 
+#content.bitcoin #transaction .muted {
+  opacity: .5;
+}
+
+#content.bitcoin #transaction h5 {
+  font-size: .85em;
+  color: #98A3B3;
+}
+
 #content.bitcoin #transaction a {
   color: #148DC7;
 }
@@ -9768,9 +9827,19 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 }
 
 #content.bitcoin #transaction .card:hover {
-  border-color: #D7E0ED !important;
-  background-color: #FAFDFE !important;
+  cursor: pointer;
+  text-decoration: none !important;
+  background: #F5FCFF;
+  border: 1px solid #BCE8FE;
   box-shadow: 4px 2px 11px 0 rgba(80, 96, 120, 0.1);
+}
+
+#content.bitcoin #transaction .card li {
+  line-height: 2.5em;
+}
+
+#content.bitcoin #transaction .card li.transactionDate {
+  color: #BAC4D1;
 }
 
 #content.bitcoin #Tumblebit i {

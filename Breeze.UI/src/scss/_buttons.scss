@@ -30,7 +30,7 @@
   &.disabled,
   &:disabled {
     cursor: $cursor-disabled;
-    opacity: .65;
+    opacity: 0;
     @include box-shadow(none);
   }
 

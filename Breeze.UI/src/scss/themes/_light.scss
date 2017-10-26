@@ -26,6 +26,7 @@ $btn-primary-color: $white !important;
     background-image: linear-gradient(90deg, #20B7C1 0%, #1387C8 100%) !important;
     &:hover {
       background-image: linear-gradient(-90deg, #20B7C1 0%, #1387C8 100%) !important;
+      border-color: transparent !important;
     }
   }
   .btn-secondary {
@@ -66,6 +67,11 @@ $btn-primary-color: $white !important;
 
     // TRANSACTIONS
     #transaction {
+      .muted {opacity: .5;}
+      h5 {
+        font-size: .85em;
+        color: $gray;
+      }
       a {color: $link-color;}
       // Cards
       .card {
@@ -81,9 +87,15 @@ $btn-primary-color: $white !important;
           }
         }
         &:hover {
-          border-color: #D7E0ED !important;
-          background-color: #FAFDFE !important;
+          cursor: pointer;
+          text-decoration: none !important;
+          background: #F5FCFF;
+          border: 1px solid #BCE8FE;
           box-shadow: 4px 2px 11px 0 rgba(80,96,120,0.10);
+        }
+        li {
+          line-height: 2.5em;
+          &.transactionDate {color: $gray-light;}
         }
       }
     }

@@ -28,7 +28,8 @@ code {color: $spacegray !important;}
   width: 150px;
   height: 150px;
   display:inline-block;
-  fill: $darkgray !important;
+  fill: white !important;
+  .loadingText {color: white;}
 }
 @-webkit-keyframes blink-caret { 50% { border-color: transparent; } }
 em {
@@ -81,7 +82,7 @@ em {
           opacity: 1;
           width: 2px;
           height: 20px;
-          background-color: #0E6682;
+          background-color: white;
           float: right;
           position: absolute;
           margin: 11px 6px 0 6px;
@@ -124,17 +125,28 @@ em {
   h5 {
     font-size: .85em;
     color: $gray;
+    margin-bottom: 0;
+
+    &.walletName {
+      color: $black;
+      font-size: 1em;
+      font-weight: bolder;
+      margin-bottom: 1.5em;
+    }
   }
+  p {margin-bottom: 0 !important;}
   .lead {
     color: $black;
-    font-size: 1.75em;
+    font-size: 1.85em;
     font-weight: 500;
+    margin-bottom: 0;
+
     .h2 {
       font-size: 2em;
       font-weight: 600;
     }
     small {
-      font-size: .75em;
+      font-size: .5em;
       padding-left: .5em;
       font-weight: 400;
     }
@@ -152,6 +164,8 @@ em {
     &:hover {
       cursor: pointer;
       text-decoration: none !important;
+      border-color: #BCE8FE !important;
+      box-shadow: 4px 2px 11px 0 rgba(80,96,120,0.10);
     }
     li {
       line-height: 2.5em;
@@ -241,6 +255,26 @@ em {
     font-size: .825em;
   }
   .float-right {a {text-decoration: underline; &:hover {text-decoration: none;}}}
+  // Fee Buttons
+  .radioButtons {
+    .btn {border-radius: 50px;}
+    .btn-outline-success,
+    .btn-outline-danger,
+    .btn-outline-warning {
+      &.active,
+      .show > &.dropdown-toggle {
+        color: white !important;
+        outline: none;
+      }
+    }
+  }
+  p {
+    color: $blue;
+    font-size: .825em;
+    font-style: italic;
+  }
+  .btn-link {padding: 0 !important;}
+  .form-group {margin-bottom: .5rem;}
 }
 #modalReceive {
   .myAddress {margin-bottom: 2em;}
