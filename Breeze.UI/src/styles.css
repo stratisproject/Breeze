@@ -50,7 +50,7 @@ code {
   fill: white !important;
 }
 
-.loadingText {
+.loadingText .display-4 {
   font-size: 1rem;
   font-weight: 400;
   padding-right: 5px;
@@ -291,6 +291,12 @@ code {
   border-radius: 50px;
 }
 
+#modalSend .radioButtons .btn-outline-success:hover,
+#modalSend .radioButtons .btn-outline-danger:hover,
+#modalSend .radioButtons .btn-outline-warning:hover {
+  color: white !important;
+}
+
 #modalSend .radioButtons .btn-outline-success.active,
 .show > #modalSend .radioButtons .btn-outline-success.dropdown-toggle,
 #modalSend .radioButtons .btn-outline-danger.active,
@@ -318,7 +324,7 @@ code {
 }
 
 #modalReceive .myAddress {
-  margin-bottom: 2em;
+  margin-bottom: 1rem;
 }
 
 #modalReceive .modal-body {
@@ -341,6 +347,11 @@ code {
 
 #modalCheck .lead {
   animation: 2s ease 0s normal forwards 1 fadein;
+  font-size: 1em !important;
+}
+
+#modalCheck .card {
+  animation: 3s ease 0s normal forwards 1 fadein;
 }
 
 @keyframes fadein {
@@ -816,7 +827,7 @@ input.cmn-toggle-round-flat:checked + label:after {
   color: rgba(220, 232, 241, 0.9);
   font-weight: 300;
   line-height: 1.25em;
-  margin: 2em 0;
+  margin: 2rem 0 .5rem 0;
 }
 
 .login .container .btn-darkgray {
@@ -3086,7 +3097,7 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 .form-control-success,
 .form-control-warning,
 .form-control-danger {
-  padding-left: 3rem;
+  padding-left: 0.75rem;
   background-repeat: no-repeat;
   background-position: center left 0.648438rem;
   background-size: 1.296875rem 1.296875rem;
@@ -5768,7 +5779,7 @@ button.close {
 .modal-dialog {
   position: relative;
   width: auto;
-  margin: 30px;
+  margin: 15px;
 }
 
 .modalBg {
@@ -5850,7 +5861,7 @@ button.close {
 @media (min-width: 576px) {
   .modal-dialog {
     max-width: 500px;
-    margin: 30px auto;
+    margin: 15px auto;
   }
   .modal-sm {
     max-width: 360px;
@@ -9731,6 +9742,10 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   border-color: #11708e;
 }
 
+.btn-lg, .btn-group-lg > .btn {
+  font-size: 1em;
+}
+
 .btn-primary {
   background-color: transparent;
   background-image: linear-gradient(90deg, #20B7C1 0%, #1387C8 100%) !important;
@@ -9747,6 +9762,14 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 
 .btn-secondary:hover {
   background-color: #fff !important;
+}
+
+.login .text-danger {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 0.25rem 1rem;
+  border-radius: 50px;
+  display: inline-block;
+  font-size: .7rem;
 }
 
 #navbarBreeze .navbar-nav .nav-item .nav-link {

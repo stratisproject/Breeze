@@ -7,13 +7,13 @@
 
       <p class="textback text-left mb-5 offset-3 row"><a (click)="onBackClicked()">Back</a></p>
       <h3 class="display-5">Welcome</h3>
-      <p class="lead my-5">
+      <p class="lead my-4 mb-5">
         If you would like to create a new wallet, please click Create. <br/>
         If you used Breeze before, please click Restore to recover your old wallet.
       </p>
-      <div class="row d-flex justify-content-center">
-        <button type="button" class="btn btn-linkgray btn-lg" (click)="onRecoverClicked()">Restore</button>
-        <button type="button" class="btn btn-darkgray btn-lg" (click)="onCreateClicked()">Create</button>
+      <div class="col-3 mt-4 mx-auto row d-flex justify-content-center">
+        <button type="button" class="btn btn-secondary btn-block btn-lg" (click)="onRecoverClicked()">Restore</button>
+        <button type="button" class="btn btn-darkgray btn-block btn-lg mt-3" (click)="onCreateClicked()">Create</button>
       </div>
     </div>
     <!-- /container-->

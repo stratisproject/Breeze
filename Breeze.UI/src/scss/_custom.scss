@@ -31,13 +31,15 @@ code {color: $spacegray !important;}
   fill: white !important;
 }
 .loadingText {
-  font-size: 1rem;
-  font-weight: 400;
-  padding-right: 5px;
-  border-right: .1em solid $blue;
-  white-space: nowrap;
-  -webkit-animation: blink-caret .5s step-end infinite alternate;
-  color: white;
+  .display-4 {
+    font-size: 1rem;
+    font-weight: 400;
+    padding-right: 5px;
+    border-right: .1em solid $blue;
+    white-space: nowrap;
+    -webkit-animation: blink-caret .5s step-end infinite alternate;
+    color: white;
+  }
 }
 @-webkit-keyframes blink-caret { 50% { border-color: transparent; } }
 
@@ -237,6 +239,11 @@ code {color: $spacegray !important;}
     .btn-outline-success,
     .btn-outline-danger,
     .btn-outline-warning {
+      &:hover {color: white !important;}
+    }
+    .btn-outline-success,
+    .btn-outline-danger,
+    .btn-outline-warning {
       &.active,
       .show > &.dropdown-toggle {
         color: white !important;
@@ -253,7 +260,7 @@ code {color: $spacegray !important;}
   .form-group {margin-bottom: .5rem;}
 }
 #modalReceive {
-  .myAddress {margin-bottom: 2em;}
+  .myAddress {margin-bottom: 1rem;}
   .modal-body {padding: 0 3em;}
   label {
     color: $gray;
@@ -270,7 +277,11 @@ code {color: $spacegray !important;}
   }
 }
 #modalCheck {
-  .lead {animation: 2s ease 0s normal forwards 1 fadein;}
+  .lead {
+    animation: 2s ease 0s normal forwards 1 fadein;
+    font-size: 1em !important;
+  }
+  .card {animation: 3s ease 0s normal forwards 1 fadein;}
   @keyframes fadein {
     0% {opacity:0;}
     66% {opacity:0;}
@@ -487,7 +498,7 @@ $curve: cubic-bezier(0.650, 0.000, 0.450, 1.000);
       color: rgba($gray-lighter, .9);
       font-weight: 300;
       line-height: 1.25em;
-      margin: 2em 0;
+      margin: 2rem 0 .5rem 0;
     }
     .btn-darkgray {
       font-size: 1em;
