@@ -515,11 +515,12 @@ $curve: cubic-bezier(0.650, 0.000, 0.450, 1.000);
     form {margin-bottom: 1em;}
     .textback {
       a {
+        font-size: 1.5rem;
         color: $darkgray;
-        text-decoration: underline;
+        text-decoration: none;
         &:hover {
           text-decoration: none;
-          color: lighten($darkgray,10%);
+          color: lighten($darkgray,20%);
         }
       }
     }

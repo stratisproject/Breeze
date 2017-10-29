@@ -850,13 +850,14 @@ input.cmn-toggle-round-flat:checked + label:after {
 }
 
 .login .container .textback a {
+  font-size: 1.5rem;
   color: #1B354B;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .login .container .textback a:hover {
   text-decoration: none;
-  color: #295071;
+  color: #366a96;
 }
 
 .login .container .badge {

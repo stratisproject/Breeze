@@ -1,8 +1,12 @@
 <section id="breeze">
   <div class="login d-flex align-items-center text-center">
     <div class="container">
-      <p class="textback text-left mb-5 col-8 mx-auto"><a (click)="onBackClicked()">Back</a></p>
-      <h3 class="display-5">Welcome</h3>
+      <p class="textback text-left mb-5 col-11 mx-auto">
+        <a (click)="onBackClicked()">
+          <span class="ico-arrow-left2"></span>
+        </a>
+      </p>
+      <h3 class="display-5">Create a new wallet</h3>
       <div class="row d-flex justify-content-center">
         <form class="col-8 mx-auto row text-left" [formGroup]="createWalletForm">
           <!--<div class="form-group has-success">-->
