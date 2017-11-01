@@ -1,7 +1,7 @@
 {
-  "name": "breeze-ui",
+  "name": "Breeze",
   "description": "Graphical User Interface for Breeze Wallet.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": {
     "name": "Stratis Group",
     "email": "info@stratisplatform.com"
