@@ -45,12 +45,9 @@ cd $TRAVIS_BUILD_DIR/Breeze.UI
 npm install
 echo $log_prefix FINISHED restoring dotnet and npm packages
 
-# dotnet build
-echo $log_prefix running 'dotnet build'
-cd $TRAVIS_BUILD_DIR/StratisBitcoinFullNode/Stratis.BreezeD
-dotnet build -c $configuration -r $os_identifier-$arch -v m 
-
+# dotnet publish
 echo $log_prefix running 'dotnet publish'
+cd $TRAVIS_BUILD_DIR/StratisBitcoinFullNode/Stratis.BreezeD
 dotnet publish -c $configuration -r $os_identifier-$arch -v m -o $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME
 
 echo $log_prefix chmoding the Stratis.BreezeD file
