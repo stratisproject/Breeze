@@ -1,32 +1,38 @@
 <section id="breeze">
   <div class="login d-flex align-items-center text-center">
     <div class="container">
-      <p class="textback text-left mb-5 offset-3 row"><a (click)="onBackClicked()">Back</a></p>
-      <h3 class="display-5">Welcome</h3>
+      <p class="textback text-left mb-5 col-11 mx-auto">
+        <a (click)="onBackClicked()">
+          <span class="ico-arrow-left2"></span>
+        </a>
+      </p>
+      <h3 class="display-5 mb-4">Restore a wallet</h3>
       <div class="row d-flex justify-content-center">
-        <form class="col-md-6 col-xs-12 text-left" [formGroup]="recoverWalletForm">
+        <form class="col-8 mx-auto row text-left mt-4" [formGroup]="recoverWalletForm">
           <!--<div class="form-group has-success">-->
-          <div class="form-group">
-            <label class="col-12 row" for="walletName">Name</label>
+          <div class="form-group col-6">
+            <label class="text-left" for="walletName">Name</label>
             <input type="text" class="form-control form-control-success" formControlName="walletName" id="walletName" placeholder="Enter a wallet name.">
-            <div *ngIf="formErrors.walletName" class="form-control-feedback mt-2">{{ formErrors.walletName }}</div>
           </div>
-          <div class="form-group">
-            <label class="col-12 row" for="creationDate">Earliest Possible Creation Date</label>
+          <div class="form-group col-6">
+            <label class="text-left" for="creationDate">Earliest Possible Creation Date</label>
             <input type="text" class="form-control" bsDatepicker formControlName="walletDate" placeholder="Select the date your wallet was created." [bsConfig]="bsConfig" [maxDate]="maxDate"/>
-            <div *ngIf="formErrors.walletDate" class="form-control-feedback mt-2">{{ formErrors.walletDate }}</div>
+            <div *ngIf="formErrors.walletDate" class="text-danger mt-2">{{ formErrors.walletDate }}</div>
           </div>
-          <div class="form-group">
-            <label class="col-12 row" for="walletMnemonic">Secret Words</label>
+          <div class="col-12 mb-2">
+            <div *ngIf="formErrors.walletName" class="text-danger mt-2">{{ formErrors.walletName }}</div>
+          </div>
+          <div class="form-group col-12">
+            <label class="text-left" for="walletMnemonic">Secret Words</label>
             <input type="text" class="form-control form-control-success" formControlName="walletMnemonic" id="walletName" placeholder="Enter your secret words.">
-            <div *ngIf="formErrors.walletMnemonic" class="form-control-feedback mt-2">{{ formErrors.walletMnemonic }}</div>
+            <div *ngIf="formErrors.walletMnemonic" class="text-danger mt-2">{{ formErrors.walletMnemonic }}</div>
           </div>
-          <div class="form-group">
+          <div class="form-group col-6">
             <label class="text-left" for="walletPassword">Password</label>
             <input type="password" class="form-control form-control-success" formControlName="walletPassword" id="walletPassword" placeholder="Enter a password.">
-            <div *ngIf="formErrors.walletPassword" class="form-control-feedback mt-2">{{ formErrors.walletPassword }}</div>
+            <div *ngIf="formErrors.walletPassword" class="text-danger mt-2">{{ formErrors.walletPassword }}</div>
           </div>
-          <div class="form-group">
+          <div class="form-group col-6">
             <label class="text-left" for="walletNetwork">Network</label>
             <select class="form-control custom-select" name="network" formControlName="selectNetwork">
               <!--<option value="main">Main</option>-->

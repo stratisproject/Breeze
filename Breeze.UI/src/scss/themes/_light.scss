@@ -1,0 +1,169 @@
+// custom variables (it will overwrite the basic variables)
+
+
+/////////////////////////////
+//
+//    VARIABLES
+//
+/////////////////////////////
+
+// buttons
+$btn-primary-color: $white !important;
+//
+.btn-primary {
+  @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
+}
+
+
+/////////////////////////////
+//
+//    CUSTOM
+//
+/////////////////////////////
+.btn-lg {font-size:1em;}
+.btn-primary {
+    background-color: transparent;
+    background-image: linear-gradient(90deg, #20B7C1 0%, #1387C8 100%) !important;
+    &:hover {
+      background-image: linear-gradient(-90deg, #20B7C1 0%, #1387C8 100%) !important;
+      border-color: transparent !important;
+    }
+  }
+  .btn-secondary {
+    color: $gray !important;
+    &:hover {background-color: $white !important;}
+}
+
+// LOGIN / SETUP
+.login {
+  .text-danger {
+    background-color: rgba(255,255,255,.7);
+    padding: 0.25rem 1rem;
+    border-radius: 50px;
+    display: inline-block;
+    font-size: .7rem;
+  }
+}
+
+
+// NAVBAR
+#navbarBreeze {
+  .navbar-nav {
+    .nav-item {
+      .nav-link {
+        color: $gray;
+        font-size: .86rem;
+        &:hover {color: lighten($brand-primary,20%);}
+        &.is-active {
+          border-bottom: 2px solid $brand-primary !important;
+          color: $brand-primary !important;
+        }
+      }
+    }
+  }
+}
+
+
+#content {
+  &.bitcoin {
+
+    // JUMBOTRON
+    .jumbotron {
+      i {
+        color: $brand-primary;
+        font-size: 1.75em;
+        margin-right: .3em;
+      }
+    }
+
+    // TRANSACTIONS
+    #transaction {
+      .muted {opacity: .5;}
+      h5 {
+        font-size: .85em;
+        color: $gray;
+      }
+      a {color: $link-color;}
+      // Cards
+      .card {
+        border: $card-border-width solid $teal;
+        color: #7385A0 !important;
+        font-size: .85em !important;
+        .amount {
+          color: $black;
+          font-weight: 600;
+          small {
+            font-size: 70%;
+            margin-right: 1rem;
+          }
+        }
+        &:hover {
+          cursor: pointer;
+          text-decoration: none !important;
+          background: #F5FCFF;
+          border: 1px solid #BCE8FE;
+          box-shadow: 4px 2px 11px 0 rgba(80,96,120,0.10);
+        }
+        li {
+          line-height: 2.5em;
+          &.transactionDate {color: $gray-light;}
+        }
+      }
+    }
+
+    // Tumblebit
+    #Tumblebit {
+      i {
+        font-size: 6.5rem;
+        &.OFF {
+          -webkit-text-fill-color: $gray-lighter !important;
+          fill: $gray-lighter !important;
+        }
+        &.ON {
+          -webkit-text-fill-color: $brand-primary !important;
+          fill: $brand-primary !important;
+        }
+      }
+      .help {
+        color: $gray;
+        font-size: .9em;
+        font-style: italic;
+        line-height: 1.3em;
+        font-weight: 200;
+      }
+      button {.icon-circle-down {color: rgba($gray,.5);}}
+      .dropdown-toggle {
+        // Generate the caret automatically
+        &::after {
+          content: none !important;
+        }
+      }
+    }
+
+  }
+}
+
+// MODAL
+.modal-header {
+  .bubble {
+    i {color: $brand-primary;}
+  }
+}
+.modal-dialog {
+  .badge {margin: 1em 0;}
+}
+#modalDetail {
+  a {
+    color: $link-color;
+    text-decoration: underline;
+    &:hover {color: lighten($link-color ,10%); text-decoration: none;}
+  }
+}
+#modalSend, #modalReceive {
+  .float-right {a {color: $link-color !important; text-decoration: underline; &:hover {text-decoration: none;}}}
+}
+#modalCheck {
+  .btn-link, .card {
+    a {color: $link-color !important;}
+  }
+}

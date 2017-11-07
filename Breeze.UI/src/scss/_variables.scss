@@ -93,13 +93,14 @@
 
 // Start with assigning color names to specific hex values.
 $white:  #fff !default;
-$black:  #444 !default;
+$black:  #2E475C !default;
 $red:    #d9534f !default;
-$orange: #f69d32 !default;
+$orange: #F69D32 !default;
 $yellow: #D1C312 !default;
 $green:  #2ECCA9 !default;
-$blue:   #7385A0 !default;
-$teal:   #DBDBDB !default;
+$blue:   #189BC5 !default;
+$blue-link: #148DC7 !default;
+$teal:   #D7E0ED !default;
 $pink:   #FF5B8A !default;
 $purple: #613d7c !default;
 $spacegray: #99A4B4 !default;
@@ -108,12 +109,12 @@ $darkgray: #1B354B !default;
 // Create grayscale
 $gray-dark:                 #878685 !default;
 $gray:                      #98A3B3 !default;
-$gray-light:                #DDDCDC !default;
-$gray-lighter:              #F3F3F3 !default;
-$gray-lightest:             #f7f7f9 !default;
+$gray-light:                #BAC4D1 !default;
+$gray-lighter:              #DCE8F1 !default;
+$gray-lightest:             #F5F9FC !default;
 
 // Reassign color vars to semantic color scheme
-$brand-primary:             $orange !default;
+$brand-primary:             $blue !default;
 $brand-success:             $green !default;
 $brand-info:                $teal !default;
 $brand-warning:             $yellow !default;
@@ -183,7 +184,7 @@ $sizes: (
 //
 // Settings for the `<body>` element.
 
-$body-bg:       $white !default;
+$body-bg:       #F3F6F8 !default;
 $body-color:    $gray-dark !default;
 $inverse-bg:    $gray-dark !default;
 $inverse-color: $gray-lighter !default;
@@ -193,7 +194,7 @@ $inverse-color: $gray-lighter !default;
 //
 // Style anchor elements.
 
-$link-color:            $brand-primary !default;
+$link-color:            $blue-link !default;
 $link-decoration:       none !default;
 $link-hover-color:      darken($link-color, 15%) !default;
 $link-hover-decoration: underline !default;
@@ -339,7 +340,7 @@ $transition-collapse:    height .35s ease !default;
 //
 // Customizes the `.table` component with basic values, each used across all table variations.
 
-$table-cell-padding:            .5rem .75rem !default;
+$table-cell-padding:            .75rem !default;
 $table-sm-cell-padding:         .3rem !default;
 
 $table-bg:                      transparent !default;
@@ -374,9 +375,9 @@ $btn-primary-color:              $white !default;
 $btn-primary-bg:                 $brand-primary !default;
 $btn-primary-border:             $btn-primary-bg !default;
 
-$btn-secondary-color:            $gray-dark !default;
+$btn-secondary-color:            $gray !default;
 $btn-secondary-bg:               $white !default;
-$btn-secondary-border:           $gray-light !default;
+$btn-secondary-border:           $teal !default;
 
 $btn-info-color:                 $white !default;
 $btn-info-bg:                    $brand-info !default;
@@ -686,8 +687,8 @@ $pagination-disabled-border:           #ddd !default;
 
 // Jumbotron
 
-$jumbotron-padding:              1.75rem !default;
-$jumbotron-bg:                   $gray-lighter !default;
+$jumbotron-padding:              3rem !default;
+$jumbotron-bg:                   transparent !default;
 
 
 // Form states and alerts
@@ -798,8 +799,8 @@ $badge-pill-border-radius:    10rem !default;
 // Padding applied to the modal body
 $modal-inner-padding:         3em !default;
 
-$modal-dialog-margin:         20px !default;
-$modal-dialog-sm-up-margin-y: 20px !default;
+$modal-dialog-margin:         15px !default;
+$modal-dialog-sm-up-margin-y: 15px !default;
 
 $modal-title-line-height:     $line-height-base !default;
 
@@ -953,7 +954,7 @@ $close-text-shadow:           0 1px 0 $white !default;
 
 // Code
 
-$code-font-size:              91% !default;
+$code-font-size:              90% !default;
 $code-padding-x:              .4rem !default;
 $code-padding-y:              .2rem !default;
 $code-color:                  #bd4147 !default;
