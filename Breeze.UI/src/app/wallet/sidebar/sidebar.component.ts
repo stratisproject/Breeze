@@ -3,7 +3,11 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confirmation.component';
 import { Router } from '@angular/router';
 
+import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
+import { ModalService } from '../../shared/services/modal.service';
+
+import { WalletInfo } from '../../shared/classes/wallet-info';
 
 @Component({
   selector: 'sidebar',
@@ -12,7 +16,7 @@ import { GlobalService } from '../../shared/services/global.service';
 })
 export class SidebarComponent implements OnInit {
 
-  constructor(private globalService: GlobalService, private router: Router, private modalService: NgbModal) { }
+  constructor(private globalService: GlobalService, private apiService: ApiService, private router: Router, private modalService: NgbModal, private genericModalService: ModalService) { }
   public bitcoinActive: boolean;
   public stratisActive: boolean;
 
@@ -27,18 +31,32 @@ export class SidebarComponent implements OnInit {
   }
 
   public loadBitcoinWallet() {
+    let currentNetwork = this.globalService.getNetwork();
+    if (currentNetwork === "Main") {
+      this.globalService.setCoinName("Bitcoin");
+      this.globalService.setCoinUnit("BTC");
+    } else if (currentNetwork === "TestNet"){
+      this.globalService.setCoinName("TestBitcoin");
+      this.globalService.setCoinUnit("TBTC");
+    }
+
     this.bitcoinActive = true;
     this.stratisActive = false;
-    this.globalService.setCoinName("TestBitcoin");
-    this.globalService.setCoinUnit("TBTC");
     this.router.navigate(['/wallet']);
   }
 
   public loadStratisWallet() {
+    let currentNetwork = this.globalService.getNetwork();
+    if (currentNetwork === "Main") {
+      this.globalService.setCoinName("Stratis");
+      this.globalService.setCoinUnit("STRAT");
+    } else if (currentNetwork === "TestNet"){
+      this.globalService.setCoinName("TestStratis");
+      this.globalService.setCoinUnit("TSTRAT");
+    }
+
     this.bitcoinActive = false;
     this.stratisActive = true;
-    this.globalService.setCoinName("TestStratis");
-    this.globalService.setCoinUnit("TSTRAT");
     this.router.navigate(['/wallet/stratis-wallet']);
   }
 

@@ -6,10 +6,10 @@ export class GlobalService {
 
   private walletPath: string;
   private currentWalletName: string;
-  private coinType: number = 0;
-  private coinName: string = "TestBitcoin";
-  private coinUnit: string = "TBTC";
-  private network: string = "TestNet";
+  private coinType: number;
+  private coinName: string;
+  private coinUnit: string;
+  private network: string;
 
   getWalletPath() {
     return this.walletPath;
