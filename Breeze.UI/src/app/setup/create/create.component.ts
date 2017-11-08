@@ -108,7 +108,6 @@ export class CreateComponent implements OnInit {
         this.createWalletForm.get("walletName").value,
         this.mnemonic,
         this.createWalletForm.get("walletPassword").value,
-        this.createWalletForm.get("selectNetwork").value
       );
       this.createWallets(this.newWallet);
     }
