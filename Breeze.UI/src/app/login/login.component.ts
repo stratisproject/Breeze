@@ -7,6 +7,7 @@ import { ApiService } from '../shared/services/api.service';
 import { ModalService } from '../shared/services/modal.service';
 
 import { WalletLoad } from '../shared/classes/wallet-load';
+import { WalletInfo } from '../shared/classes/wallet-info';
 
 @Component({
   selector: 'app-login',
@@ -117,6 +118,7 @@ export class LoginComponent implements OnInit {
   private onDecryptClicked() {
     this.isDecrypting = true;
     this.globalService.setWalletName(this.openWalletForm.get("selectWallet").value);
+    this.getCurrentNetwork();
     let walletLoad = new WalletLoad(
       this.openWalletForm.get("selectWallet").value,
       this.openWalletForm.get("password").value
@@ -129,11 +131,7 @@ export class LoginComponent implements OnInit {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            // Set Bitcoin as the default wallet
-            this.globalService.setCoinName("TestBitcoin");
-            this.globalService.setCoinUnit("TBTC");
             this.globalService.setWalletName(walletLoad.name);
-            this.globalService.setCoinType(1);
           }
         },
         error => {
@@ -165,6 +163,39 @@ export class LoginComponent implements OnInit {
         },
         error => {
           this.isDecrypting = false;
+          if (error.status === 0) {
+            this.genericModalService.openModal(null, null);
+          } else if (error.status >= 400) {
+            if (!error.json().errors[0]) {
+              console.log(error);
+            }
+            else {
+              this.genericModalService.openModal(null, error.json().errors[0].message);
+            }
+          }
+        }
+      )
+    ;
+  }
+
+  private getCurrentNetwork() {
+    let walletInfo = new WalletInfo(this.globalService.getWalletName())
+    this.apiService.getGeneralInfoOnce(walletInfo)
+      .subscribe(
+        response => {
+          if (response.status >= 200 && response.status < 400) {
+            let responseMessage = response.json();
+            this.globalService.setNetwork(responseMessage.network);
+            if (responseMessage.network === "Main") {
+              this.globalService.setCoinName("Bitcoin");
+              this.globalService.setCoinUnit("BTC");
+            } else if (responseMessage.network === "TestNet") {
+              this.globalService.setCoinName("TestBitcoin");
+              this.globalService.setCoinUnit("TBTC");
+            }
+          }
+        },
+        error => {
           if (error.status === 0) {
             this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {

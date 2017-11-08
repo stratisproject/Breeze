@@ -57,7 +57,6 @@ export class ApiService {
         .map((response: Response) => response);
      }
 
-
      /**
       * Get a new mnemonic
       */
@@ -133,6 +132,18 @@ export class ApiService {
 
       return this.http
         .get(this.currentApiUrl + '/wallet/status')
+        .map((response: Response) => response);
+    }
+
+    /** 
+     * Get general wallet info from the API once.
+     */
+    getGeneralInfoOnce(data: WalletInfo): Observable<any> {
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('Name', data.walletName);
+
+      return this.http
+        .get(this.bitcoinApiUrl + '/wallet/general-info', new RequestOptions({headers: this.headers, search: params}))
         .map((response: Response) => response);
     }
 

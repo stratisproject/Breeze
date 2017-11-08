@@ -11,8 +11,10 @@ const url = require('url');
 const os = require('os');
 
 let serve;
+let testnet;
 const args = process.argv.slice(1);
 serve = args.some(val => val === "--serve");
+testnet = args.some(val => val === "--testnet");
 
 if (serve) {
   require('electron-reload')(__dirname, {
@@ -158,9 +160,16 @@ function startBitcoinApi() {
       apiPath = path.resolve(__dirname, 'assets\\daemon\\Stratis.BreezeD.exe');
   }
 
-  bitcoinProcess = spawnBitcoin(apiPath, ['-testnet'], {
+  if(!testnet) {
+    bitcoinProcess = spawnBitcoin(apiPath, {
       detached: true
-  });
+    });
+  } else if (testnet) {
+    bitcoinProcess = spawnBitcoin(apiPath, ['-testnet'], {
+      detached: true
+    });
+  }
+  
 
   bitcoinProcess.stdout.on('data', (data) => {
     writeLog(`Bitcoin: ${data}`);
@@ -177,9 +186,16 @@ function startStratisApi() {
       apiPath = path.resolve(__dirname, 'assets\\daemon\\Stratis.BreezeD.exe');
   }
 
-  stratisProcess = spawnStratis(apiPath, ['stratis', '-testnet'], {
+  if (!testnet) {
+    stratisProcess = spawnStratis(apiPath, ['stratis'], {
       detached: true
-  });
+    });
+  } else if (testnet) {
+    stratisProcess = spawnStratis(apiPath, ['stratis', '-testnet'], {
+      detached: true
+    });
+  }
+  
 
   stratisProcess.stdout.on('data', (data) => {
     writeLog(`Stratis: ${data}`);
