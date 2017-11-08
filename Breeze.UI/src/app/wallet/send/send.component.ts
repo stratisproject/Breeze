@@ -131,7 +131,7 @@ export class SendComponent implements OnInit {
       this.globalService.getWalletName(),
       "account 0",
       this.sendForm.get("password").value,
-      this.sendForm.get("address").value,
+      this.sendForm.get("address").value.trim(),
       this.sendForm.get("amount").value,
       this.sendForm.get("fee").value,
       true
