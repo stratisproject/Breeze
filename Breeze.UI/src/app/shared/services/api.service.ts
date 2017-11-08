@@ -14,6 +14,7 @@ import { WalletRecovery } from '../classes/wallet-recovery';
 import { WalletLoad } from '../classes/wallet-load';
 import { WalletInfo } from '../classes/wallet-info';
 import { Mnemonic } from '../classes/mnemonic';
+import { FeeEstimation } from '../classes/fee-estimation';
 import { TransactionBuilding } from '../classes/transaction-building';
 import { TransactionSending } from '../classes/transaction-sending';
 
@@ -224,6 +225,17 @@ export class ApiService {
 
       return this.http
         .get(this.currentApiUrl + '/wallet/address', new RequestOptions({headers: this.headers, search: params}))
+        .map((response: Response) => response);
+    }
+
+    /**
+     * Estimate the fee of a transaction
+     */
+    estimateFee(data: FeeEstimation): Observable<any> {
+      this.getCurrentCoin();
+      
+      return this.http
+        .post(this.currentApiUrl + '/wallet/estimate-txfee/', JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
 
