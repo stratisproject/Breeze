@@ -54,8 +54,14 @@
       <div class="row d-flex justify-content-center">
         <a><button type="button" class="btn btn-link col-12" (click)="activeModal.close('Close click')">Cancel</button></a>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" *ngIf="!isSending">
         <button type="submit" class="btn btn-lg btn-primary" [disabled]="!sendForm.valid || isSending" (click)="send()">Send</button>
+      </div>
+      <div class="modal-footer" *ngIf="isSending">
+        <div class="spinner">
+          <div class="double-bounce1"></div>
+          <div class="double-bounce2"></div>
+        </div>
       </div>
     </div>
   </div>

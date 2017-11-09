@@ -35,8 +35,14 @@
         </form>
       </div>
       <!-- /row-->
-      <div class="row d-flex justify-content-center">
+      <div class="row d-flex justify-content-center" *ngIf="!isRecovering">
         <button type="button" class="btn btn-darkgray btn-lg" [disabled]="!recoverWalletForm.valid || isRecovering" (click)="onRecoverClicked()">Recover</button>
+      </div>
+      <div class="row d-flex justify-content-center" *ngIf="isRecovering">
+        <div class="spinner">
+          <div class="double-bounce1"></div>
+          <div class="double-bounce2"></div>
+        </div>
       </div>
       <!-- /row-->
     </div>
