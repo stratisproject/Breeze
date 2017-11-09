@@ -47,6 +47,7 @@
             <input type="password" class="form-control form-control-success" formControlName="password" id="walletPassword" placeholder="Please enter your wallet password.">
             <div *ngIf="formErrors.password" class="form-control-feedback">{{formErrors.password}}</div>
           </div>
+          <div *ngIf="apiError" class="text-danger mt-2">{{ apiError }}</div>
         </form>
         <!-- /form-->
       </div>
