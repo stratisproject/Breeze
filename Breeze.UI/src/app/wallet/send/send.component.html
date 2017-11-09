@@ -35,19 +35,19 @@
                 </label>
               </div>
             <!-- /fee buttons -->
+          <div class="form-group clearfix">
+            <div *ngIf="estimatedFee">
+              <label>Estimated Fee: </label>
+              <label>{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
+            </div>
+          </div>
           </div>
           <div class="form-group clearfix">
             <label for="walletPassword">Wallet Password</label>
             <input type="password" class="form-control form-control-success" formControlName="password" id="walletPassword" placeholder="Please enter your wallet password.">
             <div *ngIf="formErrors.password" class="form-control-feedback">{{formErrors.password}}</div>
           </div>
-          <div class="form-group clearfix">
-            <button type="button" class="btn btn-link" (click)="buildTransaction()" [disabled]="!sendForm.valid">Estimate Fee</button>
-            <div *ngIf="estimatedFee">
-              <label>Estimated Fee: </label>
-              <label>{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
-            </div>
-          </div>
+          <div *ngIf="apiError" class="text-danger mt-2">{{ apiError }}</div>
         </form>
         <!-- /form-->
       </div>
