@@ -40,8 +40,14 @@
           </form>
         </div>
         <!-- /row-->
-        <div class="row d-flex justify-content-center">
+        <div class="row d-flex justify-content-center" *ngIf="!isDecrypting">
           <button type="submit" class="btn btn-darkgray btn-lg" [disabled]="!openWalletForm.valid || isDecrypting" (click)="onDecryptClicked()">Decrypt</button>
+        </div>
+        <div class="row d-flex justify-content-center" *ngIf="isDecrypting">
+          <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+          </div>
         </div>
       </div>
       <!-- /row-->
