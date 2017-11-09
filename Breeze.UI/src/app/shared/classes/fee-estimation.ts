@@ -9,10 +9,10 @@ export class FeeEstimation {
     }
     
     walletName: string;
-        accountName: string;
-        destinationAddress: string;
-        amount: string;
-        feeType: string;
-        allowUnconfirmed: boolean;
-    }
+    accountName: string;
+    destinationAddress: string;
+    amount: string;
+    feeType: string;
+    allowUnconfirmed: boolean;
+}
     

@@ -233,9 +233,17 @@ export class ApiService {
      */
     estimateFee(data: FeeEstimation): Observable<any> {
       this.getCurrentCoin();
+
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', data.walletName);
+      params.set('accountName', data.accountName);
+      params.set('destinationAddress', data.destinationAddress);
+      params.set('amount', data.amount);
+      params.set('feeType', data.feeType);
+      params.set('allowUnconfirmed', "true");
       
       return this.http
-        .post(this.currentApiUrl + '/wallet/estimate-txfee/', JSON.stringify(data), {headers: this.headers})
+        .get(this.currentApiUrl + '/wallet/estimate-txfee', new RequestOptions({headers: this.headers, search: params}))
         .map((response: Response) => response);
     }
 
@@ -246,7 +254,7 @@ export class ApiService {
       this.getCurrentCoin();
 
       return this.http
-        .post(this.currentApiUrl + '/wallet/build-transaction/', JSON.stringify(data), {headers: this.headers})
+        .post(this.currentApiUrl + '/wallet/build-transaction', JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
 
@@ -257,7 +265,7 @@ export class ApiService {
       this.getCurrentCoin();
 
       return this.http
-        .post(this.currentApiUrl + '/wallet/send-transaction/', JSON.stringify(data), {headers: this.headers})
+        .post(this.currentApiUrl + '/wallet/send-transaction', JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
 
