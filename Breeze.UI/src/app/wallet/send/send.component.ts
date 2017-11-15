@@ -169,7 +169,7 @@ export class SendComponent implements OnInit {
           }
         },
         () => {
-          this.estimatedFee = this.responseMessage.fee;
+          this.estimatedFee = this.responseMessage;
         }
       )
     ;
