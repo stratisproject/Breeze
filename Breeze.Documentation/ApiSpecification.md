@@ -173,13 +173,13 @@ http://localhost:37220/api/wallet/general-info?name=testwallet
 `mnemonic` (optional) - the user's mnemonic for the wallet.  
 ```
 {
-  "network": "main", // "main" or "testnet"
-  "password": "testpassword",
   "name": "testwallet",
-  "mnemonic": "gravity sock glove cage divert creek mountain connect small banana depend thunder" // optional
+  "password": "testpassword",
+  "mnemonic": "gravity sock glove cage divert creek mountain connect small banana depend thunder"
 }
 ```
 ### Responses
+Returns the mnemonic for the wallet. If there was no mnemonic defined as input then a newly generated word list will be returned.  
 ```
 {
   "mnemonic": "gravity sock glove cage divert creek mountain connect small banana depend thunder",
