@@ -3,9 +3,7 @@
 ## Request/Response
 
 RESPONSE: response code (`200` for all successful requests, `4xx`/`5xx` if error, see later)  
-
-HEADERS
-`Content-Type:application/json`  
+HEADERS: `Content-Type:application/json`  
 
 ## Errors
 
@@ -20,7 +18,7 @@ Depending on the circumstance the API will either return an error at the first e
   "errors": [
     {
       "status": 400,
-      "message": "No wallet file found at Wallets\\myFirstWallet.json",
+      "message": "No wallet file found at Wallets\\testwallet.json",
       "description": "System.ArgumentException: No wallet file found at..."
     }
   ]
@@ -91,14 +89,12 @@ POST /wallet/send-transaction - Attempts to send a transaction
 ## GET /wallet/mnemonic - Generate a mnemonic
 
 ### Query parameters
-`language`  (optional) - the language for the words in the mnemonic. Options are: English, French, Spanish, Japanese, ChineseSimplified and ChineseTraditional. The default is 'English'.
-
-`wordcount` (optional) - the number of words in the mnemonic. Options are: 12,15,18,21 or 24. the default is 12.
-
+`language`  (optional) - the language for the words in the mnemonic. Options are: English, French, Spanish, Japanese, ChineseSimplified and ChineseTraditional. The default is 'English'.  
+`wordcount` (optional) - the number of words in the mnemonic. Options are: 12,15,18,21 or 24. the default is 12.  
 ### Examples
 request
 ```
-http://localhost:5000/api/wallet/mnemonic?wordcount=15&language=French
+http://localhost:37220/api/wallet/mnemonic?wordcount=15&language=French
 ```
 response
 ```
@@ -107,7 +103,7 @@ response
 
 request
 ```
-http://localhost:5000/api/wallet/mnemonic?wordcount=12&language=english
+http://localhost:37220/api/wallet/mnemonic?wordcount=12&language=english
 ```
 response
 ```
@@ -124,14 +120,14 @@ response
 
 #### Request
 ```
-http://localhost:37220/api/wallet/general-info?name=TestWallet
+http://localhost:37220/api/wallet/general-info?name=testwallet
 ```
 
 #### Response
 ```
 {
   "walletFilePath":null,
-  "network":"TestNet", //"main", "testnet", "stratismain", "stratistest"
+  "network":"testnet", //"main", "testnet", "stratismain", "stratistest"
   "creationTime":"1511169493",
   "isDecrypted":true,
   "lastBlockSyncedHeight":1231116,
@@ -145,7 +141,7 @@ http://localhost:37220/api/wallet/general-info?name=TestWallet
 ### Parameters
 ```
 {
-  "password": "password"  
+  "password": "testpassword"  
 }
 ```
 ### Responses
@@ -172,11 +168,14 @@ http://localhost:37220/api/wallet/general-info?name=TestWallet
 
 ## POST /wallet/create - Creates the wallet
 ### Parameters
+`name` - case-sensitive name of the wallet to be created.  
+`password` - password for the wallet to be created.  
+`mnemonic` (optional) - the user's mnemonic for the wallet.  
 ```
 {
   "network": "main", // "main" or "testnet"
-  "password": "password",
-  "name": "wallet-btc",
+  "password": "testpassword",
+  "name": "testwallet",
   "mnemonic": "gravity sock glove cage divert creek mountain connect small banana depend thunder" // optional
 }
 ```
@@ -190,9 +189,9 @@ http://localhost:37220/api/wallet/general-info?name=TestWallet
 ### Parameters
 ```
 { 
-	"password": "123456",
 	"folderPath": "Wallets", // optional, if the folder path is not the default one
-	"name": "myWallet"
+	"name": "testwallet",
+	"password": "testpassword"	
 }
 ```
 
@@ -205,11 +204,11 @@ http://localhost:37220/api/wallet/general-info?name=TestWallet
 ### Parameters
 ```
 {
-  "network": "main", // "main" or "testnet"
-  "password": "password",  
-  "mnemonic": "foo bar buz",
-  "name": "testwallet-recovered",
+  "network": "testnet", // "main" or "testnet"
   "folderPath": "Wallets", // optional, if the folder path is not the default one
+  "name": "testwallet-recovered",
+  "password": "testpassword",  
+  "mnemonic": "gravity sock glove cage divert creek mountain connect small banana depend thunder",
   "creationTime": "2017-02-25 16:20:33" // date from which to start looking for transactions
 }
 ```
@@ -227,9 +226,9 @@ This endpoint will get the first account containing no transaction or will creat
 ### Parameters
 ```
 {
-    "walletName": "myFirstWallet",    
-    "password": "123456",
-    "coinType": 105
+    "walletName": "testwallet",    
+    "password": "testpassword",
+    "coinType": 105 // 0 - Bitcoin, 105 - Stratis
 }
 ```
 ### Responses
@@ -241,11 +240,9 @@ This endpoint will get the first account containing no transaction or will creat
 
 This endpoint will get the last address containing no transaction or will create a new address.
 ### Query parameters
-`walletName` (required) - the name of the wallet in which this address is contained.
-
-`coinType` (required) - the type of coin for which to get the address, e.g 0 for bitcoin, 105 for stratis.
-
-`accountName` (required) - the name of the account in which this address is contained.
+`walletName` (required) - the name of the wallet in which this address is contained.  
+`coinType` (required) - the type of coin for which to get the address, e.g 0 for bitcoin, 105 for stratis.  
+`accountName` (required) - the name of the account in which this address is contained.  
 ### Responses
 ```
   "1HDypWxXWZC5KXK259EHMnrWaa2youy7Mj"
@@ -270,10 +267,8 @@ This endpoint will get the last address containing no transaction or will create
 
 ## GET /wallet/history - Displays the history of the specified wallet account
 ### Query parameters
-`walletName` (required) - the name of the wallet.
-
-`coinType` (required) - the type of coin, e.g 0 for bitcoin, 105 for stratis.
-
+`walletName` (required) - the name of the wallet.  
+`coinType` (required) - the type of coin, e.g 0 for bitcoin, 105 for stratis.  
 ### Responses
 ```
 {
@@ -306,10 +301,8 @@ This endpoint will get the last address containing no transaction or will create
 
 ## GET /wallet/balance - Displays the balances of the specified wallet account
 ### Query parameters
-`walletName` (required) - the name of the wallet.
-
-`coinType` (required) - the type of coin, e.g 0 for bitcoin, 105 for stratis.
-
+`walletName` (required) - the name of the wallet.  
+`coinType` (required) - the type of coin, e.g 0 for bitcoin, 105 for stratis.  
 ### Responses
 ```
 {
