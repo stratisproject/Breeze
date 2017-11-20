@@ -10,10 +10,6 @@ code {color: $spacegray !important;}
 .form-control:-moz-placeholder { color: $input-color-placeholder; }  /* Mozilla Firefox 4 to 18 */
 .form-control:-ms-input-placeholder { color: $input-color-placeholder; }  /* Internet Explorer 10-11 */
 
-// badge default
-.badge {
-  &.badge-default {color: $gray;}
-}
 // feedback
 .form-control-feedback {
   color: $pink;
