@@ -3,9 +3,7 @@
 ## Request/Response
 
 RESPONSE: response code (`200` for all successful requests, `4xx`/`5xx` if error, see later)  
-
-HEADERS
-`Content-Type:application/json`  
+HEADERS: `Content-Type:application/json`  
 
 ## Errors
 
@@ -20,7 +18,7 @@ Depending on the circumstance the API will either return an error at the first e
   "errors": [
     {
       "status": 400,
-      "message": "No wallet file found at Wallets\\myFirstWallet.json",
+      "message": "No wallet file found at Wallets\\testwallet.json",
       "description": "System.ArgumentException: No wallet file found at..."
     }
   ]
@@ -55,7 +53,7 @@ This error message comes at all request if the wallet is not loaded yet, except
 
 ```
 GET /wallet/general-info - Displays general information on the wallet
-GET /wallet/sensitive - Displays sensitive information on the wallet
+GET /wallet/extpubkey - Displays the extpubkey of the specified account
 GET /wallet/status - Displays dynamic information on the wallet
 POST /wallet/create - Creates the wallet
 POST /wallet/load - Loads the wallet and starts syncing
@@ -91,14 +89,12 @@ POST /wallet/send-transaction - Attempts to send a transaction
 ## GET /wallet/mnemonic - Generate a mnemonic
 
 ### Query parameters
-`language`  (optional) - the language for the words in the mnemonic. Options are: English, French, Spanish, Japanese, ChineseSimplified and ChineseTraditional. The default is 'English'.
-
-`wordcount` (optional) - the number of words in the mnemonic. Options are: 12,15,18,21 or 24. the default is 12.
-
+`language`  (optional) - the language for the words in the mnemonic. Options are: English, French, Spanish, Japanese, ChineseSimplified and ChineseTraditional. The default is 'English'.  
+`wordcount` (optional) - the number of words in the mnemonic. Options are: 12,15,18,21 or 24. the default is 12.  
 ### Examples
 request
 ```
-http://localhost:5000/api/wallet/mnemonic?wordcount=15&language=French
+http://localhost:37220/api/wallet/mnemonic?wordcount=15&language=French
 ```
 response
 ```
@@ -107,7 +103,7 @@ response
 
 request
 ```
-http://localhost:5000/api/wallet/mnemonic?wordcount=12&language=english
+http://localhost:37220/api/wallet/mnemonic?wordcount=12&language=english
 ```
 response
 ```
@@ -118,33 +114,43 @@ response
 ## GET /wallet/general-info - Displays general information on the wallet
 
 ### Query parameters
+`name` (required) - the name of the wallet.
+
+### Examples
+
+#### Request
+```
+http://localhost:37220/api/wallet/general-info?name=testwallet
+```
+
+#### Response
+```
+{
+  "walletFilePath":null,
+  "network":"testnet", //"main", "testnet", "stratismain", "stratistest"
+  "creationTime":"1511169493",
+  "isDecrypted":true,
+  "lastBlockSyncedHeight":1231116,
+  "chainTip":1231116,
+  "isChainSynced":true,
+  "connectedNodes":8
+}
+```
+
+## GET /wallet/extpubkey - Displays the extpubkey of the specified account
+### Query parameters
 `walletName` (required) - the name of the wallet.
 
-### Responses
+### Examples
+#### Request
 ```
-{
-   "walletFilePath":"path to the wallet file",
-   "network":"main", //"testnet", "stratismain", "stratistest"
-   "creationTime":"2017-03-21",
-   "isDecrypted":true,
-   "lastBlockHeight":123234,
-   "chainTip": 173721,         
-   "connectedNodes": 5
-}
+http://localhost:37220/api/wallet/extpubkey?walletName=testwallet&accountName=account%200
 ```
-## GET /wallet/sensitive - Displays sensitive information on the wallet
-### Parameters
+
+#### Response
+Returns the public key hash of the account.
 ```
-{
-  "password": "password"  
-}
-```
-### Responses
-```
-{
-  "extkey": "sadwqdpqoijedqcdoijsadoijsadisa",
-  "extpubkey": "dalkdsaklkjdlkjdsaljlkjdsalkjdsalk",
-}
+"tpubDDVB7J4oNpyWFUVp91UcQnxUVJExWPV5NecBFTzQVH6d3A9pcrYCvu8jGzCHVAzyD99Sk3g3kLYMx6MocpzmtusmDgpbx27Msc5iCKefMUm"
 ```
 ## GET /wallet/status - Displays dynamic information on the wallet
 ### Responses
@@ -163,15 +169,18 @@ response
 
 ## POST /wallet/create - Creates the wallet
 ### Parameters
+`name` - case-sensitive name of the wallet to be created.  
+`password` - password for the wallet to be created.  
+`mnemonic` (optional) - the user's mnemonic for the wallet.  
 ```
 {
-  "network": "main", // "main" or "testnet"
-  "password": "password",
-  "name": "wallet-btc",
-  "mnemonic": "gravity sock glove cage divert creek mountain connect small banana depend thunder" // optional
+  "name": "testwallet",
+  "password": "testpassword",
+  "mnemonic": "gravity sock glove cage divert creek mountain connect small banana depend thunder"
 }
 ```
 ### Responses
+Returns the mnemonic for the wallet. If there was no mnemonic defined as input then a newly generated word list will be returned.  
 ```
 {
   "mnemonic": "gravity sock glove cage divert creek mountain connect small banana depend thunder",
@@ -181,9 +190,9 @@ response
 ### Parameters
 ```
 { 
-	"password": "123456",
 	"folderPath": "Wallets", // optional, if the folder path is not the default one
-	"name": "myWallet"
+	"name": "testwallet",
+	"password": "testpassword"	
 }
 ```
 
@@ -196,11 +205,11 @@ response
 ### Parameters
 ```
 {
-  "network": "main", // "main" or "testnet"
-  "password": "password",  
-  "mnemonic": "foo bar buz",
-  "name": "testwallet-recovered",
+  "network": "testnet", // "main" or "testnet"
   "folderPath": "Wallets", // optional, if the folder path is not the default one
+  "name": "testwallet-recovered",
+  "password": "testpassword",  
+  "mnemonic": "gravity sock glove cage divert creek mountain connect small banana depend thunder",
   "creationTime": "2017-02-25 16:20:33" // date from which to start looking for transactions
 }
 ```
@@ -218,9 +227,9 @@ This endpoint will get the first account containing no transaction or will creat
 ### Parameters
 ```
 {
-    "walletName": "myFirstWallet",    
-    "password": "123456",
-    "coinType": 105
+    "walletName": "testwallet",    
+    "password": "testpassword",
+    "coinType": 105 // 0 - Bitcoin, 105 - Stratis
 }
 ```
 ### Responses
@@ -232,11 +241,9 @@ This endpoint will get the first account containing no transaction or will creat
 
 This endpoint will get the last address containing no transaction or will create a new address.
 ### Query parameters
-`walletName` (required) - the name of the wallet in which this address is contained.
-
-`coinType` (required) - the type of coin for which to get the address, e.g 0 for bitcoin, 105 for stratis.
-
-`accountName` (required) - the name of the account in which this address is contained.
+`walletName` (required) - the name of the wallet in which this address is contained.  
+`coinType` (required) - the type of coin for which to get the address, e.g 0 for bitcoin, 105 for stratis.  
+`accountName` (required) - the name of the account in which this address is contained.  
 ### Responses
 ```
   "1HDypWxXWZC5KXK259EHMnrWaa2youy7Mj"
@@ -261,10 +268,8 @@ This endpoint will get the last address containing no transaction or will create
 
 ## GET /wallet/history - Displays the history of the specified wallet account
 ### Query parameters
-`walletName` (required) - the name of the wallet.
-
-`coinType` (required) - the type of coin, e.g 0 for bitcoin, 105 for stratis.
-
+`walletName` (required) - the name of the wallet.  
+`coinType` (required) - the type of coin, e.g 0 for bitcoin, 105 for stratis.  
 ### Responses
 ```
 {
@@ -297,11 +302,15 @@ This endpoint will get the last address containing no transaction or will create
 
 ## GET /wallet/balance - Displays the balances of the specified wallet account
 ### Query parameters
-`walletName` (required) - the name of the wallet.
+`walletName` (required) - the name of the wallet.  
+`coinType` (required) - the type of coin, e.g 0 for bitcoin, 105 for stratis.  
 
-`coinType` (required) - the type of coin, e.g 0 for bitcoin, 105 for stratis.
-
-### Responses
+### Examples
+#### Request
+```
+http://localhost:37220/api/wallet/balance?walletName=testwallet
+```
+#### Response
 ```
 {
   "balances": [
@@ -322,7 +331,7 @@ Unconfirmed balance is the difference of unconfirmed incoming and outgoing trans
 ### Parameters
 ```
 {
-  "walletName": "myFirstWallet",    
+  "walletName": "testwallet",    
   "accountName": "account 0",      
   "coinType": 0,
   "password": "password",
