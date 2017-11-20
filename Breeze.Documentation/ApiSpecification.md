@@ -144,7 +144,7 @@ http://localhost:37220/api/wallet/general-info?name=testwallet
 ### Examples
 #### Request
 ```
-http://localhost:37220/api/wallet/extpubkey?walletName=testwallet&accountName=account0
+http://localhost:37220/api/wallet/extpubkey?walletName=testwallet&accountName=account%200
 ```
 
 #### Response
