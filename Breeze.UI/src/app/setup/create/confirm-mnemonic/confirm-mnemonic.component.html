@@ -1,0 +1,47 @@
+<section id="breeze">
+    <div class="login d-flex align-items-center text-center">
+      <div class="container">
+        <p class="textback text-left mb-5 col-11 mx-auto">
+          <a (click)="onBackClicked()">
+            <span class="ico-arrow-left2"></span>
+          </a>
+        </p>
+        <h3 class="display-5">Confirm secret words</h3>
+        <p class="lead">Please enter the corresponding secret words below.</p>
+        <!-- /row-->
+        <div class="row d-flex justify-content-center">
+          <form class="col-6 mx-auto text-left" [formGroup]="mnemonicForm">
+            <div class="form-group">
+              <label class="col-12 row" for="word1">Word n°4</label>
+              <input type="text" class="form-control" formControlName="word1" id="word1">
+              <div *ngIf="formErrors.word1" class="text-danger mt-2">{{ formErrors.word1 }}</div>
+            </div>
+            <div class="form-group">
+              <label class="col-12 row" for="word2">Word n°8</label>
+              <input type="text" class="form-control" formControlName="word2" id="word2">
+              <div *ngIf="formErrors.word2" class="text-danger mt-2">{{ formErrors.word2 }}</div>
+            </div>
+            <div class="form-group">
+              <label class="col-12 row" for="word3">Word n°12</label>
+              <input type="text" class="form-control" formControlName="word3" id="word3">
+              <div *ngIf="formErrors.word3" class="text-danger mt-2">{{ formErrors.word3 }}</div>
+            </div>
+            <div *ngIf="matchError" class="text-danger mt-2">{{ matchError }}</div>
+          </form>
+        </div>
+        <div class="row d-flex justify-content-center" *ngIf="!isCreating">
+          <button type="button" class="btn btn-darkgray btn-lg" [disabled]="!mnemonicForm.valid || isCreating" (click)="onConfirmClicked()">Confirm</button>
+        </div>
+        <div class="row d-flex justify-content-center" *ngIf="isCreating">
+            <div class="spinner">
+              <div class="double-bounce1"></div>
+              <div class="double-bounce2"></div>
+            </div>
+          </div>
+        <!-- /row-->
+      </div>
+      <!-- /container-->
+    </div>
+    <!-- /login-->
+  </section>
+  <!-- /breeze-->

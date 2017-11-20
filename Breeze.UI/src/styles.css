@@ -31,10 +31,6 @@ code {
 }
 
 /* Internet Explorer 10-11 */
-.badge.badge-default {
-  color: #98A3B3;
-}
-
 .form-control-feedback {
   color: #FF5B8A;
   margin: .5em 0;
@@ -5319,11 +5315,11 @@ a.badge:focus, a.badge:hover {
 }
 
 .badge-default {
-  background-color: rgba(152, 163, 179, 0.15);
+  background-color: #fff;
 }
 
 .badge-default[href]:focus, .badge-default[href]:hover {
-  background-color: rgba(123, 137, 157, 0.15);
+  background-color: #e6e6e6;
 }
 
 .badge-primary {
@@ -9943,6 +9939,11 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 
 #modalCheck .btn-link a, #modalCheck .card a {
   color: #148DC7 !important;
+}
+
+.badge.badge-default {
+  color: #98A3B3;
+  background-color: #fff !important;
 }
 
 /*# sourceMappingURL=styles.css.map */

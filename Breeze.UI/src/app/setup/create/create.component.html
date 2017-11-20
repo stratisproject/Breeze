@@ -31,14 +31,8 @@
         </form>
       </div>
       <!-- /row-->
-      <div class="row d-flex justify-content-center" *ngIf="!isCreating">
-        <button type="button" class="btn btn-darkgray btn-lg" [disabled]="!createWalletForm.valid || isCreating" (click)="onCreateClicked()">Create</button>
-      </div>
-      <div class="row d-flex justify-content-center" *ngIf="isCreating">
-        <div class="spinner">
-          <div class="double-bounce1"></div>
-          <div class="double-bounce2"></div>
-        </div>
+      <div class="row d-flex justify-content-center">
+        <button type="button" class="btn btn-darkgray btn-lg" [disabled]="!createWalletForm.valid" (click)="onContinueClicked()">Continue</button>
       </div>
       <!-- /row-->
     </div>

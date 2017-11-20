@@ -33,9 +33,9 @@ let mainWindow = null;
 function createWindow() {
   let applicationIcon
   if (serve) {
-    applicationIcon = nativeImage.createFromPath("./src/assets/images/breeze-logo.png")
+    applicationIcon = nativeImage.createFromPath("./src/assets/images/breeze-logo-tray.png")
   } else {
-    applicationIcon = nativeImage.createFromPath(path.join(__dirname + '/assets/images/breeze-logo.png'))
+    applicationIcon = nativeImage.createFromPath(path.join(__dirname + '/assets/images/breeze-logo-tray.png'))
   }
 
   // Create the browser window.
@@ -169,7 +169,7 @@ function startBitcoinApi() {
       detached: true
     });
   }
-  
+
 
   bitcoinProcess.stdout.on('data', (data) => {
     writeLog(`Bitcoin: ${data}`);
@@ -195,7 +195,7 @@ function startStratisApi() {
       detached: true
     });
   }
-  
+
 
   stratisProcess.stdout.on('data', (data) => {
     writeLog(`Stratis: ${data}`);
