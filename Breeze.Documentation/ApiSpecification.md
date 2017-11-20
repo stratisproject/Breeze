@@ -118,20 +118,29 @@ response
 ## GET /wallet/general-info - Displays general information on the wallet
 
 ### Query parameters
-`walletName` (required) - the name of the wallet.
+`name` (required) - the name of the wallet.
 
-### Responses
+### Examples
+
+#### Request
+```
+http://localhost:37220/api/wallet/general-info?name=TestWallet
+```
+
+#### Response
 ```
 {
-   "walletFilePath":"path to the wallet file",
-   "network":"main", //"testnet", "stratismain", "stratistest"
-   "creationTime":"2017-03-21",
-   "isDecrypted":true,
-   "lastBlockHeight":123234,
-   "chainTip": 173721,         
-   "connectedNodes": 5
+  "walletFilePath":null,
+  "network":"TestNet", //"main", "testnet", "stratismain", "stratistest"
+  "creationTime":"1511169493",
+  "isDecrypted":true,
+  "lastBlockSyncedHeight":1231116,
+  "chainTip":1231116,
+  "isChainSynced":true,
+  "connectedNodes":8
 }
 ```
+
 ## GET /wallet/sensitive - Displays sensitive information on the wallet
 ### Parameters
 ```
