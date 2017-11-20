@@ -25,7 +25,6 @@ export class CreateComponent implements OnInit {
   public createWalletForm: FormGroup;
   private newWallet: WalletCreation;
   private mnemonic: string;
-  public isCreating: boolean = false;
 
   ngOnInit() {
     this.getNewMnemonic();
@@ -101,15 +100,15 @@ export class CreateComponent implements OnInit {
     this.router.navigate(["/setup"]);
   }
 
-  public onCreateClicked() {
-    this.isCreating = true;
+  public onContinueClicked() {
     if (this.mnemonic) {
       this.newWallet = new WalletCreation(
         this.createWalletForm.get("walletName").value,
         this.mnemonic,
         this.createWalletForm.get("walletPassword").value,
       );
-      this.createWallets(this.newWallet);
+      this.router.navigate(['/setup/create/show-mnemonic'], { queryParams : { name: this.newWallet.name, mnemonic: this.newWallet.mnemonic, password: this.newWallet.password }});
+      //this.createWallets(this.newWallet);
     }
   }
 
@@ -123,63 +122,6 @@ export class CreateComponent implements OnInit {
           }
         },
         error => {
-          console.log(error);
-          if (error.status === 0) {
-            this.genericModalService.openModal(null, null);
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              this.genericModalService.openModal(null, error.json().errors[0].message);
-            }
-          }
-        }
-      )
-    ;
-  }
-
-  private createWallets(wallet: WalletCreation) {
-    this.apiService
-      .createBitcoinWallet(wallet)
-      .subscribe(
-        response => {
-          if (response.status >= 200 && response.status < 400){
-            // Bitcoin wallet created
-          }
-        },
-        error => {
-          console.log(error);
-          this.isCreating = false;
-          if (error.status === 0) {
-            this.genericModalService.openModal(null, null);
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              this.genericModalService.openModal(null, error.json().errors[0].message);
-            }
-          }
-        },
-        () => this.createStratisWallet(wallet)
-      )
-    ;
-  }
-
-  private createStratisWallet(wallet: WalletCreation) {
-    this.apiService
-      .createStratisWallet(wallet)
-      .subscribe(
-        response => {
-          if (response.status >= 200 && response.status < 400){
-            let walletBody = "Your wallet has been created.<br><br>Please write down your 12 word passphrase: <br>" + this.mnemonic + "<br><br>You can recover your wallet on any computer with:<br>- your passphrase<br>- your password<br>- In addition, knowing the approximate date at which you created your wallet will speed up recovery.<br><br>Unlike most other wallets if an attacker acquires your passphrase, he will not be able to hack your wallet without knowing your password. On the contrary, unlike other wallets, you will not be able to recover your wallet only with your passphrase if you lose your password.";
-            this.genericModalService.openModal("Wallet Info", walletBody);
-            this.router.navigate(['']);
-          }
-        },
-        error => {
-          this.isCreating = false;
           console.log(error);
           if (error.status === 0) {
             this.genericModalService.openModal(null, null);
