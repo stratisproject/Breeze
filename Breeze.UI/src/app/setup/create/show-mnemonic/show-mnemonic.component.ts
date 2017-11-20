@@ -40,8 +40,8 @@ export class ShowMnemonicComponent implements OnInit, OnDestroy {
     this.router.navigate(['/setup/create/confirm-mnemonic'], { queryParams : { name: this.newWallet.name, mnemonic: this.newWallet.mnemonic, password: this.newWallet.password }});
   }
 
-  public onBackClicked() {
-    this.router.navigate(['/setup/create']);
+  public onCancelClicked() {
+    this.router.navigate(['']);
   }
 
   ngOnDestroy() {
