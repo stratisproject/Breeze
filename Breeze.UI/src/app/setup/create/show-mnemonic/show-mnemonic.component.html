@@ -1,11 +1,6 @@
 <section id="breeze">
   <div class="login d-flex align-items-center text-center">
     <div class="container">
-      <p class="textback text-left col-11 mx-auto">
-        <a (click)="onBackClicked()">
-          <span class="ico-arrow-left2"></span>
-        </a>
-      </p>
       <h3 class="display-5">Secret words</h3>
       <p class="lead">Please write down your secret words and password. <br>You will need <strong>both</strong> to recover your wallet in the future.</p>
       <div class="row d-flex justify-content-center mt-4">
@@ -15,10 +10,11 @@
           </li>
         </ul>
       </div>
-      <div class="form-control-feedback text-center my-3">Write down your secret words and password before you continue</div>
+      <div class="form-control-feedback text-center mt-3 mb-5">Write down your secret words and password before you continue</div>
       <!-- /row-->
       <div class="row d-flex justify-content-center">
         <!-- <button type="button" class="btn btn-linkgray btn-lg col-12">Save the list somewhere</button> -->
+        <button type="button" class="btn btn-linkgray mr-4" (click)="onBackClicked()">Cancel</button>
         <button type="button" class="btn btn-darkgray btn-lg" (click)="onContinueClicked()">Continue</button>
       </div>
       <!-- /row-->
