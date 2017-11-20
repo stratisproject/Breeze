@@ -53,7 +53,7 @@ This error message comes at all request if the wallet is not loaded yet, except
 
 ```
 GET /wallet/general-info - Displays general information on the wallet
-GET /wallet/sensitive - Displays sensitive information on the wallet
+GET /wallet/extpubkey - Displays the extpubkey of the specified account
 GET /wallet/status - Displays dynamic information on the wallet
 POST /wallet/create - Creates the wallet
 POST /wallet/load - Loads the wallet and starts syncing
@@ -137,19 +137,20 @@ http://localhost:37220/api/wallet/general-info?name=testwallet
 }
 ```
 
-## GET /wallet/sensitive - Displays sensitive information on the wallet
-### Parameters
+## GET /wallet/extpubkey - Displays the extpubkey of the specified account
+### Query parameters
+`walletName` (required) - the name of the wallet.
+
+### Examples
+#### Request
 ```
-{
-  "password": "testpassword"  
-}
+http://localhost:37220/api/wallet/extpubkey?walletName=testwallet&accountName=account0
 ```
-### Responses
+
+#### Response
+Returns the public key hash of the account.
 ```
-{
-  "extkey": "sadwqdpqoijedqcdoijsadoijsadisa",
-  "extpubkey": "dalkdsaklkjdlkjdsaljlkjdsalkjdsalk",
-}
+"tpubDDVB7J4oNpyWFUVp91UcQnxUVJExWPV5NecBFTzQVH6d3A9pcrYCvu8jGzCHVAzyD99Sk3g3kLYMx6MocpzmtusmDgpbx27Msc5iCKefMUm"
 ```
 ## GET /wallet/status - Displays dynamic information on the wallet
 ### Responses
@@ -303,7 +304,13 @@ This endpoint will get the last address containing no transaction or will create
 ### Query parameters
 `walletName` (required) - the name of the wallet.  
 `coinType` (required) - the type of coin, e.g 0 for bitcoin, 105 for stratis.  
-### Responses
+
+### Examples
+#### Request
+```
+http://localhost:37220/api/wallet/balance?walletName=testwallet
+```
+#### Response
 ```
 {
   "balances": [
@@ -324,7 +331,7 @@ Unconfirmed balance is the difference of unconfirmed incoming and outgoing trans
 ### Parameters
 ```
 {
-  "walletName": "myFirstWallet",    
+  "walletName": "testwallet",    
   "accountName": "account 0",      
   "coinType": 0,
   "password": "password",
