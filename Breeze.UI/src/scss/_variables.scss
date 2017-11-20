@@ -774,7 +774,7 @@ $popover-arrow-outer-color:           fade-in($popover-border-color, .05) !defau
 
 // Badges
 
-$badge-default-bg:            rgba(152,163,179,.15) !default;
+$badge-default-bg:            $white !default;
 $badge-primary-bg:            $brand-primary !default;
 $badge-success-bg:            rgba(46,204,169,.2) !default;
 $badge-info-bg:               $brand-info !default;
