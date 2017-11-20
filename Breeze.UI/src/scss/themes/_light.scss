@@ -167,3 +167,11 @@ $btn-primary-color: $white !important;
     a {color: $link-color !important;}
   }
 }
+
+// SETUP
+.badge {
+  &.badge-default {
+    color: $gray;
+    background-color: $white !important;
+  }
+}
