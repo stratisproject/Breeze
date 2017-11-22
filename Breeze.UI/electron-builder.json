@@ -1,0 +1,22 @@
+{
+  "appId": "com.stratisplatform.breeze",
+  "productName": "Breeze Wallet",
+  "mac": {
+    "category": "com.stratisplatform.breeze"
+  },
+  "directories": {
+      "app": "dist",
+      "output": "app-builds"
+  },
+  "win": {
+      "icon": "dist/assets/images/breeze-logo",
+      "target": ["nsis"],
+      "asarUnpack": "assets/daemon/*"
+  },
+  "nsis": {
+    "oneClick": false
+  },
+  "msi": {
+    "warningsAsErrors": false
+  }
+}

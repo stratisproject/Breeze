@@ -157,7 +157,8 @@ function startBitcoinApi() {
   //Start Breeze Bitcoin Daemon
   let apiPath = path.resolve(__dirname, 'assets//daemon//Stratis.BreezeD');
   if (os.platform() === 'win32') {
-      apiPath = path.resolve(__dirname, 'assets\\daemon\\Stratis.BreezeD.exe');
+    apiPath = path.resolve(__dirname, 'assets\\daemon\\Stratis.BreezeD.exe');
+    //apiPath = path.resolve(__dirname, '..\\app.asar.unpacked\\assets\\daemon\\Stratis.BreezeD.exe');
   }
 
   if(!testnet) {
@@ -183,7 +184,8 @@ function startStratisApi() {
   //Start Breeze Stratis Daemon
   let apiPath = path.resolve(__dirname, 'assets//daemon//Stratis.BreezeD');
   if (os.platform() === 'win32') {
-      apiPath = path.resolve(__dirname, 'assets\\daemon\\Stratis.BreezeD.exe');
+    apiPath = path.resolve(__dirname, 'assets\\daemon\\Stratis.BreezeD.exe');
+    //apiPath = path.resolve(__dirname, '..\\app.asar.unpacked\\assets\\daemon\\Stratis.BreezeD.exe');
   }
 
   if (!testnet) {
