@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
 import { ModalService } from '../../shared/services/modal.service';
+import { CoinNotationPipe } from '../../shared/pipes/coin-notation.pipe';
 
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -112,7 +113,6 @@ export class SendComponent implements OnInit {
         response => {
           if (response.status >= 200 && response.status < 400){
             balanceResponse = response.json();
-            console.log(balanceResponse);
           }
         },
         error => {
@@ -131,7 +131,7 @@ export class SendComponent implements OnInit {
           }
         },
         () => {
-          this.sendForm.patchValue({amount: balanceResponse.maxSpendableAmount});
+          this.sendForm.patchValue({amount: +new CoinNotationPipe(this.globalService).transform(balanceResponse.maxSpendableAmount)});
           this.estimatedFee = balanceResponse.fee;
         }
       )
