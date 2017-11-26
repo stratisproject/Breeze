@@ -76,7 +76,8 @@ before_build:
      
       cd $env:APPVEYOR_BUILD_FOLDER/Breeze.UI
 
-      Install-Product node 6
+      Install-Product node 8
+      npm config set unsafe-perm=true
       npm install
       Write-Host "$env:log_prefix FINISHED restoring dotnet and npm packages" -foregroundcolor "magenta"
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
@@ -86,15 +87,21 @@ build_script:
       Write-Host "$env:log_prefix running 'dotnet publish'" -foregroundcolor "magenta"
       cd $env:APPVEYOR_BUILD_FOLDER/StratisBitcoinFullNode/Stratis.BreezeD
       dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\Breeze.UI\daemon\$env:win_runtime
+      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
       
       Write-Host "$env:log_prefix building Breeze" -foregroundcolor "magenta"
       cd $env:APPVEYOR_BUILD_FOLDER/Breeze.UI
       npm run build:prod
+      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
       
       Write-Host "$env:log_prefix packaging breeze" -foregroundcolor "magenta"
       npx electron-builder build --windows --$env:arch
-            
-      Write-Host "[$env:configuration][$env:win_runtime] FINISHED dotnet build" -foregroundcolor "magenta"
+      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }     
+      Write-Host "[$env:configuration][$env:win_runtime] FINISHED Breeze packaging" -foregroundcolor "magenta"
+      
+      dir
+      cd app-builds
+      dir      
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
     
 test_script:
@@ -108,7 +115,7 @@ test_script:
 
 # pushing all files in build directory recursively
 artifacts:
-- path: app-builds\*.exe
+- path: Breeze.UI\app-builds\*.exe
   name: Breeze app
   
 #----------------------------------#
