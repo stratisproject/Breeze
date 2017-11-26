@@ -10,13 +10,19 @@
   },
   "win": {
       "icon": "dist/assets/images/breeze-logo",
-      "target": ["nsis"],
-      "asarUnpack": "assets/daemon/*"
+      "target": ["nsis"]
   },
   "nsis": {
-    "oneClick": false
+    "oneClick": false,
+	"perMachine": true,
+	"allowToChangeInstallationDirectory": true,
+	"deleteAppDataOnUninstall": true,
+	"guid": "ed20df62-ff5a-4b83-a5e3-a361357c6e51",
+	"createDesktopShortcut": false,
+	"createStartMenuShortcut": true
   },
   "msi": {
     "warningsAsErrors": false
-  }
+  },
+  "extraResources": ["daemon/**/*"]
 }
