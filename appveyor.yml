@@ -53,13 +53,21 @@ install:
 - ps: |
       Write-Host "Installing dependencies" -foregroundcolor "magenta"
       
-      # Initialize dependencies
+      Write-Host "--> git submodule" -foregroundcolor "magenta"
       git submodule update --init --recursive
-      Install-Product node 8
+      
+      Write-Host "--> node 6" -foregroundcolor "magenta"
+      Install-Product node 6
+      
+      Write-Host "--> npm config" -foregroundcolor "magenta"
       npm config set unsafe-perm=true
       
+      Write-Host "--> npm install" -foregroundcolor "magenta"
       cd $env:APPVEYOR_BUILD_FOLDER/Breeze.UI
       npm install
+      
+      Write-Host "--> npm install npx" -foregroundcolor "magenta"
+      npm install -g npx
       
       Write-Host "$env:log_prefix FINISHED restoring dotnet and npm packages" -foregroundcolor "magenta"
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
