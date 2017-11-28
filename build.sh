@@ -6,7 +6,7 @@ set -o errexit
 # define a few variables
 node_output_name="Breeze-$os_platform-$arch"
 app_output_name="breeze-$TRAVIS_OS_NAME-$arch"
-app_output_zip_name="breeze-$TRAVIS_OS_NAME-$arch-$configuration.zip"
+app_output_zip_name="breeze-$TRAVIS_OS_NAME-$arch.zip"
 
 if [ "$TRAVIS_OS_NAME" = "osx" ]
 then
@@ -17,7 +17,6 @@ fi
 
 echo "current environment variables:"
 echo "OS name:" $TRAVIS_OS_NAME
-echo "OS:" $TRAVIS_OS_NAME
 echo "Platform:" $os_platform
 echo "Build directory:" $TRAVIS_BUILD_DIR
 echo "Node version:" $TRAVIS_NODE_VERSION
