@@ -43,8 +43,8 @@ environment:
 
 # build cache to preserve files/folders between builds
 cache:
-  - $env:APPVEYOR_BUILD_FOLDER/Breeze.UI/node_modules
-  - '%USERPROFILE%\.nuget\packages
+  - '%APPVEYOR_BUILD_FOLDER%/Breeze.UI/node_modules'
+  - '%USERPROFILE%\.nuget\packages'
   
 init:
 - ps: |
