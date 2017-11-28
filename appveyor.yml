@@ -49,6 +49,29 @@ init:
       $env:app_output_zip_name = "breeze-$env:win_runtime-$env:configuration.zip"
       if ($env:APPVEYOR_REPO_TAG -eq "false") { $env:APPVEYOR_REPO_TAG_NAME = "cd-unstable" }
 
+install:
+- ps: |
+      Write-Host "Installing dependencies" -foregroundcolor "magenta"
+      
+      Write-Host "--> git submodule" -foregroundcolor "magenta"
+      git submodule update --init --recursive
+      
+      Write-Host "--> node 6" -foregroundcolor "magenta"
+      Install-Product node 6
+      
+      Write-Host "--> npm config" -foregroundcolor "magenta"
+      npm config set unsafe-perm=true
+      
+      Write-Host "--> npm install" -foregroundcolor "magenta"
+      cd $env:APPVEYOR_BUILD_FOLDER/Breeze.UI
+      npm install
+      
+      Write-Host "--> npm install npx" -foregroundcolor "magenta"
+      npm install -g npx
+      
+      Write-Host "$env:log_prefix FINISHED restoring dotnet and npm packages" -foregroundcolor "magenta"
+      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
+    
 #---------------------------------#
 #       build configuration       #
 #---------------------------------#
@@ -69,17 +92,6 @@ before_build:
       Write-Host "Commit message: $env:APPVEYOR_REPO_COMMIT_MESSAGE" -foregroundcolor "magenta"
       Write-Host "*--------------------------------*" -foregroundcolor "magenta"
 
-      Write-Host "$env:log_prefix STARTED restoring dotnet and npm packages" -foregroundcolor "magenta"
-      
-      # Initialize dependencies
-      git submodule update --init --recursive
-     
-      cd $env:APPVEYOR_BUILD_FOLDER/Breeze.UI
-
-      Install-Product node 8
-      npm config set unsafe-perm=true
-      npm install
-      Write-Host "$env:log_prefix FINISHED restoring dotnet and npm packages" -foregroundcolor "magenta"
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
     
 build_script:
