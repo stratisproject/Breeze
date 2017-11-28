@@ -28,16 +28,10 @@ build:
 
 environment:
   matrix:
-  - win_runtime: win7-x64
+  - win_runtime: win-x64
     arch: x64
     plat: win32
-  - win_runtime: win7-x86
-    arch: ia32
-    plat: win32
-  - win_runtime: win10-x64
-    arch: x64
-    plat: win32
-  - win_runtime: win10-x86
+  - win_runtime: win-x86
     arch: ia32
     plat: win32
 
