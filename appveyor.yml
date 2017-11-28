@@ -43,7 +43,7 @@ environment:
 
 # build cache to preserve files/folders between builds
 cache:
-  - node_modules
+  - Breeze.UI/node_modules
   
 init:
 - ps: |
