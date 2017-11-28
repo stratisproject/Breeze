@@ -7,10 +7,8 @@ matrix:
     dist: trusty
     sudo: required
     dotnet: 2.0.0
-    env: os_identifier=ubuntu.14.04
   - os: osx # OSX 10.12
     osx_image: xcode9
-    env: os_identifier=osx.10.12
     before_install:
     - brew update
     - curl https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
