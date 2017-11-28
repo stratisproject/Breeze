@@ -32,7 +32,9 @@ env:
 
 cache:
   directories:
-  - Breeze.UI/node_modules
+  - ${TRAVIS_BUILD_DIR}/Breeze.UI/node_modules
+  - $HOME/.nuget/packages  
+  - /usr/share/dotnet/sdk/2.0.0/
   
 # Work around NuGet issue #2163
 # https://github.com/NuGet/Home/issues/2163
