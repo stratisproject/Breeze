@@ -80,5 +80,8 @@ zip -r $TRAVIS_BUILD_DIR/deploy/$app_output_zip_name $app_output_name/*
 #tests
 echo $log_prefix no tests to run
 
+cd $TRAVIS_BUILD_DIR
+ls
+
 echo $log_prefix FINISHED build
 

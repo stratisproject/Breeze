@@ -34,7 +34,7 @@ env:
 
 cache:
   directories:
-  - node_modules
+  - Breeze.UI/node_modules
   
 # Work around NuGet issue #2163
 # https://github.com/NuGet/Home/issues/2163
