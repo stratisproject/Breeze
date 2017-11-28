@@ -58,10 +58,10 @@ If you want the :sparkles: latest :sparkles: (unstable :bomb:) version of the Br
 |**OS X 10.12**| - | [download][12] |  continuous build - up to date with commits |
 
 
-[7]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-win7-x86-Release.zip
-[8]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-win7-x64-Release.zip
-[9]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-win10-x86-Release.zip
-[10]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-win10-x64-Release.zip
+[7]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze.Wallet.v0.3.0.setup.win7-x86.exe
+[8]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze.Wallet.v0.3.0.setup.win7-x64.exe
+[9]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze.Wallet.v0.3.0.setup.win10-x86.exe
+[10]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze.Wallet.v0.3.0.setup.win10-x64.exe
 [11]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-ubuntu.14.04-x64-Release.zip
 [12]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-osx.10.12-x64-Release.zip
 
