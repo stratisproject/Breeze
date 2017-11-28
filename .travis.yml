@@ -31,6 +31,10 @@ env:
   - arch=x64
   - configuration=Release  
   - os_platform=linux
+
+cache:
+  directories:
+  - node_modules
   
 # Work around NuGet issue #2163
 # https://github.com/NuGet/Home/issues/2163

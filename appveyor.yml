@@ -41,6 +41,10 @@ environment:
     arch: ia32
     plat: win32
 
+# build cache to preserve files/folders between builds
+cache:
+  - node_modules
+  
 init:
 - ps: |
       $env:log_prefix = "[$env:win_runtime][$env:configuration]"
