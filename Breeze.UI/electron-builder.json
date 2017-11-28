@@ -18,7 +18,7 @@
         "tar.gz"		
 	   ],
 	  "category": "Utility"
-  }
+  },
   "nsis": {
     "oneClick": false,
 	"perMachine": true,
