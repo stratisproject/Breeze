@@ -20,7 +20,7 @@
 	   ],
 	  "category": "Utility",
 	  "artifactName": "${productName}.v${version}.setup.${os}.${arch}.${ext}",
-	  "icon": "dist/assets/images/breeze-logo"
+	  "icon": "dist/assets/images/breeze-logo.icns"
   },
   "nsis": {
     "oneClick": false,
