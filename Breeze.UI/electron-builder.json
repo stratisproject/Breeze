@@ -28,7 +28,7 @@
 	"allowToChangeInstallationDirectory": true,
 	"deleteAppDataOnUninstall": true,
 	"guid": "ed20df62-ff5a-4b83-a5e3-a361357c6e51",
-	"createDesktopShortcut": false,
+	"createDesktopShortcut": true,
 	"createStartMenuShortcut": true
   },
   "msi": {
