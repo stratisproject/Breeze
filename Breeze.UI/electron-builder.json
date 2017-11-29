@@ -1,6 +1,7 @@
 {
   "appId": "com.stratisplatform.breeze",
   "productName": "Breeze Wallet",
+  "artifactName": "${productName}.v${version}.setup.${os}.${arch}.${ext}"
   "mac": {
     "category": "com.stratisplatform.breeze"
   },
@@ -26,9 +27,7 @@
 	"deleteAppDataOnUninstall": true,
 	"guid": "ed20df62-ff5a-4b83-a5e3-a361357c6e51",
 	"createDesktopShortcut": false,
-	"createStartMenuShortcut": true,
-	"artifactName": "${productName}.v${version}.setup.${env.win_runtime}.${ext}"
-	
+	"createStartMenuShortcut": true
   },
   "msi": {
     "warningsAsErrors": false
