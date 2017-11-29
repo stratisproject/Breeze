@@ -5,8 +5,8 @@ set -o errexit
 
 # define a few variables
 node_output_name="Breeze-$os_platform-$arch"
-app_output_name="breeze-$os_identifier-$arch"
-app_output_zip_name="breeze-$os_identifier-$arch-$configuration.zip"
+app_output_name="breeze-$TRAVIS_OS_NAME-$arch"
+app_output_zip_name="breeze-$TRAVIS_OS_NAME-$arch.zip"
 
 if [ "$TRAVIS_OS_NAME" = "osx" ]
 then
@@ -17,7 +17,6 @@ fi
 
 echo "current environment variables:"
 echo "OS name:" $TRAVIS_OS_NAME
-echo "OS identifier:" $os_identifier
 echo "Platform:" $os_platform
 echo "Build directory:" $TRAVIS_BUILD_DIR
 echo "Node version:" $TRAVIS_NODE_VERSION
@@ -48,7 +47,7 @@ echo $log_prefix FINISHED restoring dotnet and npm packages
 # dotnet publish
 echo $log_prefix running 'dotnet publish'
 cd $TRAVIS_BUILD_DIR/StratisBitcoinFullNode/Stratis.BreezeD
-dotnet publish -c $configuration -r $os_identifier-$arch -v m -o $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME
+dotnet publish -c $configuration -r $TRAVIS_OS_NAME-$arch -v m -o $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME
 
 echo $log_prefix chmoding the Stratis.BreezeD file
 chmod +x $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME/Stratis.BreezeD
@@ -79,6 +78,9 @@ zip -r $TRAVIS_BUILD_DIR/deploy/$app_output_zip_name $app_output_name/*
 
 #tests
 echo $log_prefix no tests to run
+
+cd $TRAVIS_BUILD_DIR
+ls
 
 echo $log_prefix FINISHED build
 

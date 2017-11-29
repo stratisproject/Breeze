@@ -12,6 +12,13 @@
       "icon": "dist/assets/images/breeze-logo",
       "target": ["nsis"]
   },
+  "linux": {
+      "target": [
+        "deb",
+        "tar.gz"		
+	   ],
+	  "category": "Utility"
+  },
   "nsis": {
     "oneClick": false,
 	"perMachine": true,
