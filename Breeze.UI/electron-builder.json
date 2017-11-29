@@ -1,7 +1,6 @@
 {
   "appId": "com.stratisplatform.breeze",
-  "productName": "Breeze Wallet",
-  "artifactName": "${productName}.v${version}.setup.${os}.${arch}.${ext}",
+  "productName": "Breeze Wallet",  
   "mac": {
     "category": "com.stratisplatform.breeze"
   },
@@ -11,14 +10,16 @@
   },
   "win": {
       "icon": "dist/assets/images/breeze-logo",
-      "target": ["nsis"]
+      "target": ["nsis"],
+	  "artifactName": "${productName}.v${version}.setup.${os}.${env.arch}.${ext}"
   },
   "linux": {
       "target": [
         "deb",
         "tar.gz"		
 	   ],
-	  "category": "Utility"
+	  "category": "Utility",
+	  "artifactName": "${productName}.v${version}.setup.${os}.${arch}.${ext}"
   },
   "nsis": {
     "oneClick": false,
