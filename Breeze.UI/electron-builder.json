@@ -19,7 +19,8 @@
         "tar.gz"		
 	   ],
 	  "category": "Utility",
-	  "artifactName": "${productName}.v${version}.setup.${os}.${arch}.${ext}"
+	  "artifactName": "${productName}.v${version}.setup.${os}.${arch}.${ext}",
+	  "icon": "dist/assets/images/breeze-logo"
   },
   "nsis": {
     "oneClick": false,
