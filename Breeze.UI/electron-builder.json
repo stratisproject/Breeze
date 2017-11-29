@@ -6,7 +6,7 @@
   },
   "directories": {
       "app": "dist",
-      "output": "app-builds"
+      "output": "app-builds",
       "buildResources": "dist/assets/images"
   },
   "win": {
