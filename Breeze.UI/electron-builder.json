@@ -1,7 +1,7 @@
 {
   "appId": "com.stratisplatform.breeze",
   "productName": "Breeze Wallet",
-  "artifactName": "${productName}.v${version}.setup.${os}.${arch}.${ext}"
+  "artifactName": "${productName}.v${version}.setup.${os}.${arch}.${ext}",
   "mac": {
     "category": "com.stratisplatform.breeze"
   },
