@@ -6,10 +6,11 @@
   },
   "directories": {
       "app": "dist",
-      "output": "app-builds"
+      "output": "app-builds",
+      "buildResources": "dist/assets/images"
   },
   "win": {
-      "icon": "dist/assets/images/breeze-logo",
+      "icon": "dist/assets/images",
       "target": ["nsis"],
 	  "artifactName": "${productName}.v${version}.setup.${os}.${env.arch}.${ext}"
   },
@@ -19,8 +20,7 @@
         "tar.gz"		
 	   ],
 	  "category": "Utility",
-	  "artifactName": "${productName}.v${version}.setup.${os}.${arch}.${ext}",
-	  "icon": "dist/assets/images/breeze-logo.icns"
+	  "artifactName": "${productName}.v${version}.setup.${os}.${arch}.${ext}"
   },
   "nsis": {
     "oneClick": false,
