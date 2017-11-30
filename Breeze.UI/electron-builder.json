@@ -11,7 +11,7 @@
       "target":[
          "nsis"
       ],
-      "artifactName":"${productName}.v${version}.setup.${os}.${env.arch}.${ext}"
+      "artifactName":"${productName}-v${version}-setup-${os}-${env.arch}.${ext}"
    },
    "linux":{
       "target":[
@@ -21,14 +21,14 @@
       "synopsis":"Breeze Wallet: Stratis' dual-currency full block light wallet with a strong focus on privacy.",
       "category":"Utility",
       "icon":"dist/assets/images/icons",
-      "artifactName":"${productName}_v${version}-${os}_${arch}.${ext}"
+      "artifactName":"${productName}-v${version}-${os}-${arch}.${ext}"
    },
    "mac":{
       "target":[
          "dmg"
       ],
       "category":"public.app-category.productivity",
-      "artifactName":"${productName}_v${version}_${os}${arch}.${ext}"
+      "artifactName":"${productName}-v${version}-${os}-${arch}.${ext}"
    },
    "nsis":{
       "oneClick":false,
