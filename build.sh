@@ -60,7 +60,13 @@ npm run build:prod
 
 # node packaging
 echo $log_prefix packaging breeze 
-npx electron-builder build --$TRAVIS_OS_NAME --$arch
+if [ "$TRAVIS_OS_NAME" = "osx" ]
+then
+  npx electron-builder build --mac --$arch
+else
+  npx electron-builder build --linux --$arch
+fi
+
 echo $log_prefix finished packaging
 
 #tests
