@@ -1,8 +1,6 @@
 {
   "appId": "com.stratisplatform.breeze",
   "productName": "Breeze Wallet",  
- 
-  },
   "directories": {
       "app": "dist",
       "output": "app-builds",
