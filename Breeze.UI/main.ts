@@ -158,11 +158,10 @@ function startBitcoinApi() {
   let apiPath = path.resolve(__dirname, 'assets//daemon//Stratis.BreezeD');
   if (os.platform() === 'win32') {
     apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\Stratis.BreezeD.exe');
-  } 
-  // else if(os.platform() === 'darwin') {
-	// apiPath = path.resolve(__dirname, '..//..//Content//resources//daemon//Stratis.BreezeD.exe');
-  // } else {
-	// apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD.exe');
+  } else if(os.platform() === 'linux') {
+	apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
+   } //else {
+	// apiPath = path.resolve(__dirname, '..//..//Content//resources//daemon//Stratis.BreezeD');
   // }
 
 
@@ -190,11 +189,10 @@ function startStratisApi() {
   let apiPath = path.resolve(__dirname, 'assets//daemon//Stratis.BreezeD');
   if (os.platform() === 'win32') {
     apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\Stratis.BreezeD.exe');
-  } 
-  // else if(os.platform() === 'darwin') {
-	// apiPath = path.resolve(__dirname, '..//..//Content//resources//daemon//Stratis.BreezeD.exe');
-  // } else {
-	// apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD.exe');
+  } else if(os.platform() === 'linux') {
+	apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
+   } //else {
+	// apiPath = path.resolve(__dirname, '..//..//Content//resources//daemon//Stratis.BreezeD');
   // }
 
   if (!testnet) {

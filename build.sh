@@ -42,22 +42,26 @@ git submodule update --init --recursive
 cd $TRAVIS_BUILD_DIR/Breeze.UI
 
 npm install
+npm install -g npx
 echo $log_prefix FINISHED restoring dotnet and npm packages
 
 # dotnet publish
 echo $log_prefix running 'dotnet publish'
 cd $TRAVIS_BUILD_DIR/StratisBitcoinFullNode/Stratis.BreezeD
-dotnet publish -c $configuration -r $TRAVIS_OS_NAME-$arch -v m -o $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME
+dotnet publish -c $configuration -r $TRAVIS_OS_NAME-$arch -v m -o $TRAVIS_BUILD_DIR/Breeze.UI/daemon
 
 echo $log_prefix chmoding the Stratis.BreezeD file
-chmod +x $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME/Stratis.BreezeD
+chmod +x $TRAVIS_BUILD_DIR/Breeze.UI/daemon/Stratis.BreezeD
 
 # node Build
 cd $TRAVIS_BUILD_DIR/Breeze.UI
 echo $log_prefix running 'npm run'
 npm run build:prod
 
-# node packaging
+
+if [ "$TRAVIS_OS_NAME" = "osx" ]
+then
+  # node packaging
 echo $log_prefix packaging breeze 
 node package.js --platform=$os_platform --arch=$arch --path=$TRAVIS_BUILD_DIR/breeze_out
 
@@ -68,13 +72,21 @@ mv $TRAVIS_BUILD_DIR/breeze_out/$node_output_name $TRAVIS_BUILD_DIR/breeze_out/$
 # copy api libs into app
 echo $log_prefix copying the Breeze api into the app
 mkdir -p $dotnet_resources_path_in_app
-cp -r $TRAVIS_BUILD_DIR/dotnet_out/$TRAVIS_OS_NAME/* $dotnet_resources_path_in_app
+cp -r $TRAVIS_BUILD_DIR/Breeze.UI/daemon/* $dotnet_resources_path_in_app
 
 # zip result
 echo $log_prefix zipping the app into $TRAVIS_BUILD_DIR/breeze_out/$app_output_zip_name
 mkdir -p $TRAVIS_BUILD_DIR/deploy/
 cd $TRAVIS_BUILD_DIR/breeze_out
 zip -r $TRAVIS_BUILD_DIR/deploy/$app_output_zip_name $app_output_name/*
+
+else
+  # node packaging
+echo $log_prefix packaging breeze 
+npx electron-builder build --$TRAVIS_OS_NAME --$arch
+
+echo $log_prefix finished packaging
+fi
 
 #tests
 echo $log_prefix no tests to run

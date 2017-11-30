@@ -1,6 +1,6 @@
 {
   "appId": "com.stratisplatform.breeze",
-  "productName": "Breeze Wallet",
+  "productName": "Breeze Wallet",  
   "mac": {
     "category": "com.stratisplatform.breeze"
   },
@@ -10,15 +10,17 @@
       "buildResources": "dist/assets/images"
   },
   "win": {
-      "icon": "dist/assets/images",
-      "target": ["nsis"]
+      "icon": "dist/assets/images/icon",
+      "target": ["nsis"],
+	  "artifactName": "${productName}.v${version}.setup.${os}.${env.arch}.${ext}"
   },
   "linux": {
       "target": [
         "deb",
         "tar.gz"		
 	   ],
-	  "category": "Utility"
+	  "category": "Utility",
+	  "artifactName": "${productName}.v${version}.setup.${os}.${arch}.${ext}"
   },
   "nsis": {
     "oneClick": false,
@@ -26,10 +28,8 @@
 	"allowToChangeInstallationDirectory": true,
 	"deleteAppDataOnUninstall": true,
 	"guid": "ed20df62-ff5a-4b83-a5e3-a361357c6e51",
-	"createDesktopShortcut": false,
-	"createStartMenuShortcut": true,
-	"artifactName": "${productName}.v${version}.setup.${env.win_runtime}.${ext}"
-	
+	"createDesktopShortcut": true,
+	"createStartMenuShortcut": true
   },
   "msi": {
     "warningsAsErrors": false
