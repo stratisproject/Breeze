@@ -20,6 +20,8 @@
         "tar.gz"		
 	   ],
 	  "category": "Utility",
+	  "icon": "dist/assets/images/icons",
+	  "synopsis": "${description}",
 	  "artifactName": "${productName}.v${version}.setup.${os}.${arch}.${ext}"
   },
   "nsis": {
