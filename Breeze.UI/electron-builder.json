@@ -16,6 +16,8 @@
         "deb",
         "tar.gz"		
 	    ],
+     "asar": "false"
+     "prune": "true"
      "synopsis": "Breeze Wallet Graphical User Interface",
 	    "category": "Utility",
 	    "artifactName": "${productName}.v${version}.setup.${os}.${arch}.${ext}"
@@ -37,5 +39,4 @@
   "msi": {
      "warningsAsErrors": false
   },
-  "extraResources": ["daemon/**/*"]
 }
