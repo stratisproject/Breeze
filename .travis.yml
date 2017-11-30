@@ -59,6 +59,7 @@ deploy:
     - "$TRAVIS_BUILD_DIR/deploy/*.zip"
     - "$TRAVIS_BUILD_DIR/Breeze.UI/app-builds/*.deb"
     - "$TRAVIS_BUILD_DIR/Breeze.UI/app-builds/*.tar.gz"
+    - "$TRAVIS_BUILD_DIR/Breeze.UI/app-builds/*.dmg"
   skip_cleanup: true
   overwrite: true
   prerelease: true
