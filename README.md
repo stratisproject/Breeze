@@ -43,7 +43,7 @@ dotnet run stratis -testnet
 ## CI Build
 -----------
 
-We use [AppVeyor](https://www.appveyor.com/) for Windows CI builds and [Travis CI](https://travis-ci.org/) (coming soon) for our Linux and MacOS ones.
+We use [AppVeyor](https://www.appveyor.com/) for Windows CI builds and [Travis CI](https://travis-ci.org/) for our Linux and MacOS ones.
 Every time someone pushes to the master branch or create a pull request on it, a build is triggered and a new unstable app release is created.
 
 To skip a build, for example if you've made very minor changes, include the text **[skip ci]** or **[ci skip]** in your commits' comment (with the squared brackets).
@@ -54,12 +54,12 @@ If you want the :sparkles: latest :sparkles: (unstable :bomb:) version of the Br
 |:---|----------------:|------------------:|------------------:|
 |**Windows**| [download][7] | [download][8] | Windows 7 and Windows 10 |
 |**Linux**| - | [download][9] | All Linux flavors |
-|**OS X**| - | [download][10] |  From OSX 10.12 |
+|**OS X**| - | [download][10] | OSX 10.12 or later |
 
 
-[7]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze.Wallet.v0.3.0.setup.win-x86.exe
-[8]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze.Wallet.v0.3.0.setup.win-x64.exe
-[9]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-linux-x64.zip
+[7]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze-Wallet-v0.3.0-setup-win-x86.exe
+[8]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze-Wallet-v0.3.0-setup-win-x64.exe
+[9]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze-Wallet-v0.3.0-linux-x64.tar.gz
 [10]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-osx-x64.zip
 
 
