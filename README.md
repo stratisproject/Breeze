@@ -57,9 +57,9 @@ If you want the :sparkles: latest :sparkles: (unstable :bomb:) version of the Br
 |**OS X**| - | [download][10] | OSX 10.12 or later |
 
 
-[7]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze-Wallet-v0.3.0-setup-win-x86.exe
-[8]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze-Wallet-v0.3.0-setup-win-x64.exe
-[9]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze-Wallet-v0.3.0-linux-x64.tar.gz
+[7]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze.Wallet-v0.3.0-setup-win-x86.exe
+[8]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze.Wallet-v0.3.0-setup-win-x64.exe
+[9]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze.Wallet-v0.3.0-linux-x64.tar.gz
 [10]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-osx-x64.zip
 
 

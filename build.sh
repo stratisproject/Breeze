@@ -8,6 +8,9 @@ node_output_name="Breeze-$os_platform-$arch"
 app_output_name="breeze-$TRAVIS_OS_NAME-$arch"
 app_output_zip_name="breeze-$TRAVIS_OS_NAME-$arch.zip"
 
+# specify no signing
+CSC_IDENTITY_AUTO_DISCOVERY=false
+
 if [ "$TRAVIS_OS_NAME" = "osx" ]
 then
   dotnet_resources_path_in_app=$TRAVIS_BUILD_DIR/breeze_out/$app_output_name/Breeze.app/contents/resources/app/assets/daemon
