@@ -11,7 +11,7 @@
       "target":[
          "nsis"
       ],
-      "artifactName":"${productName}_v${version}_${os}${env.arch}_setup.${ext}"
+      "artifactName":"${productName}.v${version}.setup.${os}.${env.arch}.${ext}"
    },
    "linux":{
       "target":[
