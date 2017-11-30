@@ -1,6 +1,6 @@
 {
-  "name": "Breeze",
-  "description": "Graphical User Interface for Breeze Wallet.",
+  "name": "BreezeWallet",
+  "description": "Breeze Wallet: Stratis' dual-currency full block light wallet with a strong focus on privacy.",
   "version": "0.3.0",
   "author": {
     "name": "Stratis Group",
@@ -12,6 +12,7 @@
     "breeze",
     "ui",
     "stratis",
+	"bitcoin",
     "angular",
     "electron",
     "typescript",
