@@ -29,6 +29,7 @@ env:
   - arch=x64
   - configuration=Release  
   - os_platform=linux
+  - CSC_IDENTITY_AUTO_DISCOVERY=false 
 
 cache:
   directories:
