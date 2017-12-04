@@ -1,4 +1,4 @@
-﻿const electron = require('electron');
+const electron = require('electron');
 
 // Module to control application life.
 const app = electron.app;
@@ -161,7 +161,7 @@ function startBitcoinApi() {
   } else if(os.platform() === 'linux') {
 	apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
    } else {
-	 apiPath = path.resolve(__dirname, '..//..//Content//resources//daemon//Stratis.BreezeD');
+	 apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
    }
 
 
@@ -192,7 +192,7 @@ function startStratisApi() {
   } else if(os.platform() === 'linux') {
 	apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
    } else {
-	 apiPath = path.resolve(__dirname, '..//..//Content//resources//daemon//Stratis.BreezeD');
+	 apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
    }
 
   if (!testnet) {

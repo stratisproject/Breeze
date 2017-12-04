@@ -35,8 +35,9 @@ cache:
   directories:
   - ${TRAVIS_BUILD_DIR}/Breeze.UI/node_modules
   - $HOME/.electron
-  - $HOME/.nuget/packages  
-  - /usr/share/dotnet/sdk/2.0.0/
+  - $HOME/.nuget/packages
+  - /usr/share/dotnet/sdk/ # dotnet path for linux
+  - /Users/travis/.dotnet/sdk/ # dotnet path for mac
 
 # Work around NuGet issue #2163
 # https://github.com/NuGet/Home/issues/2163
