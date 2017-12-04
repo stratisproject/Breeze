@@ -57,7 +57,6 @@ deploy:
     secure: $secure_github_key # this key is set on the Travis build page 
   file_glob: true
   file: 
-    - "$TRAVIS_BUILD_DIR/deploy/*.zip"
     - "$TRAVIS_BUILD_DIR/Breeze.UI/app-builds/*.deb"
     - "$TRAVIS_BUILD_DIR/Breeze.UI/app-builds/*.tar.gz"
     - "$TRAVIS_BUILD_DIR/Breeze.UI/app-builds/*.dmg"
