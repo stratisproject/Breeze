@@ -72,7 +72,12 @@ echo $log_prefix finished packaging
 #tests
 echo $log_prefix no tests to run
 
+echo $log_prefix contents of TRAVIS_BUILD_DIR
 cd $TRAVIS_BUILD_DIR
+ls
+
+echo $log_prefix contents of the app-builds folder
+cd $TRAVIS_BUILD_DIR/Breeze.UI/app-builds/
 ls
 
 echo $log_prefix FINISHED build
