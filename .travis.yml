@@ -29,13 +29,16 @@ env:
   - arch=x64
   - configuration=Release  
   - os_platform=linux
+  - CSC_IDENTITY_AUTO_DISCOVERY=false 
 
 cache:
   directories:
   - ${TRAVIS_BUILD_DIR}/Breeze.UI/node_modules
-  - $HOME/.nuget/packages  
-  - /usr/share/dotnet/sdk/2.0.0/
-  
+  - $HOME/.electron
+  - $HOME/.nuget/packages
+  - /usr/share/dotnet/sdk/ # dotnet path for linux
+  - /Users/travis/.dotnet/sdk/ # dotnet path for mac
+
 # Work around NuGet issue #2163
 # https://github.com/NuGet/Home/issues/2163
 # https://github.com/travis-ci/travis-ci/issues/7728
@@ -56,9 +59,9 @@ deploy:
     secure: $secure_github_key # this key is set on the Travis build page 
   file_glob: true
   file: 
-    - "$TRAVIS_BUILD_DIR/deploy/*.zip"
     - "$TRAVIS_BUILD_DIR/Breeze.UI/app-builds/*.deb"
     - "$TRAVIS_BUILD_DIR/Breeze.UI/app-builds/*.tar.gz"
+    - "$TRAVIS_BUILD_DIR/Breeze.UI/app-builds/*.dmg"
   skip_cleanup: true
   overwrite: true
   prerelease: true
