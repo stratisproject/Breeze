@@ -62,6 +62,8 @@ Write-Host "[$env:configuration][$env:win_runtime] FINISHED Breeze packaging" -f
 
 dir
 cd app-builds
+# replace the spaces in the name with a dot as CI system have trouble handling spaces in names.
+Dir *.exe | rename-item -newname {  $_.name  -replace " ","."  }
 dir      
 Write-Host "[$env:configuration][$env:win_runtime] Done! Your installer is:" -foregroundcolor "green"
 Get-ChildItem -Path "*.exe" | foreach-object {$_.Fullname}
