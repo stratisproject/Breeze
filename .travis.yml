@@ -7,10 +7,8 @@ matrix:
     dist: trusty
     sudo: required
     dotnet: 2.0.0
-    env: os_identifier=ubuntu.14.04
   - os: osx # OSX 10.12
     osx_image: xcode9
-    env: os_identifier=osx.10.12
     before_install:
     - brew update
     - curl https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
@@ -31,7 +29,16 @@ env:
   - arch=x64
   - configuration=Release  
   - os_platform=linux
-  
+  - CSC_IDENTITY_AUTO_DISCOVERY=false 
+
+cache:
+  directories:
+  - ${TRAVIS_BUILD_DIR}/Breeze.UI/node_modules
+  - $HOME/.electron
+  - $HOME/.nuget/packages
+  - /usr/share/dotnet/sdk/ # dotnet path for linux
+  - /Users/travis/.dotnet/sdk/ # dotnet path for mac
+
 # Work around NuGet issue #2163
 # https://github.com/NuGet/Home/issues/2163
 # https://github.com/travis-ci/travis-ci/issues/7728
@@ -51,7 +58,10 @@ deploy:
   api_key:
     secure: $secure_github_key # this key is set on the Travis build page 
   file_glob: true
-  file: "$TRAVIS_BUILD_DIR/deploy/*.zip"
+  file: 
+    - "$TRAVIS_BUILD_DIR/Breeze.UI/app-builds/*.deb"
+    - "$TRAVIS_BUILD_DIR/Breeze.UI/app-builds/*.tar.gz"
+    - "$TRAVIS_BUILD_DIR/Breeze.UI/app-builds/*.dmg"
   skip_cleanup: true
   overwrite: true
   prerelease: true

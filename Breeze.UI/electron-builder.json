@@ -1,30 +1,49 @@
 {
   "appId": "com.stratisplatform.breeze",
   "productName": "Breeze Wallet",
-  "mac": {
-    "category": "com.stratisplatform.breeze"
-  },
+  "publish": null,
   "directories": {
-      "app": "dist",
-      "output": "app-builds"
+    "app": "dist",
+    "output": "app-builds",
+    "buildResources": "dist/assets/images"
   },
   "win": {
-      "icon": "dist/assets/images/breeze-logo",
-      "target": ["nsis"]
+    "icon": "dist/assets/images/icon",
+    "target": [
+      "nsis"
+    ],
+    "artifactName": "${productName}-v${version}-setup-${os}-${env.arch}.${ext}"
+  },
+  "linux": {
+    "target": [
+      "deb",
+      "tar.gz"
+    ],
+    "synopsis": "Breeze Wallet: Stratis' dual-currency full block light wallet with a strong focus on privacy.",
+    "category": "Utility",
+    "icon": "dist/assets/images/icons",
+    "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}"
+  },
+  "mac": {
+    "target": [
+      "dmg"
+    ],
+    "category": "public.app-category.productivity",
+    "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}"
   },
   "nsis": {
     "oneClick": false,
-	"perMachine": true,
-	"allowToChangeInstallationDirectory": true,
-	"deleteAppDataOnUninstall": true,
-	"guid": "ed20df62-ff5a-4b83-a5e3-a361357c6e51",
-	"createDesktopShortcut": false,
-	"createStartMenuShortcut": true,
-	"artifactName": "${productName}.v${version}.setup.${env.win_runtime}.${ext}"
-	
+    "perMachine": true,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": true,
+    "guid": "ed20df62-ff5a-4b83-a5e3-a361357c6e51",
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true
   },
   "msi": {
     "warningsAsErrors": false
   },
-  "extraResources": ["daemon/**/*"]
+  "extraResources": [
+    "daemon/**/*"
+  ]
 }

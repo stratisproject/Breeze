@@ -20,7 +20,6 @@ branches:
 image: Visual Studio 2017
 clone_folder: c:\projects\breeze
 configuration:
- # - Debug
   - Release
 
 build:
@@ -28,25 +27,21 @@ build:
 
 environment:
   matrix:
-  - win_runtime: win7-x64
+  - win_runtime: win-x64
     arch: x64
     plat: win32
-  - win_runtime: win7-x86
-    arch: ia32
-    plat: win32
-  - win_runtime: win10-x64
-    arch: x64
-    plat: win32
-  - win_runtime: win10-x86
+  - win_runtime: win-x86
     arch: ia32
     plat: win32
 
+# build cache to preserve files/folders between builds
+cache:
+  - '%APPVEYOR_BUILD_FOLDER%\Breeze.UI\node_modules'
+  - '%USERPROFILE%\.nuget\packages'
+  
 init:
 - ps: |
       $env:log_prefix = "[$env:win_runtime][$env:configuration]"
-      $env:node_output_name = "Breeze-$env:plat-$env:arch"
-      $env:app_output_name = "breeze-$env:win_runtime"
-      $env:app_output_zip_name = "breeze-$env:win_runtime-$env:configuration.zip"
       if ($env:APPVEYOR_REPO_TAG -eq "false") { $env:APPVEYOR_REPO_TAG_NAME = "cd-unstable" }
 
 install:
@@ -82,9 +77,6 @@ before_build:
       Write-Host "Windows runtime: $env:win_runtime" -foregroundcolor "magenta"
       Write-Host "Build directory: $env:APPVEYOR_BUILD_FOLDER" -foregroundcolor "magenta"
       Write-Host "Configuration: $env:configuration" -foregroundcolor "magenta"
-      Write-Host "node.js output name: $env:node_output_name" -foregroundcolor "magenta"
-      Write-Host "App output folder name: $env:app_output_name" -foregroundcolor "magenta"
-      Write-Host "App output zip file name: $env:app_output_zip_name" -foregroundcolor "magenta"
       Write-Host "Branch: $env:APPVEYOR_REPO_BRANCH" -foregroundcolor "magenta"
       Write-Host "Tag is set: $env:APPVEYOR_REPO_TAG" -foregroundcolor "magenta"
       Write-Host "Tag: $env:APPVEYOR_REPO_TAG_NAME" -foregroundcolor "magenta"

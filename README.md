@@ -12,7 +12,7 @@
 
 # Breeze
 
-__Warning: This is an experimental build. At the moment, only bitcoin on testnet is supported but more is coming soon. Use at your own risk.__
+__Warning: We're still in beta, so use at your own risk.__
 This is the repository of the Breeze Wallet, the first full-block SPV bitcoin wallet using Angular and Electron at the front-end and C# with .NET Core in the back-end.
 
 ## Daemon Build
@@ -43,7 +43,7 @@ dotnet run stratis -testnet
 ## CI Build
 -----------
 
-We use [AppVeyor](https://www.appveyor.com/) for Windows CI builds and [Travis CI](https://travis-ci.org/) (coming soon) for our Linux and MacOS ones.
+We use [AppVeyor](https://www.appveyor.com/) for Windows CI builds and [Travis CI](https://travis-ci.org/) for our Linux and MacOS ones.
 Every time someone pushes to the master branch or create a pull request on it, a build is triggered and a new unstable app release is created.
 
 To skip a build, for example if you've made very minor changes, include the text **[skip ci]** or **[ci skip]** in your commits' comment (with the squared brackets).
@@ -52,17 +52,14 @@ If you want the :sparkles: latest :sparkles: (unstable :bomb:) version of the Br
 
 |    | x86 Release | x64 Release | Notes |
 |:---|----------------:|------------------:|------------------:|
-|**Windows 7**| [download][7] | [download][8] | continuous build - up to date with commits |
-|**Windows 10**| [download][9] | [download][10] | continuous build - up to date with commits | 
-|**Ubuntu 14.04**| - | [download][11] | continuous build - up to date with commits |
-|**OS X 10.12**| - | [download][12] |  continuous build - up to date with commits |
+|**Windows**| [download][7] | [download][8] | Windows 7 and Windows 10 |
+|**Linux**| - | [download][9] | All Linux flavors |
+|**OS X**| - | [download][10] | OSX 10.12 or later |
 
 
-[7]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-win7-x86-Release.zip
-[8]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-win7-x64-Release.zip
-[9]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-win10-x86-Release.zip
-[10]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-win10-x64-Release.zip
-[11]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-ubuntu.14.04-x64-Release.zip
-[12]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/breeze-osx.10.12-x64-Release.zip
+[7]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze.Wallet-v0.3.0-setup-win-ia32.exe
+[8]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze.Wallet-v0.3.0-setup-win-x64.exe
+[9]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze.Wallet-v0.3.0-linux-x64.tar.gz
+[10]: https://github.com/stratisproject/Breeze/releases/download/cd-unstable/Breeze.Wallet-v0.3.0-mac.dmg
 
 
