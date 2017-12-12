@@ -3,7 +3,7 @@
 # you can use {branch} name in version format too
 # version: 1.0.{build}-{branch}
 
-version: 0.1.0.{build}
+version: 0.3.0.{build}
 pull_requests:
   do_not_increment_build_number: true
 

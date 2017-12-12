@@ -13,8 +13,12 @@ const os = require('os');
 let serve;
 let testnet;
 const args = process.argv.slice(1);
-serve = args.some(val => val === "--serve");
-testnet = args.some(val => val === "--testnet");
+serve = args.some(val => val === "--serve" || val === "-serve");
+testnet = !args.some(val => val === "--testnet" || val === "-testnet");
+
+if (args.some(val => val === "--mainnet" || val === "-mainnet")) {
+  testnet = false;
+}
 
 if (serve) {
   require('electron-reload')(__dirname, {
@@ -31,13 +35,6 @@ require('electron-context-menu')({
 let mainWindow = null;
 
 function createWindow() {
-  let applicationIcon
-  if (serve) {
-    applicationIcon = nativeImage.createFromPath("./src/assets/images/breeze-logo-tray.png")
-  } else {
-    applicationIcon = nativeImage.createFromPath(path.join(__dirname + '/assets/images/breeze-logo-tray.png'))
-  }
-
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1200,
@@ -47,10 +44,6 @@ function createWindow() {
     minHeight: 650,
     title: "Breeze Wallet"
   });
-
-  if (os.platform() === "win32"){
-    mainWindow.setIcon(applicationIcon);
-  }
 
    // and load the index.html of the app.
   mainWindow.loadURL(url.format({
@@ -159,10 +152,10 @@ function startBitcoinApi() {
   if (os.platform() === 'win32') {
     apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\Stratis.BreezeD.exe');
   } else if(os.platform() === 'linux') {
-	apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
-   } else {
-	 apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
-   }
+	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
+  } else {
+	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
+  }
 
 
   if(!testnet) {
@@ -190,10 +183,10 @@ function startStratisApi() {
   if (os.platform() === 'win32') {
     apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\Stratis.BreezeD.exe');
   } else if(os.platform() === 'linux') {
-	apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
-   } else {
-	 apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
-   }
+	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
+  } else {
+	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
+  }
 
   if (!testnet) {
     stratisProcess = spawnStratis(apiPath, ['stratis'], {
@@ -204,7 +197,6 @@ function startStratisApi() {
       detached: true
     });
   }
-
 
   stratisProcess.stdout.on('data', (data) => {
     writeLog(`Stratis: ${data}`);
@@ -220,7 +212,7 @@ function createTray() {
   if (serve) {
     trayIcon = nativeImage.createFromPath('./src/assets/images/breeze-logo-tray.png');
   } else {
-    trayIcon = nativeImage.createFromPath(path.join(__dirname + '/assets/images/breeze-logo-tray.png'));
+    trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/src/assets/images/breeze-logo-tray.png'));
   }
 
   let systemTray = new Tray(trayIcon);
