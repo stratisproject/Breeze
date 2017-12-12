@@ -8,7 +8,7 @@
     "buildResources": "dist/assets/images"
   },
   "win": {
-    "icon": "dist/assets/images/",
+    "icon": "dist/assets/images/icon",
     "target": [
       "nsis"
     ],
@@ -39,7 +39,7 @@
     "guid": "ed20df62-ff5a-4b83-a5e3-a361357c6e51",
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
-    "license": "../Licenses/breeze-license.txt"
+    "license": "src/assets/images/license_en.txt"
   },
   "msi": {
     "warningsAsErrors": false

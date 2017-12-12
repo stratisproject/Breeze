@@ -14,7 +14,7 @@ let serve;
 let testnet;
 const args = process.argv.slice(1);
 serve = args.some(val => val === "--serve" || val === "-serve");
-testnet = !args.some(val => val === "--testnet" || val === "-testnet");
+testnet = args.some(val => val === "--testnet" || val === "-testnet");
 
 if (args.some(val => val === "--mainnet" || val === "-mainnet")) {
   testnet = false;
