@@ -136,7 +136,7 @@ export class ApiService {
         .map((response: Response) => response);
     }
 
-    /** 
+    /**
      * Get general wallet info from the API once.
      */
     getGeneralInfoOnce(data: WalletInfo): Observable<any> {
@@ -214,7 +214,7 @@ export class ApiService {
     }
 
     /**
-     * Get unused receive addresses for a certain wallet from the API.
+     * Get an unused receive address for a certain wallet from the API.
      */
     getUnusedReceiveAddress(data: WalletInfo): Observable<any> {
       this.getCurrentCoin();
@@ -222,9 +222,37 @@ export class ApiService {
       let params: URLSearchParams = new URLSearchParams();
       params.set('walletName', data.walletName);
       params.set('accountName', "account 0"); //temporary
-
       return this.http
-        .get(this.currentApiUrl + '/wallet/address', new RequestOptions({headers: this.headers, search: params}))
+        .get(this.currentApiUrl + '/wallet/unusedaddress', new RequestOptions({headers: this.headers, search: params}))
+        .map((response: Response) => response);
+    }
+
+    /**
+     * Get multiple unused receive addresses for a certain wallet from the API.
+     */
+    getUnusedReceiveAddresses(data: WalletInfo, count: string): Observable<any> {
+      this.getCurrentCoin();
+
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', data.walletName);
+      params.set('accountName', "account 0"); //temporary
+      params.set('count', count);
+      return this.http
+        .get(this.currentApiUrl + '/wallet/unusedaddresses', new RequestOptions({headers: this.headers, search: params}))
+        .map((response: Response) => response);
+    }
+
+    /**
+     * Get get all receive addresses for an account of a wallet from the API.
+     */
+    getAllReceiveAddresses(data: WalletInfo): Observable<any> {
+      this.getCurrentCoin();
+
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', data.walletName);
+      params.set('accountName', "account 0"); //temporary
+      return this.http
+        .get(this.currentApiUrl + '/wallet/addresses', new RequestOptions({headers: this.headers, search: params}))
         .map((response: Response) => response);
     }
 
@@ -241,7 +269,7 @@ export class ApiService {
       params.set('amount', data.amount);
       params.set('feeType', data.feeType);
       params.set('allowUnconfirmed', "true");
-      
+
       return this.http
         .get(this.currentApiUrl + '/wallet/estimate-txfee', new RequestOptions({headers: this.headers, search: params}))
         .map((response: Response) => response);
