@@ -89,7 +89,7 @@ before_build:
 build_script:
 - ps: |
       Write-Host "$env:log_prefix running 'dotnet publish'" -foregroundcolor "magenta"
-      cd $env:APPVEYOR_BUILD_FOLDER/StratisBitcoinFullNode/Stratis.BreezeD
+      cd $env:APPVEYOR_BUILD_FOLDER/StratisBitcoinFullNode/src/Stratis.BreezeD
       dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\Breeze.UI\daemon
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
       
