@@ -1,20 +1,15 @@
 language: csharp
 mono: none
-
+dotnet: 2.1.301
 matrix:
   include:
   - os: linux # Ubuntu 14.04
     dist: trusty
     sudo: required
-    dotnet: 2.0.0
   - os: osx # OSX 10.12
     osx_image: xcode9
     before_install:
     - brew update
-    - curl https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
-    - chmod +x dotnet-install.sh
-    - ./dotnet-install.sh --channel 2.0
-    - export PATH=$PATH:~/.dotnet/
     - ulimit -n 1024
     - os_platform=darwin
 

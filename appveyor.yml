@@ -41,6 +41,8 @@ cache:
   
 init:
 - ps: |
+      choco install dotnetcore-sdk --no-progress --confirm --version 2.1.301
+      dotnet --info
       $env:log_prefix = "[$env:win_runtime][$env:configuration]"
       if ($env:APPVEYOR_REPO_TAG -eq "false") { $env:APPVEYOR_REPO_TAG_NAME = "cd-unstable" }
 
