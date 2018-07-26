@@ -1,5 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxJs/Subscription';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 import { AdvancedService } from './../advanced.service';
 import { LoadingState } from './loadingState';
@@ -26,10 +27,6 @@ export class AdvancedIcoComponent implements OnDestroy {
         return this._extPubKeyLoadingState;
     }
 
-    ngOnDestroy() {
-        this.extPubKeySubs.unsubscribe();
-    }
-
     private loadExtPubKey() {
         this.extPubKeyLoadingState.loading = true;
         this.extPubKeySubs = this.advancedService.getExtPubKey()
@@ -39,5 +36,9 @@ export class AdvancedIcoComponent implements OnDestroy {
     private onExtPubKey(key: string) {
         this._extPubKey = key; 
         this.extPubKeyLoadingState.loading = false;
+    }
+
+    ngOnDestroy() {
+        this.extPubKeySubs.unsubscribe();
     }
 }

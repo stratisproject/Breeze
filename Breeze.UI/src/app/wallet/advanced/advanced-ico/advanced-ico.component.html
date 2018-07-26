@@ -1,8 +1,9 @@
-<div class="container" style="border:1px solid lightgray; border-radius: 4px; padding:10px; position: absolute; left:100px; width:50%">
+<div class="container" style="border:1px solid lightgray; border-radius: 4px; padding:10px; position: absolute; left:100px; width:65%">
     <h4>ICO</h4>
     <div style="margin-top:15px">
+        
         <div>
-            <label style="font-size:13px;margin-bottom:0px">Extended Public Key</label>
+            <label style="font-size:14px;margin-bottom:0px">Extended Public Key</label>
             <div class="myAddress" *ngIf="extPubKeyLoadingState.success; else elseFeedback"><code style="overflow-wrap: break-word">{{ extPubKey }}</code></div>
             <ng-template #elseFeedback>
                 <app-feedback [loading]="extPubKeyLoadingState.loading" 
@@ -10,5 +11,16 @@
                               [erroredText]="extPubKeyLoadingState.erroredText"></app-feedback>
             </ng-template>
         </div>
+
+        <div style="margin-top:20px">
+            <label style="font-size:14px;margin-bottom:1px">Generate Addresses</label>
+            <div class="input-group" style="width:55%; height:35px">
+                <input pattern="^[1-9]+$" type="number" class="form-control" placeholder="Number to generate..." style="border-radius: 0px">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">Go</button>
+                </span>
+            </div>
+        </div>
+
     </div>
 </div>
