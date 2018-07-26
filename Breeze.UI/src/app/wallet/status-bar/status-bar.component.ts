@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
 
 import { ApiService } from '../../shared/services/api.service';
@@ -27,7 +26,7 @@ export class StatusBarComponent implements OnInit {
   constructor(private apiService: ApiService, private globalService: GlobalService, private genericModalService: ModalService) { }
 
   ngOnInit() {
-    this.startSubscriptions();
+    this.startSubscriptions() ;
   }
 
   ngOnDestroy() {

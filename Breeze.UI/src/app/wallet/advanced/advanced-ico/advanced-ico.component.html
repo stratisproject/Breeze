@@ -1,0 +1,14 @@
+<div class="container" style="border:1px solid lightgray; border-radius: 4px; padding:10px; position: absolute; left:100px; width:50%">
+    <h4>ICO</h4>
+    <div style="margin-top:15px">
+        <div>
+            <label style="font-size:13px;margin-bottom:0px">Extended Public Key</label>
+            <div class="myAddress" *ngIf="extPubKeyLoadingState.success; else elseFeedback"><code style="overflow-wrap: break-word">{{ extPubKey }}</code></div>
+            <ng-template #elseFeedback>
+                <app-feedback [loading]="extPubKeyLoadingState.loading" 
+                              [errored]="extPubKeyLoadingState.errored"
+                              [erroredText]="extPubKeyLoadingState.erroredText"></app-feedback>
+            </ng-template>
+        </div>
+    </div>
+</div>
