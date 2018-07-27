@@ -1,26 +1,31 @@
-<div class="container" style="border:1px solid lightgray; border-radius: 4px; padding:10px; position: absolute; left:100px; width:65%">
-    <h4>ICO</h4>
-    <div style="margin-top:15px">
-        
-        <div>
-            <label style="font-size:14px;margin-bottom:0px">Extended Public Key</label>
-            <div class="myAddress" *ngIf="extPubKeyLoadingState.success; else elseFeedback"><code style="overflow-wrap: break-word">{{ extPubKey }}</code></div>
-            <ng-template #elseFeedback>
-                <app-feedback [loading]="extPubKeyLoadingState.loading" 
-                              [errored]="extPubKeyLoadingState.errored"
-                              [erroredText]="extPubKeyLoadingState.erroredText"></app-feedback>
-            </ng-template>
-        </div>
-
-        <div style="margin-top:20px">
-            <label style="font-size:14px;margin-bottom:1px">Generate Addresses</label>
-            <div class="input-group" style="width:55%; height:35px">
-                <input pattern="^[1-9]+$" type="number" class="form-control" placeholder="Number to generate..." style="border-radius: 0px">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">Go</button>
-                </span>
+<form [formGroup]='icoFormGroup'>
+    <div class="container" style="border:1px solid lightgray; border-radius: 4px; padding:10px; position: absolute; left:100px; width:65%">
+        <h4>ICO</h4>
+        <div style="margin-top:15px">
+            
+            <div>
+                <label style="font-size:14px;margin-bottom:0px">Extended Public Key</label>
+                <div class="myAddress" *ngIf="extPubKeyLoadingState.success; else elseFeedback"><code style="overflow-wrap: break-word">{{ extPubKey }}</code></div>
+                <ng-template #elseFeedback>
+                    <app-feedback [loading]="extPubKeyLoadingState.loading" 
+                                  [errored]="extPubKeyLoadingState.errored"
+                                  [erroredText]="'Failed to get Extended Public Key'"></app-feedback>
+                </ng-template>
             </div>
-        </div>
 
+            <div style="margin-top:20px">
+                <label style="font-size:14px;margin-bottom:1px">Generate Addresses</label>
+                <div class="input-group" style="width:240px; height:35px">
+                    <input formControlName="addressCountControl" type="text" class="form-control" placeholder="Number to generate..." style="border-radius: 0px">
+                    <span class="input-group-btn">
+                        <div>
+                            <button *ngIf="!addressCountControl.invalid" style="outline: none"  class="btn btn-default" type="button">Go</button>
+                            <button *ngIf="addressCountControl.invalid" style="outline:none; color: gray" class="btn btn-default" type="button">Go</button>
+                        </div>
+                    </span>
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
+</form> 

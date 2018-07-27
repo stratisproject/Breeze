@@ -3,10 +3,6 @@ export class LoadingState {
     private _loading = false;
     private _errored = false;
     private _erroredText = "";
-    
-    constructor(erroredText: string) {
-        this._erroredText = erroredText;
-    }
 
     public get erroredText(): string {
         return this._erroredText;
