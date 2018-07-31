@@ -1,4 +1,3 @@
-
 export class LoadingState {
     private _loading = false;
     private _errored = false;
@@ -6,6 +5,9 @@ export class LoadingState {
 
     public get erroredText(): string {
         return this._erroredText;
+    }
+    public set erroredText(value: string) {
+        this._erroredText = value;
     }
 
     public get loading(): boolean {

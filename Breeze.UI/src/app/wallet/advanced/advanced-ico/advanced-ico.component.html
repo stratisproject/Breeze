@@ -15,14 +15,23 @@
 
             <div style="margin-top:20px">
                 <label style="font-size:14px;margin-bottom:1px">Generate Addresses</label>
-                <div class="input-group" style="width:240px; height:35px">
-                    <input formControlName="addressCountControl" type="text" class="form-control" placeholder="Number to generate..." style="border-radius: 0px">
-                    <span class="input-group-btn">
-                        <div>
-                            <button *ngIf="!addressCountControl.invalid" style="outline: none"  class="btn btn-default" type="button">Go</button>
-                            <button *ngIf="addressCountControl.invalid" style="outline:none; color: gray" class="btn btn-default" type="button">Go</button>
-                        </div>
-                    </span>
+                <div style="display:flex; flex-direction:row">
+                    <div class="input-group" style="height:35px; margin-bottom:1px; width:240px">
+                        <input formControlName="addressCountControl" type="text" class="form-control" placeholder="Number to generate..." style="border-radius: 0px">
+                        <span class="input-group-btn">
+                            <div>
+                                <button *ngIf="!addressCountControl.invalid && addressCount" (click)="generateAddresses()"
+                                        class="btn btn-default" type="button">Go</button>
+                                <button *ngIf="addressCountControl.invalid || !addressCount" style="color: gray; outline:none" class="btn btn-default" type="button">Go</button>
+                            </div>
+                        </span>
+                    </div>
+                    <img style="width:16px; height:16px; margin-left:6px" 
+                         *ngIf="showTick" src="../../../../assets/images/Tick_Mark-16.png"/>
+                    <app-feedback *ngIf="!generateAddressesLoadingState.success" style="margin-left:5px; width:115px"
+                        [loading]="generateAddressesLoadingState.loading" 
+                        [errored]="generateAddressesLoadingState.errored"
+                        [erroredText]="'Failed to generate'"></app-feedback>
                 </div>
             </div>
 
