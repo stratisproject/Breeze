@@ -2,3 +2,7 @@
     margin-left: 100px;
     margin-top: 20px;
 }
+
+::ng-deep ng-datepicker input {
+    height: 35px;
+}

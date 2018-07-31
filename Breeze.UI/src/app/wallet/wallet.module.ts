@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
 import { HttpClientModule } from '@angular/common/http';
+import { NgDatepickerModule } from 'ng2-datepicker';
 
 import { WalletComponent } from './wallet.component';
 import { MenuComponent } from './menu/menu.component';
@@ -15,7 +16,6 @@ import { WalletRoutingModule } from './wallet-routing.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { StatusBarComponent } from './status-bar/status-bar.component';
 import { AdvancedComponent } from './advanced/advanced.component';
-import { AdvancedIcoComponent } from './advanced/advanced-ico/advanced-ico.component';
 
 import { AdvancedService } from '../wallet/advanced/advanced.service';
 import { FeedbackComponent } from './advanced/feedback/feedback.component';
@@ -29,7 +29,8 @@ import { FeedbackComponent } from './advanced/feedback/feedback.component';
     SharedModule.forRoot(),
     NgbModule,
     ReactiveFormsModule,
-    WalletRoutingModule
+    WalletRoutingModule,
+    NgDatepickerModule
   ],
   declarations: [
     WalletComponent,
@@ -39,7 +40,6 @@ import { FeedbackComponent } from './advanced/feedback/feedback.component';
     SidebarComponent,
     StatusBarComponent,
     AdvancedComponent,
-    AdvancedIcoComponent,
     FeedbackComponent
   ],
   providers: [

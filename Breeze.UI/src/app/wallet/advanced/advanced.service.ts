@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxJs/Observable';
+import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http'; 
+import 'rxjs/add/observable/empty';
 
 import { GlobalService } from '../../shared/services/global.service';
 
@@ -22,6 +23,10 @@ export class AdvancedService {
     public generateAddresses(count: number): Observable<string[]> {
         const url = `${this.urlPrefix}unusedaddresses?WalletName=${this.walletName}&AccountName=${this.accountName}&Count=${count}`;
         return this.httpClient.get(url).map(x => this.processAddresses(x));
+    }
+
+    public resyncFromDate(date: Date): Observable<any> {
+        return Observable.empty<any>();
     }
 
     private processAddresses(response: any): string[] {

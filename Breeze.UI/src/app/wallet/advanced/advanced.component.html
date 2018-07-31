@@ -1,3 +1,54 @@
 <div class="mainDiv">
-  <app-advanced-ico></app-advanced-ico>
+    <form [formGroup]='icoFormGroup'>
+        <div style="margin-top:15px">
+
+            <div>
+                <label style="font-size:14px;margin-bottom:0px">Extended Public Key</label>
+                <div class="myAddress" *ngIf="extPubKeyLoadingState.success; else elseFeedback">
+                    <code style="overflow-wrap: break-word">{{ extPubKey }}</code>
+                </div>
+                <ng-template #elseFeedback>
+                    <app-feedback [loading]="extPubKeyLoadingState.loading" [errored]="extPubKeyLoadingState.errored" [erroredText]="'Failed to get Extended Public Key'"></app-feedback>
+                </ng-template>
+            </div>
+
+            <div style="margin-top:30px">
+                <label style="font-size:14px;margin-bottom:1px">Generate Addresses</label>
+                <div style="display:flex; flex-direction:row">
+                    <div class="input-group" style="height:35px; margin-bottom:1px; width:240px">
+                        <input formControlName="addressCountControl" type="text" class="form-control" placeholder="Number to generate..." style="border-radius: 0px">
+                        <span class="input-group-btn">
+                            <div>
+                                <button *ngIf="!addressCountControl.invalid && addressCount" (click)="generateAddresses()" class="btn btn-default" type="button">Go</button>
+                                <button *ngIf="addressCountControl.invalid || !addressCount" style="color: gray; outline:none" class="btn btn-default" type="button">Go</button>
+                            </div>
+                        </span>
+                    </div>
+                    <img style="width:16px; height:16px; margin-left:6px" *ngIf="showAddressesTick" src="../../../assets/images/Tick_Mark-16.png"
+                    />
+                    <app-feedback *ngIf="!generateAddressesLoadingState.success" style="margin-left:5px; width:115px" [loading]="generateAddressesLoadingState.loading"
+                        [errored]="generateAddressesLoadingState.errored" [erroredText]="'Failed to generate'"></app-feedback>
+                </div>
+            </div>
+
+            <div style="margin-top:30px">
+                <label style="font-size:14px;margin-bottom:1px">Resync</label>
+                <div style="display:flex; flex-direction:row">
+                    <div class="input-group" style="height:35px; margin-bottom:1px; width:240px">
+                        <ng-datepicker style="width:163px" [(ngModel)]="resyncDate" [options]="resyncDateOptions" formControlName="datePickerControl"></ng-datepicker>
+                        <span class="input-group-btn">
+                            <div>
+                                <button style="height: 35px" (click)="resync()" class="btn btn-default" type="button">Go</button>
+                            </div>
+                        </span>
+                    </div>
+                    <img style="width:16px; height:16px; margin-left:6px" *ngIf="showResyncTick" src="../../../assets/images/Tick_Mark-16.png"
+                    />
+                    <app-feedback *ngIf="!resyncLoadingState.success" style="margin-left:5px; width:115px" [loading]="resyncLoadingState.loading"
+                        [errored]="resyncLoadingState.errored" [erroredText]="'Failed to sync'"></app-feedback>
+                </div>
+            </div>
+
+        </div>
+    </form>
 </div>

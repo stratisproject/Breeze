@@ -58,8 +58,9 @@
     "core-js": "2.5.3",
     "electron-context-menu": "0.9.1",
     "enhanced-resolve": "3.4.1",
-    "ngx-clipboard": "9.0.0",
+    "ng2-datepicker": "^3.1.0",
     "ngx-bootstrap": "2.0.0-beta.11",
+    "ngx-clipboard": "9.0.0",
     "rxjs": "5.5.5",
     "zone.js": "0.8.18"
   },
