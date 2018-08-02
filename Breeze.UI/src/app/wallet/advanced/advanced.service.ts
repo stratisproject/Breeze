@@ -1,18 +1,27 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpClient } from '@angular/common/http'; 
+import { HttpClient, HttpHeaders } from '@angular/common/http'; 
 import 'rxjs/add/observable/empty';
 
 import { GlobalService } from '../../shared/services/global.service';
+import { NavigationService, Page } from '../../shared/services/navigation.service';
+
+class dateRequest {
+    constructor(public date: Date){}
+}
 
 @Injectable()
 export class AdvancedService {
-    private readonly accountName = 'account 0';
+    private urlPrefix = '';
     private readonly walletName;
-    private readonly urlPrefix = 'http://localhost:37221/api/Wallet/';
+    private readonly accountName = 'account 0';
+    private headers = new HttpHeaders({'Content-Type': 'application/json'});
 
-    constructor(private httpClient: HttpClient, private globalService: GlobalService) { 
+    constructor(private httpClient: HttpClient, private globalService: GlobalService, navigationService: NavigationService) { 
         this.walletName = this.globalService.getWalletName();
+
+        navigationService.pageSubject.subscribe(x => 
+            this.urlPrefix = `http://localhost:3722${Page.Bitcoin ? 0 : 1}/api/Wallet/`);
     }
 
     public getExtPubKey(): Observable<string> {
@@ -26,7 +35,10 @@ export class AdvancedService {
     }
 
     public resyncFromDate(date: Date): Observable<any> {
-        return Observable.empty<any>();
+        date = new Date(date.getFullYear(), date.getMonth(), date.getDate()); //<- Strip any time values
+        const url = `${this.urlPrefix}syncfromdate`;
+        const data = JSON.stringify(new dateRequest(date));
+        return this.httpClient.post(url, data, {headers: this.headers}).map((x: Response) => x);
     }
 
     private processAddresses(response: any): string[] {

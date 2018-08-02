@@ -17,6 +17,7 @@ import { GenericModalComponent } from './shared/components/generic-modal/generic
 import { ApiService } from './shared/services/api.service';
 import { GlobalService } from './shared/services/global.service';
 import { ModalService } from './shared/services/modal.service';
+import { NavigationService } from './shared/services/navigation.service';
 
 import { SendComponent } from './wallet/send/send.component';
 import { SendConfirmationComponent } from './wallet/send/send-confirmation/send-confirmation.component';
@@ -55,7 +56,7 @@ import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout
     TransactionDetailsComponent,
     LogoutConfirmationComponent
   ],
-  providers: [ ApiService, GlobalService, ModalService, Title ],
+  providers: [ NavigationService, ApiService, GlobalService, ModalService, Title ],
   bootstrap: [ AppComponent ]
 })
 

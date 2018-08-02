@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
 import { ModalService } from '../../shared/services/modal.service';
+import { NavigationService } from '../../shared/services/navigation.service';
 
 import { WalletInfo } from '../../shared/classes/wallet-info';
 
@@ -16,7 +17,9 @@ import { WalletInfo } from '../../shared/classes/wallet-info';
 })
 export class SidebarComponent implements OnInit {
 
-  constructor(private globalService: GlobalService, private apiService: ApiService, private router: Router, private modalService: NgbModal, private genericModalService: ModalService) { }
+  constructor(private globalService: GlobalService, private apiService: ApiService, 
+                private router: Router, private modalService: NgbModal, private genericModalService: ModalService, 
+                    private navigationService: NavigationService) { }
   public bitcoinActive: boolean;
   public stratisActive: boolean;
 

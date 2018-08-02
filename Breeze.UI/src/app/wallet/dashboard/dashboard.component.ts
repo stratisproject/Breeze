@@ -95,8 +95,9 @@ export class DashboardComponent implements OnInit {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            if (response.json().transactionsHistory.length > 0) {
-              historyResponse = response.json().transactionsHistory;
+            const json = response.json();
+            if (json.transactionsHistory) {
+              historyResponse = json.transactionsHistory;
               this.getTransactionInfo(historyResponse);
             }
           }

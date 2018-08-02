@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxJs/Subscription';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { DatepickerOptions } from 'ng2-datepicker';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 import { AdvancedService } from './advanced.service';
 import { LoadingState } from './loadingState';
@@ -23,23 +23,23 @@ export class AdvancedComponent implements OnInit, OnDestroy {
 
     public icoFormGroup: FormGroup;
     public extPubKey = "";
-    public resyncDate = new Date();
+    public resyncDate: NgbDateStruct;
     public extPubKeyLoadingState = new LoadingState();  
     public generateAddressesLoadingState = new LoadingState();
-    public resyncDateOptions: DatepickerOptions;
     public resyncLoadingState = new LoadingState();
+    public maxResyncDate: NgbDateStruct;
+    public minResyncDate: NgbDateStruct;
 
     public get datePickerControl() { return this.icoFormGroup.get('datePickerControl'); }
     public get addressCountControl() { return this.icoFormGroup.get('addressCountControl'); }
-    public get showAddressesTick() {  
-        return this.generateAddressesLoadingState.success && this.addresses.length && (Number(this.addressCount)===this.addresses.length); 
-    }
+    public get showAddressesTick() { return this.generateAddressesLoadingState.success && 
+                                            this.addresses.length && (Number(this.addressCount)===this.addresses.length); }
     public get showResyncTick(): boolean { return this.resyncLoadingState.success && this.resyncActioned; }
 
     ngOnInit() {
         this.registerFormControls();
-        this.setResyncDateOptions();
         this.loadExtPubKey();
+        this.setResyncDates();
     } 
 
     public generateAddresses() {
@@ -58,9 +58,16 @@ export class AdvancedComponent implements OnInit, OnDestroy {
             this.resyncSubs.unsubscribe();
         }
         this.resyncLoadingState.loading = this.resyncActioned = true;
-        this.resyncSubs = this.advancedService.resyncFromDate(this.resyncDate)
+        const date = new Date(this.resyncDate.year, this.resyncDate.month-1, this.resyncDate.day);
+        this.resyncSubs = this.advancedService.resyncFromDate(date)
                                               .subscribe(_ => this.onResync(),
                                                          _ => this.resyncLoadingState.errored = true);
+    }
+
+    private setResyncDates() {
+        const now = new Date();
+        this.maxResyncDate = {year: now.getFullYear(), month: now.getMonth()+1, day: now.getDate()}
+        this.minResyncDate = {year: now.getFullYear(), month: 1, day: 1}
     }
 
     private loadExtPubKey() {
@@ -97,15 +104,6 @@ export class AdvancedComponent implements OnInit, OnDestroy {
                 this.addressCount = this.addressCountControl.value;
             }
         });
-    }
-
-    private setResyncDateOptions() {
-        const today = new Date();
-        this.resyncDateOptions = {
-            minDate: new Date(today.getFullYear(),0),
-            maxDate: today,
-            displayFormat: 'MMMM D[,] YYYY'
-        };
     }
 
     ngOnDestroy() {
