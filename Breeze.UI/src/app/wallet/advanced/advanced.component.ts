@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxJs/Subscription';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 import { AdvancedService } from './advanced.service';
@@ -12,14 +12,16 @@ import { LoadingState } from './loadingState';
   styleUrls: ['./advanced.component.css']
 })
 export class AdvancedComponent implements OnInit, OnDestroy {
-    private addressCount: string;
+    private addressCount = "";
     private extPubKeySubs: Subscription;
     private generateAddressesSubs: Subscription;
     private resyncSubs: Subscription;
     private addresses = new Array<string>();
     private resyncActioned = false;
 
-    constructor(private advancedService: AdvancedService, private formBuilder: FormBuilder) { }
+    constructor(private advancedService: AdvancedService, private formBuilder: FormBuilder) { 
+        this.setResyncDates();
+    }
 
     public icoFormGroup: FormGroup;
     public extPubKey = "";
@@ -29,17 +31,15 @@ export class AdvancedComponent implements OnInit, OnDestroy {
     public resyncLoadingState = new LoadingState();
     public maxResyncDate: NgbDateStruct;
     public minResyncDate: NgbDateStruct;
-
-    public get datePickerControl() { return this.icoFormGroup.get('datePickerControl'); }
-    public get addressCountControl() { return this.icoFormGroup.get('addressCountControl'); }
-    public get showAddressesTick() { return this.generateAddressesLoadingState.success && 
+    public get datePickerControl(): AbstractControl { return this.icoFormGroup.get('datePickerControl'); }
+    public get addressCountControl(): AbstractControl { return this.icoFormGroup.get('addressCountControl'); }
+    public get showAddressesTick(): boolean { return this.generateAddressesLoadingState.success && 
                                             this.addresses.length && (Number(this.addressCount)===this.addresses.length); }
     public get showResyncTick(): boolean { return this.resyncLoadingState.success && this.resyncActioned; }
 
     ngOnInit() {
         this.registerFormControls();
         this.loadExtPubKey();
-        this.setResyncDates();
     } 
 
     public generateAddresses() {
@@ -62,12 +62,6 @@ export class AdvancedComponent implements OnInit, OnDestroy {
         this.resyncSubs = this.advancedService.resyncFromDate(date)
                                               .subscribe(_ => this.onResync(),
                                                          _ => this.resyncLoadingState.errored = true);
-    }
-
-    private setResyncDates() {
-        const now = new Date();
-        this.maxResyncDate = {year: now.getFullYear(), month: now.getMonth()+1, day: now.getDate()}
-        this.minResyncDate = {year: now.getFullYear(), month: 1, day: 1}
     }
 
     private loadExtPubKey() {
@@ -104,6 +98,12 @@ export class AdvancedComponent implements OnInit, OnDestroy {
                 this.addressCount = this.addressCountControl.value;
             }
         });
+    }
+
+    private setResyncDates() {
+        const now = new Date();
+        this.maxResyncDate = {year: now.getFullYear(), month: now.getMonth()+1, day: now.getDate()}
+        this.minResyncDate = {year: now.getFullYear(), month: 1, day: 1}
     }
 
     ngOnDestroy() {
