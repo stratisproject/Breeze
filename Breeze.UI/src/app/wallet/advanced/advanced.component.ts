@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxJs/Subscription';
 import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
+import './monitor';
 import { AdvancedService } from './advanced.service';
 import { LoadingState } from './loadingState';
+import { SerialDisposable } from './serialDisposable';
 
 @Component({
   selector: 'app-advanced',
@@ -13,9 +14,9 @@ import { LoadingState } from './loadingState';
 })
 export class AdvancedComponent implements OnInit, OnDestroy {
     private addressCount = "";
-    private extPubKeySubs: Subscription;
-    private generateAddressesSubs: Subscription;
-    private resyncSubs: Subscription;
+    private extPubKeySubs = new SerialDisposable();
+    private generateAddressesSubs = new SerialDisposable();
+    private resyncSubs = new SerialDisposable();
     private addresses = new Array<string>();
     private resyncActioned = false;
 
@@ -42,47 +43,25 @@ export class AdvancedComponent implements OnInit, OnDestroy {
         this.loadExtPubKey();
     } 
 
-    public generateAddresses() {
-        this.addresses = new Array<string>();
-        this.generateAddressesLoadingState.loading = true;
-        if (this.generateAddressesSubs) { 
-            this.generateAddressesSubs.unsubscribe(); 
-        }
-        this.generateAddressesSubs = this.advancedService.generateAddresses(Number(this.addressCount))
-                                                         .subscribe(x => this.onGenerateAddresses(x), 
-                                                                    _ => this.generateAddressesLoadingState.errored = true);
+    resync() {
+        this.resyncActioned = true;
+        const date = new Date(this.resyncDate.year, this.resyncDate.month-1, this.resyncDate.day);
+        this.resyncSubs.disposable = this.advancedService.resyncFromDate(date)
+                                              .monitor(this.resyncLoadingState)
+                                              .subscribe();
     }
 
-    public resync() {
-        if (this.resyncSubs) {
-            this.resyncSubs.unsubscribe();
-        }
-        this.resyncLoadingState.loading = this.resyncActioned = true;
-        const date = new Date(this.resyncDate.year, this.resyncDate.month-1, this.resyncDate.day);
-        this.resyncSubs = this.advancedService.resyncFromDate(date)
-                                              .subscribe(_ => this.onResync(),
-                                                         _ => this.resyncLoadingState.errored = true);
+    generateAddresses() {
+        this.addresses = [];
+        this.generateAddressesSubs.disposable = this.advancedService.generateAddresses(Number(this.addressCount))
+                                                         .monitor(this.generateAddressesLoadingState)
+                                                         .subscribe(x => this.addresses = x);
     }
 
     private loadExtPubKey() {
-        this.extPubKeyLoadingState.loading = true;
-        this.extPubKeySubs = this.advancedService.getExtPubKey()
-                                                 .subscribe(x => this.onExtPubKey(x), 
-                                                            _ => this.extPubKeyLoadingState.errored = true);
-    }
-
-    private onExtPubKey(key: string) {
-        this.extPubKey = key; 
-        this.extPubKeyLoadingState.loading = false;
-    }
-
-    private onGenerateAddresses(addresses: string[]) {
-        this.generateAddressesLoadingState.loading = false;
-        this.addresses = addresses;
-    }
-
-    private onResync() {
-        this.resyncLoadingState.loading = false;
+        this.extPubKeySubs.disposable = this.advancedService.getExtPubKey()
+                                                 .monitor(this.extPubKeyLoadingState)
+                                                 .subscribe(x => this.extPubKey = x);
     }
 
     private registerFormControls() {
@@ -102,20 +81,13 @@ export class AdvancedComponent implements OnInit, OnDestroy {
 
     private setResyncDates() {
         const now = new Date();
-        this.maxResyncDate = {year: now.getFullYear(), month: now.getMonth()+1, day: now.getDate()}
-        this.minResyncDate = {year: now.getFullYear(), month: 1, day: 1}
+        this.maxResyncDate = { year: now.getFullYear(), month: now.getMonth()+1, day: now.getDate() }
+        this.minResyncDate = { year: now.getFullYear(), month: 1, day: 1 }
     }
 
     ngOnDestroy() {
-        if (this.extPubKeySubs) { 
-            this.extPubKeySubs.unsubscribe(); 
-        }
-        if (this.generateAddressesSubs) { 
-            this.generateAddressesSubs.unsubscribe(); 
-        }
-        if (this.resyncSubs) { 
-            this.resyncSubs.unsubscribe(); 
-        }
+        this.extPubKeySubs.dispose();
+        this.generateAddressesSubs.dispose();
+        this.resyncSubs.dispose();
     }
 }
-
