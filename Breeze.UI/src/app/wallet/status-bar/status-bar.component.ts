@@ -26,7 +26,7 @@ export class StatusBarComponent implements OnInit {
   constructor(private apiService: ApiService, private globalService: GlobalService, private genericModalService: ModalService) { }
 
   ngOnInit() {
-    this.startSubscriptions() ;
+    this.startSubscriptions();
   }
 
   ngOnDestroy() {

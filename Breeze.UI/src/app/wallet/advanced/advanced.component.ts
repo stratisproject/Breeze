@@ -13,7 +13,7 @@ import { SerialDisposable } from './serialDisposable';
   styleUrls: ['./advanced.component.css']
 })
 export class AdvancedComponent implements OnInit, OnDestroy {
-    private addressCount = "";
+    private addressCount = '';
     private extPubKeySubs = new SerialDisposable();
     private generateAddressesSubs = new SerialDisposable();
     private resyncSubs = new SerialDisposable();
@@ -25,7 +25,7 @@ export class AdvancedComponent implements OnInit, OnDestroy {
     }
 
     public icoFormGroup: FormGroup;
-    public extPubKey = "";
+    public extPubKey = '';
     public resyncDate: NgbDateStruct;
     public extPubKeyLoadingState = new LoadingState();  
     public generateAddressesLoadingState = new LoadingState();
