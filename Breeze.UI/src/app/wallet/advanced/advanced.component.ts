@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import 'rxjs/add/operator/filter';
 
 import './monitor';
 import { AdvancedService } from './advanced.service';
 import { LoadingState } from './loadingState';
-import { SerialDisposable } from './serialDisposable';
+import { SerialDisposable } from '../../../app/shared/classes/serialDisposable';
 
 @Component({
   selector: 'app-advanced',
@@ -20,23 +21,23 @@ export class AdvancedComponent implements OnInit, OnDestroy {
     private addresses: string[] = [];
     private resyncActioned = false;
 
-    constructor(private advancedService: AdvancedService, private formBuilder: FormBuilder) { 
+    constructor(readonly advancedService: AdvancedService, readonly formBuilder: FormBuilder) { 
         this.setResyncDates();
     }
 
-    public icoFormGroup: FormGroup;
-    public extPubKey = '';
-    public resyncDate: NgbDateStruct;
-    public extPubKeyLoadingState = new LoadingState();  
-    public generateAddressesLoadingState = new LoadingState();
-    public resyncLoadingState = new LoadingState();
-    public maxResyncDate: NgbDateStruct;
-    public minResyncDate: NgbDateStruct;
-    public get datePickerControl(): AbstractControl { return this.icoFormGroup.get('datePickerControl'); }
-    public get addressCountControl(): AbstractControl { return this.icoFormGroup.get('addressCountControl'); }
-    public get showAddressesTick(): boolean { return this.generateAddressesLoadingState.success && 
+    icoFormGroup: FormGroup;
+    extPubKey = '';
+    extPubKeyLoadingState = new LoadingState();  
+    generateAddressesLoadingState = new LoadingState();
+    resyncLoadingState = new LoadingState();
+    resyncDate: NgbDateStruct;
+    maxResyncDate: NgbDateStruct;
+    minResyncDate: NgbDateStruct;
+    get datePickerControl(): AbstractControl { return this.icoFormGroup.get('datePickerControl'); }
+    get addressCountControl(): AbstractControl { return this.icoFormGroup.get('addressCountControl'); }
+    get showAddressesTick(): boolean { return this.generateAddressesLoadingState.success && 
                                             this.addresses.length && (Number(this.addressCount)===this.addresses.length); }
-    public get showResyncTick(): boolean { return this.resyncLoadingState.success && this.resyncActioned; }
+    get showResyncTick(): boolean { return this.resyncLoadingState.success && this.resyncActioned; }
 
     ngOnInit() {
         this.registerFormControls();
@@ -70,13 +71,10 @@ export class AdvancedComponent implements OnInit, OnDestroy {
             datePickerControl: [Validators.required] 
         });     
 
-        this.addressCountControl.valueChanges.subscribe(_ => {
-            if (this.addressCountControl.invalid) {
-                this.addressCountControl.setValue(this.addressCount); 
-            } else {
-                this.addressCount = this.addressCountControl.value;
-            }
-        });
+        const control = this.addressCountControl;
+        const changes$ = control.valueChanges;
+        changes$.filter(_ => control.invalid).subscribe(_ => control.setValue(this.addressCount));
+        changes$.filter(_ => !control.invalid).subscribe(_ => this.addressCount = control.value);
     }
 
     private setResyncDates() {
