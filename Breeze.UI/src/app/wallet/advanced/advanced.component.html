@@ -3,7 +3,7 @@
         <div style="margin-top:20px">
 
             <div>
-                <label style="font-size:14px;margin-bottom:0px">Extended Public Key</label>
+                <label class="label">Extended Public Key</label>
                 <div class="myAddress" *ngIf="extPubKeyLoadingState.success; else elseFeedback">
                     <code style="overflow-wrap: break-word">{{ extPubKey }}</code>
                 </div>
@@ -14,7 +14,7 @@
 
             <div style="display: flex; flex-direction: row; margin-top:30px">
                 <div style="width:275px">
-                    <label style="font-size:14px;margin-bottom:1px">Generate Addresses</label>
+                    <label class="label">Generate Addresses</label>
                     <div style="display:flex; flex-direction:row; height:34px">
                         <input formControlName="addressCountControl" type="text" class="form-control" placeholder="Number to generate..." style="border-radius: 0px; width: 163px">
                         <button *ngIf="!addressCountControl.invalid && addressCount" [disabled]="addressCountControl.invalid || !addressCount" (click)="generateAddresses()"
@@ -25,7 +25,7 @@
                 </div>
 
                 <div style="margin-left: 30px">
-                    <label style="font-size:14px;margin-bottom:1px">Resync</label>
+                    <label class="label">Resync</label>
                     <div style="display:flex; flex-direction:row">
                         <ngb-datepicker [(ngModel)]="resyncDate" [outsideDays]="hidden" [minDate]="minResyncDate" [maxDate]="maxResyncDate" style="outline:none; border:none"
                             formControlName="datePickerControl"></ngb-datepicker>
