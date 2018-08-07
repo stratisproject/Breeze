@@ -17,7 +17,7 @@ export class AdvancedComponent implements OnInit, OnDestroy {
     private extPubKeySubs = new SerialDisposable();
     private generateAddressesSubs = new SerialDisposable();
     private resyncSubs = new SerialDisposable();
-    private addresses = new Array<string>();
+    private addresses: string[] = [];
     private resyncActioned = false;
 
     constructor(private advancedService: AdvancedService, private formBuilder: FormBuilder) { 

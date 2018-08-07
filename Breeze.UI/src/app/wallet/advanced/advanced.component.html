@@ -19,10 +19,8 @@
                         <input formControlName="addressCountControl" type="text" class="form-control" placeholder="Number to generate..." style="border-radius: 0px; width: 163px">
                         <button *ngIf="!addressCountControl.invalid && addressCount" [disabled]="addressCountControl.invalid || !addressCount" (click)="generateAddresses()"
                             class="btn btn-darkgray btn-sm" type="button" style="margin-left: 5px">Go</button>
-                        <img style="width:16px; height:16px; margin-left:6px; margin-top:8px" *ngIf="showAddressesTick" src="../../../assets/images/Tick_Mark-16.png"
-                        />
-                        <app-feedback *ngIf="!generateAddressesLoadingState.success" style="margin-left:5px; width:115px" [loading]="generateAddressesLoadingState.loading"
-                            [errored]="generateAddressesLoadingState.errored" [erroredText]="'Failed'"></app-feedback>
+                        <app-feedback style="margin-left:5px; width:115px" [loading]="generateAddressesLoadingState.loading" [success]="showAddressesTick"
+                            [errored]="generateAddressesLoadingState.errored" [erroredText]="'Failed'" [showSuccessTick]="true"></app-feedback>
                     </div>
                 </div>
 
@@ -33,10 +31,8 @@
                             formControlName="datePickerControl"></ngb-datepicker>
                         <button [disabled]="!resyncDate" style="margin-left: 5px; align-self:flex-start; height:34px" (click)="resync()" class="btn btn-darkgray btn-sm"
                             type="button">Go</button>
-                        <img style="width:16px; height:16px; margin-left:6px; margin-top:8px" *ngIf="showResyncTick" src="../../../assets/images/Tick_Mark-16.png"
-                        />
-                        <app-feedback *ngIf="!resyncLoadingState.success" style="margin-left:5px; width:65px" [loading]="resyncLoadingState.loading"
-                            [errored]="resyncLoadingState.errored" [erroredText]="'Failed'"></app-feedback>
+                        <app-feedback style="margin-left:5px; width:65px" [loading]="resyncLoadingState.loading" [showSuccessTick]="true" [errored]="resyncLoadingState.errored"
+                            [erroredText]="'Failed'" [success]="showResyncTick"></app-feedback>
                     </div>
                 </div>
             </div>

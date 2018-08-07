@@ -6,7 +6,7 @@ export class SerialDisposable {
         this.dispose();
         this.subscription = value;
     }
-    public dispose() {
+    dispose() {
         if (this.subscription) {
             this.subscription.unsubscribe();
             this.subscription = null;

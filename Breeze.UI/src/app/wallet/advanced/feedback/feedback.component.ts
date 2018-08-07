@@ -9,6 +9,8 @@ export class FeedbackComponent {
     private _loading = false;
     private _errored = false;
     private _erroredText = "Failed";
+    private _success = false;
+    private _showSuccessTick = false;
 
     @Input()
     public set loading(value: boolean) {
@@ -32,5 +34,21 @@ export class FeedbackComponent {
     }
     public get erroredText(): string {
         return this._erroredText;
+    }
+
+    @Input()
+    public set success(value: boolean) {
+        this._success = value;
+    }
+    public get success(): boolean {
+        return this._success;
+    }
+
+    @Input()
+    public set showSuccessTick(value: boolean) {
+        this._showSuccessTick = value;
+    }
+    public get showSuccessTick(): boolean {
+        return this._showSuccessTick;
     }
 }
