@@ -238,7 +238,7 @@ function getPlugins() {
 }
 
 module.exports = {
-  "devtool": "source-map",
+  "devtool": "eval-source-map",
   "externals": {
     "electron": "require('electron')",
     "buffer": "require('buffer')",

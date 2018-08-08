@@ -1,0 +1,42 @@
+<div class="mainDiv">
+    <form [formGroup]='icoFormGroup'>
+        <div style="margin-top:20px">
+
+            <div>
+                <label class="label">Extended Public Key</label>
+                <div class="myAddress" *ngIf="extPubKeyLoadingState.success; else elseFeedback">
+                    <code style="overflow-wrap: break-word">{{ extPubKey }}</code>
+                </div>
+                <ng-template #elseFeedback>
+                    <app-feedback [loading]="extPubKeyLoadingState.loading" [errored]="extPubKeyLoadingState.errored" [erroredText]="'Failed to get Extended Public Key'"></app-feedback>
+                </ng-template>
+            </div>
+
+            <div style="display: flex; flex-direction: row; margin-top:30px">
+                <div style="width:275px">
+                    <label class="label">Generate Addresses</label>
+                    <div style="display:flex; flex-direction:row; height:34px">
+                        <input formControlName="addressCountControl" type="text" class="form-control" placeholder="Number to generate..." style="border-radius: 0px; width: 163px">
+                        <button *ngIf="!addressCountControl.invalid && addressCount" [disabled]="addressCountControl.invalid || !addressCount" (click)="generateAddresses()"
+                            class="btn btn-darkgray btn-sm" type="button" style="margin-left: 5px">Go</button>
+                        <app-feedback style="margin-left:5px; width:115px" [loading]="generateAddressesLoadingState.loading" [success]="showAddressesTick"
+                            [errored]="generateAddressesLoadingState.errored" [erroredText]="'Failed'" [showSuccessTick]="true"></app-feedback>
+                    </div>
+                </div>
+
+                <div style="margin-left: 30px">
+                    <label class="label">Resync</label>
+                    <div style="display:flex; flex-direction:row">
+                        <ngb-datepicker [(ngModel)]="resyncDate" [outsideDays]="hidden" [minDate]="minResyncDate" [maxDate]="maxResyncDate" style="outline:none; border:none"
+                            formControlName="datePickerControl"></ngb-datepicker>
+                        <button [disabled]="!resyncDate" style="margin-left: 5px; align-self:flex-start; height:34px" (click)="resync()" class="btn btn-darkgray btn-sm"
+                            type="button">Go</button>
+                        <app-feedback style="margin-left:5px; width:65px" [loading]="resyncLoadingState.loading" [showSuccessTick]="true" [errored]="resyncLoadingState.errored"
+                            [erroredText]="'Failed'" [success]="showResyncTick"></app-feedback>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>

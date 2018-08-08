@@ -8,7 +8,6 @@ import { ModalService } from '../../shared/services/modal.service';
 import { WalletInfo } from '../../shared/classes/wallet-info';
 import { TransactionInfo } from '../../shared/classes/transaction-info';
 
-import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
 
 import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
@@ -49,8 +48,9 @@ export class HistoryComponent {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            if (response.json().transactionsHistory.length > 0) {
-              historyResponse = response.json().transactionsHistory;
+            const json = response.json();
+            if (json && json.transactionsHistory) {
+              historyResponse = json.transactionsHistory;
               this.getTransactionInfo(historyResponse);
             }
           }

@@ -1,0 +1,14 @@
+<div>
+    <div class="progress" *ngIf="loading">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+            aria-valuemax="100" style="width: 100%">
+            <label style="font-size:10px">Working...</label>
+        </div>
+    </div>
+    <div *ngIf="errored">
+        <img class="img" src="../../../../assets/images/if_Error_16.png" />
+    </div>
+    <div *ngIf="success">
+        <img class="img" src="../../../../assets/images/Tick_Mark-16.png" />
+    </div>
+</div>
