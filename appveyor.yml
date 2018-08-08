@@ -54,10 +54,10 @@ install:
       git submodule update --init --recursive
       
       Write-Host "--> latest node" -foregroundcolor "magenta"
-      Install-Product node ''
+      Install-Product node 8.11.2
       
       Write-Host "--> latest npm" -foregroundcolor "magenta"
-      npm install -g npm@latest
+      npm install -g npm@6.2.0
             
       Write-Host "--> npm config" -foregroundcolor "magenta"
       npm config set unsafe-perm=true
