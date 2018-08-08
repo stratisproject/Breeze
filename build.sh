@@ -41,6 +41,7 @@ git submodule update --init --recursive
 
 cd $TRAVIS_BUILD_DIR/Breeze.UI
 
+npm install -g cross-env
 npm install -g npx
 echo $log_prefix FINISHED restoring dotnet and npm packages
 
