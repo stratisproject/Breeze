@@ -39,7 +39,7 @@ cache:
 # https://github.com/travis-ci/travis-ci/issues/7728
 
 install:
-- nvm install 6
+- nvm install 8.11.2
 
 before_script:
 - if [ -z "$TRAVIS_TAG" ] ; then TRAVIS_TAG=cd-unstable; fi
