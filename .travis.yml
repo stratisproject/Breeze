@@ -39,10 +39,13 @@ cache:
 # https://github.com/travis-ci/travis-ci/issues/7728
 
 install:
-- nvm install 6
+- nvm install 8.11.2
+- npm install -g npm@6.2.0
 
 before_script:
 - if [ -z "$TRAVIS_TAG" ] ; then TRAVIS_TAG=cd-unstable; fi
+- npm --version
+- nvm --version
 
 script:
 - chmod +x build.sh
