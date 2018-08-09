@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
 import { HttpClientModule } from '@angular/common/http';
-import { NgDatepickerModule } from 'ng2-datepicker';
 
 import { WalletComponent } from './wallet.component';
 import { MenuComponent } from './menu/menu.component';
@@ -29,8 +28,7 @@ import { FeedbackComponent } from './advanced/feedback/feedback.component';
     SharedModule.forRoot(),
     NgbModule,
     ReactiveFormsModule,
-    WalletRoutingModule,
-    NgDatepickerModule
+    WalletRoutingModule
   ],
   declarations: [
     WalletComponent,
