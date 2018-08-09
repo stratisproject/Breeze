@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Router, Event, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operator/filter';
-import { map } from 'rxjs/operator/map';
-import { ReplaySubject } from 'rxJs/ReplaySubject';
+import { Router, NavigationEnd } from '@angular/router';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 export enum Page {
     Bitcoin, Stratis

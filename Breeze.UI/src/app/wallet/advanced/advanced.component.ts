@@ -53,7 +53,7 @@ export class AdvancedComponent implements OnInit, OnDestroy {
     }
 
     generateAddresses() {
-        this.addresses = [];
+        this.addresses.length = 0;
         this.generateAddressesSubs.disposable = this.advancedService.generateAddresses(Number(this.addressCount))
                                                          .monitor(this.generateAddressesLoadingState)
                                                          .subscribe(x => this.addresses = x);
