@@ -36,10 +36,8 @@ export class AppComponent implements OnInit {
   }
 
   private setTitle() {
-    let applicationName = "Breeze Wallet";
-    let applicationVersion = remote.app.getVersion();
-    let releaseCycle = "beta";
-    let newTitle = applicationName + " v" + applicationVersion + " " + releaseCycle;
+    const applicationName = "Stratis Breeze Wallet";
+    const newTitle = applicationName + " v" + remote.app.getVersion();
     this.titleService.setTitle(newTitle);
   }
 }
