@@ -25,7 +25,6 @@ export class AdvancedService {
 
     public getExtPubKey(): Observable<string> {
         const url = `${this.urlPrefix}extpubkey?WalletName=${this.walletName}&AccountName=${this.accountName}`;
-        console.log(url);
         return this.httpClient.get(url).map(x => x.toString());
     }
 
