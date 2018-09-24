@@ -20,8 +20,7 @@ export class AdvancedService {
     constructor(private httpClient: HttpClient, private globalService: GlobalService, navigationService: NavigationService) { 
         this.walletName = this.globalService.getWalletName();
 
-        navigationService.pageSubject.subscribe(x => 
-            this.urlPrefix = `http://localhost:3722${Page.Bitcoin ? 0 : 1}/api/Wallet/`);
+        navigationService.pageSubject.subscribe(x => this.urlPrefix = `http://localhost:3722${x}/api/Wallet/`);
     }
 
     public getExtPubKey(): Observable<string> {
