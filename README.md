@@ -1,4 +1,4 @@
-| Windows | MacOs | Ubuntu64
+| Windows | Mac OS | Linux
 | :---- | :------ | :---- |
 | [![Build status](https://dev.azure.com/StratisProject/Breeze/_apis/build/status/Hosted%20Windows%20Container?branchName=master)](https://dev.azure.com/StratisProject/Breeze/_build/latest?definitionId=10) | [![Build status](https://dev.azure.com/StratisProject/Breeze/_apis/build/status/Hosted%20macOS?branchName=master)](https://dev.azure.com/StratisProject/Breeze/_build/latest?definitionId=12) | [![Build status](https://dev.azure.com/StratisProject/Breeze/_apis/build/status/Hosted%20Ubuntu%201604?branchName=master)](https://dev.azure.com/StratisProject/Breeze/_build/latest?definitionId=11)
 
@@ -31,4 +31,13 @@ dotnet run stratis -testnet
 ## UI Build
 
 [Read more...](https://github.com/stratisproject/Breeze/blob/master/Breeze.UI/README.md)
+
+## CI Build
+-----------
+
+Every time someone pushes to the master branch or create a pull request on it, a build is triggered and a new unstable app release is created.
+
+If you want the :sparkles: latest :sparkles: (unstable :bomb:) version of the Breeze app, you can get it here: 
+
+https://github.com/stratisproject/Breeze/releases/tag/Continuous-Delivery
 
