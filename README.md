@@ -20,7 +20,7 @@ cd Breeze
 git submodule update --init --recursive
 
 # Go in the Breeze deamon folder
-cd StratisBitcoinFullNode/Stratis.BreezeD
+cd StratisBitcoinFullNode/src/Stratis.BreezeD
 dotnet build
 
 # Run the Bitcoin and Stratis full-SPV daemons on testnet in separate terminals
