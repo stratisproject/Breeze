@@ -32,7 +32,8 @@ export class ConfirmMnemonicComponent implements OnInit {
       this.newWallet = new WalletCreation(
         params["name"],
         params["mnemonic"],
-        params["password"]
+        params["password"],
+        params["passphrase"]
       )
     });
   }
