@@ -7,6 +7,7 @@
 __Warning: We're still in beta, so use at your own risk.__
 This is the repository of the Breeze Wallet, the first full-block SPV bitcoin wallet using Angular and Electron at the front-end and C# with .NET Core in the back-end.
 
+
 ## Daemon Build
 
 Breeze daemon is the backend REST service, hosting a Bitcoin node upon which Breeze UI depends:
